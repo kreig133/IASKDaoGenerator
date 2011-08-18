@@ -53,4 +53,8 @@ public class Utils {
 
         return new String(chars);
     }
+
+    public static String[] splitIt( String string ){
+        return string.split( " \\t" );
+    }
 }

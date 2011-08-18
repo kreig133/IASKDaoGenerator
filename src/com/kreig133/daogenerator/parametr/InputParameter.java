@@ -1,4 +1,6 @@
-package com.kreig133.daogenerator;
+package com.kreig133.daogenerator.parametr;
+
+import com.kreig133.daogenerator.Utils;
 
 /**
  * @author eshangareev
@@ -9,7 +11,7 @@ public class InputParameter extends Parameter {
 
     public InputParameter(String name, String type, String defaultValue, String comment) {
         super(comment, type, name);
-        this.defaultValue = Utils.handleDefaultValue(defaultValue);
+        this.defaultValue = Utils.handleDefaultValue( defaultValue );
 
     }
 

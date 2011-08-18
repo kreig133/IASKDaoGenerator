@@ -1,4 +1,6 @@
-package com.kreig133.daogenerator;
+package com.kreig133.daogenerator.parametr;
+
+import com.kreig133.daogenerator.Utils;
 
 /**
  * @author eshangareev
@@ -8,34 +10,43 @@ abstract public class Parameter {
     protected String comment;
     protected String type;
     protected String name;
+    protected String sqlType;
 
     public Parameter(String comment, String type, String name) {
         this.comment = comment;
+
+        type = type.trim().toLowerCase();
+
+        sqlType = type;
+
         if (
-                "int".equals(type.trim().toLowerCase())
-                        ||
-                        "long".equals(type.trim().toLowerCase())
-                        ||
-                        "smallint".equals(type.trim().toLowerCase())
-                ) {
-            this.type = "Integer";
+                "int"       .equals( type )
+                ||
+                "long"      .equals( type )
+                ||
+                "smallint"  .equals( type )
+        ) {
+            this.type = "Long";
         } else if (
-                "datetime".equals(type.trim().toLowerCase())
-                ) {
+                "datetime"  .equals( type )
+        ) {
             this.type = "Date";
         } else if (
                 type != null
-                        &&
-                            (type.trim().toLowerCase().startsWith("varchar")
-                                ||
-                            type.trim().toLowerCase().startsWith("string"))
-                ) {
+                &&
+                (
+                    type.startsWith( "varchar" )
+                    ||
+                    type .startsWith( "string" )
+                )
+        ) {
             this.type = "String";
         } else if (
-                type != null && type.trim().toLowerCase().startsWith("decimal")
-                ) {
+                type != null && type.startsWith("decimal")
+        ) {
             this.type = "Double";
         }
+
         this.name = name.trim();
     }
 
@@ -63,10 +74,18 @@ abstract public class Parameter {
         this.name = name;
     }
 
+    public String getSqlType() {
+        return sqlType;
+    }
+
+    public void setSqlType( String sqlType ) {
+        this.sqlType = sqlType;
+    }
+
     @Override
     public String toString() {
 
-        return Utils.getJavaDocString(new String[] {comment} ) +
+        return Utils.getJavaDocString( new String[] { comment } ) +
                 "\tprivate " + type + " " + name;
     }
 
