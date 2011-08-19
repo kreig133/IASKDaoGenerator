@@ -113,18 +113,29 @@ public class DaoGenerator  implements Settings{
 
     private static String name;
 
-    final static public List<Parameter> INPUT_PARAMETER_LIST = new ArrayList<Parameter>();
-    final static public List<Parameter> OUTPUT_PARAMETER_LIST = new ArrayList<Parameter>();
+    final static private List<Parameter> INPUT_PARAMETER_LIST = new ArrayList<Parameter>();
+    final static private List<Parameter> OUTPUT_PARAMETER_LIST = new ArrayList<Parameter>();
 
-    static public String OUTPUT_PATH ;
-    static public String OUTPUT_PATH_FOR_ENTITY ;
+    static private String OUTPUT_PATH ;
+    static private String OUTPUT_PATH_FOR_ENTITY ;
 
-    static public StringBuilder QUERY;
+    static private StringBuilder QUERY;
 
-    static public Type TYPE;
-    static public SelectType SELECT_TYPE;
-    static public ReturnType RETURN_TYPE;
+    static private Type TYPE;
+    static private SelectType SELECT_TYPE;
+    static private ReturnType RETURN_TYPE;
 
+    public static void setTYPE( Type TYPE ) {
+        DaoGenerator.TYPE = TYPE;
+    }
+
+    public static void setSELECT_TYPE( SelectType SELECT_TYPE ) {
+        DaoGenerator.SELECT_TYPE = SELECT_TYPE;
+    }
+
+    public static void setRETURN_TYPE( ReturnType RETURN_TYPE ) {
+        DaoGenerator.RETURN_TYPE = RETURN_TYPE;
+    }
 
     private static void createDirectoriesIfTheyNotExists() {
         final File file = new File(OUTPUT_PATH);

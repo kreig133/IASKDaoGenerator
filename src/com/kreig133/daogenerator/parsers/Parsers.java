@@ -1,6 +1,7 @@
 package com.kreig133.daogenerator.parsers;
 
 import com.kreig133.daogenerator.DaoGenerator;
+import com.kreig133.daogenerator.Settings;
 import com.kreig133.daogenerator.parametr.Parameter;
 import com.kreig133.daogenerator.enums.Mode;
 
@@ -12,13 +13,19 @@ import java.util.List;
  */
 public class Parsers {
 
-    static List<Parameter> inputParameterList  = DaoGenerator. INPUT_PARAMETER_LIST;
-    static List<Parameter> outputParameterList = DaoGenerator.OUTPUT_PARAMETER_LIST;
-    static StringBuilder   query               = DaoGenerator.QUERY;
 
 
 
-    public static void readLine( Mode mode, String line ){
+
+    public static void readLine(
+            Settings settings,
+            Mode mode,
+            String line
+    ){
+        final List<Parameter> inputParameterList  = settings. getInputParameterList();
+        final List<Parameter> outputParameterList = settings.getOutputParameterList();
+        final StringBuilder   query               = settings.getSelectQuery        ();
+
         switch ( mode ){
             case IS_INPUT_PARAMETRS:
                 mode.parse( inputParameterList, line );

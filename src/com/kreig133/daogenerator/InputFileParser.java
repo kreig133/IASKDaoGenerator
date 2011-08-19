@@ -41,7 +41,7 @@ public class InputFileParser {
 
                 if( ! isStopLine( line ) ){
                     if( mode != null && line.length() > 7 )
-                        Parsers.readLine( mode, line );
+                        Parsers.readLine( DaoGenerator.instance(), mode, line );
                 }
 
                 line = reader.readLine();
@@ -59,9 +59,9 @@ public class InputFileParser {
 
         assert split.length >= 3;
 
-        DaoGenerator.TYPE        = Type      .getByName( split[ 0 ] );
-        DaoGenerator.SELECT_TYPE = SelectType.getByName( split[ 1 ] );
-        DaoGenerator.RETURN_TYPE = ReturnType.getByName( split[ 2 ] );
+        DaoGenerator.setTYPE        ( Type      .getByName( split[ 0 ] ) );
+        DaoGenerator.setSELECT_TYPE ( SelectType.getByName( split[ 1 ] ) ) ;
+        DaoGenerator.setRETURN_TYPE ( ReturnType.getByName( split[ 2 ] ) );
     }
 
     private static boolean isStopLine( String line ){
