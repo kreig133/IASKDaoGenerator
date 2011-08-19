@@ -1,9 +1,8 @@
 package com.kreig133.daogenerator.mybatis;
 
+import com.kreig133.daogenerator.Settings;
 import com.kreig133.daogenerator.Utils;
 import com.kreig133.daogenerator.enums.ReturnType;
-import com.kreig133.daogenerator.enums.SelectType;
-import com.kreig133.daogenerator.enums.Type;
 import com.kreig133.daogenerator.parametr.Parameter;
 
 import java.util.List;
@@ -12,13 +11,16 @@ import java.util.List;
  * @author eshangareev
  * @version 1.0
  */
-public class MethodGenerator {
+public class InterfaceMethodGenerator {
+
     public static String methodGenerator(
-            final List< Parameter > INPUT_PARAMETER_LIST,
-            final List< Parameter > OUTPUT_PARAMETER_LIST,
-            final String            name,
-            final ReturnType        returnType
+        Settings settings
     ) {
+        final List< Parameter > INPUT_PARAMETER_LIST    = settings.getInputParameterList();
+        final List< Parameter > OUTPUT_PARAMETER_LIST   = settings.getOutputParameterList();
+        final String            name                    = settings.getName();
+        final ReturnType        returnType              = settings.getReturnType();
+
         StringBuilder result = new StringBuilder( );
         result.append("    ");
 

@@ -12,7 +12,6 @@ public class InputParameter extends Parameter {
     public InputParameter(String name, String type, String defaultValue, String comment) {
         super(comment, type, name);
         this.defaultValue = Utils.handleDefaultValue( defaultValue );
-
     }
 
     public String getDefaultValue() {

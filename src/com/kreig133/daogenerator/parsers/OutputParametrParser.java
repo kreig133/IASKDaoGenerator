@@ -11,14 +11,18 @@ import java.util.List;
  */
 public class OutputParametrParser implements IParser<List<Parameter>>{
 
-    public void parse( List<Parameter> input, String lineForParse ) {
-        final String[] params =  lineForParse.split( ";" );
+    public void parse(
+            List<Parameter> input,
+            String lineForParse
+    ) {
+        final String[] params =  lineForParse.split( "\t" );
 
-        if (!(params[1] == null || "".equals(params[1]))) {
+        if (!(params[2] == null || "".equals(params[2]))) {
             input.add(
                     new OutputParameter(
-                            params.length > 3 ? params[ 3 ] : null,
-                            params[ 2 ], params[ 1 ] )
+                            params.length >= 5 ? params[ 4 ] : null,
+                            params[ 3 ],
+                            params[ 2 ] )
             );
         }
     }

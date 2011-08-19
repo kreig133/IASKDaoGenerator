@@ -1,7 +1,10 @@
 package com.kreig133.daogenerator.mybatis;
 
 import com.kreig133.daogenerator.InOutClass;
+import com.kreig133.daogenerator.Settings;
 import com.kreig133.daogenerator.Utils;
+import com.kreig133.daogenerator.enums.Mode;
+import com.kreig133.daogenerator.enums.Type;
 import com.kreig133.daogenerator.parametr.Parameter;
 
 import java.util.List;
@@ -12,10 +15,12 @@ import java.util.List;
  */
 public class XmlMappingGenerator {
     public static String generateXmlMapping(
-            List<Parameter> INPUT_PARAMETER_LIST,
-            List<Parameter> OUTPUT_PARAMETER_LIST,
-            String name
+        Settings settings
     ){
+        List<Parameter> INPUT_PARAMETER_LIST    = settings.getInputParameterList();
+        List<Parameter> OUTPUT_PARAMETER_LIST   = settings.getOutputParameterList();
+        String name                             = settings.getName();
+
         StringBuilder result = new StringBuilder();
         result.append("    <select id=\"");
         result.append(name);
@@ -35,26 +40,35 @@ public class XmlMappingGenerator {
             result.append("Out\"");
         }
         result.append(">\n\n");
-        generateProcedureCall( INPUT_PARAMETER_LIST, name, result );
+        result.append( generateProcedureCall( INPUT_PARAMETER_LIST, name ) );
         result.append("        )}\n\n");
         result.append("    </select>\n\n");
 
         return result.toString();
     }
 
-    public static void generateProcedureCall( List<Parameter> INPUT_PARAMETER_LIST, String name,
-                                             StringBuilder result ) {
+    public static String generateProcedureCall(
+            List<Parameter> INPUT_PARAMETER_LIST,
+            String name
+    ) {
+        StringBuilder result = new StringBuilder();
+
         result.append("        {CALL ");
-        result.append(name);
-        result.append("(\n");
+        result.append( name );
+        result.append( "(\n" );
         boolean  first = true;
         for (Parameter p : INPUT_PARAMETER_LIST) {
             if( !first ){
-                result.append(",\n");
-            } else first = false;
-            result.append("            #{");
-            result.append(p.getName().trim());
-            result.append("}\n");
+                result.append( "           ,#{\"" );
+            } else {
+                first = false;
+                result.append( "            #{" );
+            }
+            result.append( p.getName().trim() );
+            result.append( "}\n");
         }
+        result.append( "    )}" );
+
+        return result.toString();
     }
 }

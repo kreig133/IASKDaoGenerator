@@ -10,16 +10,19 @@ import java.util.List;
  */
 public class InputParameterParser implements IParser<List<Parameter>>{
 
-    public void parse( List<Parameter> input, String lineForParse ) {
-        final String[] params =  lineForParse.split( ";" );
+    public void parse(
+            List<Parameter> input,
+            String lineForParse
+    ) {
+        final String[] params =  lineForParse.split( "\t" );
 
-        if (!(params[1] == null || "".equals(params[1]))) {
+        if (!(params[2] == null || "".equals(params[2]))) {
             input.add(
                     new InputParameter(
-                            params[ 1 ],
                             params[ 2 ],
-                            params.length >= 5 ? params[ 4 ] : null,
-                            params.length == 6 ? params[ 5 ] : null
+                            params[ 3 ],
+                            params.length > 4 ? params[ 4 ] : null,
+                            params.length > 5 ? params[ 5 ] : null
                     )
             );
         }

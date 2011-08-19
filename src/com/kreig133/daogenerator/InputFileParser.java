@@ -40,7 +40,8 @@ public class InputFileParser {
             try{
 
                 if( ! isStopLine( line ) ){
-                    Parsers.readLine( mode, line );
+                    if( mode != null && line.length() > 7 )
+                        Parsers.readLine( mode, line );
                 }
 
                 line = reader.readLine();

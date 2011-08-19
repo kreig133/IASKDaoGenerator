@@ -14,7 +14,7 @@ import java.util.List;
  * @author eshangareev
  * @version 1.0
  */
-public class DaoGenerator {
+public class DaoGenerator  implements Settings{
 
     public static void main(String[] args) throws IOException {
 
@@ -56,14 +56,16 @@ public class DaoGenerator {
                     "Out");
         }
 
-        appandByteToFile(new File(OUTPUT_PATH + "map.xml"), myBatisGenerator().getBytes());
-        appandByteToFile(new File(OUTPUT_PATH + "interface.java"), methodGenerator().getBytes());
+        MyBatis.generateFiles( instance() );
     }
 
 
 
-    private static void createJavaClassForInputOutputWrappers(List<Parameter> parameterList,
-                                                              String name) throws IOException {
+    private static void createJavaClassForInputOutputWrappers(
+            List<Parameter> parameterList,
+            String name
+    ) throws IOException {
+
         FileWriter writer = null;
         try {
             InOutClass inOutClass = new InOutClass(parameterList, name);
@@ -80,16 +82,7 @@ public class DaoGenerator {
         }
     }
 
-    public static void appandByteToFile(File file, byte[] data) throws IOException {
-        FileOutputStream writer = null;
-        try {
-            writer = new FileOutputStream(file, true);
-            writer.write(data);
-        } finally {
-            if (writer != null) writer.close();
-        }
 
-    }
 
     private static String name;
 
@@ -122,4 +115,47 @@ public class DaoGenerator {
         OUTPUT_PARAMETER_LIST.clear();
         QUERY = new StringBuilder();
     }
+
+    public Type getType() {
+        return TYPE;
+    }
+
+    public SelectType getSelectType() {
+        return SELECT_TYPE;
+    }
+
+    public List<Parameter> getInputParameterList() {
+        return INPUT_PARAMETER_LIST;
+    }
+
+    public List<Parameter> getOutputParameterList() {
+        return OUTPUT_PARAMETER_LIST;
+    }
+
+    public StringBuilder getSelectQuery() {
+        return QUERY;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public ReturnType getReturnType() {
+        return RETURN_TYPE;
+    }
+
+    public String getOutputPath() {
+        return OUTPUT_PATH;
+    }
+
+    private DaoGenerator(){}
+
+    private static class Inner{
+        final static DaoGenerator INSTANCE = new DaoGenerator();
+    }
+
+    public static DaoGenerator instance(){
+        return Inner.INSTANCE;
+    }
+
 }
