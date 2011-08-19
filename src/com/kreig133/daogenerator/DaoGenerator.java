@@ -6,6 +6,7 @@ import com.kreig133.daogenerator.enums.Type;
 import com.kreig133.daogenerator.mybatis.MyBatis;
 import com.kreig133.daogenerator.parametr.Parameter;
 
+import javax.swing.*;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -18,9 +19,35 @@ public class DaoGenerator  implements Settings{
 
     public static void main(String[] args) throws IOException {
 
-        createDirectoriesIfTheyNotExists();
+        JFileChooser fc = new JFileChooser( );
+        fc.setMultiSelectionEnabled( false );
+        fc.setCurrentDirectory( new File( System.getProperty("user.dir") ) );
+        fc.setFileSelectionMode( JFileChooser.DIRECTORIES_ONLY );
 
-        String path = "D:/ForGenerateDao"; // TODO костыль че
+        String path = null;
+
+        int returnVal = fc.showOpenDialog( null );
+
+        if (returnVal == JFileChooser.APPROVE_OPTION) {
+            File file = fc.getSelectedFile();
+            path = file.getAbsolutePath();
+        } else {
+            System.exit( 0 );
+        }
+
+
+
+        returnVal = fc.showSaveDialog( null );
+        
+        if (returnVal == JFileChooser.APPROVE_OPTION) {
+            File file = fc.getSelectedFile();
+            OUTPUT_PATH = file.getAbsolutePath();
+            OUTPUT_PATH_FOR_ENTITY = OUTPUT_PATH + "Entity/";
+        } else {
+            System.exit( 0 );
+        }
+
+        createDirectoriesIfTheyNotExists();
 
         for(
                 String s:
@@ -88,8 +115,9 @@ public class DaoGenerator  implements Settings{
 
     final static public List<Parameter> INPUT_PARAMETER_LIST = new ArrayList<Parameter>();
     final static public List<Parameter> OUTPUT_PARAMETER_LIST = new ArrayList<Parameter>();
-    final static public String OUTPUT_PATH = "D:/GeneratedDao/";
-    final static public String OUTPUT_PATH_FOR_ENTITY = OUTPUT_PATH + "Entity/";
+
+    static public String OUTPUT_PATH ;
+    static public String OUTPUT_PATH_FOR_ENTITY ;
 
     static public StringBuilder QUERY;
 
