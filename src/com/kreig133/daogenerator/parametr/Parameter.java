@@ -85,12 +85,12 @@ abstract public class Parameter {
     @Override
     public String toString() {
 
-        return Utils.getJavaDocString( new String[] { comment } ) +
+        return Utils.getJavaDocString( new String[] { getCommentForJavaDoc() } ) +
                 "\tprivate " + type + " " + name;
     }
 
     public String generateGetter(){
-        return Utils.getJavaDocString(new String[] {"Получить ", "\""+comment+"\""})+
+        return Utils.getJavaDocString(new String[] {"Получить ", "\""+getCommentForJavaDoc()+"\""})+
         "\tpublic " + type + " get" + Utils.convertNameForGettersAndSetters( name ) + "(){\n"+
             "\t\treturn " + name + ";\n"+
         "\t}\n\n";
@@ -98,9 +98,14 @@ abstract public class Parameter {
 
 
     public String generateSetter(){
-        return Utils.getJavaDocString(new String[] {"Установить ", "\""+comment+"\""})+
+        return Utils.getJavaDocString(new String[] {"Установить ", "\""+getCommentForJavaDoc()+"\""})+
         "\tpublic void set" + Utils.convertNameForGettersAndSetters( name ) + "( "+type +" "  + name +" ){\n"+
             "\t\tthis." + name + " = "+ name +";\n"+
         "\t}\n\n";
+    }
+
+    private String getCommentForJavaDoc(){
+        if( comment == null || "".equals( comment )) return name;
+        return comment;
     }
 }

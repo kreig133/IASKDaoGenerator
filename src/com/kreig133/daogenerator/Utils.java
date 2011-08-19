@@ -101,4 +101,8 @@ public class Utils {
             if (writer != null) writer.close();
         }
     }
+
+    public static boolean stringNotEmpty( String string ){
+        return string != null && ! ( "".equals( string ) );
+    }
 }

@@ -1,5 +1,6 @@
 package com.kreig133.daogenerator.parsers;
 
+import com.kreig133.daogenerator.Utils;
 import com.kreig133.daogenerator.parametr.InputParameter;
 import com.kreig133.daogenerator.parametr.Parameter;
 
@@ -16,15 +17,17 @@ public class InputParameterParser implements IParser<List<Parameter>>{
     ) {
         final String[] params =  lineForParse.split( "\t" );
 
-        if (!(params[2] == null || "".equals(params[2]))) {
-            input.add(
-                    new InputParameter(
-                            params[ 2 ],
-                            params[ 3 ],
-                            params.length > 4 ? params[ 4 ] : null,
-                            params.length > 5 ? params[ 5 ] : null
-                    )
-            );
-        }
+        int i = Utils.stringNotEmpty( params[1])? 1 : ( Utils.stringNotEmpty( params[2]) ? 2 : Integer.MIN_VALUE );
+
+        input.add(
+                new InputParameter(
+                        params[ i ],
+                        params[ i+1 ],
+                        params.length > i+2 ? params[ i+2 ] : null,
+                        params.length > i+3 ? params[ i+2 ] : null
+                )
+        );
     }
+
+
 }

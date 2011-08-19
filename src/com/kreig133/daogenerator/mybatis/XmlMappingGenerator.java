@@ -67,7 +67,7 @@ public class XmlMappingGenerator {
             result.append( p.getName().trim() );
             result.append( "}\n");
         }
-        result.append( "    )}" );
+        result.append( "        )}" );
 
         return result.toString();
     }
