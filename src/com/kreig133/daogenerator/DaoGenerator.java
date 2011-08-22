@@ -41,8 +41,8 @@ public class DaoGenerator  implements Settings{
         
         if (returnVal == JFileChooser.APPROVE_OPTION) {
             File file = fc.getSelectedFile();
-            OUTPUT_PATH = file.getAbsolutePath();
-            OUTPUT_PATH_FOR_ENTITY = OUTPUT_PATH + "Entity/";
+            OUTPUT_PATH = file.getAbsolutePath()+"/";
+            OUTPUT_PATH_FOR_ENTITY = OUTPUT_PATH + "Entity";
         } else {
             System.exit( 0 );
         }
@@ -97,7 +97,7 @@ public class DaoGenerator  implements Settings{
         try {
             InOutClass inOutClass = new InOutClass(parameterList, name);
 
-            File inClassFile = new File(OUTPUT_PATH_FOR_ENTITY + inOutClass.getName() + ".java");
+            File inClassFile = new File(OUTPUT_PATH_FOR_ENTITY + "/" + inOutClass.getName() + ".java");
             inClassFile.createNewFile();
 
             writer = new FileWriter(inClassFile);

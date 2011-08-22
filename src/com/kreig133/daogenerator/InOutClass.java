@@ -26,11 +26,6 @@ public class InOutClass {
         this.parameters = parameters;
         this.name = name;
     }
-
-    public String getName() {
-        return name;
-    }
-
     @Override
     public String toString() {
         StringBuilder result = new StringBuilder();
@@ -49,5 +44,17 @@ public class InOutClass {
         result.append("}");
 
         return result.toString();
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName( String name ) {
+        this.name = name;
+    }
+
+    public List<Parameter> getParameters() {
+        return parameters;
     }
 }

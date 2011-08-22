@@ -41,7 +41,7 @@ public class AnnotationGenerator {
 
             case SELECT:
                 builder.append(
-                    Utils.wrapWithQuotes( selectQuery )
+                    Utils.wrapWithQuotes( processSelectQueryString( selectQuery, inputParameterList  ) )
                 );
                 break;
         }
@@ -49,5 +49,56 @@ public class AnnotationGenerator {
         builder.append( "    )\n" );
 
         return builder.toString();
+    }
+
+    private static String processSelectQueryString( final String sqlQuery, final List<Parameter> inputParameters ){
+
+        String query = sqlQuery;
+
+        StringBuilder result = null;
+
+        final String[] split = query.split( "\\?" );
+        if( split.length > 1 ){
+
+            result = new StringBuilder();
+
+            int index = 0;
+
+            for( int i = 0; i < split.length - 1; i++ ){
+                String string = split[i];
+                result.append( string );
+                result.append( "${" );
+                result.append( inputParameters.get( index ).getName() );
+                result.append( "}" );
+                index ++ ;
+            }
+        }
+
+        if( sqlQuery.split( ":" ).length > 1 ){
+            if( result != null ){
+                query = result.toString();
+            }
+
+            result = new StringBuilder();
+
+            int index = 0;
+            
+            for( String string: sqlQuery.split( ":" )){
+                if( index == 0 ){
+                    result.append( string );
+                    index ++ ;
+                } else {
+                    String[] aftefSplit = string.split( "[ =;,\\)\\n\\t\\r\\*\\-\\+/<>]" );
+                    result.append( aftefSplit[0] );
+                    result.append( "} " );
+                    if( aftefSplit.length > 1 ) {
+                        result.append( string.substring( aftefSplit[0].length() + 1 ) );
+                    }
+                }
+                result.append( "${" );
+            }
+        }
+
+        return result == null? sqlQuery : result.toString();
     }
 }
