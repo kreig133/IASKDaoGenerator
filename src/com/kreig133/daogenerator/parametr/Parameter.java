@@ -22,6 +22,8 @@ abstract public class Parameter {
         if (
                 "int"       .equals( type )
                 ||
+                "byte"      .equals( type )
+                ||
                 "long"      .equals( type )
                 ||
                 "smallint"  .equals( type )
