@@ -3,7 +3,6 @@ package com.kreig133.daogenerator.mybatis;
 import com.kreig133.daogenerator.Settings;
 import com.kreig133.daogenerator.Utils;
 import com.kreig133.daogenerator.enums.SelectType;
-import com.kreig133.daogenerator.enums.Type;
 import com.kreig133.daogenerator.parametr.Parameter;
 
 import java.util.List;
@@ -20,7 +19,7 @@ public class AnnotationGenerator {
         List<Parameter> inputParameterList  = settings.getInputParameterList();
         List<Parameter> outputParameterList = settings.getOutputParameterList();
         String selectQuery                  = settings.getSelectQuery().toString();
-        String name                         = settings.getName();
+        String name                         = settings.getFunctionName();
 
 
         StringBuilder builder = new StringBuilder();

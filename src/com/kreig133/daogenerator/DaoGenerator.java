@@ -30,6 +30,7 @@ public class DaoGenerator  implements Settings{
 
         if (returnVal == JFileChooser.APPROVE_OPTION) {
             File file = fc.getSelectedFile();
+            OPERATION_NAME = file.getName();
             path = file.getAbsolutePath();
         } else {
             System.exit( 0 );
@@ -68,18 +69,19 @@ public class DaoGenerator  implements Settings{
             File fileWithData
     ) throws IOException {
         //считываем название из файла ( название файла = название хранимки, запроса )
-        name = fileWithData.getName().split(".txt")[0];
+        FUNCTION_NAME = fileWithData.getName().split(".txt")[0];
 
         clearBefore();
 
         InputFileParser.readFileWithDataForGenerateDao( fileWithData );
 
         if (!INPUT_PARAMETER_LIST.isEmpty()) {
-            createJavaClassForInputOutputWrappers(INPUT_PARAMETER_LIST, Utils.convertNameForClassNaming(name) + "In");
+            createJavaClassForInputOutputWrappers(INPUT_PARAMETER_LIST, Utils.convertNameForClassNaming( FUNCTION_NAME ) + "In");
         }
 
         if (!OUTPUT_PARAMETER_LIST.isEmpty()) {
-            createJavaClassForInputOutputWrappers(OUTPUT_PARAMETER_LIST, Utils.convertNameForClassNaming(name) +
+            createJavaClassForInputOutputWrappers(OUTPUT_PARAMETER_LIST, Utils.convertNameForClassNaming(
+                    FUNCTION_NAME ) +
                     "Out");
         }
 
@@ -111,7 +113,9 @@ public class DaoGenerator  implements Settings{
 
 
 
-    private static String name;
+    private static String FUNCTION_NAME;
+
+    private static String OPERATION_NAME;
 
     final static private List<Parameter> INPUT_PARAMETER_LIST = new ArrayList<Parameter>();
     final static private List<Parameter> OUTPUT_PARAMETER_LIST = new ArrayList<Parameter>();
@@ -175,8 +179,8 @@ public class DaoGenerator  implements Settings{
         return QUERY;
     }
 
-    public String getName() {
-        return name;
+    public String getFunctionName() {
+        return FUNCTION_NAME;
     }
 
     public ReturnType getReturnType() {
@@ -185,6 +189,11 @@ public class DaoGenerator  implements Settings{
 
     public String getOutputPath() {
         return OUTPUT_PATH;
+    }
+
+    @Override
+    public String getOperationName() {
+        return OPERATION_NAME;
     }
 
     private DaoGenerator(){}
@@ -196,5 +205,4 @@ public class DaoGenerator  implements Settings{
     public static DaoGenerator instance(){
         return Inner.INSTANCE;
     }
-
 }

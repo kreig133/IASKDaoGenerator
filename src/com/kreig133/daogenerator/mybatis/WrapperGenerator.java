@@ -16,7 +16,7 @@ public class WrapperGenerator {
     ){
         final List<Parameter> inputParametrs    = settings.getInputParameterList();
         final List<Parameter> outputParametrs   = settings.getOutputParameterList();
-        final String          name              = settings.getName();
+        final String          name              = settings.getFunctionName();
 
         StringBuilder builder = new StringBuilder();
 

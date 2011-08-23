@@ -18,7 +18,7 @@ public class InterfaceMethodGenerator {
     ) {
         final List< Parameter > INPUT_PARAMETER_LIST    = settings.getInputParameterList();
         final List< Parameter > OUTPUT_PARAMETER_LIST   = settings.getOutputParameterList();
-        final String            name                    = settings.getName();
+        final String            name                    = settings.getFunctionName();
         final ReturnType        returnType              = settings.getReturnType();
 
         StringBuilder result = new StringBuilder( );

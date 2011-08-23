@@ -23,7 +23,9 @@ public interface Settings {
 
     StringBuilder getSelectQuery();
 
-    String getName();
+    String getFunctionName();
+
+    String getOperationName();
 
     ReturnType getReturnType();
 

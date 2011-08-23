@@ -3,8 +3,6 @@ package com.kreig133.daogenerator.mybatis;
 import com.kreig133.daogenerator.InOutClass;
 import com.kreig133.daogenerator.Settings;
 import com.kreig133.daogenerator.Utils;
-import com.kreig133.daogenerator.enums.Mode;
-import com.kreig133.daogenerator.enums.Type;
 import com.kreig133.daogenerator.parametr.Parameter;
 
 import java.util.List;
@@ -19,7 +17,7 @@ public class XmlMappingGenerator {
     ){
         List<Parameter> INPUT_PARAMETER_LIST    = settings.getInputParameterList();
         List<Parameter> OUTPUT_PARAMETER_LIST   = settings.getOutputParameterList();
-        String name                             = settings.getName();
+        String name                             = settings.getFunctionName();
 
         StringBuilder result = new StringBuilder();
         result.append("    <select id=\"");

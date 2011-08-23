@@ -31,13 +31,13 @@ public class MyBatis {
 
         switch ( settings.getType() ){
             case IASK:
-                Utils.appandByteToFile( new File( settings.getOutputPath() + "+/mapper.java" ),
+                Utils.appandByteToFile( new File( settings.getOutputPath() + "+/"+settings.getOperationName()+".java" ),
                         XmlMappingGenerator.generateXmlMapping( settings ).getBytes() );
                 break;
             case DEPO:
                 method = AnnotationGenerator.generateAnnotation( settings )
                         + InterfaceMethodGenerator.methodGenerator( settings ) + "\n";
-                Utils.appandByteToFile( new File( settings.getOutputPath() + "/mapper.java" ),
+                Utils.appandByteToFile( new File( settings.getOutputPath() + "/"+settings.getOperationName()+"Mapper.java" ),
                         method.getBytes() );
                 break;
         }
@@ -48,7 +48,7 @@ public class MyBatis {
     ) throws IOException {
 
         Utils.appandByteToFile(
-                new File( settings.getOutputPath() + "interface.java" ),
+                new File( settings.getOutputPath() + settings.getOperationName() +".java" ),
                 InterfaceMethodGenerator.methodGenerator( settings ).getBytes()
         );
     }
