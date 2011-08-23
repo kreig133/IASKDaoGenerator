@@ -29,7 +29,7 @@ public class InputParameter extends Parameter {
                 (
                         ( defaultValue == null || "".equals(defaultValue) )?
                         ";\n\n" :
-                        " = " + defaultValue.toLowerCase() + ";\n\n"
+                        " = " + defaultValue.toLowerCase() + ( "Long".equals( type ) ? "L;\n\n" :";\n\n" )
                 );
     }
 }

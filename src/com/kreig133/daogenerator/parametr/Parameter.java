@@ -27,6 +27,8 @@ abstract public class Parameter {
                 "long"      .equals( type )
                 ||
                 "smallint"  .equals( type )
+                ||
+                type.startsWith( "numeric" )
         ) {
             this.type = "Long";
         } else if (

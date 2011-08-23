@@ -16,13 +16,19 @@ public class InterfaceMethodGenerator {
     public static String methodGenerator(
         Settings settings
     ) {
+        return "    " + generateMethodSignature( settings ) + ";\n";
+    }
+
+    public static String generateMethodSignature(
+        Settings settings
+    ) {
+
         final List< Parameter > INPUT_PARAMETER_LIST    = settings.getInputParameterList();
         final List< Parameter > OUTPUT_PARAMETER_LIST   = settings.getOutputParameterList();
         final String            name                    = settings.getFunctionName();
         final ReturnType        returnType              = settings.getReturnType();
 
         StringBuilder result = new StringBuilder( );
-        result.append("    ");
 
         if (!OUTPUT_PARAMETER_LIST.isEmpty()) {
             if( returnType == ReturnType.MULTIPLE ){
@@ -45,7 +51,7 @@ public class InterfaceMethodGenerator {
             result.append(Utils.convertNameForClassNaming(name));
             result.append("In request");
         }
-        result.append(");\n");
+        result.append(")");
 
         return result.toString();
     }

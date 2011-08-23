@@ -2,18 +2,18 @@ package com.kreig133.daogenerator.mybatis;
 
 import com.kreig133.daogenerator.Settings;
 import com.kreig133.daogenerator.Utils;
-import com.kreig133.daogenerator.enums.SelectType;
-import com.kreig133.daogenerator.enums.Type;
 
 import java.io.File;
 import java.io.IOException;
-import java.text.Annotation;
 
 /**
  * @author eshangareev
  * @version 1.0
  */
 public class MyBatis {
+
+    public static final String MAPPER_PREFIX = "Mapper";
+    public static final String JAVA_EXTENSION = ".java";
 
     public static void generateFiles(
             Settings settings
@@ -31,13 +31,15 @@ public class MyBatis {
 
         switch ( settings.getType() ){
             case IASK:
-                Utils.appandByteToFile( new File( settings.getOutputPath() + "+/"+settings.getOperationName()+".java" ),
+                Utils.appandByteToFile( new File( settings.getOutputPath() + "+/"+settings.getOperationName()+
+                        JAVA_EXTENSION ),
                         XmlMappingGenerator.generateXmlMapping( settings ).getBytes() );
                 break;
             case DEPO:
                 method = AnnotationGenerator.generateAnnotation( settings )
                         + InterfaceMethodGenerator.methodGenerator( settings ) + "\n";
-                Utils.appandByteToFile( new File( settings.getOutputPath() + "/"+settings.getOperationName()+"Mapper.java" ),
+                Utils.appandByteToFile( new File( settings.getOutputPath() + "/"+settings.getOperationName()+
+                        MAPPER_PREFIX + JAVA_EXTENSION ),
                         method.getBytes() );
                 break;
         }
@@ -48,12 +50,18 @@ public class MyBatis {
     ) throws IOException {
 
         Utils.appandByteToFile(
-                new File( settings.getOutputPath() + settings.getOperationName() +".java" ),
+                new File( settings.getOutputPath() + settings.getOperationName() +"Dao" + JAVA_EXTENSION ),
                 InterfaceMethodGenerator.methodGenerator( settings ).getBytes()
         );
     }
 
-    public static void generateImplementation( Settings settings ){
-        //TODO Доделать
+    public static void generateImplementation(
+            Settings settings
+    ) throws IOException {
+        
+        Utils.appandByteToFile(
+                new File( settings.getOutputPath() + settings.getOperationName() + "DaoImpl" + JAVA_EXTENSION ),
+                ImplementationMethodGenerator.generateMethodImpl( settings ).getBytes()
+        );
     }
 }
