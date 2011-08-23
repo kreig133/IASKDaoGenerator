@@ -57,7 +57,7 @@ public class XmlMappingGenerator {
         boolean  first = true;
         for (Parameter p : INPUT_PARAMETER_LIST) {
             if( !first ){
-                result.append( "           ,#{\"" );
+                result.append( "           ,#{" );
             } else {
                 first = false;
                 result.append( "            #{" );

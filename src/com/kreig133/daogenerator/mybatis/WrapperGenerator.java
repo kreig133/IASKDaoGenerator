@@ -63,6 +63,7 @@ public class WrapperGenerator {
             builder.append( "\n" );
         }
 
+        builder.append( ";\n" );
         builder.append( "select @res = @@error;\n" );
         builder.append( "if @res<>0 return -1;\n" );
         builder.append( "SELECT * FROM #TempTableForNamedResultSet" );

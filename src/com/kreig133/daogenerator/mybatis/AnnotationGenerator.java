@@ -56,7 +56,7 @@ public class AnnotationGenerator {
 
         StringBuilder result = null;
 
-        final String[] split = query.split( "\\?" );
+        String[] split = query.split( "\\?" );
         if( split.length > 1 ){
 
             result = new StringBuilder();
@@ -71,30 +71,27 @@ public class AnnotationGenerator {
                 result.append( "}" );
                 index ++ ;
             }
+            result.append( split[split.length - 1 ] );
         }
 
-        if( sqlQuery.split( ":" ).length > 1 ){
+        split = sqlQuery.split( ":" );
+        if( split.length > 1 ){
             if( result != null ){
                 query = result.toString();
             }
 
             result = new StringBuilder();
 
-            int index = 0;
-            
-            for( String string: sqlQuery.split( ":" )){
-                if( index == 0 ){
-                    result.append( string );
-                    index ++ ;
+            for( int i = 0; i < split.length ; i++ ){
+                if( i == 0 ){
+                    result.append( split[i] );
                 } else {
-                    String[] aftefSplit = string.split( "[ =;,\\)\\n\\t\\r\\*\\-\\+/<>]" );
+                    result.append( "${" );
+                    String[] aftefSplit = split[i].split( "[ =;,\\)\\n\\t\\r\\*\\-\\+/<>]" );
                     result.append( aftefSplit[0] );
                     result.append( "} " );
-                    if( aftefSplit.length > 1 ) {
-                        result.append( string.substring( aftefSplit[0].length() + 1 ) );
-                    }
+                    result.append( split[i].substring( aftefSplit[0].length() + 1 ) );
                 }
-                result.append( "${" );
             }
         }
 
