@@ -13,10 +13,6 @@ import java.util.List;
  */
 public class Parsers {
 
-
-
-
-
     public static void readLine(
             Settings settings,
             Mode mode,

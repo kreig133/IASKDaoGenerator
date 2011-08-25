@@ -23,7 +23,12 @@ public class AnnotationGenerator {
 
 
         StringBuilder builder = new StringBuilder();
-        builder.append( "    @Select(\n" );
+
+        builder.append( "    @" );
+        builder.append( selectType.getAnnotation() );
+        builder.append( "(\n" );
+
+        assert selectType !=null ;
 
         switch ( selectType ){
 
@@ -38,7 +43,7 @@ public class AnnotationGenerator {
                     Utils.wrapWithQuotes( WrapperGenerator.generateWrapperProcedure( settings ) ) );
                 break;
 
-            case SELECT:
+            default:
                 builder.append(
                     Utils.wrapWithQuotes( processSelectQueryString( selectQuery, inputParameterList  ) )
                 );

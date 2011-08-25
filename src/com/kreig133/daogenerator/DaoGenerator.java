@@ -36,8 +36,6 @@ public class DaoGenerator  implements Settings{
             System.exit( 0 );
         }
 
-
-
         returnVal = fc.showSaveDialog( null );
         
         if (returnVal == JFileChooser.APPROVE_OPTION) {
@@ -63,8 +61,6 @@ public class DaoGenerator  implements Settings{
         }
     }
 
-
-
     public static void controller(
             File fileWithData
     ) throws IOException {
@@ -87,8 +83,6 @@ public class DaoGenerator  implements Settings{
 
         MyBatis.generateFiles( instance() );
     }
-
-
 
     private static void createJavaClassForInputOutputWrappers(
             List<Parameter> parameterList,
@@ -117,15 +111,15 @@ public class DaoGenerator  implements Settings{
 
     private static String OPERATION_NAME;
 
-    final static private List<Parameter> INPUT_PARAMETER_LIST = new ArrayList<Parameter>();
-    final static private List<Parameter> OUTPUT_PARAMETER_LIST = new ArrayList<Parameter>();
+    private final static List<Parameter> INPUT_PARAMETER_LIST  = new ArrayList<Parameter>();
+    private final static List<Parameter> OUTPUT_PARAMETER_LIST = new ArrayList<Parameter>();
 
     static private String OUTPUT_PATH ;
     static private String OUTPUT_PATH_FOR_ENTITY ;
 
     static private StringBuilder QUERY;
 
-    static private Type TYPE;
+    static private Type       TYPE;
     static private SelectType SELECT_TYPE;
     static private ReturnType RETURN_TYPE;
 
