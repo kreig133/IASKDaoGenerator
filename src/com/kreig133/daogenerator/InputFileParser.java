@@ -40,8 +40,9 @@ public class InputFileParser {
             try{
 
                 if( ! isStopLine( line ) ){
-                    if( mode != null && line.length() > 7 )
+                    if( mode != null && ( mode == Mode.IS_SELECT_QUERY ? true : line.length() > 7 ) ){
                         Parsers.readLine( DaoGenerator.instance(), mode, line );
+                    }
                 }
 
                 line = reader.readLine();

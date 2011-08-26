@@ -5,6 +5,7 @@ import com.sun.java.browser.plugin2.liveconnect.v1.Result;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.List;
 
 /**
  * @author eshangareev
@@ -76,7 +77,11 @@ public class Utils {
     }
 
     public static String wrapWithQuotes( String string ){
+
         String[] strings = string.split( "\n" );
+
+        strings = deleteEmptyStrings( strings );
+
         StringBuilder builder = new StringBuilder();
 
         for( int i = 0; i < strings.length; i++ ){
@@ -87,9 +92,30 @@ public class Utils {
             }
             builder.append( "\"" );
             builder.append( strings[ i ] );
-            builder.append( "\"\n" );
+            builder.append( "\\n\"\n" );
         }
         return builder.toString();
+    }
+
+    public static String[] deleteEmptyStrings( String [] in ){
+        String [] temp = new String[in.length];
+
+        int length = 0;
+
+        for( String s: in ){
+            if( stringNotEmpty( s ) ){
+                temp[length] = s;
+                length ++ ;
+            }
+        }
+
+        String[] result = new String[length];
+
+        for( int i = 0; i < length; i++ ){
+            result[i] = temp[i];
+        }
+
+        return result;
     }
 
     public static void appandByteToFile(File file, byte[] data) throws IOException {
