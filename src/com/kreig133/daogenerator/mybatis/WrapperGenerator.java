@@ -20,7 +20,6 @@ public class WrapperGenerator {
 
         StringBuilder builder = new StringBuilder();
 
-        builder.append( "declare @res int;\n" );
         builder.append( "create table #TempTableForNamedResultSet(\n" );
 
         boolean first = true;
@@ -42,7 +41,6 @@ public class WrapperGenerator {
         }
 
         builder.append( ");\n" );
-        builder.append( "select @res = 0;\n" );
         builder.append( "insert into #TempTableForNamedResultSet\n" );
         builder.append( "     exec " );
         builder.append( name );
@@ -66,8 +64,6 @@ public class WrapperGenerator {
         }
 
         builder.append( ";\n" );
-        builder.append( "select @res = @@error;\n" );
-        builder.append( "if @res<>0 return -1;\n" );
         builder.append( "SELECT * FROM #TempTableForNamedResultSet" );
 
         return builder.toString();
