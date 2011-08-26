@@ -28,8 +28,13 @@ public class InputParameter extends Parameter {
         return super.toString() +
                 (
                         ( defaultValue == null || "".equals(defaultValue) )?
-                        ";\n\n" :
-                        " = " + defaultValue.toLowerCase() + ( "Long".equals( type ) ? "L;\n\n" :";\n\n" )
-                );
+                            "" :
+                            " = " + defaultValue.toLowerCase() +
+                                    (
+                                            "Long".equals( type ) ?
+                                                    ( "null".equals( defaultValue.toLowerCase() )?  "" :  "L" ) :
+                                                     ""
+                                    )
+                ) + ";\n\n";
     }
 }

@@ -60,7 +60,9 @@ public class WrapperGenerator {
 
             builder.append( "@" );
             builder.append( p.getName() );
-            builder.append( "\n" );
+            builder.append( " = ${" );
+            builder.append( p.getName() );
+            builder.append( "}\n" );
         }
 
         builder.append( ";\n" );
