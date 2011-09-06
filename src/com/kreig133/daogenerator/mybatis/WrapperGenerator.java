@@ -14,6 +14,31 @@ public class WrapperGenerator {
     public static String generateWrapperProcedure (
         Settings settings
     ){
+        switch ( settings.getSelectType() ){
+            case GENERATE:
+                return generateWrapperForStoreProcedureWithoutColumnName( settings );
+            case GENEROUT:
+                return generateWrapperForStoreProcedureWithoutResultSet( settings );
+        }
+        throw new IllegalArgumentException();
+    }
+
+    private static String generateWrapperForStoreProcedureWithoutResultSet( Settings settings ) {
+        final List<Parameter> inputParametrs    = settings.getInputParameterList();
+        final List<Parameter> outputParametrs   = settings.getOutputParameterList();
+        final String          name              = settings.getFunctionName();
+
+        StringBuilder builder = new StringBuilder();
+
+        builder.append( "" );
+
+
+
+
+        return builder.toString();
+    }
+
+    private static String generateWrapperForStoreProcedureWithoutColumnName( Settings settings ) {
         final List<Parameter> inputParametrs    = settings.getInputParameterList();
         final List<Parameter> outputParametrs   = settings.getOutputParameterList();
         final String          name              = settings.getFunctionName();

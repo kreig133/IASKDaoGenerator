@@ -50,12 +50,14 @@ public class DaoGenerator  implements Settings{
 
         for(
                 String s:
-                (new File(path)).list(new FilenameFilter() {
-                    public boolean accept(File dir, String name) {
-                        return name.endsWith("txt");
-                    }
-                }
-            )
+                ( new File( path ) )
+                        .list(
+                                new FilenameFilter() {
+                                    public boolean accept(File dir, String name) {
+                                        return name.endsWith("txt");
+                                    }
+                                }
+                        )
         ) {
             controller(new File(path + "/"+s));
         }

@@ -39,6 +39,7 @@ public class AnnotationGenerator {
                 break;
 
             case GENERATE:
+            case GENEROUT:
                 builder.append(
                     Utils.wrapWithQuotes( WrapperGenerator.generateWrapperProcedure( settings ) ) );
                 break;

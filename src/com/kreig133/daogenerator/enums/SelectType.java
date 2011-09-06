@@ -5,7 +5,13 @@ package com.kreig133.daogenerator.enums;
  * @version 1.0
  */
 public enum SelectType {
-    CALL("Select"), SELECT("Select"), GENERATE("Select"), INSERT("Insert"), DELETE("Delete"), UPDATE("Update");
+    CALL    ("Select"),
+    SELECT  ("Select"),
+    GENERATE("Select"),
+    GENEROUT("Select"),
+    INSERT  ("Insert"),
+    DELETE  ("Delete"),
+    UPDATE  ("Update");
 
     private String annotation;
 
@@ -37,6 +43,9 @@ public enum SelectType {
         }
         if( "update".equals( name ) ){
             return UPDATE;
+        }
+        if( "generout".equals( name ) ){
+            return GENEROUT;
         }
         return null;
     }
