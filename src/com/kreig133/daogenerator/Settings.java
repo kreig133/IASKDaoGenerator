@@ -3,8 +3,7 @@ package com.kreig133.daogenerator;
 import com.kreig133.daogenerator.enums.ReturnType;
 import com.kreig133.daogenerator.enums.SelectType;
 import com.kreig133.daogenerator.enums.Type;
-import com.kreig133.daogenerator.parametr.Parameter;
-import com.sun.org.apache.bcel.internal.generic.Select;
+import com.kreig133.daogenerator.parameter.Parameter;
 
 import java.util.List;
 

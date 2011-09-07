@@ -3,7 +3,8 @@ package com.kreig133.daogenerator.mybatis;
 import com.kreig133.daogenerator.Settings;
 import com.kreig133.daogenerator.Utils;
 import com.kreig133.daogenerator.enums.SelectType;
-import com.kreig133.daogenerator.parametr.Parameter;
+import com.kreig133.daogenerator.parameter.Parameter;
+import com.kreig133.daogenerator.mybatis.wrappers.WrapperGenerators;
 
 import java.util.List;
 
@@ -41,7 +42,7 @@ public class AnnotationGenerator {
             case GENERATE:
             case GENEROUT:
                 builder.append(
-                    Utils.wrapWithQuotes( WrapperGenerator.generateWrapperProcedure( settings ) ) );
+                    Utils.wrapWithQuotes( WrapperGenerators.generateWrapperProcedure( settings ) ) );
                 break;
 
             default:

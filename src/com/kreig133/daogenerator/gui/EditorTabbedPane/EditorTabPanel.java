@@ -1,7 +1,6 @@
 package com.kreig133.daogenerator.gui.EditorTabbedPane;
 
-import com.kreig133.daogenerator.InOutClass;
-import com.kreig133.daogenerator.parametr.Parameter;
+import com.kreig133.daogenerator.parameter.Parameter;
 
 import javax.swing.*;
 import javax.swing.table.AbstractTableModel;

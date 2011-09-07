@@ -1,10 +1,11 @@
 package com.kreig133.daogenerator;
 
+import com.kreig133.daogenerator.enums.JavaType;
 import com.kreig133.daogenerator.enums.ReturnType;
 import com.kreig133.daogenerator.enums.SelectType;
 import com.kreig133.daogenerator.enums.Type;
 import com.kreig133.daogenerator.mybatis.MyBatis;
-import com.kreig133.daogenerator.parametr.Parameter;
+import com.kreig133.daogenerator.parameter.Parameter;
 
 import javax.swing.*;
 import java.io.*;

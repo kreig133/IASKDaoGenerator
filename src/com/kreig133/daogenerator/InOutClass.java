@@ -1,6 +1,6 @@
 package com.kreig133.daogenerator;
 
-import com.kreig133.daogenerator.parametr.Parameter;
+import com.kreig133.daogenerator.parameter.Parameter;
 
 import java.util.List;
 

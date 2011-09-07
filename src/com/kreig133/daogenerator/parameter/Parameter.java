@@ -1,6 +1,7 @@
-package com.kreig133.daogenerator.parametr;
+package com.kreig133.daogenerator.parameter;
 
 import com.kreig133.daogenerator.Utils;
+import com.kreig133.daogenerator.enums.JavaType;
 
 /**
  * @author eshangareev
@@ -8,48 +9,18 @@ import com.kreig133.daogenerator.Utils;
  */
 abstract public class Parameter {
     protected String comment;
-    protected String type;
+    protected JavaType type;
     protected String name;
     protected String sqlType;
 
-    public Parameter(String comment, String type, String name) {
+    public Parameter( String comment, String type, String name ) {
         this.comment = comment;
 
         type = type.trim().toLowerCase();
 
         sqlType = type;
 
-        if (
-                "int"       .equals( type )
-                ||
-                "byte"      .equals( type )
-                ||
-                "long"      .equals( type )
-                ||
-                "smallint"  .equals( type )
-                ||
-                type.startsWith( "numeric" )
-        ) {
-            this.type = "Long";
-        } else if (
-                "datetime"  .equals( type )
-        ) {
-            this.type = "Date";
-        } else if (
-                type != null
-                &&
-                (
-                    type.startsWith( "varchar" )
-                    ||
-                    type .startsWith( "string" )
-                )
-        ) {
-            this.type = "String";
-        } else if (
-                type != null && type.startsWith("decimal")
-        ) {
-            this.type = "Double";
-        }
+        this.type = JavaType.getBySqlType( type );
 
         this.name = name.trim();
     }
@@ -62,11 +33,11 @@ abstract public class Parameter {
         this.comment = comment;
     }
 
-    public String getType() {
+    public JavaType getType() {
         return type;
     }
 
-    public void setType(String type) {
+    public void setType( JavaType type ) {
         this.type = type;
     }
 

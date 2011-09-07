@@ -1,6 +1,7 @@
-package com.kreig133.daogenerator.parametr;
+package com.kreig133.daogenerator.parameter;
 
 import com.kreig133.daogenerator.Utils;
+import com.kreig133.daogenerator.enums.InputParameterType;
 
 /**
  * @author eshangareev
@@ -8,10 +9,12 @@ import com.kreig133.daogenerator.Utils;
  */
 public class InputParameter extends Parameter {
     private String defaultValue;
+    private InputParameterType inputType;
 
-    public InputParameter(String name, String type, String defaultValue, String comment) {
+    public InputParameter(String name, String type, String defaultValue, String comment, InputParameterType inputType) {
         super(comment, type, name);
         this.defaultValue = Utils.handleDefaultValue( defaultValue );
+        this.inputType = inputType;
     }
 
     public String getDefaultValue() {
@@ -20,6 +23,14 @@ public class InputParameter extends Parameter {
 
     public void setDefaultValue(String defaultValue) {
         this.defaultValue = defaultValue;
+    }
+
+    public InputParameterType getInputType() {
+        return inputType;
+    }
+
+    public void setInputType( InputParameterType inputType ) {
+        this.inputType = inputType;
     }
 
     @Override

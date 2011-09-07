@@ -1,4 +1,4 @@
-package com.kreig133.daogenerator.parametr;
+package com.kreig133.daogenerator.parameter;
 
 /**
  * @author eshangareev

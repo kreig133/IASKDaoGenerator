@@ -1,8 +1,9 @@
 package com.kreig133.daogenerator.parsers;
 
 import com.kreig133.daogenerator.Utils;
-import com.kreig133.daogenerator.parametr.InputParameter;
-import com.kreig133.daogenerator.parametr.Parameter;
+import com.kreig133.daogenerator.enums.InputParameterType;
+import com.kreig133.daogenerator.parameter.InputParameter;
+import com.kreig133.daogenerator.parameter.Parameter;
 
 import java.util.List;
 /**
@@ -24,7 +25,8 @@ public class InputParameterParser implements IParser<List<Parameter>>{
                         params[ i ],
                         params[ i+1 ],
                         params.length > i+2 ? params[ i+2 ] : null,
-                        params.length > i+3 ? params[ i+2 ] : null
+                        params.length > i+3 ? params[ i+2 ] : null,
+                        InputParameterType.OUT
                 )
         );
     }
