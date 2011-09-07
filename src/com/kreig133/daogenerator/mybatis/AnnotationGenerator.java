@@ -73,7 +73,7 @@ public class AnnotationGenerator {
             for( int i = 0; i < split.length - 1; i++ ){
                 String string = split[i];
                 result.append( string );
-                result.append( "${" );
+                result.append( "#{" );
                 result.append( inputParameters.get( index ).getName() );
                 result.append( "}" );
                 index ++ ;
@@ -93,7 +93,7 @@ public class AnnotationGenerator {
                 if( i == 0 ){
                     result.append( split[i] );
                 } else {
-                    result.append( "${" );
+                    result.append( "#{" );
                     String[] aftefSplit = split[i].split( "[ =;,\\)\\n\\t\\r\\*\\-\\+/<>]" );
                     result.append( aftefSplit[0] );
                     result.append( "} " );
