@@ -1,8 +1,8 @@
 package com.kreig133.daogenerator.mybatis;
 
-import com.kreig133.daogenerator.InOutClass;
-import com.kreig133.daogenerator.Settings;
-import com.kreig133.daogenerator.Utils;
+import com.kreig133.daogenerator.common.InOutClass;
+import com.kreig133.daogenerator.common.Settings;
+import com.kreig133.daogenerator.common.Utils;
 import com.kreig133.daogenerator.parameter.Parameter;
 
 import java.util.List;
@@ -32,9 +32,9 @@ public class XmlMappingGenerator {
         }
         if (!OUTPUT_PARAMETER_LIST.isEmpty()) {
             result.append("\n        resultType=\"");
-            result.append(InOutClass.PACKAGE);
+            result.append( InOutClass.PACKAGE);
             result.append(".");
-            result.append(Utils.convertNameForClassNaming(name));
+            result.append( Utils.convertNameForClassNaming( name ));
             result.append("Out\"");
         }
         result.append(">\n\n");

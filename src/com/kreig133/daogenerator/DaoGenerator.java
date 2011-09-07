@@ -1,11 +1,14 @@
 package com.kreig133.daogenerator;
 
-import com.kreig133.daogenerator.enums.JavaType;
+import com.kreig133.daogenerator.common.InOutClass;
+import com.kreig133.daogenerator.common.Settings;
+import com.kreig133.daogenerator.common.Utils;
 import com.kreig133.daogenerator.enums.ReturnType;
 import com.kreig133.daogenerator.enums.SelectType;
 import com.kreig133.daogenerator.enums.Type;
 import com.kreig133.daogenerator.mybatis.MyBatis;
 import com.kreig133.daogenerator.parameter.Parameter;
+import com.kreig133.daogenerator.parsers.InputFileParser;
 
 import javax.swing.*;
 import java.io.*;
@@ -16,7 +19,7 @@ import java.util.List;
  * @author eshangareev
  * @version 1.0
  */
-public class DaoGenerator  implements Settings{
+public class DaoGenerator  implements Settings {
 
     public static void main(String[] args) throws IOException {
 
@@ -74,20 +77,24 @@ public class DaoGenerator  implements Settings{
 
         InputFileParser.readFileWithDataForGenerateDao( fileWithData );
 
-        if (!INPUT_PARAMETER_LIST.isEmpty()) {
-            createJavaClassForInputOutputWrappers(INPUT_PARAMETER_LIST, Utils.convertNameForClassNaming( FUNCTION_NAME ) + "In");
+        if (
+                ( INPUT_PARAMETER_LIST.size() > 3 && TYPE == Type.DEPO ) ||
+                ( INPUT_PARAMETER_LIST.size() > 1 && TYPE == Type.IASK )
+        ) {
+            createJavaClassForInputOutputEntities( INPUT_PARAMETER_LIST,
+                    Utils.convertNameForClassNaming( FUNCTION_NAME ) + "In" );
         }
 
-        if (!OUTPUT_PARAMETER_LIST.isEmpty()) {
-            createJavaClassForInputOutputWrappers(OUTPUT_PARAMETER_LIST, Utils.convertNameForClassNaming(
+        if ( OUTPUT_PARAMETER_LIST.size() > 1 ) {
+            createJavaClassForInputOutputEntities( OUTPUT_PARAMETER_LIST, Utils.convertNameForClassNaming(
                     FUNCTION_NAME ) +
-                    "Out");
+                    "Out" );
         }
 
         MyBatis.generateFiles( instance() );
     }
 
-    private static void createJavaClassForInputOutputWrappers(
+    private static void createJavaClassForInputOutputEntities(
             List<Parameter> parameterList,
             String name
     ) throws IOException {

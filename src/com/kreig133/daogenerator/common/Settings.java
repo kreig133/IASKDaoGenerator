@@ -1,4 +1,4 @@
-package com.kreig133.daogenerator;
+package com.kreig133.daogenerator.common;
 
 import com.kreig133.daogenerator.enums.ReturnType;
 import com.kreig133.daogenerator.enums.SelectType;

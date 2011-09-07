@@ -1,4 +1,4 @@
-package com.kreig133.daogenerator;
+package com.kreig133.daogenerator.common;
 
 import com.sun.java.browser.plugin2.liveconnect.v1.Result;
 

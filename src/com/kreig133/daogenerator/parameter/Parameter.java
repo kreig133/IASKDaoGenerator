@@ -1,6 +1,6 @@
 package com.kreig133.daogenerator.parameter;
 
-import com.kreig133.daogenerator.Utils;
+import com.kreig133.daogenerator.common.Utils;
 import com.kreig133.daogenerator.enums.JavaType;
 
 /**

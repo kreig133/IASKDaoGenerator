@@ -1,14 +1,14 @@
-package com.kreig133.daogenerator;
+package com.kreig133.daogenerator.parsers;
 
+import com.kreig133.daogenerator.DaoGenerator;
 import com.kreig133.daogenerator.enums.Mode;
 import com.kreig133.daogenerator.enums.ReturnType;
 import com.kreig133.daogenerator.enums.SelectType;
 import com.kreig133.daogenerator.enums.Type;
-import com.kreig133.daogenerator.parsers.Parsers;
 
 import java.io.*;
 
-import static com.kreig133.daogenerator.Utils.*;
+import static com.kreig133.daogenerator.common.Utils.*;
 
 /**
  * @author eshangareev

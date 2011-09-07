@@ -12,27 +12,6 @@ import java.util.List;
  */
 public class CommonWrapperGenerator {
 
-    protected static void iterateForParametrList(
-        StringBuilder builder,
-        List<Parameter> parameterList,
-        FuctionalObject functionalObject
-    ){
-        boolean first = true;
-
-        for( Parameter p: parameterList ){
-            if( functionalObject.filter( p ) ){
-                builder.append( "    " );
-                if(!first){
-                    builder.append( "," );
-                } else {
-                    first = false;
-                }
-                functionalObject.writeString( builder, p );
-                builder.append( "\n" );
-            }
-        }
-    }
-
     protected static void declareParamInProcedure( StringBuilder builder, Parameter p ) {
         declareInTypeParamInProcedure( builder, p );
     }

@@ -1,6 +1,6 @@
 package com.kreig133.daogenerator.mybatis;
 
-import com.kreig133.daogenerator.Settings;
+import com.kreig133.daogenerator.common.Settings;
 
 /**
  * @author eshangareev

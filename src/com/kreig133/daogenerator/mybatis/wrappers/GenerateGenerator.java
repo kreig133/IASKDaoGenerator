@@ -1,8 +1,10 @@
 package com.kreig133.daogenerator.mybatis.wrappers;
 
-import com.kreig133.daogenerator.Settings;
+import com.kreig133.daogenerator.common.Settings;
 import com.kreig133.daogenerator.mybatis.wrappers.strategy.FuctionalObject;
 import com.kreig133.daogenerator.parameter.Parameter;
+
+import static com.kreig133.daogenerator.mybatis.MyBatisUtils.*;
 
 import java.util.List;
 

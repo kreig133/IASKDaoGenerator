@@ -1,6 +1,6 @@
 package com.kreig133.daogenerator.parsers;
 
-import com.kreig133.daogenerator.Settings;
+import com.kreig133.daogenerator.common.Settings;
 import com.kreig133.daogenerator.parameter.Parameter;
 import com.kreig133.daogenerator.enums.Mode;
 

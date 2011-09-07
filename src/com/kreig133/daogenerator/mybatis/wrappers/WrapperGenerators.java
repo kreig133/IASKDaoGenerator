@@ -1,11 +1,6 @@
 package com.kreig133.daogenerator.mybatis.wrappers;
 
-import com.kreig133.daogenerator.Settings;
-import com.kreig133.daogenerator.parameter.InputParameter;
-import com.kreig133.daogenerator.parameter.Parameter;
-import com.kreig133.daogenerator.mybatis.wrappers.strategy.*;
-
-import java.util.List;
+import com.kreig133.daogenerator.common.Settings;
 
 /**
  * @author eshangareev

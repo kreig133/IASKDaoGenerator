@@ -7,6 +7,7 @@ import com.kreig133.daogenerator.parameter.Parameter;
  * @version 1.0
  */
 public interface FuctionalObject {
+
     void writeString( StringBuilder builder, Parameter p );
 
     boolean filter( Parameter p );

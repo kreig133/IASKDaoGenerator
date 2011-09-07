@@ -1,7 +1,7 @@
 package com.kreig133.daogenerator.mybatis;
 
-import com.kreig133.daogenerator.Settings;
-import com.kreig133.daogenerator.Utils;
+import com.kreig133.daogenerator.common.Settings;
+import com.kreig133.daogenerator.common.Utils;
 
 import java.io.File;
 import java.io.IOException;
