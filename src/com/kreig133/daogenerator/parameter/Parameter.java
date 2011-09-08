@@ -80,7 +80,7 @@ abstract public class Parameter {
     }
 
     private String getCommentForJavaDoc(){
-        if( comment == null || "".equals( comment )) return name;
+        if( comment == null || "".equals( comment ) || comment.toLowerCase().equals( "null" ) ) return name;
         return comment;
     }
 }

@@ -49,6 +49,6 @@ public enum JavaType {
             }
         }
 
-        throw new RuntimeException( "Упс! Нашелся баг: я не смогла преобразовать входной тип в java-тип" );
+        throw new RuntimeException( "Упс! Нашелся баг: я не смогла преобразовать входной тип в java-тип. Ай-я-я-яй" );
     }
 }
