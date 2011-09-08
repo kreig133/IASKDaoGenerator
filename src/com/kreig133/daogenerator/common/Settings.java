@@ -30,5 +30,9 @@ public interface Settings {
 
     String getOutputPath();
 
-    String getPackage();
+    String getEntityPackage();
+
+    String getMapperPackage();
+
+    String getDaoPackage();
 }

@@ -6,7 +6,6 @@ import com.kreig133.daogenerator.common.Utils;
 import com.kreig133.daogenerator.enums.ReturnType;
 import com.kreig133.daogenerator.enums.SelectType;
 import com.kreig133.daogenerator.enums.Type;
-import com.kreig133.daogenerator.gui.MainForm;
 import com.kreig133.daogenerator.mybatis.MyBatis;
 import com.kreig133.daogenerator.parameter.Parameter;
 import com.kreig133.daogenerator.parsers.InputFileParser;
@@ -28,7 +27,7 @@ public class DaoGenerator  implements Settings {
 
         JFileChooser fc = new JFileChooser( );
         fc.setMultiSelectionEnabled( false );
-        fc.setCurrentDirectory( new File( System.getProperty("user.dir") ) );
+        fc.setCurrentDirectory ( new File( System.getProperty("user.dir") ) );
         fc.setFileSelectionMode( JFileChooser.DIRECTORIES_ONLY );
 
         String path = null;
@@ -55,6 +54,8 @@ public class DaoGenerator  implements Settings {
 
         createDirectoriesIfTheyNotExists();
 
+        MyBatis.prepareFiles    ( instance() );
+
         for(
                 String s:
                 ( new File( path ) )
@@ -68,6 +69,8 @@ public class DaoGenerator  implements Settings {
         ) {
             controller(new File(path + "/"+s));
         }
+        
+        MyBatis.closeFiles      ( instance() );
     }
 
     private static void controller(
@@ -91,7 +94,7 @@ public class DaoGenerator  implements Settings {
                     "Out" );
         }
 
-        MyBatis.generateFiles( instance() );
+        MyBatis.generateFiles   ( instance() );
     }
 
 
@@ -103,7 +106,7 @@ public class DaoGenerator  implements Settings {
 
         FileWriter writer = null;
         try {
-            InOutClass inOutClass = new InOutClass(PACKAGE, parameterList, name);
+            InOutClass inOutClass = new InOutClass( ENTITY_PACKAGE, parameterList, name);
 
             File inClassFile = new File(OUTPUT_PATH_FOR_ENTITY + "/" + inOutClass.getName() + ".java");
             inClassFile.createNewFile();
@@ -123,7 +126,11 @@ public class DaoGenerator  implements Settings {
 
     private static String OPERATION_NAME;
 
-    private static String PACKAGE = "com.aplana.sbrf.deposit.persistence.custom.entity.accounts.operation" +
+    private static String ENTITY_PACKAGE = "com.aplana.sbrf.deposit.persistence.custom.entity.accounts.operation" +
+            ".administrative.closecount";
+    private static String DAO_PACKAGE = "com.aplana.sbrf.deposit.persistence.custom.entity.accounts.operation" +
+            ".administrative.closecount";
+    private static String MAPPER_PACKAGE = "com.aplana.sbrf.deposit.persistence.custom.entity.accounts.operation" +
             ".administrative.closecount";
 
     private final static List<Parameter> INPUT_PARAMETER_LIST  = new ArrayList<Parameter>();
@@ -136,7 +143,7 @@ public class DaoGenerator  implements Settings {
 
 
 
-    private static Type       TYPE;
+    private static Type       TYPE          = Type.DEPO; //TODO костыль
     private static SelectType SELECT_TYPE;
     private static ReturnType RETURN_TYPE;
 
@@ -208,10 +215,20 @@ public class DaoGenerator  implements Settings {
     }
 
     @Override
-    public String getPackage() {
-        return PACKAGE;
+    public String getEntityPackage() {
+        return ENTITY_PACKAGE;
     }
-    
+
+    @Override
+    public String getMapperPackage() {
+        return MAPPER_PACKAGE;
+    }
+
+    @Override
+    public String getDaoPackage() {
+        return DAO_PACKAGE;
+    }
+
     private DaoGenerator(){}
 
     private static class Inner{
