@@ -1,8 +1,9 @@
 package com.kreig133.daogenerator.mybatis.wrappers;
 
 import com.kreig133.daogenerator.common.Settings;
+import com.kreig133.daogenerator.common.strategy.FunctionalObjectWithoutFilter;
 import com.kreig133.daogenerator.enums.InputParameterType;
-import com.kreig133.daogenerator.mybatis.wrappers.strategy.FuctionalObject;
+import com.kreig133.daogenerator.common.strategy.FuctionalObject;
 import com.kreig133.daogenerator.parameter.InputParameter;
 import com.kreig133.daogenerator.parameter.Parameter;
 
@@ -33,7 +34,6 @@ public class GeneroutGenerator extends CommonWrapperGenerator{
                 index = parameterName( builder, index );
                 builder.append( p.getSqlType() );
             }
-
             @Override
             public boolean filter( Parameter p ) {
                 return isOutParameter( ( InputParameter ) p );
@@ -50,10 +50,8 @@ public class GeneroutGenerator extends CommonWrapperGenerator{
             @Override
             public void writeString( StringBuilder builder, Parameter p ) {
                 index = parameterName( builder, index );
-                builder.append( "= " );
-                builder.append( defaultValue( p ) );
+                builder.append( "= " ).append( defaultValue( p ) );
             }
-
             @Override
             public boolean filter( Parameter p ) {
                 return isOutParameter( ( InputParameter ) p );
@@ -61,20 +59,13 @@ public class GeneroutGenerator extends CommonWrapperGenerator{
         } );
 
         //Выполняем хранимую процедуру
-        builder.append( "EXECUTE DBO." );
-        builder.append( name );
-        builder.append( "\n" );
+        builder.append( "EXECUTE DBO." ).append( name ).append( "\n" );
 
         index = 0;
-        iterateForParameterList( builder, inputParametrs, new FuctionalObject() {
+        iterateForParameterList( builder, inputParametrs, new FunctionalObjectWithoutFilter() {
             @Override
             public void writeString( StringBuilder builder, Parameter p ) {
                 index = declareParamInProcedure( builder, p, index );
-            }
-
-            @Override
-            public boolean filter( Parameter p ) {
-                return true;
             }
         } );
 
@@ -87,7 +78,6 @@ public class GeneroutGenerator extends CommonWrapperGenerator{
                 index = parameterName( builder, index );
                 builder.append( p.getName() );
             }
-
             @Override
             public boolean filter( Parameter p ) {
                 return isOutParameter( ( InputParameter ) p );

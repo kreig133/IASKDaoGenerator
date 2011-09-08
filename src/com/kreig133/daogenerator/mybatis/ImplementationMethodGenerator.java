@@ -11,27 +11,28 @@ public class ImplementationMethodGenerator {
 
     public static String generateMethodImpl( Settings settings ){
 
-        StringBuilder result = new StringBuilder();
+        StringBuilder builder = new StringBuilder();
 
-        result.append( "    @Override\n    public " );
-        result.append( InterfaceMethodGenerator.generateMethodSignature( settings, MethodType.DAO ) );
-        result.append( "{\n" );
-        result.append( "        " );
+        builder.append( "    @Override\n    public " );
+        builder.append( InterfaceMethodGenerator.generateMethodSignature( settings, MethodType.DAO ) );
+        builder.append( "{\n" );
+        builder.append( "        " );
+
         if( ! settings.getOutputParameterList().isEmpty() ){
-            result.append( "return " );
+            builder.append( "return " );
         }
-        result.append( "getSqlSession().getMapper( " );
-        result.append( settings.getOperationName() );
-        result.append( MyBatis.MAPPER_PREFIX );
-        result.append( ".class )." );
-        result.append( settings.getFunctionName() );
-        result.append( "(" );
-        if( ! settings.getInputParameterList().isEmpty() ){
-            result.append( "request" );
-        }
-        result.append( ");\n" );
-        result.append( "    }\n\n" );
 
-        return result.toString();
+        builder.append( "getSqlSession().getMapper( " ).append( settings.getOperationName() );
+        builder.append( MyBatis.MAPPER_PREFIX ).append( ".class )." );
+        builder.append( settings.getFunctionName() ).append( "(" );
+
+        if( ! settings.getInputParameterList().isEmpty() ){
+            builder.append( "request" );
+        }
+
+        builder.append( ");\n" );
+        builder.append( "    }\n\n" );
+
+        return builder.toString();
     }
 }

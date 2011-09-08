@@ -8,7 +8,6 @@ import com.kreig133.daogenerator.common.Settings;
  */
 public class WrapperGenerators {
 
-
     public static String generateWrapperProcedure (
         Settings settings
     ){
@@ -20,13 +19,4 @@ public class WrapperGenerators {
         }
         throw new IllegalArgumentException();
     }
-
-
-
-
-
-
-
-
-
 }

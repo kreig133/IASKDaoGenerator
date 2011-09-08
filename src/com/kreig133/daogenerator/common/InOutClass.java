@@ -1,6 +1,7 @@
 package com.kreig133.daogenerator.common;
 
-import com.kreig133.daogenerator.mybatis.wrappers.strategy.FuctionalObject;
+import com.kreig133.daogenerator.common.strategy.FuctionalObject;
+import com.kreig133.daogenerator.common.strategy.FunctionalObjectWithoutFilter;
 import com.kreig133.daogenerator.parameter.Parameter;
 
 import java.util.List;
@@ -57,40 +58,25 @@ public class InOutClass {
 
     private void writeSerialVersionUID( StringBuilder builder ) {
         builder.append( "\n    private static final long serialVersionUID = " );
-        builder.append( (long)( Math.random() * Long.MAX_VALUE ) );
-        builder.append( "L;\n\n" );
+        builder.append( (long)( Math.random() * Long.MAX_VALUE ) ).append( "L;\n\n" );
     }
 
     private void writeEmptyConstructor( StringBuilder builder ) {
-        builder.append( "    public " );
-        builder.append( name );
-        builder.append( "(){\n    }\n\n" );
+        builder.append( "    public " ).append( name ).append( "(){\n    }\n\n" );
     }
 
     private void writeFullConstructor( StringBuilder builder ) {
-        builder.append( "    public " );
-        builder.append( name );
-        builder.append( "(\n" );
-        iterateForParameterList( builder, parameters, 2, new FuctionalObject() {
+        builder.append( "    public " ).append( name ).append( "(\n" );
+        iterateForParameterList( builder, parameters, 2, new FunctionalObjectWithoutFilter() {
             @Override
             public void writeString( StringBuilder builder, Parameter p ) {
-                builder.append( p.getType() );
-                builder.append( " " );
-                builder.append( p.getName() );
-            }
-            @Override
-            public boolean filter( Parameter p ) {
-                return true;
+                builder.append( p.getType() ).append( " " ).append( p.getName() );
             }
         } );
 
         builder.append( "    ){\n" );
         for( Parameter p: parameters ){
-            builder.append( "        this." );
-            builder.append( p.getName() );
-            builder.append( " = " );
-            builder.append( p.getName() );
-            builder.append( ";\n" );
+            builder.append( "        this." ).append( p.getName() ).append( " = " ).append( p.getName() ).append(";\n");
         }
     }
 

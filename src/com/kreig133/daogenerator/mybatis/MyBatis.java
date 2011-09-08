@@ -32,14 +32,14 @@ public class MyBatis {
 
         switch ( settings.getType() ){
             case IASK:
-                Utils.appandByteToFile( new File( settings.getOutputPath() + "+/"+settings.getOperationName()+
+                Utils.appendByteToFile( new File( settings.getOutputPath() + "+/" + settings.getOperationName() +
                         JAVA_EXTENSION ),
                         XmlMappingGenerator.generateXmlMapping( settings ).getBytes() );
                 break;
             case DEPO:
                 method = AnnotationGenerator.generateAnnotation( settings )
                         + InterfaceMethodGenerator.methodGenerator( settings, MethodType.MAPPER  ) + "\n";
-                Utils.appandByteToFile( new File( settings.getOutputPath() + "/"+settings.getOperationName()+
+                Utils.appendByteToFile( new File( settings.getOutputPath() + "/" + settings.getOperationName() +
                         MAPPER_PREFIX + JAVA_EXTENSION ),
                         method.getBytes() );
                 break;
@@ -50,8 +50,8 @@ public class MyBatis {
             Settings settings
     ) throws IOException {
 
-        Utils.appandByteToFile(
-                new File( settings.getOutputPath() + settings.getOperationName() +"Dao" + JAVA_EXTENSION ),
+        Utils.appendByteToFile(
+                new File( settings.getOutputPath() + settings.getOperationName() + "Dao" + JAVA_EXTENSION ),
                 InterfaceMethodGenerator.methodGenerator( settings, MethodType.DAO ).getBytes()
         );
     }
@@ -60,7 +60,7 @@ public class MyBatis {
             Settings settings
     ) throws IOException {
         
-        Utils.appandByteToFile(
+        Utils.appendByteToFile(
                 new File( settings.getOutputPath() + settings.getOperationName() + "DaoImpl" + JAVA_EXTENSION ),
                 ImplementationMethodGenerator.generateMethodImpl( settings ).getBytes()
         );

@@ -26,12 +26,9 @@ public class AnnotationGenerator {
 
         assert selectType != null ;
         
-        builder.append( "    @" );
-        builder.append( selectType.getAnnotation() );
-        builder.append( "(\n" );
+        builder.append( "    @" ).append( selectType.getAnnotation() ).append( "(\n" );
 
         switch ( selectType ){
-
             case CALL:
                 builder.append(
                     Utils.wrapWithQuotes( XmlMappingGenerator.generateProcedureCall( inputParameterList, name ) )
@@ -58,43 +55,40 @@ public class AnnotationGenerator {
 
     private static String processSelectQueryString( final String sqlQuery, final List<Parameter> inputParameters ){
 
-        StringBuilder result = null;
+        StringBuilder builder = null;
 
         String[] splitted = sqlQuery.split( "\\?" );
         if( splitted.length > 1 ){
 
-            result = new StringBuilder();
+            builder = new StringBuilder();
 
             int index = 0;
 
             for( int i = 0; i < splitted.length - 1; i++ ){
-                result.append( splitted[i] );
-                result.append( "#{" );
-                result.append( inputParameters.get( index ).getName() );
-                result.append( "}" );
+                builder.append( splitted[i] ).append( "#{" );
+                builder.append( inputParameters.get( index ).getName() ).append( "}" );
                 index ++ ;
             }
-            result.append( splitted[splitted.length - 1 ] );
+            builder.append( splitted[ splitted.length - 1 ] );
         }
 
         splitted = sqlQuery.split( ":" );
         if( splitted.length > 1 ){
 
-            result = new StringBuilder();
+            builder = new StringBuilder();
 
             for( int i = 0; i < splitted.length ; i++ ){
                 if( i == 0 ){
-                    result.append( splitted[0] );
+                    builder.append( splitted[ 0 ] );
                 } else {
-                    result.append( "#{" );
+                    builder.append( "#{" );
                     String[] aftefSplit = splitted[i].split( "[ =;,\\)\\n\\t\\r\\*\\-\\+/<>]" );
-                    result.append( aftefSplit[0] );
-                    result.append( "} " );
-                    result.append( splitted[i].substring( aftefSplit[0].length() + 1 ) );
+                    builder.append( aftefSplit[ 0 ] ).append( "} " );
+                    builder.append( splitted[ i ].substring( aftefSplit[ 0 ].length() + 1 ) );
                 }
             }
         }
 
-        return result == null? sqlQuery : result.toString();
+        return builder == null? sqlQuery : builder.toString();
     }
 }

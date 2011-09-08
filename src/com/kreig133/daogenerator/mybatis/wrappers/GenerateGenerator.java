@@ -1,7 +1,8 @@
 package com.kreig133.daogenerator.mybatis.wrappers;
 
 import com.kreig133.daogenerator.common.Settings;
-import com.kreig133.daogenerator.mybatis.wrappers.strategy.FuctionalObject;
+import com.kreig133.daogenerator.common.strategy.FuctionalObject;
+import com.kreig133.daogenerator.common.strategy.FunctionalObjectWithoutFilter;
 import com.kreig133.daogenerator.parameter.Parameter;
 
 import java.util.List;
@@ -23,37 +24,21 @@ public class GenerateGenerator extends CommonWrapperGenerator{
 
         builder.append( "create table #TempTableForNamedResultSet(\n" );
 
-        iterateForParameterList( builder, outputParametrs, new FuctionalObject() {
+        iterateForParameterList( builder, outputParametrs, new FunctionalObjectWithoutFilter() {
             @Override
             public void writeString( StringBuilder builder, Parameter p ) {
-                builder.append( p.getName() );
-                builder.append( " " );
-                builder.append( p.getSqlType() );
-                builder.append( " " );
-                builder.append( "NULL" );
-            }
-
-            @Override
-            public boolean filter( Parameter p ) {
-                return true;
+                builder.append( p.getName() ).append( " " ).append( p.getSqlType() ).append( " " ).append( "NULL" );
             }
         } );
 
         builder.append( ");\n" );
         builder.append( "insert into #TempTableForNamedResultSet\n" );
-        builder.append( "     exec " );
-        builder.append( name );
-        builder.append( "\n" );
+        builder.append( "     exec " ).append( name ).append( "\n" );
 
-        iterateForParameterList( builder, inputParametrs, 2, new FuctionalObject() {
+        iterateForParameterList( builder, inputParametrs, 2, new FunctionalObjectWithoutFilter() {
             @Override
             public void writeString( StringBuilder builder, Parameter p ) {
                 declareInTypeParamInProcedure( builder, p );
-            }
-
-            @Override
-            public boolean filter( Parameter p ) {
-                return true;
             }
         } );
 

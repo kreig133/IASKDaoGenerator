@@ -2,7 +2,8 @@ package com.kreig133.daogenerator.mybatis;
 
 import com.kreig133.daogenerator.common.Settings;
 import com.kreig133.daogenerator.common.Utils;
-import com.kreig133.daogenerator.mybatis.wrappers.strategy.FuctionalObject;
+import com.kreig133.daogenerator.common.strategy.FuctionalObject;
+import com.kreig133.daogenerator.common.strategy.FunctionalObjectWithoutFilter;
 import com.kreig133.daogenerator.parameter.Parameter;
 
 import java.util.List;
@@ -22,20 +23,20 @@ public class XmlMappingGenerator {
         String name                             = settings.getFunctionName();
         String package_                         = settings.getPackage();
 
-        StringBuilder result = new StringBuilder();
-        result.append("    <select id=\"").append( name ).append( "\" statementType=\"CALLABLE\"" );
+        StringBuilder builder = new StringBuilder();
+        builder.append( "    <select id=\"" ).append( name ).append( "\" statementType=\"CALLABLE\"" );
 
-        writeParameterType(  inputParameterList, name, "parameterType", "In" , package_, result );
-        writeParameterType( outputParameterList, name, "resultType"   , "Out", package_, result );
+        writeParameterType(  inputParameterList, name, "parameterType", "In" , package_, builder );
+        writeParameterType( outputParameterList, name, "resultType"   , "Out", package_, builder );
 
-        result.append(">\n\n");
+        builder.append( ">\n\n" );
 
-        result.append( generateProcedureCall( inputParameterList, name ) );
+        builder.append( generateProcedureCall( inputParameterList, name ) );
 
-        result.append("        )}\n\n");
-        result.append("    </select>\n\n");
+        builder.append( "        )}\n\n" );
+        builder.append( "    </select>\n\n" );
 
-        return result.toString();
+        return builder.toString();
     }
 
     private static void writeParameterType(
@@ -66,16 +67,10 @@ public class XmlMappingGenerator {
 
         result.append("        {CALL ").append( name ).append( "(\n" );
 
-        iterateForParameterList( result, inputParameterList, 3, new FuctionalObject() {
+        iterateForParameterList( result, inputParameterList, 3, new FunctionalObjectWithoutFilter() {
             @Override
             public void writeString( StringBuilder builder, Parameter p ) {
-                builder.append( "#{" );
-                builder.append( p.getName() );
-                builder.append( "}");
-            }
-            @Override
-            public boolean filter( Parameter p ) {
-                return true;
+                builder.append( "#{" ).append( p.getName() ).append( "}" );
             }
         } );
 
