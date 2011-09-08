@@ -18,18 +18,17 @@ public class AnnotationGenerator {
     ){
         SelectType selectType               = settings.getSelectType();
         List<Parameter> inputParameterList  = settings.getInputParameterList();
-        List<Parameter> outputParameterList = settings.getOutputParameterList();
         String selectQuery                  = settings.getSelectQuery().toString();
         String name                         = settings.getFunctionName();
 
 
         StringBuilder builder = new StringBuilder();
 
+        assert selectType != null ;
+        
         builder.append( "    @" );
         builder.append( selectType.getAnnotation() );
         builder.append( "(\n" );
-
-        assert selectType !=null ;
 
         switch ( selectType ){
 
@@ -59,11 +58,9 @@ public class AnnotationGenerator {
 
     private static String processSelectQueryString( final String sqlQuery, final List<Parameter> inputParameters ){
 
-        String query = sqlQuery;
-
         StringBuilder result = null;
 
-        String[] split = query.split( "\\?" );
+        String[] split = sqlQuery.split( "\\?" );
         if( split.length > 1 ){
 
             result = new StringBuilder();
@@ -83,9 +80,6 @@ public class AnnotationGenerator {
 
         split = sqlQuery.split( ":" );
         if( split.length > 1 ){
-            if( result != null ){
-                query = result.toString();
-            }
 
             result = new StringBuilder();
 

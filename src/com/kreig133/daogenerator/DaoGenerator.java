@@ -67,7 +67,7 @@ public class DaoGenerator  implements Settings {
         }
     }
 
-    public static void controller(
+    private static void controller(
             File fileWithData
     ) throws IOException {
         //считываем название из файла ( название файла = название хранимки, запроса )

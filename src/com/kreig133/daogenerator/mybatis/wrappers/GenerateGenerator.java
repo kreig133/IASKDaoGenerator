@@ -15,7 +15,6 @@ import java.util.List;
 public class GenerateGenerator extends CommonWrapperGenerator{
 
     public static String generateWrapper( Settings settings ) {
-        final List<Parameter> inputParametrs    = settings.getInputParameterList();
         final List<Parameter> outputParametrs   = settings.getOutputParameterList();
         final String          name              = settings.getFunctionName();
 

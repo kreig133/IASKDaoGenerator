@@ -16,11 +16,10 @@ import java.util.List;
  */
 public class GeneroutGenerator extends CommonWrapperGenerator{
 
-    static int index = 0;
+    private static int index = 0;
 
     public static String generateWrapper( Settings settings ) {
         final List<Parameter> inputParametrs    = settings.getInputParameterList();
-        final List<Parameter> outputParametrs   = settings.getOutputParameterList();
         final String          name              = settings.getFunctionName();
 
         StringBuilder builder = new StringBuilder();
@@ -96,14 +95,13 @@ public class GeneroutGenerator extends CommonWrapperGenerator{
     }
 
     private static boolean isOutParameter( InputParameter p ) {
-        return ( ( InputParameter ) p ).getInputType() == InputParameterType.OUT;
+        return p.getInputType() == InputParameterType.OUT;
     }
 
     private static String defaultValue( Parameter parameter ) {
         switch ( parameter.getType() ){
             case Double:
             case Long:
-            case BigDecimal:
                 return "0";
             case Date:
                 return "NULL";

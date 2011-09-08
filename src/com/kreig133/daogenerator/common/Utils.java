@@ -41,7 +41,6 @@ public class Utils {
 
         if ( name == null || "".equals( name ) ) throw  new IllegalArgumentException();
 
-        String newName = name;
         final char[] chars = name.toCharArray();
         if ( Character.isLowerCase( chars[ 0 ] ) ){
             if( chars.length == 1 || Character.isLowerCase( chars[ 1 ] ) ){
@@ -97,7 +96,7 @@ public class Utils {
         return builder.toString();
     }
 
-    public static String[] deleteEmptyStrings( String [] in ){
+    private static String[] deleteEmptyStrings( String [] in ){
         String [] temp = new String[in.length];
 
         int length = 0;
@@ -111,9 +110,7 @@ public class Utils {
 
         String[] result = new String[length];
 
-        for( int i = 0; i < length; i++ ){
-            result[i] = temp[i];
-        }
+        System.arraycopy( temp, 0, result, 0, length );
 
         return result;
     }

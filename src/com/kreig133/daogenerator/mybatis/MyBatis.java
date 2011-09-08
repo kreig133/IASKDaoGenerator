@@ -24,10 +24,10 @@ public class MyBatis {
         generateImplementation  ( settings );
     }
 
-    public static void generateMapping(
+    private static void generateMapping(
         Settings settings
     ) throws IOException {
-        String method = "";
+        String method;
 
         switch ( settings.getType() ){
             case IASK:
@@ -45,7 +45,7 @@ public class MyBatis {
         }
     }
 
-    public static void generateInterface(
+    private static void generateInterface(
             Settings settings
     ) throws IOException {
 
@@ -55,7 +55,7 @@ public class MyBatis {
         );
     }
 
-    public static void generateImplementation(
+    private static void generateImplementation(
             Settings settings
     ) throws IOException {
         

@@ -18,7 +18,7 @@ public enum Mode {
         this.parser = parser;
     }
 
-    IParser parser;
+    private final IParser parser;
 
     public void parse( Object input, String lineForParse ){
         parser.parse( input, lineForParse );
@@ -28,14 +28,10 @@ public enum Mode {
     public static Mode getByName( String name ){
         name = name.trim().toLowerCase();
 
-        if( "is_input_parametrs".equals( name )){
-            return IS_INPUT_PARAMETRS;
-        }
-        if( "is_output_parametrs".equals( name )){
-            return IS_OUTPUT_PARAMETRS;
-        }
-        if( "is_select_query".equals( name )){
-            return IS_SELECT_QUERY;
+        for( Mode mode: Mode.values() ){
+            if( mode.toString().toLowerCase().equals( name ) ){
+                return mode;
+            }
         }
 
         return null;

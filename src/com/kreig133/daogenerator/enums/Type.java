@@ -10,14 +10,12 @@ public enum Type  {
     public static Type getByName( String name ){
         name = name.trim().toLowerCase();
 
-        if( "iask".equals( name ) ){
-            return IASK;
+        for( Type type: Type.values() ){
+            if( type.toString().toLowerCase().equals( name ) ){
+                return type;
+            }
         }
 
-        if( "depo".equals( name ) ){
-            return DEPO;
-        }
-        
         return null;
     }
 }

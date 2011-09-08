@@ -2,6 +2,7 @@ package com.kreig133.daogenerator.parameter;
 
 import com.kreig133.daogenerator.common.Utils;
 import com.kreig133.daogenerator.enums.InputParameterType;
+import com.kreig133.daogenerator.enums.JavaType;
 
 /**
  * @author eshangareev
@@ -42,7 +43,7 @@ public class InputParameter extends Parameter {
                             "" :
                             " = " + defaultValue.toLowerCase() +
                                     (
-                                            "Long".equals( type ) ?
+                                            type == JavaType.Long ?
                                                     ( "null".equals( defaultValue.toLowerCase() )?  "" :  "L" ) :
                                                      ""
                                     )

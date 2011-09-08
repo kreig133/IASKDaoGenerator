@@ -10,12 +10,12 @@ public enum ReturnType {
     public static ReturnType getByName( String name ){
         name = name.trim().toLowerCase();
 
-        if( "single".equals( name )){
-            return SINGLE;
+        for( ReturnType returnType: ReturnType.values() ){
+            if( returnType.toString().toLowerCase().equals( name ) ){
+                return returnType;
+            }
         }
-        if( "multiple".equals( name )){
-            return MULTIPLE;
-        }
+
         return null;
     }
 }

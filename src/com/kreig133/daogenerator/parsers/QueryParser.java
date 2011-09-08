@@ -7,6 +7,6 @@ package com.kreig133.daogenerator.parsers;
 public class QueryParser implements IParser<StringBuilder>{
 
     public void parse( StringBuilder input, String lineForParse ) {
-        input.append( lineForParse + "\n" );
+        input.append( lineForParse ).append( "\n" );
     }
 }

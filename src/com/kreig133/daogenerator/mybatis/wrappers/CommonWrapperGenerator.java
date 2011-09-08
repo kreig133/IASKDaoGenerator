@@ -35,23 +35,23 @@ public class CommonWrapperGenerator {
         throw new AssertionError();
     }
 
-    protected static void declareOutTypeParamInProcedure( StringBuilder builder, Parameter p , int index) {
-        declareParamNameInProcedure( builder, p );
-        parameterName( builder, index );
-        builder.append( " output" );
-    }
-
-    protected static void declareParamNameInProcedure( StringBuilder builder, Parameter p ) {
-        builder.append( "@" );
-        builder.append( p.getName() );
-        builder.append( " = " );
-    }
-
     protected static int parameterName( StringBuilder builder, int index ){
         builder.append( "@P" );
         builder.append( index );
         builder.append( " " );
 
         return ++index;
+    }
+
+    private static void declareOutTypeParamInProcedure( StringBuilder builder, Parameter p , int index) {
+        declareParamNameInProcedure( builder, p );
+        parameterName( builder, index );
+        builder.append( " output" );
+    }
+
+    private static void declareParamNameInProcedure( StringBuilder builder, Parameter p ) {
+        builder.append( "@" );
+        builder.append( p.getName() );
+        builder.append( " = " );
     }
 }

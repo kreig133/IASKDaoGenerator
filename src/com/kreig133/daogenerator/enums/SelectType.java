@@ -1,5 +1,8 @@
 package com.kreig133.daogenerator.enums;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * @author eshangareev
  * @version 1.0
@@ -13,7 +16,7 @@ public enum SelectType {
     DELETE  ("Delete"),
     UPDATE  ("Update");
 
-    private String annotation;
+    private final String annotation;
 
     public String getAnnotation() {
         return annotation;
@@ -25,28 +28,12 @@ public enum SelectType {
 
     public static SelectType getByName( String name ){
         name = name.trim().toLowerCase();
+        for( SelectType selectType: SelectType.values() ){
+            if( selectType.toString().toLowerCase().equals( name ) ){
+                return selectType;
+            }
+        }
 
-        if( "call".equals( name ) ){
-            return CALL;
-        }
-        if( "select".equals( name ) ){
-            return SELECT;
-        }
-        if( "generate".equals( name ) ){
-            return GENERATE;
-        }
-        if( "insert".equals( name ) ){
-            return INSERT;
-        }
-        if( "delete".equals( name ) ){
-            return DELETE;
-        }
-        if( "update".equals( name ) ){
-            return UPDATE;
-        }
-        if( "generout".equals( name ) ){
-            return GENEROUT;
-        }
         return null;
     }
 
