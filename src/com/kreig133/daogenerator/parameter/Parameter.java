@@ -59,24 +59,30 @@ abstract public class Parameter {
 
     @Override
     public String toString() {
+        StringBuilder builder = new StringBuilder();
 
-        return Utils.getJavaDocString( new String[] { getCommentForJavaDoc() } ) +
-                "\tprivate " + type + " " + name;
+        Utils.getJavaDocString( builder, new String[] { getCommentForJavaDoc() } );
+        builder.append( "    private " ).append( type ).append( " " ).append( name );
+
+        return builder.toString();
     }
 
-    public String generateGetter(){
-        return Utils.getJavaDocString(new String[] {"Получить ", "\""+getCommentForJavaDoc()+"\""})+
-        "\tpublic " + type + " get" + Utils.convertNameForGettersAndSetters( name ) + "(){\n"+
-            "\t\treturn " + name + ";\n"+
-        "\t}\n\n";
+    public void generateGetter( StringBuilder builder){
+        Utils.getJavaDocString( builder, new String[]{"Получить ","\""+ getCommentForJavaDoc()+"\""});
+
+        builder.append( "    public " ).append( type ).append( " get" );
+        builder.append( Utils.convertNameForGettersAndSetters( name ) ).append( "(){\n" );
+        builder.append( "        return " ).append( name ).append( ";\n");
+        builder.append( "    }\n\n" );
     }
 
 
-    public String generateSetter(){
-        return Utils.getJavaDocString(new String[] {"Установить ", "\""+getCommentForJavaDoc()+"\""})+
-        "\tpublic void set" + Utils.convertNameForGettersAndSetters( name ) + "( "+type +" "  + name +" ){\n"+
-            "\t\tthis." + name + " = "+ name +";\n"+
-        "\t}\n\n";
+    public void generateSetter( StringBuilder builder ){
+        Utils.getJavaDocString( builder, new String[] { "Установить ", "\""+getCommentForJavaDoc()+"\""} );
+        builder.append( "    public void set").append( Utils.convertNameForGettersAndSetters( name ) );
+        builder.append( "( " ).append( type ).append( " " ).append( name ).append( " ){\n" );
+        builder.append( "        this." ).append( name ).append( " = " ).append( name ).append( ";\n" );
+        builder.append( "    }\n\n" );
     }
 
     private String getCommentForJavaDoc(){

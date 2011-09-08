@@ -33,26 +33,26 @@ public class InOutClass {
 
     @Override
     public String toString() {
-        StringBuilder result = new StringBuilder();
-        result.append("package ");
-        result.append( package_ );
-        result.append(";\n\n");
-        result.append(IMPORTS);
-        result.append(COMMENT_TO_CLASS);
-        result.append("public class ").append(name).append( " implements Serializable {\n\n" );
+        StringBuilder builder = new StringBuilder();
 
-        writeSerialVersionUID( result );
-        writeEmptyConstructor( result );
-        writeFullConstructor( result );
+        builder.append( "package " ).append( package_ ).append( ";\n\n" );
+        builder.append( IMPORTS );
+        builder.append( COMMENT_TO_CLASS );
+        builder.append( "public class " ).append(name).append( " implements Serializable {\n\n" );
+
+        writeSerialVersionUID( builder );
+        writeEmptyConstructor( builder );
+        writeFullConstructor ( builder );
 
         for(Parameter p : parameters){
-            result.append(p.toString());
-            result.append(p.generateGetter());
-            result.append(p.generateSetter());
-        }
-        result.append("}");
+            builder.append( p.toString() );
 
-        return result.toString();
+            p.generateGetter( builder );
+            p.generateSetter( builder );
+        }
+        builder.append( "}" );
+
+        return builder.toString();
     }
 
     private void writeSerialVersionUID( StringBuilder builder ) {

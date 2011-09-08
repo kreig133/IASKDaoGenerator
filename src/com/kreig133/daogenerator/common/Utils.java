@@ -25,7 +25,7 @@ public class Utils {
                ( inputParameterList.size() > 1 && type == Type.IASK );
     }
     
-    public static String getJavaDocString(String[] commentsLine){
+    public static void getJavaDocString( StringBuilder builder, String[] commentsLine){
 
         boolean commentsNotEmpty = false;
         for( String string: commentsLine ){
@@ -35,18 +35,15 @@ public class Utils {
             }
         }
 
-        if( !commentsNotEmpty ) return "";
+        if( !commentsNotEmpty ) return;
 
-        StringBuilder result = new StringBuilder();
-        result.append("\t/**\n" );
+        builder.append( "\t/**\n" );
         for( String comment : commentsLine ){
-            result.append( "\t * " );
-            result.append( comment );
-            result.append( "\n"    );
+            builder.append( "\t * " );
+            builder.append( comment );
+            builder.append( "\n" );
         }
-        result.append("\t */\n");
-
-        return  result.toString();
+        builder.append( "\t */\n" );
     }
 
     public static String convertNameForGettersAndSetters ( String name ){
