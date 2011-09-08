@@ -2,6 +2,7 @@ package com.kreig133.daogenerator.mybatis;
 
 import com.kreig133.daogenerator.common.Settings;
 import com.kreig133.daogenerator.common.Utils;
+import com.kreig133.daogenerator.enums.MethodType;
 
 import java.io.File;
 import java.io.IOException;
@@ -37,7 +38,7 @@ public class MyBatis {
                 break;
             case DEPO:
                 method = AnnotationGenerator.generateAnnotation( settings )
-                        + InterfaceMethodGenerator.methodGenerator( settings ) + "\n";
+                        + InterfaceMethodGenerator.methodGenerator( settings, MethodType.MAPPER  ) + "\n";
                 Utils.appandByteToFile( new File( settings.getOutputPath() + "/"+settings.getOperationName()+
                         MAPPER_PREFIX + JAVA_EXTENSION ),
                         method.getBytes() );
@@ -51,7 +52,7 @@ public class MyBatis {
 
         Utils.appandByteToFile(
                 new File( settings.getOutputPath() + settings.getOperationName() +"Dao" + JAVA_EXTENSION ),
-                InterfaceMethodGenerator.methodGenerator( settings ).getBytes()
+                InterfaceMethodGenerator.methodGenerator( settings, MethodType.DAO ).getBytes()
         );
     }
 

@@ -4,8 +4,6 @@ import com.kreig133.daogenerator.mybatis.wrappers.strategy.FuctionalObject;
 import com.kreig133.daogenerator.parameter.InputParameter;
 import com.kreig133.daogenerator.parameter.Parameter;
 
-import java.util.List;
-
 /**
  * @author eshangareev
  * @version 1.0

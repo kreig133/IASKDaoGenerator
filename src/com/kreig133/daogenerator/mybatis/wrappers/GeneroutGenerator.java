@@ -6,9 +6,9 @@ import com.kreig133.daogenerator.mybatis.wrappers.strategy.FuctionalObject;
 import com.kreig133.daogenerator.parameter.InputParameter;
 import com.kreig133.daogenerator.parameter.Parameter;
 
-import static com.kreig133.daogenerator.mybatis.MyBatisUtils.*;
-
 import java.util.List;
+
+import static com.kreig133.daogenerator.common.Utils.*;
 
 /**
  * @author eshangareev
@@ -27,12 +27,13 @@ public class GeneroutGenerator extends CommonWrapperGenerator{
 
         builder.append( "DECLARE\n" );
 
-        iterateForParametrList( builder, inputParametrs, new FuctionalObject() {
+        iterateForParameterList( builder, inputParametrs, new FuctionalObject() {
             @Override
             public void writeString( StringBuilder builder, Parameter p ) {
                 index = parameterName( builder, index );
                 builder.append( p.getSqlType() );
             }
+
             @Override
             public boolean filter( Parameter p ) {
                 return isOutParameter( ( InputParameter ) p );
@@ -45,13 +46,14 @@ public class GeneroutGenerator extends CommonWrapperGenerator{
         builder.append( "SELECT" );
 
         index = 0;
-        iterateForParametrList( builder, inputParametrs, new FuctionalObject() {
+        iterateForParameterList( builder, inputParametrs, new FuctionalObject() {
             @Override
             public void writeString( StringBuilder builder, Parameter p ) {
                 index = parameterName( builder, index );
                 builder.append( "= " );
                 builder.append( defaultValue( p ) );
             }
+
             @Override
             public boolean filter( Parameter p ) {
                 return isOutParameter( ( InputParameter ) p );
@@ -64,11 +66,12 @@ public class GeneroutGenerator extends CommonWrapperGenerator{
         builder.append( "\n" );
 
         index = 0;
-        iterateForParametrList( builder, inputParametrs, new FuctionalObject() {
+        iterateForParameterList( builder, inputParametrs, new FuctionalObject() {
             @Override
             public void writeString( StringBuilder builder, Parameter p ) {
                 index = declareParamInProcedure( builder, p, index );
             }
+
             @Override
             public boolean filter( Parameter p ) {
                 return true;
@@ -78,7 +81,7 @@ public class GeneroutGenerator extends CommonWrapperGenerator{
         //вернуть полученные значения
         index = 0;
         builder.append( "\nSELECT\n" );
-        iterateForParametrList( builder, inputParametrs, new FuctionalObject() {
+        iterateForParameterList( builder, inputParametrs, new FuctionalObject() {
             @Override
             public void writeString( StringBuilder builder, Parameter p ) {
                 index = parameterName( builder, index );

@@ -15,6 +15,8 @@ import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 
+
+import static com.kreig133.daogenerator.common.Utils.*;
 /**
  * @author eshangareev
  * @version 1.0
@@ -77,10 +79,7 @@ public class DaoGenerator  implements Settings {
 
         InputFileParser.readFileWithDataForGenerateDao( fileWithData );
 
-        if (
-                ( INPUT_PARAMETER_LIST.size() > 3 && TYPE == Type.DEPO ) ||
-                ( INPUT_PARAMETER_LIST.size() > 1 && TYPE == Type.IASK )
-        ) {
+        if ( checkToNeedOwnInClass( instance() ) ) {
             createJavaClassForInputOutputEntities( INPUT_PARAMETER_LIST,
                     Utils.convertNameForClassNaming( FUNCTION_NAME ) + "In" );
         }
@@ -93,6 +92,8 @@ public class DaoGenerator  implements Settings {
 
         MyBatis.generateFiles( instance() );
     }
+
+
 
     private static void createJavaClassForInputOutputEntities(
             List<Parameter> parameterList,

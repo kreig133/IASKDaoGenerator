@@ -1,6 +1,7 @@
 package com.kreig133.daogenerator.mybatis;
 
 import com.kreig133.daogenerator.common.Settings;
+import com.kreig133.daogenerator.enums.MethodType;
 
 /**
  * @author eshangareev
@@ -13,7 +14,7 @@ public class ImplementationMethodGenerator {
         StringBuilder result = new StringBuilder();
 
         result.append( "    @Override\n    public " );
-        result.append( InterfaceMethodGenerator.generateMethodSignature( settings ) );
+        result.append( InterfaceMethodGenerator.generateMethodSignature( settings, MethodType.DAO ) );
         result.append( "{\n" );
         result.append( "        " );
         if( ! settings.getOutputParameterList().isEmpty() ){

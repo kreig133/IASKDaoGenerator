@@ -1,5 +1,8 @@
 package com.kreig133.daogenerator.common;
 
+import com.kreig133.daogenerator.enums.Type;
+import com.kreig133.daogenerator.mybatis.wrappers.strategy.FuctionalObject;
+import com.kreig133.daogenerator.parameter.Parameter;
 import com.sun.java.browser.plugin2.liveconnect.v1.Result;
 
 import java.io.File;
@@ -12,6 +15,15 @@ import java.util.List;
  * @version 1.0
  */
 public class Utils {
+
+    public static boolean checkToNeedOwnInClass( Settings settings ) {
+        final List<Parameter> inputParameterList = settings.getInputParameterList();
+
+        final Type type = settings.getType();
+
+        return ( inputParameterList.size() > 3 && type == Type.DEPO ) ||
+               ( inputParameterList.size() > 1 && type == Type.IASK );
+    }
     
     public static String getJavaDocString(String[] commentsLine){
 
@@ -127,5 +139,39 @@ public class Utils {
 
     public static boolean stringNotEmpty( String string ){
         return string != null && ! ( "".equals( string ) );
+    }
+
+
+    public static void iterateForParameterList(
+            StringBuilder builder,
+            List<Parameter> parameterList,
+            FuctionalObject functionalObject
+    ){
+        iterateForParameterList( builder, parameterList, 1, functionalObject );
+    }
+
+    public static void iterateForParameterList(
+            StringBuilder builder,
+            List<Parameter> parameterList,
+            int tabs,
+            FuctionalObject functionalObject
+
+    ){
+        boolean first = true;
+
+        for( Parameter p: parameterList ){
+            if( functionalObject.filter( p ) ){
+                for ( int i = 0; i < tabs; i++ ){
+                    builder.append( "    " );
+                }
+                if(!first){
+                    builder.append( "," );
+                } else {
+                    first = false;
+                }
+                functionalObject.writeString( builder, p );
+                builder.append( "\n" );
+            }
+        }
     }
 }

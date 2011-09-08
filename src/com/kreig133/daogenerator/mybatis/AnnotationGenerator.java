@@ -34,7 +34,7 @@ public class AnnotationGenerator {
 
             case CALL:
                 builder.append(
-                        Utils.wrapWithQuotes( XmlMappingGenerator.generateProcedureCall( inputParameterList, name ) )
+                    Utils.wrapWithQuotes( XmlMappingGenerator.generateProcedureCall( inputParameterList, name ) )
                 );
                 break;
 
@@ -60,38 +60,37 @@ public class AnnotationGenerator {
 
         StringBuilder result = null;
 
-        String[] split = sqlQuery.split( "\\?" );
-        if( split.length > 1 ){
+        String[] splitted = sqlQuery.split( "\\?" );
+        if( splitted.length > 1 ){
 
             result = new StringBuilder();
 
             int index = 0;
 
-            for( int i = 0; i < split.length - 1; i++ ){
-                String string = split[i];
-                result.append( string );
+            for( int i = 0; i < splitted.length - 1; i++ ){
+                result.append( splitted[i] );
                 result.append( "#{" );
                 result.append( inputParameters.get( index ).getName() );
                 result.append( "}" );
                 index ++ ;
             }
-            result.append( split[split.length - 1 ] );
+            result.append( splitted[splitted.length - 1 ] );
         }
 
-        split = sqlQuery.split( ":" );
-        if( split.length > 1 ){
+        splitted = sqlQuery.split( ":" );
+        if( splitted.length > 1 ){
 
             result = new StringBuilder();
 
-            for( int i = 0; i < split.length ; i++ ){
+            for( int i = 0; i < splitted.length ; i++ ){
                 if( i == 0 ){
-                    result.append( split[i] );
+                    result.append( splitted[0] );
                 } else {
                     result.append( "#{" );
-                    String[] aftefSplit = split[i].split( "[ =;,\\)\\n\\t\\r\\*\\-\\+/<>]" );
+                    String[] aftefSplit = splitted[i].split( "[ =;,\\)\\n\\t\\r\\*\\-\\+/<>]" );
                     result.append( aftefSplit[0] );
                     result.append( "} " );
-                    result.append( split[i].substring( aftefSplit[0].length() + 1 ) );
+                    result.append( splitted[i].substring( aftefSplit[0].length() + 1 ) );
                 }
             }
         }
