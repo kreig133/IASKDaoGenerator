@@ -37,8 +37,11 @@ public class MyBatis {
                         XmlMappingGenerator.generateXmlMapping( settings ).getBytes() );
                 break;
             case DEPO:
-                method = AnnotationGenerator.generateAnnotation( settings )
-                        + InterfaceMethodGenerator.methodGenerator( settings, MethodType.MAPPER  ) + "\n";
+                method =
+                        AnnotationGenerator.generateAnnotation( settings )
+                        +"    public "
+                        + InterfaceMethodGenerator.generateMethodSignature( settings, MethodType.MAPPER  )
+                        + "\n";
                 Utils.appendByteToFile( new File( settings.getOutputPath() + "/" + settings.getOperationName() +
                         MAPPER_PREFIX + JAVA_EXTENSION ),
                         method.getBytes() );
