@@ -6,6 +6,7 @@ import com.kreig133.daogenerator.common.Utils;
 import com.kreig133.daogenerator.enums.ReturnType;
 import com.kreig133.daogenerator.enums.SelectType;
 import com.kreig133.daogenerator.enums.Type;
+import com.kreig133.daogenerator.gui.MainForm;
 import com.kreig133.daogenerator.mybatis.MyBatis;
 import com.kreig133.daogenerator.parameter.Parameter;
 import com.kreig133.daogenerator.parsers.InputFileParser;
@@ -102,7 +103,7 @@ public class DaoGenerator  implements Settings {
 
         FileWriter writer = null;
         try {
-            InOutClass inOutClass = new InOutClass(parameterList, name);
+            InOutClass inOutClass = new InOutClass(PACKAGE, parameterList, name);
 
             File inClassFile = new File(OUTPUT_PATH_FOR_ENTITY + "/" + inOutClass.getName() + ".java");
             inClassFile.createNewFile();
@@ -122,17 +123,22 @@ public class DaoGenerator  implements Settings {
 
     private static String OPERATION_NAME;
 
+    private static String PACKAGE = "com.aplana.sbrf.deposit.persistence.custom.entity.accounts.operation" +
+            ".administrative.closecount";
+
     private final static List<Parameter> INPUT_PARAMETER_LIST  = new ArrayList<Parameter>();
     private final static List<Parameter> OUTPUT_PARAMETER_LIST = new ArrayList<Parameter>();
 
-    static private String OUTPUT_PATH ;
-    static private String OUTPUT_PATH_FOR_ENTITY ;
+    private static String OUTPUT_PATH ;
+    private static String OUTPUT_PATH_FOR_ENTITY ;
 
-    static private StringBuilder QUERY;
+    private static StringBuilder QUERY;
 
-    static private Type       TYPE;
-    static private SelectType SELECT_TYPE;
-    static private ReturnType RETURN_TYPE;
+
+
+    private static Type       TYPE;
+    private static SelectType SELECT_TYPE;
+    private static ReturnType RETURN_TYPE;
 
     public static void setTYPE( Type TYPE ) {
         DaoGenerator.TYPE = TYPE;
@@ -201,6 +207,11 @@ public class DaoGenerator  implements Settings {
         return OPERATION_NAME;
     }
 
+    @Override
+    public String getPackage() {
+        return PACKAGE;
+    }
+    
     private DaoGenerator(){}
 
     private static class Inner{

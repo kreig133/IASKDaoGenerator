@@ -29,4 +29,6 @@ public interface Settings {
     ReturnType getReturnType();
 
     String getOutputPath();
+
+    String getPackage();
 }
