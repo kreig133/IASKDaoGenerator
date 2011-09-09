@@ -2,6 +2,7 @@ package com.kreig133.daogenerator.files.mybatis.wrappers;
 
 import com.kreig133.daogenerator.common.Settings;
 
+
 /**
  * @author eshangareev
  * @version 1.0
@@ -15,7 +16,7 @@ public class WrapperGenerators {
             case GENERATE:
                 return GenerateGenerator.generateWrapper( settings );
             case GENEROUT:
-                return GeneroutGenerator.generateWrapper( settings );
+//                return GeneroutGenerator.generateWrapper( settings );
         }
         throw new IllegalArgumentException();
     }

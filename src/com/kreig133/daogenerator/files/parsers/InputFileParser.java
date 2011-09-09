@@ -1,6 +1,7 @@
 package com.kreig133.daogenerator.files.parsers;
 
 import com.kreig133.daogenerator.DaoGenerator;
+import com.kreig133.daogenerator.common.Settings;
 import com.kreig133.daogenerator.enums.Mode;
 import com.kreig133.daogenerator.enums.ReturnType;
 import com.kreig133.daogenerator.enums.SelectType;
@@ -19,7 +20,8 @@ public class InputFileParser {
     private static Mode mode;
 
     public static void readFileWithDataForGenerateDao(
-            File fileWithData
+            File fileWithData,
+            Settings settings
     ) throws IOException {
 
         final BufferedReader reader = new BufferedReader(
@@ -32,7 +34,7 @@ public class InputFileParser {
         String line = reader.readLine();
 
         //Считываем настройки
-        readType( line );
+        readType( line, settings );
 
         line = reader.readLine();
 
@@ -41,7 +43,7 @@ public class InputFileParser {
 
                 if( ! isStopLine( line ) ){
                     if( mode != null && ( mode == Mode.IS_SELECT_QUERY || line.length() > 7 ) ){
-                        Parsers.readLine( DaoGenerator.instance(), mode, line );
+                        Parsers.readLine( settings, mode, line );
                     }
                 }
 
@@ -55,14 +57,17 @@ public class InputFileParser {
         }
     }
 
-    private static void readType( String lineWithSettings ){
+    private static void readType(
+            String      lineWithSettings,
+            Settings    settings
+    ){
         final String[] split = splitIt( lineWithSettings );
 
         assert split.length >= 3;
 
-        DaoGenerator.setTYPE        ( Type      .getByName( split[ 0 ] ) );
-        DaoGenerator.setSELECT_TYPE ( SelectType.getByName( split[ 1 ] ) ) ;
-        DaoGenerator.setRETURN_TYPE ( ReturnType.getByName( split[ 2 ] ) );
+//        settings.setType       ( Type      .getByName( split[ 0 ] ) );
+        settings.setSelectType ( SelectType.getByName( split[ 1 ] ) ) ;
+        settings.setReturnType ( ReturnType.getByName( split[ 2 ] ) );
     }
 
     private static boolean isStopLine( String line ){

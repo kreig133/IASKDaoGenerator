@@ -20,7 +20,7 @@ public class JavaFilesUtils {
     public static File mappingFile( Settings settings ) {
         switch ( settings.getType() ){
             case IASK:
-                return new File( settings.getOutputPath() + "+/" + settings.getOperationName() +
+                return new File( settings.getOutputPath() + "/" + settings.getOperationName() +
                         ".map.xml" );
             case DEPO:
                 return new File( settings.getOutputPath() + "/" + mapperFileName( settings ) + JAVA_EXTENSION );
@@ -33,7 +33,7 @@ public class JavaFilesUtils {
     }
 
     public static File interfaceFile( Settings settings ) {
-        return new File( settings.getOutputPath() + interfaceFileName( settings ) + JAVA_EXTENSION );
+        return new File( settings.getOutputPath() + "/" + interfaceFileName( settings ) + JAVA_EXTENSION );
     }
 
     public static String interfaceFileName( Settings settings ) {
@@ -41,7 +41,7 @@ public class JavaFilesUtils {
     }
 
     public static File implementationFile( Settings settings ) {
-        return new File( settings.getOutputPath() + implementationFileName( settings ) + JAVA_EXTENSION );
+        return new File( settings.getOutputPath() + "/" + implementationFileName( settings ) + JAVA_EXTENSION );
     }
 
     public static String implementationFileName( Settings settings ) {

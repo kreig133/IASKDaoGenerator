@@ -14,7 +14,11 @@ import java.util.List;
 public interface Settings {
     Type getType();
 
+    void setType( Type type );
+
     SelectType getSelectType();
+
+    void setSelectType( SelectType selectType );
 
     List<Parameter> getInputParameterList();
 
@@ -22,17 +26,37 @@ public interface Settings {
 
     StringBuilder getSelectQuery();
 
+    void clearSelectQuery();
+
     String getFunctionName();
+
+    void setFunctionName( String functionName );
 
     String getOperationName();
 
+    void setOperationName(String operationName );
+
     ReturnType getReturnType();
+
+    void setReturnType( ReturnType returnType );
 
     String getOutputPath();
 
+    void setOutputPath( String outputPath );
+
     String getEntityPackage();
+
+    void setEntityPackage( String entityPackage );
 
     String getMapperPackage();
 
+    void setMapperPackage( String mapperPackage );
+
     String getDaoPackage();
+
+    void setDaoPackage( String daoPackage );
+
+    String getSourcePath();
+
+    void setSourcePath( String path );
 }

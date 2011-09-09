@@ -2,7 +2,7 @@ package com.kreig133.daogenerator.files.mybatis.wrappers;
 
 import com.kreig133.daogenerator.common.Settings;
 import com.kreig133.daogenerator.common.strategy.FunctionalObjectWithoutFilter;
-import com.kreig133.daogenerator.enums.InputParameterType;
+import com.kreig133.daogenerator.enums.InputOrOutputType;
 import com.kreig133.daogenerator.common.strategy.FuctionalObject;
 import com.kreig133.daogenerator.parameter.InputParameter;
 import com.kreig133.daogenerator.parameter.Parameter;
@@ -79,7 +79,7 @@ public class GeneroutGenerator extends CommonWrapperGenerator{
     }
 
     static boolean isOutParameter( InputParameter p ) {
-        return p.getInputType() == InputParameterType.OUT;
+        return p.getInputType() == InputOrOutputType.OUT;
     }
 
     private static String defaultValue( Parameter parameter ) {

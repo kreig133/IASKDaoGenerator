@@ -25,6 +25,10 @@ public class MyBatis {
         generateMapping         ( settings );
         generateInterface       ( settings );
         generateImplementation  ( settings );
+
+        settings.clearSelectQuery();
+        settings.getInputParameterList().clear();
+        settings.getOutputParameterList().clear();
     }
 
     public static void prepareFiles(
