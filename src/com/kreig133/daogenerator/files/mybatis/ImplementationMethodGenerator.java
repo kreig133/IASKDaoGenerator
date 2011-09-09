@@ -1,7 +1,8 @@
-package com.kreig133.daogenerator.mybatis;
+package com.kreig133.daogenerator.files.mybatis;
 
 import com.kreig133.daogenerator.common.Settings;
 import com.kreig133.daogenerator.enums.MethodType;
+import com.kreig133.daogenerator.files.JavaFilesUtils;
 
 /**
  * @author eshangareev
@@ -23,7 +24,7 @@ public class ImplementationMethodGenerator {
         }
 
         builder.append( "getSqlSession().getMapper( " ).append( settings.getOperationName() );
-        builder.append( MyBatis.MAPPER_PREFIX ).append( ".class )." );
+        builder.append( JavaFilesUtils.MAPPER_PREFIX ).append( ".class )." );
         builder.append( settings.getFunctionName() ).append( "(" );
 
         if( ! settings.getInputParameterList().isEmpty() ){

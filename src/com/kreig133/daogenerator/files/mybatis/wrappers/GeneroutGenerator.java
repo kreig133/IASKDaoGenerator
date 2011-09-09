@@ -1,4 +1,4 @@
-package com.kreig133.daogenerator.mybatis.wrappers;
+package com.kreig133.daogenerator.files.mybatis.wrappers;
 
 import com.kreig133.daogenerator.common.Settings;
 import com.kreig133.daogenerator.common.strategy.FunctionalObjectWithoutFilter;
@@ -28,15 +28,10 @@ public class GeneroutGenerator extends CommonWrapperGenerator{
 
         builder.append( "DECLARE\n" );
 
-        iterateForParameterList( builder, inputParametrs, new FuctionalObject() {
+        iterateForParameterList( builder, inputParametrs, new FunctionalObjectForOutParametres() {
             @Override
             public void writeString( StringBuilder builder, Parameter p ) {
-                index = parameterName( builder, index );
-                builder.append( p.getSqlType() );
-            }
-            @Override
-            public boolean filter( Parameter p ) {
-                return isOutParameter( ( InputParameter ) p );
+                insertExpressionWithParameter( builder, p.getSqlType() );
             }
         } );
 
@@ -46,15 +41,10 @@ public class GeneroutGenerator extends CommonWrapperGenerator{
         builder.append( "SELECT" );
 
         index = 0;
-        iterateForParameterList( builder, inputParametrs, new FuctionalObject() {
+        iterateForParameterList( builder, inputParametrs, new FunctionalObjectForOutParametres() {
             @Override
             public void writeString( StringBuilder builder, Parameter p ) {
-                index = parameterName( builder, index );
-                builder.append( "= " ).append( defaultValue( p ) );
-            }
-            @Override
-            public boolean filter( Parameter p ) {
-                return isOutParameter( ( InputParameter ) p );
+                insertExpressionWithParameter( builder, "= " + defaultValue( p ) );
             }
         } );
 
@@ -72,22 +62,23 @@ public class GeneroutGenerator extends CommonWrapperGenerator{
         //вернуть полученные значения
         index = 0;
         builder.append( "\nSELECT\n" );
-        iterateForParameterList( builder, inputParametrs, new FuctionalObject() {
+
+        iterateForParameterList( builder, inputParametrs, new FunctionalObjectForOutParametres() {
             @Override
             public void writeString( StringBuilder builder, Parameter p ) {
-                index = parameterName( builder, index );
-                builder.append( p.getName() );
-            }
-            @Override
-            public boolean filter( Parameter p ) {
-                return isOutParameter( ( InputParameter ) p );
+                insertExpressionWithParameter( builder, p.getName() );
             }
         } );
 
         return builder.toString();
     }
 
-    private static boolean isOutParameter( InputParameter p ) {
+    private static void insertExpressionWithParameter( StringBuilder builder, String rightPartOfExpr ) {
+        index = parameterName( builder, index );
+        builder.append( rightPartOfExpr );
+    }
+
+    static boolean isOutParameter( InputParameter p ) {
         return p.getInputType() == InputParameterType.OUT;
     }
 
@@ -102,5 +93,12 @@ public class GeneroutGenerator extends CommonWrapperGenerator{
                 return "\"\"";
         }
         throw new IllegalArgumentException();
+    }
+}
+
+abstract class FunctionalObjectForOutParametres implements FuctionalObject{
+    @Override
+    public boolean filter( Parameter p ) {
+        return GeneroutGenerator.isOutParameter( ( InputParameter ) p );
     }
 }

@@ -1,4 +1,4 @@
-package com.kreig133.daogenerator.parsers;
+package com.kreig133.daogenerator.files.parsers;
 
 import com.kreig133.daogenerator.common.Utils;
 import com.kreig133.daogenerator.enums.InputParameterType;

@@ -1,9 +1,9 @@
 package com.kreig133.daogenerator.enums;
 
-import com.kreig133.daogenerator.parsers.IParser;
-import com.kreig133.daogenerator.parsers.InputParameterParser;
-import com.kreig133.daogenerator.parsers.OutputParametrParser;
-import com.kreig133.daogenerator.parsers.QueryParser;
+import com.kreig133.daogenerator.files.parsers.IParser;
+import com.kreig133.daogenerator.files.parsers.InputParameterParser;
+import com.kreig133.daogenerator.files.parsers.OutputParametrParser;
+import com.kreig133.daogenerator.files.parsers.QueryParser;
 
 /**
  * @author eshangareev

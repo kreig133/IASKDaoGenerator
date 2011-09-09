@@ -13,30 +13,10 @@ public enum JavaType {
     private static final Map< JavaType, List<String> > map = new HashMap<JavaType, List<String>>( 6 );
 
     static {
-        List<String> listOfStrings = new ArrayList<String>( 5 );
-        listOfStrings.add( "int" );
-        listOfStrings.add( "byte" );
-        listOfStrings.add( "long" );
-        listOfStrings.add( "smallint" );
-        listOfStrings.add( "numeric" );
-
-        map.put( Long, listOfStrings );
-
-        listOfStrings = new ArrayList<String>( 1 );
-        listOfStrings.add( "datetime" );
-
-        map.put( Date, listOfStrings );
-
-        listOfStrings = new ArrayList<String>( 2 );
-        listOfStrings.add( "string" );
-        listOfStrings.add( "varchar" );
-
-        map.put( String, listOfStrings );
-
-        listOfStrings = new ArrayList<String>( 1 );
-        listOfStrings.add( "decimal" );
-
-        map.put( Double, listOfStrings );
+        linkJavaTypeWithAliases( Long   , "int", "byte", "long", "smallint", "numeric" );
+        linkJavaTypeWithAliases( Date   , "datetime" );
+        linkJavaTypeWithAliases( String , "string", "varchar" );
+        linkJavaTypeWithAliases( Double , "decimal" );
     }
 
     public static JavaType getBySqlType( String type ) {
@@ -49,6 +29,14 @@ public enum JavaType {
             }
         }
 
-        throw new RuntimeException( "Упс! Нашелся баг: я не смогла преобразовать входной тип в java-тип. Ай-я-я-яй" );
+        throw new RuntimeException( "Упс! Нашелся баг: я не шмогла преобразовать входной тип в java-тип. Ай-я-я-яй" );
+    }
+
+    private static void linkJavaTypeWithAliases(JavaType type, String...aliases){
+        List<String> listOfStrings = new ArrayList<String>( aliases.length );
+        for( String s : aliases ){
+            listOfStrings.add( s );
+        }
+        map.put( type, listOfStrings );
     }
 }

@@ -1,4 +1,4 @@
-package com.kreig133.daogenerator.mybatis;
+package com.kreig133.daogenerator.files.mybatis;
 
 import com.kreig133.daogenerator.common.Settings;
 import com.kreig133.daogenerator.common.Utils;
@@ -17,10 +17,10 @@ public class XmlMappingGenerator {
     public static String generateXmlMapping(
         Settings settings
     ){
-        List<Parameter> inputParameterList    = settings.getInputParameterList();
-        List<Parameter> outputParameterList   = settings.getOutputParameterList();
-        String name                             = settings.getFunctionName();
-        String package_                         = settings.getEntityPackage();
+        final List<Parameter> inputParameterList  = settings.getInputParameterList();
+        final List<Parameter> outputParameterList = settings.getOutputParameterList();
+        final String name                         = settings.getFunctionName();
+        final String package_                     = settings.getEntityPackage();
 
         StringBuilder builder = new StringBuilder();
         builder.append( "    <select id=\"" ).append( name ).append( "\" statementType=\"CALLABLE\"" );

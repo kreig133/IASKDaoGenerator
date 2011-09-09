@@ -1,10 +1,10 @@
-package com.kreig133.daogenerator.mybatis;
+package com.kreig133.daogenerator.files.mybatis;
 
 import com.kreig133.daogenerator.common.Settings;
 import com.kreig133.daogenerator.common.Utils;
 import com.kreig133.daogenerator.enums.SelectType;
 import com.kreig133.daogenerator.parameter.Parameter;
-import com.kreig133.daogenerator.mybatis.wrappers.WrapperGenerators;
+import com.kreig133.daogenerator.files.mybatis.wrappers.WrapperGenerators;
 
 import java.util.List;
 

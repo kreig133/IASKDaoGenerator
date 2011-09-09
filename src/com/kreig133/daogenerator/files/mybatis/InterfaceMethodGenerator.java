@@ -1,4 +1,4 @@
-package com.kreig133.daogenerator.mybatis;
+package com.kreig133.daogenerator.files.mybatis;
 
 import com.kreig133.daogenerator.common.Settings;
 import com.kreig133.daogenerator.common.Utils;
@@ -6,7 +6,6 @@ import com.kreig133.daogenerator.common.strategy.FunctionalObjectWithoutFilter;
 import com.kreig133.daogenerator.enums.MethodType;
 import com.kreig133.daogenerator.enums.ReturnType;
 import com.kreig133.daogenerator.enums.Type;
-import com.kreig133.daogenerator.common.strategy.FuctionalObject;
 import com.kreig133.daogenerator.parameter.Parameter;
 
 import java.util.List;

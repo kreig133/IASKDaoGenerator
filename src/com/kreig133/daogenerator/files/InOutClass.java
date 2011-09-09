@@ -1,4 +1,4 @@
-package com.kreig133.daogenerator.common;
+package com.kreig133.daogenerator.files;
 
 import com.kreig133.daogenerator.common.strategy.FuctionalObject;
 import com.kreig133.daogenerator.common.strategy.FunctionalObjectWithoutFilter;

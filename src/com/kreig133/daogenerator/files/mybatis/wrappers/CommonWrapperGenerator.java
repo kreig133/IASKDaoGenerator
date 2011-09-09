@@ -1,4 +1,4 @@
-package com.kreig133.daogenerator.mybatis.wrappers;
+package com.kreig133.daogenerator.files.mybatis.wrappers;
 
 import com.kreig133.daogenerator.parameter.InputParameter;
 import com.kreig133.daogenerator.parameter.Parameter;

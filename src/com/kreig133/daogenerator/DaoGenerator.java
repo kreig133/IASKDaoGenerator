@@ -1,14 +1,14 @@
 package com.kreig133.daogenerator;
 
-import com.kreig133.daogenerator.common.InOutClass;
+import com.kreig133.daogenerator.files.InOutClass;
 import com.kreig133.daogenerator.common.Settings;
 import com.kreig133.daogenerator.common.Utils;
 import com.kreig133.daogenerator.enums.ReturnType;
 import com.kreig133.daogenerator.enums.SelectType;
 import com.kreig133.daogenerator.enums.Type;
-import com.kreig133.daogenerator.mybatis.MyBatis;
+import com.kreig133.daogenerator.files.mybatis.MyBatis;
 import com.kreig133.daogenerator.parameter.Parameter;
-import com.kreig133.daogenerator.parsers.InputFileParser;
+import com.kreig133.daogenerator.files.parsers.InputFileParser;
 
 import javax.swing.*;
 import java.io.*;

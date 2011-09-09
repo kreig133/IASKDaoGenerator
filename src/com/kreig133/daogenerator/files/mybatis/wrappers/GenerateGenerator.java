@@ -1,7 +1,6 @@
-package com.kreig133.daogenerator.mybatis.wrappers;
+package com.kreig133.daogenerator.files.mybatis.wrappers;
 
 import com.kreig133.daogenerator.common.Settings;
-import com.kreig133.daogenerator.common.strategy.FuctionalObject;
 import com.kreig133.daogenerator.common.strategy.FunctionalObjectWithoutFilter;
 import com.kreig133.daogenerator.parameter.Parameter;
 
