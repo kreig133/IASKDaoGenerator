@@ -34,9 +34,7 @@ public enum JavaType {
 
     private static void linkJavaTypeWithAliases(JavaType type, String...aliases){
         List<String> listOfStrings = new ArrayList<String>( aliases.length );
-        for( String s : aliases ){
-            listOfStrings.add( s );
-        }
+        Collections.addAll( listOfStrings, aliases );
         map.put( type, listOfStrings );
     }
 }

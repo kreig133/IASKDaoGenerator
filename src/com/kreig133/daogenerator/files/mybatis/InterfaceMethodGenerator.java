@@ -19,10 +19,9 @@ import static com.kreig133.daogenerator.common.Utils.*;
 public class InterfaceMethodGenerator {
 
     public static String methodGenerator(
-            final Settings settings,
-            final MethodType methodType
+            final Settings settings
     ) {
-        return "    " + generateMethodSignature( settings, methodType ) + ";\n";
+        return "    " + generateMethodSignature( settings, MethodType.DAO ) + ";\n";
     }
 
     public static String generateMethodSignature(

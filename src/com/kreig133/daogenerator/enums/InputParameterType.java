@@ -5,5 +5,5 @@ package com.kreig133.daogenerator.enums;
  * @version 1.0
  */
 public enum InputParameterType {
-    IN, OUT;
+    IN, OUT
 }

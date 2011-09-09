@@ -20,7 +20,7 @@ public class InOutClass {
     private static final String IMPORTS = "import java.io.Serializable;\n" +
                                   "import java.util.*;\n\n";
 
-    public String package_;
+    private final String package_;
 
 
     private final List< Parameter > parameters;

@@ -8,7 +8,6 @@ import com.kreig133.daogenerator.files.mybatis.preparatory.ImplementationFilePre
 import com.kreig133.daogenerator.files.mybatis.preparatory.InterfaceFilePreparatory;
 import com.kreig133.daogenerator.files.mybatis.preparatory.MappingFilePreparatory;
 
-import java.io.File;
 import java.io.IOException;
 
 import static com.kreig133.daogenerator.files.JavaFilesUtils.*;
@@ -78,7 +77,7 @@ public class MyBatis {
 
         Utils.appendByteToFile(
                 interfaceFile( settings ) ,
-                InterfaceMethodGenerator.methodGenerator( settings, MethodType.DAO ).getBytes()
+                InterfaceMethodGenerator.methodGenerator( settings ).getBytes()
         );
     }
 
