@@ -34,4 +34,8 @@ public interface OperationSettings {
     String getSourcePath();
 
     void setSourcePath( String path );
+
+    boolean skipTesting();
+
+    void setSkipTesting( boolean skipTesting );
 }

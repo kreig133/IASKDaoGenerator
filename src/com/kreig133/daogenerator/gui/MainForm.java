@@ -1,5 +1,6 @@
 package com.kreig133.daogenerator.gui;
 
+import com.kreig133.daogenerator.Controller;
 import com.kreig133.daogenerator.DaoGenerator;
 import com.kreig133.daogenerator.common.settings.FunctionSettings;
 import com.kreig133.daogenerator.common.settings.OperationSettings;
@@ -50,7 +51,7 @@ public class MainForm {
                 if( validate() ){
                     try {
                         fillSettingsWithData();
-                        DaoGenerator.doAction();
+                        Controller.doAction();
                     } catch ( IOException e1 ) {
                         e1.printStackTrace();
                         //TODO вывести окно с ошибкой
@@ -63,8 +64,8 @@ public class MainForm {
     private void fillSettingsWithData() {
         OperationSettings operationSettings = DaoGenerator.getCurrentOperationSettings();
 
-        operationSettings.setOutputPath     ( destDirTextField.getText() + "/" + "src" );
-        operationSettings.setSourcePath     ( sourceDirTextField            .getText() );
+        operationSettings.setOutputPath( destDirTextField.getText() + "/" + "src" );
+        operationSettings.setSourcePath( sourceDirTextField.getText() );
         operationSettings.setDaoPackage     ( interfacePackageTextField     .getText() );
         operationSettings.setEntityPackage  ( entityPackageTextField        .getText() );
         operationSettings.setMapperPackage  ( mappingPackageTextField       .getText() );

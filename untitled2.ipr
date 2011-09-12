@@ -220,5 +220,15 @@
       <template>/**$s$Do$s$not$s$instantiate$s$${CLASS_NAME}.$s$*/</template>
     </doccer>
   </component>
+  <component name="libraryTable">
+    <library name="Unnamed">
+      <CLASSES>
+        <root url="file://$MAVEN_REPOSITORY$/com/microsoft/sqlserver/sqljdbc/3.0" />
+      </CLASSES>
+      <JAVADOC />
+      <SOURCES />
+      <jarDirectory url="file://$MAVEN_REPOSITORY$/com/microsoft/sqlserver/sqljdbc/3.0" recursive="false" />
+    </library>
+  </component>
 </project>
 

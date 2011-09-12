@@ -7,7 +7,9 @@ import com.kreig133.daogenerator.enums.Type;
  * @version 1.0
  */
 public class OperationSettingsImpl implements OperationSettings{
-    private Type TYPE         ;
+    private Type TYPE;
+    private boolean SKIP_TESTING;
+
 
     private String OPERATION_NAME;
     private String ENTITY_PACKAGE;
@@ -115,5 +117,15 @@ public class OperationSettingsImpl implements OperationSettings{
         } else {
             throw new RuntimeException( "SOURCE_PATH уже установле!" );
         }
+    }
+
+    @Override
+    public boolean skipTesting() {
+        return SKIP_TESTING;
+    }
+
+    @Override
+    public void setSkipTesting( boolean skipTesting ) {
+        this.SKIP_TESTING = skipTesting;
     }
 }

@@ -24,6 +24,14 @@ public interface FunctionSettings {
 
     StringBuilder getSelectQuery();
 
+    String getMyBatisQuery();
+
+    void setMyBatisQuery( String myBatisQuery );
+
+    String getQueryForTesting();
+
+    void setQueryForTesting( String queryForTesting );
+
     String getFunctionName();
 
     void setFunctionName( String functionName );

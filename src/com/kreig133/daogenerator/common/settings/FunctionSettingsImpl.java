@@ -17,7 +17,10 @@ public class FunctionSettingsImpl implements FunctionSettings {
     private final List<Parameter> OUTPUT_PARAMETER_LIST = new ArrayList<Parameter>();
 
     private StringBuilder QUERY = new StringBuilder();
-    
+
+    private String MY_BATIS_QUERY;
+    private String QUERY_FOR_TESTING;
+
     private String     FUNCTION_NAME;
     private SelectType SELECT_TYPE  ;
     private ReturnType RETURN_TYPE  ;
@@ -50,6 +53,22 @@ public class FunctionSettingsImpl implements FunctionSettings {
     }
 
     @Override
+    public String getMyBatisQuery() {
+        if( MY_BATIS_QUERY == null ){
+            throw new AssertionError( "MY_BATIS_QUERY еще не был установлен!" );
+        }
+        return MY_BATIS_QUERY;
+    }
+
+    @Override
+    public String getQueryForTesting() {
+        if( QUERY_FOR_TESTING == null ){
+            throw new AssertionError( "QUERY_FOR_TESTING еще не был установлен!" );
+        }
+        return QUERY_FOR_TESTING;
+    }
+
+    @Override
     public void setSelectType( SelectType selectType ) {
         if( SELECT_TYPE == null ){
             this.SELECT_TYPE = selectType;
@@ -74,5 +93,21 @@ public class FunctionSettingsImpl implements FunctionSettings {
         } else {
             throw new AssertionError( "FUNCTION_NAME уже был устновлен!" );
         }
+    }
+
+    @Override
+    public void setMyBatisQuery( String myBatisQuery ) {
+        if( MY_BATIS_QUERY != null ){
+            throw new AssertionError( "MY_BATIS_QUERY уже был установлен!" );
+        }
+        MY_BATIS_QUERY = myBatisQuery;
+    }
+
+    @Override
+    public void setQueryForTesting( String queryForTesting ) {
+        if( QUERY_FOR_TESTING != null ){
+            throw new AssertionError( "QUERY_FOR_TESTING уже был установлен" );
+        }
+        QUERY_FOR_TESTING = queryForTesting;
     }
 }

@@ -1,4 +1,4 @@
-package com.kreig133.daogenerator.files.mybatis.wrappers;
+package com.kreig133.daogenerator.sql.wrappers;
 
 import com.kreig133.daogenerator.common.settings.FunctionSettings;
 import com.kreig133.daogenerator.common.strategy.FuctionalObject;
@@ -19,16 +19,17 @@ public class GeneroutGenerator extends CommonWrapperGenerator{
 
     private static int index = 0;
 
-    public static String generateWrapper( FunctionSettings functionSettings ) {
+    public static void generateWrapper( FunctionSettings functionSettings ) {
         final List<Parameter> inputParametrs    = functionSettings.getInputParameterList();
         final String          name              = functionSettings.getFunctionName();
 
-        StringBuilder builder = new StringBuilder();
+        StringBuilder myBatisQuery      = new StringBuilder();
+        StringBuilder queryForTesting   = new StringBuilder();
+
         //Декларация переменных
+        myBatisQuery.append( "DECLARE\n" );
 
-        builder.append( "DECLARE\n" );
-
-        iterateForParameterList( builder, inputParametrs, new FunctionalObjectForOutParametres() {
+        iterateForParameterList( myBatisQuery, inputParametrs, new FunctionalObjectForOutParametres() {
             @Override
             public void writeString( StringBuilder builder, Parameter p ) {
                 insertExpressionWithParameter( builder, p.getSqlType() );
@@ -38,10 +39,10 @@ public class GeneroutGenerator extends CommonWrapperGenerator{
         if( index == 0 ) throw new AssertionError();
 
         //Записываем в переменные дефолтные значения
-        builder.append( "SELECT" );
+        myBatisQuery.append( "SELECT" );
 
         index = 0;
-        iterateForParameterList( builder, inputParametrs, new FunctionalObjectForOutParametres() {
+        iterateForParameterList( myBatisQuery, inputParametrs, new FunctionalObjectForOutParametres() {
             @Override
             public void writeString( StringBuilder builder, Parameter p ) {
                 insertExpressionWithParameter( builder, "= " + defaultValue( p ) );
@@ -49,10 +50,20 @@ public class GeneroutGenerator extends CommonWrapperGenerator{
         } );
 
         //Выполняем хранимую процедуру
-        builder.append( "EXECUTE DBO." ).append( name ).append( "\n" );
+        myBatisQuery.append( "EXECUTE DBO." ).append( name ).append( "\n" );
+
+        queryForTesting.append( myBatisQuery.toString() );
+//TODO разобраться, я ни хрена не понял
+        index = 0;
+        iterateForParameterList( myBatisQuery, inputParametrs, new FunctionalObjectWithoutFilter() {
+            @Override
+            public void writeString( StringBuilder builder, Parameter p ) {
+                index = declareParamInProcedure( builder, p, index );
+            }
+        } );
 
         index = 0;
-        iterateForParameterList( builder, inputParametrs, new FunctionalObjectWithoutFilter() {
+        iterateForParameterList( myBatisQuery, inputParametrs, new FunctionalObjectWithoutFilter() {
             @Override
             public void writeString( StringBuilder builder, Parameter p ) {
                 index = declareParamInProcedure( builder, p, index );
@@ -60,17 +71,27 @@ public class GeneroutGenerator extends CommonWrapperGenerator{
         } );
 
         //вернуть полученные значения
-        index = 0;
-        builder.append( "\nSELECT\n" );
 
-        iterateForParameterList( builder, inputParametrs, new FunctionalObjectForOutParametres() {
+        myBatisQuery    .append( "\nSELECT\n" );
+        queryForTesting .append( "\nSELECT\n" );
+
+        index = 0;
+        iterateForParameterList( myBatisQuery, inputParametrs, new FunctionalObjectForOutParametres() {
+            @Override
+            public void writeString( StringBuilder builder, Parameter p ) {
+                insertExpressionWithParameter( builder, p.getName() );
+            }
+        } );
+        index = 0;
+        iterateForParameterList( queryForTesting, inputParametrs, new FunctionalObjectForOutParametres() {
             @Override
             public void writeString( StringBuilder builder, Parameter p ) {
                 insertExpressionWithParameter( builder, p.getName() );
             }
         } );
 
-        return builder.toString();
+        functionSettings.setMyBatisQuery    ( myBatisQuery   .toString() );
+        functionSettings.setQueryForTesting ( queryForTesting.toString() );
     }
 
     private static void insertExpressionWithParameter( StringBuilder builder, String rightPartOfExpr ) {

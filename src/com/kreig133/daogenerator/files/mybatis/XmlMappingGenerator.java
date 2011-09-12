@@ -15,6 +15,7 @@ import static com.kreig133.daogenerator.common.Utils.iterateForParameterList;
  * @version 1.0
  */
 public class XmlMappingGenerator {
+
     public static String generateXmlMapping(
         final OperationSettings operationSettings,
         final FunctionSettings functionSettings
@@ -32,7 +33,7 @@ public class XmlMappingGenerator {
 
         builder.append( ">\n\n" );
 
-        builder.append( generateProcedureCall( inputParameterList, name ) );
+        builder.append( functionSettings.getMyBatisQuery() );
 
         builder.append( "        )}\n\n" );
         builder.append( "    </select>\n\n" );
@@ -60,23 +61,5 @@ public class XmlMappingGenerator {
         }
     }
 
-    public static String generateProcedureCall(
-            List<Parameter> inputParameterList,
-            String name
-    ) {
-        StringBuilder result = new StringBuilder();
 
-        result.append("        {CALL ").append( name ).append( "(\n" );
-
-        iterateForParameterList( result, inputParameterList, 3, new FunctionalObjectWithoutFilter() {
-            @Override
-            public void writeString( StringBuilder builder, Parameter p ) {
-                builder.append( "#{" ).append( p.getName() ).append( "}" );
-            }
-        } );
-
-        result.append( "        )}" );
-
-        return result.toString();
-    }
 }

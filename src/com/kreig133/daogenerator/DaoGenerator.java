@@ -38,26 +38,7 @@ public class DaoGenerator {
 
     }
 
-    public static void doAction() throws IOException {
 
-        MyBatis.prepareFiles            ( operationSettings );
-
-        for(
-                String s:
-                ( new File( operationSettings.getSourcePath() ) )
-                        .list(
-                                new FilenameFilter() {
-                                    public boolean accept(File dir, String name) {
-                                        return name.endsWith("txt");
-                                    }
-                                }
-                        )
-        ) {
-            Controller.controller( new File( operationSettings.getSourcePath() + "/"+s), operationSettings );
-        }
-
-        MyBatis.closeFiles      ( operationSettings );
-    }
 
     public static OperationSettings getCurrentOperationSettings(){
         return operationSettings;
