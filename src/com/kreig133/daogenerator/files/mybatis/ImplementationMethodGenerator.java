@@ -1,6 +1,7 @@
 package com.kreig133.daogenerator.files.mybatis;
 
-import com.kreig133.daogenerator.common.Settings;
+import com.kreig133.daogenerator.common.settings.FunctionSettings;
+import com.kreig133.daogenerator.common.settings.OperationSettings;
 import com.kreig133.daogenerator.enums.MethodType;
 import com.kreig133.daogenerator.files.JavaFilesUtils;
 
@@ -10,24 +11,30 @@ import com.kreig133.daogenerator.files.JavaFilesUtils;
  */
 public class ImplementationMethodGenerator {
 
-    public static String generateMethodImpl( Settings settings ){
+    public static String generateMethodImpl(
+            OperationSettings operationSettings,
+            FunctionSettings functionSettings
+    ){
 
         StringBuilder builder = new StringBuilder();
 
         builder.append( "    @Override\n    public " );
-        builder.append( InterfaceMethodGenerator.generateMethodSignature( settings, MethodType.DAO ) );
+        builder.append( InterfaceMethodGenerator.generateMethodSignature(
+                operationSettings,
+                functionSettings,
+                MethodType.DAO ) );
         builder.append( "{\n" );
         builder.append( "        " );
 
-        if( ! settings.getOutputParameterList().isEmpty() ){
+        if( ! functionSettings.getOutputParameterList().isEmpty() ){
             builder.append( "return " );
         }
 
-        builder.append( "getSqlSession().getMapper( " ).append( settings.getOperationName() );
+        builder.append( "getSqlSession().getMapper( " ).append( operationSettings.getOperationName() );
         builder.append( JavaFilesUtils.MAPPER_PREFIX ).append( ".class )." );
-        builder.append( settings.getFunctionName() ).append( "(" );
+        builder.append( functionSettings.getFunctionName() ).append( "(" );
 
-        if( ! settings.getInputParameterList().isEmpty() ){
+        if( ! functionSettings.getInputParameterList().isEmpty() ){
             builder.append( "request" );
         }
 

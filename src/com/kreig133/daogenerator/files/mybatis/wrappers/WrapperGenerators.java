@@ -1,7 +1,6 @@
 package com.kreig133.daogenerator.files.mybatis.wrappers;
 
-import com.kreig133.daogenerator.common.Settings;
-
+import com.kreig133.daogenerator.common.settings.FunctionSettings;
 
 /**
  * @author eshangareev
@@ -10,13 +9,13 @@ import com.kreig133.daogenerator.common.Settings;
 public class WrapperGenerators {
 
     public static String generateWrapperProcedure (
-        Settings settings
+        FunctionSettings functionSettings
     ){
-        switch ( settings.getSelectType() ){
+        switch ( functionSettings.getSelectType() ){
             case GENERATE:
-                return GenerateGenerator.generateWrapper( settings );
+                return GenerateGenerator.generateWrapper( functionSettings );
             case GENEROUT:
-//                return GeneroutGenerator.generateWrapper( settings );
+//                return GeneroutGenerator.generateWrapper( functionSettings );
         }
         throw new IllegalArgumentException();
     }

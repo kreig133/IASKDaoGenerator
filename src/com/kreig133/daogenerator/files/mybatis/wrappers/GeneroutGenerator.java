@@ -1,15 +1,15 @@
 package com.kreig133.daogenerator.files.mybatis.wrappers;
 
-import com.kreig133.daogenerator.common.Settings;
+import com.kreig133.daogenerator.common.settings.FunctionSettings;
+import com.kreig133.daogenerator.common.strategy.FuctionalObject;
 import com.kreig133.daogenerator.common.strategy.FunctionalObjectWithoutFilter;
 import com.kreig133.daogenerator.enums.InputOrOutputType;
-import com.kreig133.daogenerator.common.strategy.FuctionalObject;
 import com.kreig133.daogenerator.parameter.InputParameter;
 import com.kreig133.daogenerator.parameter.Parameter;
 
 import java.util.List;
 
-import static com.kreig133.daogenerator.common.Utils.*;
+import static com.kreig133.daogenerator.common.Utils.iterateForParameterList;
 
 /**
  * @author eshangareev
@@ -19,9 +19,9 @@ public class GeneroutGenerator extends CommonWrapperGenerator{
 
     private static int index = 0;
 
-    public static String generateWrapper( Settings settings ) {
-        final List<Parameter> inputParametrs    = settings.getInputParameterList();
-        final String          name              = settings.getFunctionName();
+    public static String generateWrapper( FunctionSettings functionSettings ) {
+        final List<Parameter> inputParametrs    = functionSettings.getInputParameterList();
+        final String          name              = functionSettings.getFunctionName();
 
         StringBuilder builder = new StringBuilder();
         //Декларация переменных

@@ -1,11 +1,9 @@
 package com.kreig133.daogenerator.files.parsers;
 
-import com.kreig133.daogenerator.DaoGenerator;
-import com.kreig133.daogenerator.common.Settings;
+import com.kreig133.daogenerator.common.settings.FunctionSettings;
 import com.kreig133.daogenerator.enums.Mode;
 import com.kreig133.daogenerator.enums.ReturnType;
 import com.kreig133.daogenerator.enums.SelectType;
-import com.kreig133.daogenerator.enums.Type;
 
 import java.io.*;
 
@@ -21,7 +19,7 @@ public class InputFileParser {
 
     public static void readFileWithDataForGenerateDao(
             File fileWithData,
-            Settings settings
+            FunctionSettings functionSettings
     ) throws IOException {
 
         final BufferedReader reader = new BufferedReader(
@@ -34,7 +32,7 @@ public class InputFileParser {
         String line = reader.readLine();
 
         //Считываем настройки
-        readType( line, settings );
+        readType( line, functionSettings );
 
         line = reader.readLine();
 
@@ -43,7 +41,7 @@ public class InputFileParser {
 
                 if( ! isStopLine( line ) ){
                     if( mode != null && ( mode == Mode.IS_SELECT_QUERY || line.length() > 7 ) ){
-                        Parsers.readLine( settings, mode, line );
+                        Parsers.readLine( functionSettings, mode, line );
                     }
                 }
 
@@ -59,15 +57,15 @@ public class InputFileParser {
 
     private static void readType(
             String      lineWithSettings,
-            Settings    settings
+            FunctionSettings functionSettings
     ){
         final String[] split = splitIt( lineWithSettings );
 
         assert split.length >= 3;
 
-//        settings.setType       ( Type      .getByName( split[ 0 ] ) );
-        settings.setSelectType ( SelectType.getByName( split[ 1 ] ) ) ;
-        settings.setReturnType ( ReturnType.getByName( split[ 2 ] ) );
+//        functionSettings.setType       ( Type      .getByName( split[ 0 ] ) );
+        functionSettings.setSelectType ( SelectType.getByName( split[ 1 ] ) ) ;
+        functionSettings.setReturnType ( ReturnType.getByName( split[ 2 ] ) );
     }
 
     private static boolean isStopLine( String line ){

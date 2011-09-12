@@ -1,37 +1,29 @@
 package com.kreig133.daogenerator;
 
-import com.kreig133.daogenerator.common.SettingsImpl;
-import com.kreig133.daogenerator.files.InOutClass;
-import com.kreig133.daogenerator.common.Settings;
-import com.kreig133.daogenerator.common.Utils;
-import com.kreig133.daogenerator.enums.ReturnType;
-import com.kreig133.daogenerator.enums.SelectType;
-import com.kreig133.daogenerator.enums.Type;
+import com.kreig133.daogenerator.common.settings.FunctionSettings;
+import com.kreig133.daogenerator.common.settings.FunctionSettingsImpl;
+import com.kreig133.daogenerator.common.settings.OperationSettings;
+import com.kreig133.daogenerator.common.settings.OperationSettingsImpl;
 import com.kreig133.daogenerator.files.mybatis.MyBatis;
 import com.kreig133.daogenerator.gui.MainForm;
-import com.kreig133.daogenerator.parameter.Parameter;
-import com.kreig133.daogenerator.files.parsers.InputFileParser;
+import com.sun.corba.se.spi.orb.Operation;
 
 import javax.swing.*;
 import java.awt.*;
 import java.io.*;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
 
-import static com.kreig133.daogenerator.common.Utils.*;
 /**
  * @author eshangareev
  * @version 1.0
  */
 public class DaoGenerator {
 
-    static Settings settings;
+    static OperationSettings operationSettings;
 
 
     public static void main(String[] args) throws IOException {
 
-        settings = new SettingsImpl();
+        operationSettings = new OperationSettingsImpl();
         EventQueue.invokeLater( new Runnable() {
             @Override
             public void run() {
@@ -48,11 +40,11 @@ public class DaoGenerator {
 
     public static void doAction() throws IOException {
 
-        MyBatis.prepareFiles            ( settings );
+        MyBatis.prepareFiles            ( operationSettings );
 
         for(
                 String s:
-                ( new File( settings.getSourcePath() ) )
+                ( new File( operationSettings.getSourcePath() ) )
                         .list(
                                 new FilenameFilter() {
                                     public boolean accept(File dir, String name) {
@@ -61,14 +53,14 @@ public class DaoGenerator {
                                 }
                         )
         ) {
-            Controller.controller( new File( settings.getSourcePath() + "/"+s), settings );
+            Controller.controller( new File( operationSettings.getSourcePath() + "/"+s), operationSettings );
         }
 
-        MyBatis.closeFiles      ( settings );
+        MyBatis.closeFiles      ( operationSettings );
     }
 
-    public static Settings getCurrentSettings(){
-        return settings;
+    public static OperationSettings getCurrentOperationSettings(){
+        return operationSettings;
     }
 
 }

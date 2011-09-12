@@ -1,7 +1,8 @@
 package com.kreig133.daogenerator.files.mybatis;
 
-import com.kreig133.daogenerator.common.Settings;
 import com.kreig133.daogenerator.common.Utils;
+import com.kreig133.daogenerator.common.settings.FunctionSettings;
+import com.kreig133.daogenerator.common.settings.OperationSettings;
 import com.kreig133.daogenerator.enums.MethodType;
 import com.kreig133.daogenerator.enums.Type;
 import com.kreig133.daogenerator.files.mybatis.preparatory.ImplementationFilePreparatory;
@@ -19,79 +20,85 @@ import static com.kreig133.daogenerator.files.JavaFilesUtils.*;
 public class MyBatis {
 
     public static void generateFiles(
-            Settings settings
+            OperationSettings operationSettingsSettings,
+            FunctionSettings functionSettings
     ) throws IOException {
 
-        generateMapping         ( settings );
-        generateInterface       ( settings );
-        generateImplementation  ( settings );
+        generateMapping         ( operationSettingsSettings, functionSettings );
+        generateInterface       ( operationSettingsSettings, functionSettings );
+        generateImplementation  ( operationSettingsSettings, functionSettings );
 
-        settings.clearSelectQuery();
-        settings.getInputParameterList().clear();
-        settings.getOutputParameterList().clear();
     }
 
     public static void prepareFiles(
-            Settings settings
+            OperationSettings operationSettings
     ) throws IOException {
 
-        InterfaceFilePreparatory        .prepareFile( settings );
-        ImplementationFilePreparatory   .prepareFile( settings );
-        MappingFilePreparatory          .prepareFile( settings );
+        InterfaceFilePreparatory        .prepareFile( operationSettings );
+        ImplementationFilePreparatory   .prepareFile( operationSettings );
+        MappingFilePreparatory          .prepareFile( operationSettings );
 
     }
 
-    public static void closeFiles( Settings settings ) throws IOException {
+    public static void closeFiles(
+            OperationSettings operationSettings
+    ) throws IOException {
         String s = "\n}";
-        Utils.appendByteToFile( interfaceFile       ( settings ), s.getBytes() );
-        Utils.appendByteToFile( implementationFile  ( settings ), s.getBytes() );
+        Utils.appendByteToFile( interfaceFile       ( operationSettings ), s.getBytes() );
+        Utils.appendByteToFile( implementationFile  ( operationSettings ), s.getBytes() );
 
-        if( settings.getType() == Type.DEPO ){
-            Utils.appendByteToFile( mappingFile ( settings ), s.getBytes() );
+        if( operationSettings.getType() == Type.DEPO ){
+            Utils.appendByteToFile( mappingFile ( operationSettings ), s.getBytes() );
         } else {
             throw new RuntimeException( "Запили для ИАСКА. Быстро!" );
         }
     }
 
     private static void generateMapping(
-        Settings settings
+        OperationSettings operationSettings,
+        FunctionSettings functionSettings
     ) throws IOException {
         String method;
 
-        switch ( settings.getType() ){
+        switch (  operationSettings.getType() ){
             case IASK:
-                Utils.appendByteToFile( mappingFile( settings ),
-                        XmlMappingGenerator.generateXmlMapping( settings ).getBytes() );
+                Utils.appendByteToFile( mappingFile( operationSettings ),
+                        XmlMappingGenerator.generateXmlMapping( operationSettings, functionSettings ).getBytes() );
                 break;
             case DEPO:
                 method =
-                        AnnotationGenerator.generateAnnotation( settings )
+                        AnnotationGenerator.generateAnnotation( functionSettings )
                         +"    public "
-                        + InterfaceMethodGenerator.generateMethodSignature( settings, MethodType.MAPPER  )
+                        + InterfaceMethodGenerator.generateMethodSignature(
+                                operationSettings,
+                                functionSettings,
+                                MethodType.MAPPER  )
                         + "\n";
-                Utils.appendByteToFile( mappingFile( settings ),
+                Utils.appendByteToFile( mappingFile( operationSettings ),
                         method.getBytes() );
                 break;
         }
     }
 
     private static void generateInterface(
-            Settings settings
+            OperationSettings operationSettings,
+            FunctionSettings functionSettings
     ) throws IOException {
 
         Utils.appendByteToFile(
-                interfaceFile( settings ) ,
-                InterfaceMethodGenerator.methodGenerator( settings ).getBytes()
+                interfaceFile( operationSettings ) ,
+                InterfaceMethodGenerator.methodGenerator( operationSettings, functionSettings ).getBytes()
         );
     }
 
     private static void generateImplementation(
-            Settings settings
+            OperationSettings operationSettings,
+            FunctionSettings functionSettings
     ) throws IOException {
 
         Utils.appendByteToFile(
-                implementationFile( settings ),
-                ImplementationMethodGenerator.generateMethodImpl( settings ).getBytes()
+                implementationFile( operationSettings ),
+                ImplementationMethodGenerator.generateMethodImpl( operationSettings, functionSettings ).getBytes()
         );
     }
 }

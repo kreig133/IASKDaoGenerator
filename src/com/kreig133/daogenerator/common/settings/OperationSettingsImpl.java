@@ -1,26 +1,14 @@
-package com.kreig133.daogenerator.common;
+package com.kreig133.daogenerator.common.settings;
 
-import com.kreig133.daogenerator.enums.ReturnType;
-import com.kreig133.daogenerator.enums.SelectType;
 import com.kreig133.daogenerator.enums.Type;
-import com.kreig133.daogenerator.parameter.Parameter;
-import com.sun.org.apache.regexp.internal.RE;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * @author eshangareev
  * @version 1.0
  */
-public class SettingsImpl implements Settings{
+public class OperationSettingsImpl implements OperationSettings{
+    private Type TYPE         ;
 
-    private final List<Parameter> INPUT_PARAMETER_LIST  = new ArrayList<Parameter>();
-    private final List<Parameter> OUTPUT_PARAMETER_LIST = new ArrayList<Parameter>();
-
-    private StringBuilder QUERY = new StringBuilder();
-    
-    private String FUNCTION_NAME;
     private String OPERATION_NAME;
     private String ENTITY_PACKAGE;
     private String DAO_PACKAGE;
@@ -28,46 +16,10 @@ public class SettingsImpl implements Settings{
     private String OUTPUT_PATH;
     private String SOURCE_PATH;
 
-    private Type       TYPE         ; 
-    private SelectType SELECT_TYPE  ;
-    private ReturnType RETURN_TYPE  ;
-
-    //= "com.aplana.sbrf.deposit.persistence.custom.entity.accounts.operation" +
-    //".administrative.closecount";
-
-
     @Override
     public Type getType() {
         return TYPE;
     }
-
-    @Override
-    public SelectType getSelectType() {
-        return SELECT_TYPE;
-    }
-
-    @Override
-    public List<Parameter> getInputParameterList() {
-        return INPUT_PARAMETER_LIST;
-    }
-    @Override
-    public List<Parameter> getOutputParameterList() {
-        return OUTPUT_PARAMETER_LIST;
-    }
-    @Override
-    public StringBuilder getSelectQuery() {
-        return QUERY;
-    }
-    @Override
-    public String getFunctionName() {
-        return FUNCTION_NAME;
-    }
-
-    @Override
-    public ReturnType getReturnType() {
-        return RETURN_TYPE;
-    }
-
 
     @Override
     public String getOutputPath() {
@@ -101,21 +53,6 @@ public class SettingsImpl implements Settings{
         } else {
             throw new RuntimeException( "TYPE уже был установлен!" );
         }
-    }
-
-    @Override
-    public void setSelectType( SelectType selectType ) {
-        this.SELECT_TYPE = selectType;
-    }
-
-    @Override
-    public void setReturnType( ReturnType returnType ) {
-        RETURN_TYPE = returnType;
-    }
-
-    @Override
-    public void setFunctionName( String functionName ) {
-        FUNCTION_NAME = functionName;
     }
 
     @Override
@@ -178,10 +115,5 @@ public class SettingsImpl implements Settings{
         } else {
             throw new RuntimeException( "SOURCE_PATH уже установле!" );
         }
-    }
-
-    @Override
-    public void clearSelectQuery() {
-        QUERY = new StringBuilder();
     }
 }

@@ -1,6 +1,6 @@
 package com.kreig133.daogenerator.files.parsers;
 
-import com.kreig133.daogenerator.common.Settings;
+import com.kreig133.daogenerator.common.settings.FunctionSettings;
 import com.kreig133.daogenerator.parameter.Parameter;
 import com.kreig133.daogenerator.enums.Mode;
 
@@ -13,13 +13,13 @@ import java.util.List;
 public class Parsers {
 
     public static void readLine(
-            Settings settings,
+            FunctionSettings functionSettings,
             Mode mode,
             String line
     ){
-        final List<Parameter> inputParameterList  = settings. getInputParameterList();
-        final List<Parameter> outputParameterList = settings.getOutputParameterList();
-        final StringBuilder   query               = settings.getSelectQuery        ();
+        final List<Parameter> inputParameterList  = functionSettings. getInputParameterList();
+        final List<Parameter> outputParameterList = functionSettings.getOutputParameterList();
+        final StringBuilder   query               = functionSettings.getSelectQuery        ();
 
         switch ( mode ){
             case IS_INPUT_PARAMETRS:

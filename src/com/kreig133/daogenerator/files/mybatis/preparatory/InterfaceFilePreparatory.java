@@ -1,7 +1,8 @@
 package com.kreig133.daogenerator.files.mybatis.preparatory;
 
-import com.kreig133.daogenerator.common.Settings;
 import com.kreig133.daogenerator.common.Utils;
+import com.kreig133.daogenerator.common.settings.FunctionSettings;
+import com.kreig133.daogenerator.common.settings.OperationSettings;
 
 import java.io.IOException;
 
@@ -11,18 +12,19 @@ import static com.kreig133.daogenerator.files.JavaFilesUtils.*;
  * @version 1.0
  */
 public class InterfaceFilePreparatory extends Preparatory{
-    protected static void startingLinesOfDaoFiles( Settings settings, StringBuilder builder ) {
-        insertPackageLine( settings.getDaoPackage(), builder );
-        commonImports( settings, builder );
+
+    protected static void startingLinesOfDaoFiles( OperationSettings operationSettings, StringBuilder builder ) {
+        insertPackageLine( operationSettings.getDaoPackage(), builder );
+        commonImports( operationSettings, builder );
     }
 
-    public static void prepareFile( Settings settings ) throws IOException {
+    public static void prepareFile( OperationSettings operationSettings ) throws IOException {
         StringBuilder builder = new StringBuilder();
 
-        startingLinesOfDaoFiles( settings, builder );
+        startingLinesOfDaoFiles( operationSettings, builder );
         //TODO блок комментариев
-        builder.append( "public interface ").append( interfaceFileName( settings ) ).append( "{\n\n" );
+        builder.append( "public interface ").append( interfaceFileName( operationSettings ) ).append( "{\n\n" );
 
-        Utils.appendByteToFile( interfaceFile( settings ), builder.toString().getBytes() );
+        Utils.appendByteToFile( interfaceFile( operationSettings ), builder.toString().getBytes() );
     }
 }

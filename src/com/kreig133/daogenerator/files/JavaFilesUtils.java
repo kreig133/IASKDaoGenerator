@@ -1,6 +1,7 @@
 package com.kreig133.daogenerator.files;
 
-import com.kreig133.daogenerator.common.Settings;
+import com.kreig133.daogenerator.common.settings.FunctionSettings;
+import com.kreig133.daogenerator.common.settings.OperationSettings;
 
 import java.io.File;
 import java.io.IOException;
@@ -20,20 +21,20 @@ public class JavaFilesUtils {
         builder.append( "package " ).append( packageName ).append( ";\n\n" );
     }
 
-    public static File mappingFile( Settings settings ) throws IOException {
+    public static File mappingFile( OperationSettings operationSettings ) throws IOException {
         File file = null;
 
-        switch ( settings.getType() ){
+        switch ( operationSettings.getType() ){
             case IASK:
-                file = new File( settings.getOutputPath() + "/" + settings.getOperationName() + ".map.xml" );
+                file = new File( operationSettings.getOutputPath() + "/" + operationSettings.getOperationName() + ".map.xml" );
                 break;
             case DEPO:
                 file = new File(
-                        settings.getOutputPath() +
+                        operationSettings.getOutputPath() +
                         "/" +
-                        replacePointBySlash( settings.getMapperPackage() ) +
+                        replacePointBySlash( operationSettings.getMapperPackage() ) +
                         "/" +
-                        mapperFileName( settings ) + JAVA_EXTENSION );
+                        mapperFileName( operationSettings ) + JAVA_EXTENSION );
                 break;
         }
 
@@ -44,49 +45,52 @@ public class JavaFilesUtils {
         return file;
     }
 
-    public static String mapperFileName( Settings settings ) {
-        return settings.getOperationName() + MAPPER_PREFIX;
+    public static String mapperFileName( OperationSettings operationSettings ) {
+        return operationSettings.getOperationName() + MAPPER_PREFIX;
     }
 
-    public static File interfaceFile( Settings settings ) throws IOException {
+    public static File interfaceFile( OperationSettings operationSettings ) throws IOException {
         File file = new File(
-                settings.getOutputPath() +
+                operationSettings.getOutputPath() +
                 "/" +
-                replacePointBySlash( settings.getDaoPackage() ) +
+                replacePointBySlash( operationSettings.getDaoPackage() ) +
                 "/" +
-                interfaceFileName( settings ) + JAVA_EXTENSION );
+                interfaceFileName( operationSettings ) + JAVA_EXTENSION );
 
         createDirsAndFile( file.getParentFile() );
 
         return file;
     }
 
-    public static String interfaceFileName( Settings settings ) {
-        return settings.getOperationName() + "Dao";
+    public static String interfaceFileName( OperationSettings operationSettings ) {
+        return operationSettings.getOperationName() + "Dao";
     }
 
-    public static File implementationFile( Settings settings ) throws IOException {
+    public static File implementationFile( OperationSettings operationSettings ) throws IOException {
         File file = new File(
-                settings.getOutputPath() +
+                operationSettings.getOutputPath() +
                 "/" +
-                replacePointBySlash( settings.getDaoPackage() ) +
+                replacePointBySlash( operationSettings.getDaoPackage() ) +
                 "/" +
-                implementationFileName( settings ) + JAVA_EXTENSION );
+                implementationFileName( operationSettings ) + JAVA_EXTENSION );
 
         createDirsAndFile( file.getParentFile() );
 
         return file;
     }
 
-    public static String implementationFileName( Settings settings ) {
-        return settings.getOperationName() + "DaoImpl";
+    public static String implementationFileName( OperationSettings operationSettings ) {
+        return operationSettings.getOperationName() + "DaoImpl";
     }
 
-    public static File getInOrOutClassFile( Settings settings, InOutClass inOutClass ) throws IOException {
+    public static File getInOrOutClassFile(
+            OperationSettings operationSettings,
+            InOutClass inOutClass
+    ) throws IOException {
         File file = new File(
-                settings.getOutputPath   () +
+                operationSettings.getOutputPath   () +
                 "/" +
-                replacePointBySlash( settings.getEntityPackage() ) +
+                replacePointBySlash( operationSettings.getEntityPackage() ) +
                 "/" +
                 inOutClass.getName() + JAVA_EXTENSION);
 

@@ -1,7 +1,8 @@
 package com.kreig133.daogenerator.files.mybatis;
 
-import com.kreig133.daogenerator.common.Settings;
 import com.kreig133.daogenerator.common.Utils;
+import com.kreig133.daogenerator.common.settings.FunctionSettings;
+import com.kreig133.daogenerator.common.settings.OperationSettings;
 import com.kreig133.daogenerator.common.strategy.FunctionalObjectWithoutFilter;
 import com.kreig133.daogenerator.enums.MethodType;
 import com.kreig133.daogenerator.enums.ReturnType;
@@ -10,7 +11,8 @@ import com.kreig133.daogenerator.parameter.Parameter;
 
 import java.util.List;
 
-import static com.kreig133.daogenerator.common.Utils.*;
+import static com.kreig133.daogenerator.common.Utils.checkToNeedOwnInClass;
+import static com.kreig133.daogenerator.common.Utils.iterateForParameterList;
 
 /**
  * @author eshangareev
@@ -19,20 +21,22 @@ import static com.kreig133.daogenerator.common.Utils.*;
 public class InterfaceMethodGenerator {
 
     public static String methodGenerator(
-            final Settings settings
+            final OperationSettings operationSettings,
+            final FunctionSettings functionSettings
     ) {
-        return "    " + generateMethodSignature( settings, MethodType.DAO ) + ";\n";
+        return "    " + generateMethodSignature( operationSettings, functionSettings, MethodType.DAO ) + ";\n";
     }
 
     public static String generateMethodSignature(
-            final Settings settings,
+            final OperationSettings operationSettings,
+            final FunctionSettings functionSettings,
             final MethodType methodType
     ) {
 
-        final List<Parameter>  inputParameterList = settings.getInputParameterList();
-        final List<Parameter> outputParameterList = settings.getOutputParameterList();
-        final String name = settings.getFunctionName();
-        final ReturnType returnType = settings.getReturnType();
+        final List<Parameter>  inputParameterList = functionSettings.getInputParameterList();
+        final List<Parameter> outputParameterList = functionSettings.getOutputParameterList();
+        final String name = functionSettings.getFunctionName();
+        final ReturnType returnType = functionSettings.getReturnType();
 
         StringBuilder builder = new StringBuilder();
 
@@ -56,13 +60,13 @@ public class InterfaceMethodGenerator {
         builder.append( name ).append( "(\n" );
 
         if ( ! inputParameterList.isEmpty() ) {
-            if ( checkToNeedOwnInClass( settings ) ) {
+            if ( checkToNeedOwnInClass( operationSettings, functionSettings ) ) {
                 builder.append( "        " ).append( Utils.convertNameForClassNaming( name ) ).append( "In request\n" );
             } else {
                 iterateForParameterList( builder, inputParameterList, 2, new FunctionalObjectWithoutFilter() {
                     @Override
                     public void writeString( StringBuilder builder, Parameter p ) {
-                        if ( settings.getType() == Type.DEPO && methodType == MethodType.MAPPER ) {
+                        if ( operationSettings.getType() == Type.DEPO && methodType == MethodType.MAPPER ) {
                             builder.append( "@Param(\"" ).append( p.getName() ).append( "\") " );
                         }
                         builder.append( p.getType() ).append( " " ).append( p.getName() );

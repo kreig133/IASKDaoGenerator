@@ -1,5 +1,7 @@
 package com.kreig133.daogenerator.common;
 
+import com.kreig133.daogenerator.common.settings.FunctionSettings;
+import com.kreig133.daogenerator.common.settings.OperationSettings;
 import com.kreig133.daogenerator.enums.Type;
 import com.kreig133.daogenerator.common.strategy.FuctionalObject;
 import com.kreig133.daogenerator.parameter.Parameter;
@@ -15,10 +17,13 @@ import java.util.List;
  */
 public class Utils {
 
-    public static boolean checkToNeedOwnInClass( Settings settings ) {
-        final List<Parameter> inputParameterList = settings.getInputParameterList();
+    public static boolean checkToNeedOwnInClass(
+            OperationSettings operationSettings,
+            FunctionSettings functionSettings
+    ) {
+        final List<Parameter> inputParameterList = functionSettings.getInputParameterList();
 
-        final Type type = settings.getType();
+        final Type type = operationSettings.getType();
 
         return  ( inputParameterList.size() > 3 && type == Type.DEPO ) ||
                 ( inputParameterList.size() > 1 && type == Type.IASK );

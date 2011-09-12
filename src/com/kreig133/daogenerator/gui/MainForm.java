@@ -1,7 +1,8 @@
 package com.kreig133.daogenerator.gui;
 
 import com.kreig133.daogenerator.DaoGenerator;
-import com.kreig133.daogenerator.common.Settings;
+import com.kreig133.daogenerator.common.settings.FunctionSettings;
+import com.kreig133.daogenerator.common.settings.OperationSettings;
 import com.kreig133.daogenerator.enums.Type;
 
 import javax.swing.*;
@@ -34,13 +35,13 @@ public class MainForm {
         setSourceDirButton.addActionListener( new ActionListener() {
             @Override
             public void actionPerformed( ActionEvent e ) {
-                setSourcePath( DaoGenerator.getCurrentSettings() );
+                setSourcePath();
             }
         } );
         setDestDirButton.addActionListener( new ActionListener() {
             @Override
             public void actionPerformed( ActionEvent e ) {
-                setOutputPath( DaoGenerator.getCurrentSettings() );
+                setOutputPath();
             }
         } );
         startButton.addActionListener( new ActionListener() {
@@ -60,16 +61,16 @@ public class MainForm {
     }
 
     private void fillSettingsWithData() {
-        Settings settings = DaoGenerator.getCurrentSettings();
+        OperationSettings operationSettings = DaoGenerator.getCurrentOperationSettings();
 
-        settings.setSourcePath      ( sourceDirTextField        .getText() );
-        settings.setOutputPath      ( destDirTextField          .getText() + "/" + "src" );
-        settings.setDaoPackage      ( interfacePackageTextField .getText() );
-        settings.setEntityPackage   ( entityPackageTextField    .getText() );
-        settings.setMapperPackage   ( mappingPackageTextField   .getText() );
-        settings.setOperationName   ( tempOperationName                    );
+        operationSettings.setOutputPath     ( destDirTextField.getText() + "/" + "src" );
+        operationSettings.setSourcePath     ( sourceDirTextField            .getText() );
+        operationSettings.setDaoPackage     ( interfacePackageTextField     .getText() );
+        operationSettings.setEntityPackage  ( entityPackageTextField        .getText() );
+        operationSettings.setMapperPackage  ( mappingPackageTextField       .getText() );
+        operationSettings.setOperationName  ( tempOperationName                        );
 
-        settings.setType( IASKRadioButton.isSelected()? Type.IASK: Type.DEPO );
+        operationSettings.setType( IASKRadioButton.isSelected() ? Type.IASK : Type.DEPO );
     }
 
     private boolean validate() {
@@ -103,7 +104,7 @@ public class MainForm {
         fc.setFileSelectionMode     ( JFileChooser.DIRECTORIES_ONLY );
     }
 
-    private void setOutputPath( Settings settings ) {
+    private void setOutputPath() {
         int returnVal = fc.showSaveDialog( null );
 
         if (returnVal == JFileChooser.APPROVE_OPTION) {
@@ -114,7 +115,7 @@ public class MainForm {
 
     private String tempOperationName;
 
-    private void setSourcePath( Settings settings ) {
+    private void setSourcePath() {
         int returnVal = fc.showOpenDialog( panel1 );
 
         if (returnVal == JFileChooser.APPROVE_OPTION) {

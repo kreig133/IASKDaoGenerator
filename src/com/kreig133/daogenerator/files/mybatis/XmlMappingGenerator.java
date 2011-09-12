@@ -1,13 +1,14 @@
 package com.kreig133.daogenerator.files.mybatis;
 
-import com.kreig133.daogenerator.common.Settings;
 import com.kreig133.daogenerator.common.Utils;
+import com.kreig133.daogenerator.common.settings.FunctionSettings;
+import com.kreig133.daogenerator.common.settings.OperationSettings;
 import com.kreig133.daogenerator.common.strategy.FunctionalObjectWithoutFilter;
 import com.kreig133.daogenerator.parameter.Parameter;
 
 import java.util.List;
 
-import static com.kreig133.daogenerator.common.Utils.*;
+import static com.kreig133.daogenerator.common.Utils.iterateForParameterList;
 
 /**
  * @author eshangareev
@@ -15,12 +16,13 @@ import static com.kreig133.daogenerator.common.Utils.*;
  */
 public class XmlMappingGenerator {
     public static String generateXmlMapping(
-        Settings settings
+        final OperationSettings operationSettings,
+        final FunctionSettings functionSettings
     ){
-        final List<Parameter> inputParameterList  = settings.getInputParameterList();
-        final List<Parameter> outputParameterList = settings.getOutputParameterList();
-        final String name                         = settings.getFunctionName();
-        final String package_                     = settings.getEntityPackage();
+        final List<Parameter> inputParameterList  = functionSettings.getInputParameterList();
+        final List<Parameter> outputParameterList = functionSettings.getOutputParameterList();
+        final String name                         = functionSettings.getFunctionName();
+        final String package_                     = operationSettings.getEntityPackage();
 
         StringBuilder builder = new StringBuilder();
         builder.append( "    <select id=\"" ).append( name ).append( "\" statementType=\"CALLABLE\"" );
