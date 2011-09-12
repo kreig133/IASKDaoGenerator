@@ -17,6 +17,7 @@ import java.io.IOException;
 import java.util.List;
 
 import static com.kreig133.daogenerator.common.Utils.checkToNeedOwnInClass;
+import static com.kreig133.daogenerator.files.JavaFilesUtils.*;
 
 /**
  * @author eshangareev
@@ -59,15 +60,13 @@ public class Controller {
                     Utils.convertNameForClassNaming( settings.getFunctionName() ) + type
             );
 
-//            File inClassFile = new File(OUTPUT_PATH_FOR_ENTITY + "/" + inOutClass.getName() + ".java");
-//            inClassFile.createNewFile();
-//TODO
-//            writer = new FileWriter(inClassFile);
-//            writer.write(inOutClass.toString());
+            File inClassFile = getInOrOutClassFile( settings, inOutClass );
+            inClassFile.createNewFile();
+
+            writer = new FileWriter(inClassFile);
+            writer.write(inOutClass.toString());
         } finally {
-            if (writer != null) {
-                writer.close();
-            }
+            if (writer != null) writer.close();
         }
     }
 }

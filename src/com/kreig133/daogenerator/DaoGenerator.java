@@ -13,6 +13,7 @@ import com.kreig133.daogenerator.parameter.Parameter;
 import com.kreig133.daogenerator.files.parsers.InputFileParser;
 
 import javax.swing.*;
+import java.awt.*;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -31,17 +32,21 @@ public class DaoGenerator {
     public static void main(String[] args) throws IOException {
 
         settings = new SettingsImpl();
+        EventQueue.invokeLater( new Runnable() {
+            @Override
+            public void run() {
+                JFrame frame = new JFrame( "MainForm" );
+                frame.setContentPane          ( new MainForm().panel1 );
+                frame.setDefaultCloseOperation( JFrame.EXIT_ON_CLOSE );
+                frame.pack();
+                frame.setVisible( true );
+            }
+        } );
 
-        JFrame frame = new JFrame( "MainForm" );
-        frame.setContentPane( new MainForm().panel1 );
-        frame.setDefaultCloseOperation( JFrame.EXIT_ON_CLOSE );
-        frame.pack();
-        frame.setVisible( true );
 
     }
 
     public static void doAction() throws IOException {
-        createDirectoriesIfTheyNotExists( settings );
 
         MyBatis.prepareFiles            ( settings );
 
@@ -66,12 +71,4 @@ public class DaoGenerator {
         return settings;
     }
 
-
-
-    private static void createDirectoriesIfTheyNotExists( Settings settings ) {
-        final File file = new File( settings.getOutputPath() );
-        if(!file.exists()){
-            file.mkdirs();
-        }
-    }
 }

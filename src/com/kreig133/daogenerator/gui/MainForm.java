@@ -63,7 +63,7 @@ public class MainForm {
         Settings settings = DaoGenerator.getCurrentSettings();
 
         settings.setSourcePath      ( sourceDirTextField        .getText() );
-        settings.setOutputPath      ( destDirTextField          .getText() );
+        settings.setOutputPath      ( destDirTextField          .getText() + "/" + "src" );
         settings.setDaoPackage      ( interfacePackageTextField .getText() );
         settings.setEntityPackage   ( entityPackageTextField    .getText() );
         settings.setMapperPackage   ( mappingPackageTextField   .getText() );
