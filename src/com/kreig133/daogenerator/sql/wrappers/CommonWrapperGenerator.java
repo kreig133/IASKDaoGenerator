@@ -30,6 +30,19 @@ public class CommonWrapperGenerator {
         throw new AssertionError();
     }
 
+    protected static int declareParamInProcedureForTesting( StringBuilder builder, Parameter p, int index ){
+        switch ( ( ( InputParameter ) p ).getInputType() ) {
+            case IN:
+                declareParamNameInProcedure( builder, p );
+                builder.append( " ?" );
+                return index;
+            case OUT:
+                declareOutTypeParamInProcedure( builder, p, index );
+                return ++index;
+        }
+        throw new AssertionError();
+    }
+
     protected static int parameterName( StringBuilder builder, int index ){
         builder.append( "@P" ).append( index ).append( " " );
 

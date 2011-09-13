@@ -9,6 +9,10 @@ import com.kreig133.daogenerator.files.InOutClass;
 import com.kreig133.daogenerator.files.mybatis.MyBatis;
 import com.kreig133.daogenerator.files.mybatis.WrapperGenerators;
 import com.kreig133.daogenerator.files.parsers.InputFileParser;
+import com.kreig133.daogenerator.sql.ProcedureCallCreator;
+import com.kreig133.daogenerator.sql.SelectQueryConverter;
+import com.kreig133.daogenerator.sql.wrappers.GenerateGenerator;
+import com.kreig133.daogenerator.sql.wrappers.GeneroutGenerator;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -61,17 +65,16 @@ public class Controller {
         for( FunctionSettings settings : settingsList ){
             switch ( settings.getSelectType() ){
                 case CALL:
-
+                    ProcedureCallCreator.generateProcedureCall( settings );
                     break;
-
                 case GENERATE:
-                case GENEROUT:
-                    builder.append(
-                        Utils.wrapWithQuotes( WrapperGenerators.generateWrapperProcedure( functionSettings ) ) );
+                    GenerateGenerator.generateWrapper( settings );
                     break;
-
+                case GENEROUT:
+                    GeneroutGenerator.generateWrapper( settings );
+                    break;
                 default:
-
+                    SelectQueryConverter.processSelectQueryString( settings );
                     break;
             }
         }

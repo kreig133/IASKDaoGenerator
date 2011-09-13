@@ -12,11 +12,11 @@ import java.util.List;
  */
 public class SelectQueryConverter {
 
-    private static void processSelectQueryString(
-            final String sqlQuery,
+    public static void processSelectQueryString(
             final FunctionSettings functionSettings
     ){
 
+        String sqlQuery = functionSettings.getSelectQuery().toString();
         StringBuilder myBatisString = null;
         StringBuilder queryForTesting = null;
 

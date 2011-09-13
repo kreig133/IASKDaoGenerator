@@ -53,7 +53,7 @@ public class GeneroutGenerator extends CommonWrapperGenerator{
         myBatisQuery.append( "EXECUTE DBO." ).append( name ).append( "\n" );
 
         queryForTesting.append( myBatisQuery.toString() );
-//TODO разобраться, я ни хрена не понял
+
         index = 0;
         iterateForParameterList( myBatisQuery, inputParametrs, new FunctionalObjectWithoutFilter() {
             @Override
@@ -63,10 +63,10 @@ public class GeneroutGenerator extends CommonWrapperGenerator{
         } );
 
         index = 0;
-        iterateForParameterList( myBatisQuery, inputParametrs, new FunctionalObjectWithoutFilter() {
+        iterateForParameterList( queryForTesting, inputParametrs, new FunctionalObjectWithoutFilter() {
             @Override
             public void writeString( StringBuilder builder, Parameter p ) {
-                index = declareParamInProcedure( builder, p, index );
+                index = declareParamInProcedureForTesting( builder, p, index );
             }
         } );
 
