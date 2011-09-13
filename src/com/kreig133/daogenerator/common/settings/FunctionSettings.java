@@ -2,6 +2,7 @@ package com.kreig133.daogenerator.common.settings;
 
 import com.kreig133.daogenerator.enums.ReturnType;
 import com.kreig133.daogenerator.enums.SelectType;
+import com.kreig133.daogenerator.enums.TestInfoType;
 import com.kreig133.daogenerator.enums.Type;
 import com.kreig133.daogenerator.parameter.Parameter;
 
@@ -30,7 +31,9 @@ public interface FunctionSettings {
 
     String getQueryForTesting();
 
-    void setQueryForTesting( String queryForTesting );
+    void appendToQueryForTesting( String queryForTesting );
+
+    void addToTestParams ( String param );
 
     String getFunctionName();
 
@@ -39,5 +42,9 @@ public interface FunctionSettings {
     ReturnType getReturnType();
 
     void setReturnType( ReturnType returnType );
+
+    TestInfoType getTestInfoType();
+
+    void setTestInfoType( TestInfoType testInfoType );
 
 }

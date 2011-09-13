@@ -61,9 +61,8 @@ public class InputFileParser {
     ){
         final String[] split = splitIt( lineWithSettings );
 
-        assert split.length >= 3;
+        assert split.length >= 2;
 
-//        functionSettings.setType       ( Type      .getByName( split[ 0 ] ) );
         functionSettings.setSelectType ( SelectType.getByName( split[ 1 ] ) ) ;
         functionSettings.setReturnType ( ReturnType.getByName( split[ 2 ] ) );
     }

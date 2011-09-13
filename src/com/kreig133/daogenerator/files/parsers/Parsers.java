@@ -1,6 +1,7 @@
 package com.kreig133.daogenerator.files.parsers;
 
 import com.kreig133.daogenerator.common.settings.FunctionSettings;
+import com.kreig133.daogenerator.enums.TestInfoType;
 import com.kreig133.daogenerator.parameter.Parameter;
 import com.kreig133.daogenerator.enums.Mode;
 
@@ -30,6 +31,9 @@ public class Parsers {
                 break;
             case IS_SELECT_QUERY:
                 mode.parse( query, line );
+                break;
+            case IS_TESTING_QUERY:
+                mode.parse( inputParameterList, line );
                 break;
         }
     }

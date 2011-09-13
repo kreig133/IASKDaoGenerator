@@ -1,9 +1,6 @@
 package com.kreig133.daogenerator.enums;
 
-import com.kreig133.daogenerator.files.parsers.IParser;
-import com.kreig133.daogenerator.files.parsers.InputParameterParser;
-import com.kreig133.daogenerator.files.parsers.OutputParametrParser;
-import com.kreig133.daogenerator.files.parsers.QueryParser;
+import com.kreig133.daogenerator.files.parsers.*;
 
 /**
  * @author eshangareev
@@ -12,7 +9,8 @@ import com.kreig133.daogenerator.files.parsers.QueryParser;
 public enum Mode {
     IS_INPUT_PARAMETRS ( new InputParameterParser() ),
     IS_OUTPUT_PARAMETRS( new OutputParametrParser() ),
-    IS_SELECT_QUERY    ( new QueryParser         () );
+    IS_SELECT_QUERY    ( new QueryParser         () ),
+    IS_TESTING_QUERY   ( new TestParser() );
 
     Mode( IParser parser ) {
         this.parser = parser;

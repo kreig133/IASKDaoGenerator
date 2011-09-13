@@ -4,8 +4,6 @@ import com.kreig133.daogenerator.common.settings.FunctionSettings;
 import com.kreig133.daogenerator.common.strategy.FunctionalObjectWithoutFilter;
 import com.kreig133.daogenerator.parameter.Parameter;
 
-import java.util.List;
-
 import static com.kreig133.daogenerator.common.Utils.iterateForParameterList;
 
 /**
@@ -41,6 +39,6 @@ public class ProcedureCallCreator {
         queryForTesting .append( "        )}" );
 
         functionSettings.setMyBatisQuery    ( myBatisQuery      .toString() );
-        functionSettings.setQueryForTesting ( queryForTesting   .toString() );
+        functionSettings.appendToQueryForTesting( queryForTesting.toString() );
     }
 }

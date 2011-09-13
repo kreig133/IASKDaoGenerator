@@ -171,4 +171,22 @@ public class Utils {
             }
         }
     }
+
+    public static String replaceQuestionMarkWithStrings( List<String> testParameterList, String s ) {
+        String[] afterSplit = s.split( "\\?" );
+
+        StringBuilder builder = new StringBuilder();
+        builder.append( afterSplit[ 0 ] );
+
+        if ( testParameterList.size() != afterSplit.length - 1 )
+            throw new AssertionError(
+                    "Количество параметров не совпадает с количеством вопросительных знаков в вопросе!" );
+
+        for( int i = 1; i < afterSplit.length; i++ ){
+            builder.append( testParameterList.get( i - 1 ) );
+            builder.append( afterSplit[ i ] );
+        }
+
+        return builder.toString();
+    }
 }

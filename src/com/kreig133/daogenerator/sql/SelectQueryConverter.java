@@ -1,10 +1,6 @@
 package com.kreig133.daogenerator.sql;
 
-import com.kreig133.daogenerator.common.Utils;
 import com.kreig133.daogenerator.common.settings.FunctionSettings;
-import com.kreig133.daogenerator.parameter.Parameter;
-
-import java.util.List;
 
 /**
  * @author eshangareev
@@ -63,8 +59,8 @@ public class SelectQueryConverter {
                 myBatisString == null ? sqlQuery : myBatisString.toString()
         );
 
-        functionSettings.setQueryForTesting(
-                queryForTesting == null? sqlQuery : queryForTesting.toString()
+        functionSettings.appendToQueryForTesting(
+                queryForTesting == null ? sqlQuery : queryForTesting.toString()
         );
     }
 }

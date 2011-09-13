@@ -1,7 +1,9 @@
 package com.kreig133.daogenerator.common.settings;
 
+import com.kreig133.daogenerator.common.Utils;
 import com.kreig133.daogenerator.enums.ReturnType;
 import com.kreig133.daogenerator.enums.SelectType;
+import com.kreig133.daogenerator.enums.TestInfoType;
 import com.kreig133.daogenerator.parameter.Parameter;
 
 import java.util.ArrayList;
@@ -13,17 +15,19 @@ import java.util.List;
  */
 public class FunctionSettingsImpl implements FunctionSettings {
 
-    private final List<Parameter> INPUT_PARAMETER_LIST  = new ArrayList<Parameter>();
+    private final List<Parameter>  INPUT_PARAMETER_LIST = new ArrayList<Parameter>();
     private final List<Parameter> OUTPUT_PARAMETER_LIST = new ArrayList<Parameter>();
+    private final List<String>      TEST_PARAMETER_LIST = new ArrayList<String>(  );
 
-    private StringBuilder QUERY = new StringBuilder();
+    private StringBuilder QUERY         = new StringBuilder();
+    private StringBuilder TEST_QUERY    = new StringBuilder();
 
     private String MY_BATIS_QUERY;
-    private String QUERY_FOR_TESTING;
 
-    private String     FUNCTION_NAME;
-    private SelectType SELECT_TYPE  ;
-    private ReturnType RETURN_TYPE  ;
+    private String          FUNCTION_NAME;
+    private SelectType      SELECT_TYPE  ;
+    private ReturnType      RETURN_TYPE  ;
+    private TestInfoType    TEST_INFO_TYPE;
 
     @Override
     public SelectType getSelectType() {
@@ -62,10 +66,25 @@ public class FunctionSettingsImpl implements FunctionSettings {
 
     @Override
     public String getQueryForTesting() {
-        if( QUERY_FOR_TESTING == null ){
-            throw new AssertionError( "QUERY_FOR_TESTING еще не был установлен!" );
+        switch ( TEST_INFO_TYPE ){
+            case TQUERY:
+                return TEST_QUERY.toString();
+            case TPARAM:
+                return Utils.replaceQuestionMarkWithStrings( TEST_PARAMETER_LIST, TEST_QUERY.toString() );
+            case NONE:
+                throw new AssertionError( "Ошибка! Строка для тестирования не задана." );
         }
-        return QUERY_FOR_TESTING;
+        throw new AssertionError();
+    }
+
+    @Override
+    public TestInfoType getTestInfoType() {
+        return TEST_INFO_TYPE;
+    }
+
+    @Override
+    public void addToTestParams( String param ) {
+        TEST_PARAMETER_LIST.add( param );
     }
 
     @Override
@@ -104,10 +123,12 @@ public class FunctionSettingsImpl implements FunctionSettings {
     }
 
     @Override
-    public void setQueryForTesting( String queryForTesting ) {
-        if( QUERY_FOR_TESTING != null ){
-            throw new AssertionError( "QUERY_FOR_TESTING уже был установлен" );
-        }
-        QUERY_FOR_TESTING = queryForTesting;
+    public void appendToQueryForTesting( String appendToQuery ) {
+        TEST_QUERY.append( appendToQuery );
+    }
+
+    @Override
+    public void setTestInfoType( TestInfoType testInfoType ) {
+        TEST_INFO_TYPE = testInfoType;
     }
 }

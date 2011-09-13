@@ -57,6 +57,6 @@ public class GenerateGenerator extends CommonWrapperGenerator{
         queryForTesting.append( "SELECT * FROM #TempTableForNamedResultSet" );
 
         functionSettings.setMyBatisQuery   ( myBatisQuery   .toString() );
-        functionSettings.setQueryForTesting( queryForTesting.toString() );
+        functionSettings.appendToQueryForTesting( queryForTesting.toString() );
     }
 }

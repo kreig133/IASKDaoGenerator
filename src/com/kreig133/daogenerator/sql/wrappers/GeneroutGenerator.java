@@ -91,7 +91,7 @@ public class GeneroutGenerator extends CommonWrapperGenerator{
         } );
 
         functionSettings.setMyBatisQuery    ( myBatisQuery   .toString() );
-        functionSettings.setQueryForTesting ( queryForTesting.toString() );
+        functionSettings.appendToQueryForTesting( queryForTesting.toString() );
     }
 
     private static void insertExpressionWithParameter( StringBuilder builder, String rightPartOfExpr ) {
