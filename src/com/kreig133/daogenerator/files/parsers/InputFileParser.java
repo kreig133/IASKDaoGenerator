@@ -1,13 +1,17 @@
 package com.kreig133.daogenerator.files.parsers;
 
 import com.kreig133.daogenerator.common.settings.FunctionSettings;
+import com.kreig133.daogenerator.common.settings.OperationSettings;
 import com.kreig133.daogenerator.enums.Mode;
 import com.kreig133.daogenerator.enums.ReturnType;
 import com.kreig133.daogenerator.enums.SelectType;
+import com.kreig133.daogenerator.enums.TestInfoType;
+import com.kreig133.daogenerator.files.parsers.strategy.Action;
 
 import java.io.*;
 
 import static com.kreig133.daogenerator.common.Utils.*;
+import static com.kreig133.daogenerator.files.parsers.settings.SettingsReader.*;
 
 /**
  * @author eshangareev
@@ -19,6 +23,7 @@ public class InputFileParser {
 
     public static void readFileWithDataForGenerateDao(
             File fileWithData,
+            OperationSettings operationSettings,
             FunctionSettings functionSettings
     ) throws IOException {
 
@@ -32,7 +37,7 @@ public class InputFileParser {
         String line = reader.readLine();
 
         //Считываем настройки
-        readType( line, functionSettings );
+        readType( line, operationSettings, functionSettings );
 
         line = reader.readLine();
 
@@ -41,7 +46,7 @@ public class InputFileParser {
 
                 if( ! isStopLine( line ) ){
                     if( mode != null && ( mode == Mode.IS_SELECT_QUERY || line.length() > 7 ) ){
-                        Parsers.readLine( functionSettings, mode, line );
+                        Parsers.readLine( operationSettings, functionSettings, mode, line );
                     }
                 }
 
@@ -57,15 +62,48 @@ public class InputFileParser {
 
     private static void readType(
             String      lineWithSettings,
+            OperationSettings operationSettings,
             FunctionSettings functionSettings
     ){
         final String[] split = splitIt( lineWithSettings );
 
-        assert split.length >= 2;
+        setParameter( split, SELECT, operationSettings, functionSettings, new Action() {
+            @Override
+            public void doAction( String[] strings, Integer place, OperationSettings operationSettings,
+                                  FunctionSettings functionSettings ) {
+                functionSettings.setSelectType ( SelectType.getByName( split[ place ] ) ) ;
+            }
+        } );
+        setParameter( split, RETURN, operationSettings, functionSettings, new Action() {
+            @Override
+            public void doAction( String[] strings, Integer place, OperationSettings operationSettings, FunctionSettings functionSettings ) {
+                 functionSettings.setReturnType ( ReturnType.getByName( split[ place ] ) );
+            }
+        } );
 
-        functionSettings.setSelectType ( SelectType.getByName( split[ 1 ] ) ) ;
-        functionSettings.setReturnType ( ReturnType.getByName( split[ 2 ] ) );
+        setParameter( split, TEST, operationSettings, functionSettings, new Action() {
+            @Override
+            public void doAction( String[] strings, Integer place, OperationSettings operationSettings, FunctionSettings functionSettings ) {
+                functionSettings.setTestInfoType( TestInfoType.getByName( split[ place ] ) );
+            }
+        } );
     }
+
+    private static void setParameter(
+            String[] strings,
+            String key,
+            OperationSettings operationSettings,
+            FunctionSettings functionSettings,
+            Action action
+    ){
+        Integer placeOfParameter = operationSettings.getPlaceOfParameter( key );
+        if( placeOfParameter != null  ){
+            ParsersUtils.checkPlaceOfParameter( false, strings.length, placeOfParameter );
+            action.doAction( strings, placeOfParameter ,operationSettings, functionSettings );
+        }
+    }
+
+
 
     private static boolean isStopLine( String line ){
         for( String s : splitIt( line ) ){

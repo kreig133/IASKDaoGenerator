@@ -1,6 +1,7 @@
 package com.kreig133.daogenerator.files.parsers;
 
 import com.kreig133.daogenerator.common.settings.FunctionSettings;
+import com.kreig133.daogenerator.common.settings.OperationSettings;
 
 /**
  * @author eshangareev
@@ -12,13 +13,13 @@ public class TestParser implements IParser<FunctionSettings>{
     TestQueryParser  testQueryParser  = new TestQueryParser ();
 
     @Override
-    public void parse( FunctionSettings input, String lineForParse ) {
+    public void parse( OperationSettings operationSettings, FunctionSettings input, String lineForParse ) {
         switch ( input.getTestInfoType() ){
             case TQUERY:
-                testQueryParser.parse( input, lineForParse );
+                testQueryParser.parse( operationSettings, input, lineForParse );
                 break;
             case TPARAM:
-                testParamsParser.parse( input, lineForParse );
+                testParamsParser.parse( operationSettings,input, lineForParse );
         }
     }
 }

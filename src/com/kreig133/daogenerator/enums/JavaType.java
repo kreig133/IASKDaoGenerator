@@ -29,7 +29,10 @@ public enum JavaType {
             }
         }
 
-        throw new RuntimeException( "Упс! Нашелся баг: я не шмогла преобразовать входной тип в java-тип. Ай-я-я-яй" );
+        throw new RuntimeException( "Упс! Нашелся баг: я не шмогла преобразовать входной тип в java-тип ( "
+                +type
+                +"). Ай-я-я-яй"
+        );
     }
 
     private static void linkJavaTypeWithAliases(JavaType type, String...aliases){

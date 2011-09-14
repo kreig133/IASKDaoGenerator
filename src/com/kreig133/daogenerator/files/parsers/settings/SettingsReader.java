@@ -1,74 +1,82 @@
-package com.kreig133.daogenerator.testing;
+package com.kreig133.daogenerator.files.parsers.settings;
 
 import com.kreig133.daogenerator.common.settings.OperationSettings;
+import com.kreig133.daogenerator.enums.InputOrOutputType;
 import com.kreig133.daogenerator.enums.Type;
+import com.sun.org.apache.bcel.internal.generic.RETURN;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.sql.*;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
-
-import static com.kreig133.daogenerator.testing.settings.SettingName.*;
 
 /**
  * @author eshangareev
  * @version 1.0
  */
-public class JDBCConnector {
+public class SettingsReader {
+    public static final String NAME     = "name";
+    public static final String TYPE     = "type";
+    public static final String DEFAULT  = "default";
+    public static final String COMMENT  = "comment";
+    public static final String IN_OUT   = "inout";
+
+    public static final String[] KEYS = new String[]{ NAME, TYPE, DEFAULT, COMMENT, IN_OUT };
+
+    public static final String RETURN   = "return";
+    public static final String SELECT   = "select";
+    public static final String TEST     = "test";
+
     private static final Properties properties = new Properties();
-    private static String pathToProperties ="./src/com/kreig133/daogenerator/testing/settings/";
+    private static final String pathToProperties ="./src/com/kreig133/daogenerator/files/parsers/settings/parse.properties";
 
-    private static Connection connection;
+    private static Map<String, Integer> settings = new HashMap<String, Integer>( 10 );
 
-    public static void connectToDB(
-            OperationSettings operationSettings
-    ) throws IOException, SQLException {
+    public static void readProperties( OperationSettings operationSettings ) throws IOException {
+        final File fileWithSettings = operationSettings.getFileWithSettings();
 
-        if( connection != null ) throw  new AssertionError( "Соединение с базой уже было установлено!" );
-
-        FileInputStream props = null;
-
-        switch ( operationSettings.getType() ){
-            case IASK:
-                props = new FileInputStream( pathToProperties + "iask.properties" );
-                break;
-            case DEPO:
-                props = new FileInputStream( pathToProperties + "depo.properties" );
-                break;
-        }
-        if( props != null ){
-            properties.load( props );
-            props.close();
-        } else {
-            throw new IOException( "Не удалось загрузить параметры соединения" );
-        }
-
-        System.setProperty( "jdbc.driver", properties.getProperty( DRIVER ) );
-
-        connection =  DriverManager.getConnection(
-                properties.getProperty( URL ),
-                properties.getProperty( USERNAME ),
-                properties.getProperty( PASSWORD )
+        final FileInputStream fileInputStream = new FileInputStream(
+                fileWithSettings == null ? new File( pathToProperties ) : fileWithSettings
         );
+
+        properties.load( fileInputStream );
+
+        for ( String key : KEYS ){
+            String   param  = properties.getProperty( key );
+            String[] params = param.split( "," );
+
+            settings.put( key + InputOrOutputType.IN, convertToInteger( params[0] ) );
+
+            if( params.length == 2 ){
+                settings.put( key + InputOrOutputType.OUT, convertToInteger( params[1] ) );
+            } else {
+                settings.put( key + InputOrOutputType.OUT, convertToInteger( params[0] ) );
+            }
+        }
+
+        settings.put( RETURN, convertToInteger( properties.getProperty( RETURN ) ) );
+        settings.put( SELECT, convertToInteger( properties.getProperty( SELECT ) ) );
+        settings.put( TEST  , convertToInteger( properties.getProperty( TEST   ) ) );
+
+        operationSettings.setParameterPlaces( settings );
+        fileInputStream.close();
     }
 
-    public static void main( String[] args ) throws IOException, SQLException {
-        connectToDB( new OperationSettings() {
-            @Override
-            public Integer getPlaceOfParameter( String parameterKey ) {
-                return 0;  //To change body of implemented methods use File | Settings | File Templates.
-            }
+    private static Integer convertToInteger( String param ){
+        if( "".equals( param.trim() ) ){
+            return null;
+        }
+        return new Integer( param.trim() );
+    }
 
-            @Override
-            public void setParameterPlaces( Map<String, Integer> settings ) {
-                //To change body of implemented methods use File | Settings | File Templates.
-            }
-
+    public static void main( String[] args ) throws IOException {
+        OperationSettings settings = new OperationSettings() {
             @Override
             public Type getType() {
-                return Type.DEPO;  //To change body of implemented methods use File | Settings | File Templates.
+                return null;  //To change body of implemented methods use File | Settings | File Templates.
             }
 
             @Override
@@ -155,19 +163,18 @@ public class JDBCConnector {
             public void setFileWithSettings( File fileWithSettings ) {
                 //To change body of implemented methods use File | Settings | File Templates.
             }
-        } );
-        Statement statement = connection.createStatement();
 
-        ResultSet resultSet = statement.executeQuery( "SELECT * FROM DepoType" );
+            @Override
+            public Integer getPlaceOfParameter( String parameterKey ) {
+                return 0;  //To change body of implemented methods use File | Settings | File Templates.
+            }
 
-        final ResultSetMetaData metaData = resultSet.getMetaData();
-
-        for( int i = 1; i <= metaData.getColumnCount(); i++ ){
-            System.out.println(
-                    metaData.getColumnName( i )+
-                    "    " +
-                    metaData.getColumnTypeName( i ) +
-                    "\n" );
-        }
+            @Override
+            public void setParameterPlaces( Map<String, Integer> settings ) {
+                //To change body of implemented methods use File | Settings | File Templates.
+            }
+        };
+        readProperties( settings );
     }
+
 }

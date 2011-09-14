@@ -1,11 +1,16 @@
 package com.kreig133.daogenerator.files.parsers;
 
 import com.kreig133.daogenerator.common.Utils;
+import com.kreig133.daogenerator.common.settings.OperationSettings;
 import com.kreig133.daogenerator.enums.InputOrOutputType;
 import com.kreig133.daogenerator.parameter.InputParameter;
 import com.kreig133.daogenerator.parameter.Parameter;
 
+import javax.swing.text.html.parser.Parser;
 import java.util.List;
+
+import static com.kreig133.daogenerator.files.parsers.settings.SettingsReader.*;
+
 /**
  * @author eshangareev
  * @version 1.0
@@ -13,20 +18,51 @@ import java.util.List;
 public class InputParameterParser implements IParser<List<Parameter>>{
 
     public void parse(
+            OperationSettings operationSettings,
             List<Parameter> input,
             String lineForParse
     ) {
         final String[] params =  lineForParse.split( "\t" );
 
-        int i = Utils.stringNotEmpty( params[1])? 1 : ( Utils.stringNotEmpty( params[ 2 ] ) ? 2 : Integer.MIN_VALUE );
+        String name;
+        String type;
+        String defaultValue = null;
+        String comment = null;
+        InputOrOutputType inOutType = InputOrOutputType.OUT;
+
+        String suffix = InputOrOutputType.IN.toString();
+        Integer placeOfParam;
+
+        placeOfParam = operationSettings.getPlaceOfParameter( NAME + suffix );
+        ParsersUtils.checkPlaceOfParameter( true, params.length, placeOfParam );
+        name = params[ placeOfParam ];
+
+        placeOfParam = operationSettings.getPlaceOfParameter( TYPE + suffix );
+        ParsersUtils.checkPlaceOfParameter( true, params.length, placeOfParam );
+        type = params[ placeOfParam ];
+
+        placeOfParam = operationSettings.getPlaceOfParameter( DEFAULT + suffix );
+        if( placeOfParam != null && params.length > placeOfParam ){
+            defaultValue = params[ placeOfParam ];
+        }
+
+        placeOfParam = operationSettings.getPlaceOfParameter( COMMENT + suffix );
+        if( placeOfParam != null && params.length > placeOfParam ){
+            comment = params[ placeOfParam ];
+        }
+
+        placeOfParam = operationSettings.getPlaceOfParameter( IN_OUT + suffix );
+        if( placeOfParam != null ){
+            inOutType = InputOrOutputType.getByName( params[ placeOfParam ] );
+        }
 
         input.add(
                 new InputParameter(
-                        params[ i ],
-                        params[ i+1 ],
-                        params.length > i+2 ? params[ i+2 ] : null,
-                        params.length > i+3 ? params[ i+2 ] : null,
-                        InputOrOutputType.OUT
+                        name,
+                        type,
+                        defaultValue,
+                        comment,
+                        inOutType
                 )
         );
     }

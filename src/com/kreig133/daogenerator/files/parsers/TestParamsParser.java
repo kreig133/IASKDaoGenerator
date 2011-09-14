@@ -1,6 +1,7 @@
 package com.kreig133.daogenerator.files.parsers;
 
 import com.kreig133.daogenerator.common.settings.FunctionSettings;
+import com.kreig133.daogenerator.common.settings.OperationSettings;
 
 import java.util.List;
 
@@ -10,7 +11,7 @@ import java.util.List;
  */
 public class TestParamsParser implements IParser<FunctionSettings>{
     @Override
-    public void parse( FunctionSettings input, String lineForParse ) {
+    public void parse( OperationSettings operationSettings,  FunctionSettings input, String lineForParse ) {
         input.addToTestParams( lineForParse.trim() );
     }
 }

@@ -2,6 +2,9 @@ package com.kreig133.daogenerator.common.settings;
 
 import com.kreig133.daogenerator.enums.Type;
 
+import java.io.File;
+import java.util.Map;
+
 /**
  * @author eshangareev
  * @version 1.0
@@ -38,4 +41,13 @@ public interface OperationSettings {
     boolean skipTesting();
 
     void setSkipTesting( boolean skipTesting );
+
+    File getFileWithSettings();
+
+    void setFileWithSettings( File fileWithSettings );
+
+    Integer getPlaceOfParameter( String parameterKey );
+
+    void setParameterPlaces( Map<String, Integer> settings );
+
 }

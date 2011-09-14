@@ -9,6 +9,7 @@ import com.kreig133.daogenerator.files.InOutClass;
 import com.kreig133.daogenerator.files.mybatis.MyBatis;
 import com.kreig133.daogenerator.files.mybatis.WrapperGenerators;
 import com.kreig133.daogenerator.files.parsers.InputFileParser;
+import com.kreig133.daogenerator.files.parsers.settings.SettingsReader;
 import com.kreig133.daogenerator.sql.ProcedureCallCreator;
 import com.kreig133.daogenerator.sql.SelectQueryConverter;
 import com.kreig133.daogenerator.sql.wrappers.GenerateGenerator;
@@ -38,13 +39,15 @@ public class Controller {
 
         MyBatis.prepareFiles( operationSettings );
 
+        SettingsReader.readProperties( operationSettings );
+
         for(
                 String s:
                 ( new File( operationSettings.getSourcePath() ) )
                         .list(
                                 new FilenameFilter() {
-                                    public boolean accept(File dir, String name) {
-                                        return name.endsWith("txt");
+                                    public boolean accept( File dir, String name ) {
+                                        return name.endsWith( "txt" );
                                     }
                                 }
                         )
@@ -83,16 +86,21 @@ public class Controller {
     static void readFile(
             File fileWithData,
             OperationSettings operationSettings
-    ) throws IOException {
+    ) {
 
-        FunctionSettings currentSettings = new FunctionSettingsImpl();
+        try {
+            FunctionSettings currentSettings = new FunctionSettingsImpl();
 
-        settingsList.add( currentSettings );
+            settingsList.add( currentSettings );
 
-        //считываем название из файла ( название файла = название хранимки, запроса )
-        currentSettings.setFunctionName( fileWithData.getName().split( ".txt" )[ 0 ] );
+            //считываем название из файла ( название файла = название хранимки, запроса )
+            currentSettings.setFunctionName( fileWithData.getName().split( ".txt" )[ 0 ] );
 
-        InputFileParser.readFileWithDataForGenerateDao( fileWithData, currentSettings );
+            InputFileParser.readFileWithDataForGenerateDao( fileWithData, operationSettings, currentSettings );
+        } catch ( Throwable e ) {
+            System.err.println( ">>>Controller: Ошибка! Файл - " + fileWithData.getName() );
+            e.printStackTrace();
+        }
     }
 
     static void writeFiles(
