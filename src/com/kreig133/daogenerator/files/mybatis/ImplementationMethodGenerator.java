@@ -3,6 +3,8 @@ package com.kreig133.daogenerator.files.mybatis;
 import com.kreig133.daogenerator.common.settings.FunctionSettings;
 import com.kreig133.daogenerator.common.settings.OperationSettings;
 import com.kreig133.daogenerator.enums.MethodType;
+import com.kreig133.daogenerator.enums.ReturnType;
+import com.kreig133.daogenerator.enums.Type;
 import com.kreig133.daogenerator.files.JavaFilesUtils;
 
 /**
@@ -30,10 +32,11 @@ public class ImplementationMethodGenerator {
             builder.append( "return " );
         }
 
-        builder.append( "getSqlSession().getMapper( " ).append( operationSettings.getOperationName() );
-        builder.append( JavaFilesUtils.MAPPER_PREFIX ).append( ".class )." );
-        builder.append( functionSettings.getFunctionName() ).append( "(" );
-
+        if( operationSettings.getType() == Type.DEPO ){
+            generateDepoStyleMethodCall( operationSettings, functionSettings, builder );
+        } else {
+            generateIaskStyleMethodCall( operationSettings, functionSettings, builder );
+        }
         if( ! functionSettings.getInputParameterList().isEmpty() ){
             builder.append( "request" );
         }
@@ -42,5 +45,25 @@ public class ImplementationMethodGenerator {
         builder.append( "    }\n\n" );
 
         return builder.toString();
+    }
+
+    private static void generateIaskStyleMethodCall( OperationSettings operationSettings, FunctionSettings functionSettings, StringBuilder builder ) {
+        builder.append( "select" );
+        if( functionSettings.getReturnType() == ReturnType.SINGLE ){
+            builder.append( "One" );
+        } else {
+            builder.append( "List" );
+        }
+        builder.append( "(\"" ).append( operationSettings.getDaoPackage() ).append( "." )
+                .append( functionSettings.getFunctionName() ).append( "\" ");
+        if( ! functionSettings.getInputParameterList().isEmpty() ){
+            builder.append( "," );
+        }
+    }
+
+    private static void generateDepoStyleMethodCall( OperationSettings operationSettings, FunctionSettings functionSettings, StringBuilder builder ) {
+        builder.append( "getSqlSession().getMapper( " ).append( operationSettings.getOperationName() );
+        builder.append( JavaFilesUtils.MAPPER_PREFIX ).append( ".class )." );
+        builder.append( functionSettings.getFunctionName() ).append( "(" );
     }
 }

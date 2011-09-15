@@ -15,7 +15,7 @@
           </grid>
         </constraints>
         <properties>
-          <text value=""/>
+          <text value="D:\ForGenerateDao\OperationDays"/>
         </properties>
       </component>
       <component id="84d46" class="javax.swing.JLabel">
@@ -40,7 +40,9 @@
             <preferred-size width="150" height="-1"/>
           </grid>
         </constraints>
-        <properties/>
+        <properties>
+          <text value="D:\GeneratedDao"/>
+        </properties>
       </component>
       <component id="d6c8b" class="javax.swing.JLabel">
         <constraints>
@@ -64,7 +66,9 @@
             <preferred-size width="150" height="-1"/>
           </grid>
         </constraints>
-        <properties/>
+        <properties>
+          <text value="com.temp.entities"/>
+        </properties>
       </component>
       <component id="9d526" class="javax.swing.JLabel">
         <constraints>
@@ -80,7 +84,9 @@
             <preferred-size width="150" height="-1"/>
           </grid>
         </constraints>
-        <properties/>
+        <properties>
+          <text value="com.temp.dao"/>
+        </properties>
       </component>
       <component id="d785e" class="javax.swing.JTextField" binding="mappingPackageTextField">
         <constraints>
@@ -88,7 +94,9 @@
             <preferred-size width="150" height="-1"/>
           </grid>
         </constraints>
-        <properties/>
+        <properties>
+          <text value="com.temp.mapping"/>
+        </properties>
       </component>
       <component id="1402e" class="javax.swing.JLabel">
         <constraints>
@@ -119,6 +127,7 @@
           <grid row="5" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
         </constraints>
         <properties>
+          <selected value="true"/>
           <text value="IASK"/>
         </properties>
       </component>
@@ -127,7 +136,8 @@
           <grid row="5" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
         </constraints>
         <properties>
-          <selected value="true"/>
+          <enabled value="true"/>
+          <selected value="false"/>
           <text value="DEPO"/>
         </properties>
       </component>

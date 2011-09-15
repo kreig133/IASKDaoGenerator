@@ -34,11 +34,11 @@ public class InputParameterParser implements IParser<List<Parameter>>{
         Integer placeOfParam;
 
         placeOfParam = operationSettings.getPlaceOfParameter( NAME + suffix );
-        ParsersUtils.checkPlaceOfParameter( true, params.length, placeOfParam );
+        ParsersUtils.checkPlaceOfParameter( true, params, placeOfParam );
         name = params[ placeOfParam ];
 
         placeOfParam = operationSettings.getPlaceOfParameter( TYPE + suffix );
-        ParsersUtils.checkPlaceOfParameter( true, params.length, placeOfParam );
+        ParsersUtils.checkPlaceOfParameter( true, params, placeOfParam );
         type = params[ placeOfParam ];
 
         placeOfParam = operationSettings.getPlaceOfParameter( DEFAULT + suffix );

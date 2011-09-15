@@ -14,28 +14,26 @@
     <option name="historyRevisionsNumber" value="4" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="8c81c0cf-177d-40ae-8419-f7530a46f3df" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/com/kreig133/daogenerator/files/parsers/ParsersUtils.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/com/kreig133/daogenerator/files/parsers/settings/SettingsReader.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/com/kreig133/daogenerator/files/parsers/settings/parse.properties" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/com/kreig133/daogenerator/files/parsers/strategy/Action.java" />
+    <list default="true" id="8c81c0cf-177d-40ae-8419-f7530a46f3df" name="Default" comment="Настройки парсера вынесены в файл.">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/kreig133/daogenerator/Controller.java" afterPath="$PROJECT_DIR$/src/com/kreig133/daogenerator/Controller.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/kreig133/daogenerator/common/settings/OperationSettings.java" afterPath="$PROJECT_DIR$/src/com/kreig133/daogenerator/common/settings/OperationSettings.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/kreig133/daogenerator/common/settings/OperationSettingsImpl.java" afterPath="$PROJECT_DIR$/src/com/kreig133/daogenerator/common/settings/OperationSettingsImpl.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/kreig133/daogenerator/enums/InputOrOutputType.java" afterPath="$PROJECT_DIR$/src/com/kreig133/daogenerator/enums/InputOrOutputType.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/kreig133/daogenerator/enums/JavaType.java" afterPath="$PROJECT_DIR$/src/com/kreig133/daogenerator/enums/JavaType.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/kreig133/daogenerator/enums/Mode.java" afterPath="$PROJECT_DIR$/src/com/kreig133/daogenerator/enums/Mode.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/kreig133/daogenerator/enums/TestInfoType.java" afterPath="$PROJECT_DIR$/src/com/kreig133/daogenerator/enums/TestInfoType.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/kreig133/daogenerator/files/parsers/IParser.java" afterPath="$PROJECT_DIR$/src/com/kreig133/daogenerator/files/parsers/IParser.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/kreig133/daogenerator/files/mybatis/ImplementationMethodGenerator.java" afterPath="$PROJECT_DIR$/src/com/kreig133/daogenerator/files/mybatis/ImplementationMethodGenerator.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/kreig133/daogenerator/files/mybatis/MyBatis.java" afterPath="$PROJECT_DIR$/src/com/kreig133/daogenerator/files/mybatis/MyBatis.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/kreig133/daogenerator/files/mybatis/XmlMappingGenerator.java" afterPath="$PROJECT_DIR$/src/com/kreig133/daogenerator/files/mybatis/XmlMappingGenerator.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/kreig133/daogenerator/files/mybatis/preparatory/ImplementationFilePreparatory.java" afterPath="$PROJECT_DIR$/src/com/kreig133/daogenerator/files/mybatis/preparatory/ImplementationFilePreparatory.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/kreig133/daogenerator/files/mybatis/preparatory/MappingFilePreparatory.java" afterPath="$PROJECT_DIR$/src/com/kreig133/daogenerator/files/mybatis/preparatory/MappingFilePreparatory.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/kreig133/daogenerator/files/parsers/InputFileParser.java" afterPath="$PROJECT_DIR$/src/com/kreig133/daogenerator/files/parsers/InputFileParser.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/kreig133/daogenerator/files/parsers/InputParameterParser.java" afterPath="$PROJECT_DIR$/src/com/kreig133/daogenerator/files/parsers/InputParameterParser.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/kreig133/daogenerator/files/parsers/OutputParametrParser.java" afterPath="$PROJECT_DIR$/src/com/kreig133/daogenerator/files/parsers/OutputParametrParser.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/kreig133/daogenerator/files/parsers/Parsers.java" afterPath="$PROJECT_DIR$/src/com/kreig133/daogenerator/files/parsers/Parsers.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/kreig133/daogenerator/files/parsers/QueryParser.java" afterPath="$PROJECT_DIR$/src/com/kreig133/daogenerator/files/parsers/QueryParser.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/kreig133/daogenerator/files/parsers/TestParamsParser.java" afterPath="$PROJECT_DIR$/src/com/kreig133/daogenerator/files/parsers/TestParamsParser.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/kreig133/daogenerator/files/parsers/TestParser.java" afterPath="$PROJECT_DIR$/src/com/kreig133/daogenerator/files/parsers/TestParser.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/kreig133/daogenerator/files/parsers/TestQueryParser.java" afterPath="$PROJECT_DIR$/src/com/kreig133/daogenerator/files/parsers/TestQueryParser.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/kreig133/daogenerator/files/parsers/ParsersUtils.java" afterPath="$PROJECT_DIR$/src/com/kreig133/daogenerator/files/parsers/ParsersUtils.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/kreig133/daogenerator/files/parsers/settings/parse.properties" afterPath="$PROJECT_DIR$/src/com/kreig133/daogenerator/files/parsers/settings/parse.properties" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/kreig133/daogenerator/gui/MainForm.form" afterPath="$PROJECT_DIR$/src/com/kreig133/daogenerator/gui/MainForm.form" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/kreig133/daogenerator/gui/MainForm.java" afterPath="$PROJECT_DIR$/src/com/kreig133/daogenerator/gui/MainForm.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/kreig133/daogenerator/sql/ProcedureCallCreator.java" afterPath="$PROJECT_DIR$/src/com/kreig133/daogenerator/sql/ProcedureCallCreator.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/kreig133/daogenerator/testing/JDBCConnector.java" afterPath="$PROJECT_DIR$/src/com/kreig133/daogenerator/testing/JDBCConnector.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/kreig133/daogenerator/testing/Tester.java" afterPath="$PROJECT_DIR$/src/com/kreig133/daogenerator/testing/Tester.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/kreig133/daogenerator/testing/TypeAndNameComparator.java" afterPath="$PROJECT_DIR$/src/com/kreig133/daogenerator/testing/TypeAndNameComparator.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/untitled2.iws" afterPath="$PROJECT_DIR$/untitled2.iws" />
     </list>
     <ignored path="untitled2.iws" />
@@ -100,7 +98,7 @@
         <option name="CONDITION" value="" />
         <option name="LOG_MESSAGE" value="" />
       </breakpoint>
-      <breakpoint url="file://$PROJECT_DIR$/src/com/kreig133/daogenerator/files/parsers/ParsersUtils.java" line="9" class="com.kreig133.daogenerator.files.parsers.ParsersUtils" package="com.kreig133.daogenerator.files.parsers">
+      <breakpoint url="file://$PROJECT_DIR$/src/com/kreig133/daogenerator/files/parsers/ParsersUtils.java" line="14" class="com.kreig133.daogenerator.files.parsers.ParsersUtils" package="com.kreig133.daogenerator.files.parsers">
         <option name="ENABLED" value="true" />
         <option name="LOG_ENABLED" value="false" />
         <option name="LOG_EXPRESSION_ENABLED" value="false" />
@@ -113,7 +111,46 @@
         <option name="CONDITION" value="" />
         <option name="LOG_MESSAGE" value="" />
       </breakpoint>
-      <breakpoint url="file://$PROJECT_DIR$/src/com/kreig133/daogenerator/enums/JavaType.java" line="31" class="com.kreig133.daogenerator.enums.JavaType" package="com.kreig133.daogenerator.enums">
+      <breakpoint url="file://$PROJECT_DIR$/src/com/kreig133/daogenerator/enums/JavaType.java" line="32" class="com.kreig133.daogenerator.enums.JavaType" package="com.kreig133.daogenerator.enums">
+        <option name="ENABLED" value="true" />
+        <option name="LOG_ENABLED" value="false" />
+        <option name="LOG_EXPRESSION_ENABLED" value="false" />
+        <option name="SUSPEND_POLICY" value="SuspendAll" />
+        <option name="COUNT_FILTER_ENABLED" value="false" />
+        <option name="COUNT_FILTER" value="0" />
+        <option name="CONDITION_ENABLED" value="false" />
+        <option name="CLASS_FILTERS_ENABLED" value="false" />
+        <option name="INSTANCE_FILTERS_ENABLED" value="false" />
+        <option name="CONDITION" value="" />
+        <option name="LOG_MESSAGE" value="" />
+      </breakpoint>
+      <breakpoint url="file://$PROJECT_DIR$/src/com/kreig133/daogenerator/testing/Tester.java" line="25" class="com.kreig133.daogenerator.testing.Tester" package="com.kreig133.daogenerator.testing">
+        <option name="ENABLED" value="true" />
+        <option name="LOG_ENABLED" value="false" />
+        <option name="LOG_EXPRESSION_ENABLED" value="false" />
+        <option name="SUSPEND_POLICY" value="SuspendAll" />
+        <option name="COUNT_FILTER_ENABLED" value="false" />
+        <option name="COUNT_FILTER" value="0" />
+        <option name="CONDITION_ENABLED" value="false" />
+        <option name="CLASS_FILTERS_ENABLED" value="false" />
+        <option name="INSTANCE_FILTERS_ENABLED" value="false" />
+        <option name="CONDITION" value="" />
+        <option name="LOG_MESSAGE" value="" />
+      </breakpoint>
+      <breakpoint url="file://$PROJECT_DIR$/src/com/kreig133/daogenerator/testing/Tester.java" line="20" class="com.kreig133.daogenerator.testing.Tester" package="com.kreig133.daogenerator.testing">
+        <option name="ENABLED" value="true" />
+        <option name="LOG_ENABLED" value="false" />
+        <option name="LOG_EXPRESSION_ENABLED" value="false" />
+        <option name="SUSPEND_POLICY" value="SuspendAll" />
+        <option name="COUNT_FILTER_ENABLED" value="false" />
+        <option name="COUNT_FILTER" value="0" />
+        <option name="CONDITION_ENABLED" value="false" />
+        <option name="CLASS_FILTERS_ENABLED" value="false" />
+        <option name="INSTANCE_FILTERS_ENABLED" value="false" />
+        <option name="CONDITION" value="" />
+        <option name="LOG_MESSAGE" value="" />
+      </breakpoint>
+      <breakpoint url="file://$PROJECT_DIR$/src/com/kreig133/daogenerator/testing/TypeAndNameComparator.java" line="51" class="com.kreig133.daogenerator.testing.TypeAndNameComparator" package="com.kreig133.daogenerator.testing">
         <option name="ENABLED" value="true" />
         <option name="LOG_ENABLED" value="false" />
         <option name="LOG_EXPRESSION_ENABLED" value="false" />
@@ -184,97 +221,91 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="SettingsReader.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/com/kreig133/daogenerator/files/parsers/settings/SettingsReader.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="0" column="56" selection-start="8" selection-end="56" vertical-scroll-proportion="0.0">
-              <folding>
-                <element signature="imports" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="parse.properties" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/com/kreig133/daogenerator/files/parsers/settings/parse.properties">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="6" column="8" selection-start="60" selection-end="60" vertical-scroll-proportion="0.0">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="InputFileParser.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/com/kreig133/daogenerator/files/parsers/InputFileParser.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="100" column="0" selection-start="3639" selection-end="3639" vertical-scroll-proportion="0.0">
-              <folding>
-                <element signature="imports" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
       <file leaf-file-name="ParsersUtils.java" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/com/kreig133/daogenerator/files/parsers/ParsersUtils.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="9" column="0" selection-start="322" selection-end="322" vertical-scroll-proportion="0.0">
+            <state line="18" column="9" selection-start="861" selection-end="861" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="InputParameterParser.java" pinned="false" current="true" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/src/com/kreig133/daogenerator/files/parsers/InputParameterParser.java">
+      <file leaf-file-name="MyBatis.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/com/kreig133/daogenerator/files/mybatis/MyBatis.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="39" column="6" selection-start="1280" selection-end="1280" vertical-scroll-proportion="0.18613862">
-              <folding>
-                <element signature="imports" expanded="true" />
-              </folding>
+            <state line="96" column="49" selection-start="3675" selection-end="3675" vertical-scroll-proportion="0.0">
+              <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="JavaType.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/com/kreig133/daogenerator/enums/JavaType.java">
+      <file leaf-file-name="ImplementationMethodGenerator.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/com/kreig133/daogenerator/files/mybatis/ImplementationMethodGenerator.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="31" column="0" selection-start="900" selection-end="900" vertical-scroll-proportion="0.0">
+            <state line="56" column="26" selection-start="1992" selection-end="1992" vertical-scroll-proportion="0.0">
               <folding />
             </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="XmlMappingGenerator.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/com/kreig133/daogenerator/files/mybatis/XmlMappingGenerator.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="36" column="0" selection-start="1529" selection-end="1529" vertical-scroll-proportion="0.0">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="ProcedureCallCreator.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/com/kreig133/daogenerator/sql/ProcedureCallCreator.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="44" column="9" selection-start="1885" selection-end="1885" vertical-scroll-proportion="0.0">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="MainForm.form" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/com/kreig133/daogenerator/gui/MainForm.form">
+          <provider selected="true" editor-type-id="ui-designer">
+            <state />
           </provider>
         </entry>
       </file>
       <file leaf-file-name="Controller.java" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/com/kreig133/daogenerator/Controller.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="101" column="32" selection-start="3835" selection-end="3835" vertical-scroll-proportion="0.0">
+            <state line="66" column="75" selection-start="2583" selection-end="2583" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="Parameter.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/com/kreig133/daogenerator/parameter/Parameter.java">
+      <file leaf-file-name="Tester.java" pinned="false" current="true" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/src/com/kreig133/daogenerator/testing/Tester.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="22" column="0" selection-start="509" selection-end="509" vertical-scroll-proportion="0.0">
+            <state line="34" column="0" selection-start="1290" selection-end="1290" vertical-scroll-proportion="0.5961123">
+              <folding>
+                <element signature="imports" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="TypeAndNameComparator.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/com/kreig133/daogenerator/testing/TypeAndNameComparator.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="46" column="11" selection-start="1815" selection-end="1815" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="InputParameter.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/com/kreig133/daogenerator/parameter/InputParameter.java">
+      <file leaf-file-name="SQLServerResultSet.class" pinned="false" current="false" current-in-tab="false">
+        <entry file="jar://$MAVEN_REPOSITORY$/com/microsoft/sqlserver/sqljdbc/3.0/sqljdbc-3.0.jar!/com/microsoft/sqlserver/jdbc/SQLServerResultSet.class">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="0" column="44" selection-start="8" selection-end="44" vertical-scroll-proportion="0.0">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="OutputParametrParser.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/com/kreig133/daogenerator/files/parsers/OutputParametrParser.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="40" column="65" selection-start="1435" selection-end="1435" vertical-scroll-proportion="0.0">
+            <state line="261" column="38" selection-start="14948" selection-end="14948" vertical-scroll-proportion="-5.44">
               <folding />
             </state>
           </provider>
@@ -294,22 +325,22 @@
   <component name="IdeDocumentHistory">
     <option name="changedFiles">
       <list>
-        <option value="$PROJECT_DIR$/src/com/kreig133/daogenerator/files/parsers/TestParamsParser.java" />
-        <option value="$PROJECT_DIR$/src/com/kreig133/daogenerator/files/parsers/TestParser.java" />
-        <option value="$PROJECT_DIR$/src/com/kreig133/daogenerator/files/parsers/TestQueryParser.java" />
-        <option value="$PROJECT_DIR$/src/com/kreig133/daogenerator/enums/Mode.java" />
-        <option value="$PROJECT_DIR$/src/com/kreig133/daogenerator/files/parsers/Parsers.java" />
-        <option value="$PROJECT_DIR$/src/com/kreig133/daogenerator/files/parsers/settings/SettingsReader.java" />
-        <option value="$PROJECT_DIR$/src/com/kreig133/daogenerator/testing/JDBCConnector.java" />
-        <option value="$PROJECT_DIR$/src/com/kreig133/daogenerator/files/parsers/ParsersUtils.java" />
-        <option value="$PROJECT_DIR$/src/com/kreig133/daogenerator/files/parsers/InputFileParser.java" />
-        <option value="$PROJECT_DIR$/src/com/kreig133/daogenerator/enums/InputOrOutputType.java" />
-        <option value="$PROJECT_DIR$/src/com/kreig133/daogenerator/common/settings/OperationSettingsImpl.java" />
+        <option value="$PROJECT_DIR$/src/com/kreig133/daogenerator/files/mybatis/preparatory/MappingFilePreparatory.java" />
         <option value="$PROJECT_DIR$/src/com/kreig133/daogenerator/files/parsers/settings/parse.properties" />
-        <option value="$PROJECT_DIR$/src/com/kreig133/daogenerator/files/parsers/OutputParametrParser.java" />
         <option value="$PROJECT_DIR$/src/com/kreig133/daogenerator/files/parsers/InputParameterParser.java" />
+        <option value="$PROJECT_DIR$/src/com/kreig133/daogenerator/files/parsers/OutputParametrParser.java" />
+        <option value="$PROJECT_DIR$/src/com/kreig133/daogenerator/files/parsers/InputFileParser.java" />
+        <option value="$PROJECT_DIR$/src/com/kreig133/daogenerator/files/parsers/ParsersUtils.java" />
+        <option value="$PROJECT_DIR$/src/com/kreig133/daogenerator/files/parsers/Parsers.java" />
         <option value="$PROJECT_DIR$/src/com/kreig133/daogenerator/enums/JavaType.java" />
+        <option value="$PROJECT_DIR$/src/com/kreig133/daogenerator/files/mybatis/MyBatis.java" />
+        <option value="$PROJECT_DIR$/src/com/kreig133/daogenerator/gui/MainForm.form" />
+        <option value="$PROJECT_DIR$/src/com/kreig133/daogenerator/files/mybatis/XmlMappingGenerator.java" />
+        <option value="$PROJECT_DIR$/src/com/kreig133/daogenerator/files/mybatis/ImplementationMethodGenerator.java" />
+        <option value="$PROJECT_DIR$/src/com/kreig133/daogenerator/sql/ProcedureCallCreator.java" />
         <option value="$PROJECT_DIR$/src/com/kreig133/daogenerator/Controller.java" />
+        <option value="$PROJECT_DIR$/src/com/kreig133/daogenerator/testing/TypeAndNameComparator.java" />
+        <option value="$PROJECT_DIR$/src/com/kreig133/daogenerator/testing/Tester.java" />
       </list>
     </option>
   </component>
@@ -348,383 +379,6 @@
       <sortByType />
     </navigator>
     <panes>
-      <pane id="PackagesPane">
-        <subPane>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="untitled2" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PackageViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="untitled2" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PackageViewModuleNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="untitled2" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PackageViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="untitled2" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PackageViewModuleNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="com.kreig133.daogenerator" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PackageElementNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="untitled2" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PackageViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="untitled2" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PackageViewModuleNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="com.kreig133.daogenerator" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PackageElementNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="mybatis" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PackageElementNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="untitled2" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PackageViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="untitled2" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PackageViewModuleNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="com.kreig133.daogenerator" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PackageElementNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="mybatis" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PackageElementNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="file.preparatory" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PackageElementNode" />
-            </PATH_ELEMENT>
-          </PATH>
-        </subPane>
-      </pane>
-      <pane id="Favorites" />
-      <pane id="ProjectPane">
-        <subPane>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="untitled2" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="External Libraries" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ExternalLibrariesNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="untitled2" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="IASKDaoGenerator" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="untitled2" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="IASKDaoGenerator" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="src" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="untitled2" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="IASKDaoGenerator" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="src" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="daogenerator" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="untitled2" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="IASKDaoGenerator" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="src" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="daogenerator" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="testing" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="untitled2" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="IASKDaoGenerator" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="src" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="daogenerator" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="testing" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="settings" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="untitled2" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="IASKDaoGenerator" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="src" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="daogenerator" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="files" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="untitled2" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="IASKDaoGenerator" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="src" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="daogenerator" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="files" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="parsers" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="untitled2" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="IASKDaoGenerator" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="src" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="daogenerator" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="files" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="parsers" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="strategy" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="untitled2" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="IASKDaoGenerator" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="src" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="daogenerator" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="files" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="parsers" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="settings" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="untitled2" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="IASKDaoGenerator" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="src" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="daogenerator" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="files" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="mybatis" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="untitled2" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="IASKDaoGenerator" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="src" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="daogenerator" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="enums" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="untitled2" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="IASKDaoGenerator" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="src" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="daogenerator" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="common" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="untitled2" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="IASKDaoGenerator" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="src" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="daogenerator" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="common" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="settings" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-        </subPane>
-      </pane>
       <pane id="Scope">
         <subPane subId="Project Files">
           <PATH>
@@ -797,6 +451,113 @@
           </PATH>
         </subPane>
       </pane>
+      <pane id="PackagesPane">
+        <subPane>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="untitled2" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PackageViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="untitled2" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PackageViewModuleNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="untitled2" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PackageViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="untitled2" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PackageViewModuleNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="com.kreig133.daogenerator" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PackageElementNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="untitled2" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PackageViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="untitled2" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PackageViewModuleNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="com.kreig133.daogenerator" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PackageElementNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="mybatis" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PackageElementNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="untitled2" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PackageViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="untitled2" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PackageViewModuleNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="com.kreig133.daogenerator" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PackageElementNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="mybatis" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PackageElementNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="file.preparatory" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PackageElementNode" />
+            </PATH_ELEMENT>
+          </PATH>
+        </subPane>
+      </pane>
+      <pane id="ProjectPane">
+        <subPane>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="untitled2" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="External Libraries" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ExternalLibrariesNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="untitled2" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="IASKDaoGenerator" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="untitled2" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="IASKDaoGenerator" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+        </subPane>
+      </pane>
+      <pane id="Favorites" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -1095,35 +856,35 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="-1688" y="-34" width="1696" height="1066" extended-state="0" />
+    <frame x="-1688" y="-34" width="1696" height="1066" extended-state="6" />
     <editor active="false" />
     <layout>
-      <window_info id="UI Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.22290263" sideWeight="0.53186816" order="4" side_tool="false" content_ui="tabs" />
+      <window_info id="UI Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.22290263" sideWeight="0.74725276" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Data Sources" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.23146623" sideWeight="0.5335868" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32919255" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="SQL" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.52670807" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
       <window_info id="Atlassian " active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="13" side_tool="false" content_ui="tabs" />
-      <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.30802205" sideWeight="0.53186816" order="4" side_tool="false" content_ui="tabs" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.31868133" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.30802205" sideWeight="0.74725276" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.2495935" sideWeight="0.6347826" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.3956044" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" x="-1654" y="596" width="1633" height="332" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.44175825" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" x="-1654" y="596" width="1633" height="332" />
       <window_info id="IDEtalk Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
       <window_info id="IDEtalk" active="false" anchor="right" auto_hide="true" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3292683" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
-      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.26483518" sideWeight="0.5" order="12" side_tool="false" content_ui="tabs" />
+      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.2637969" sideWeight="0.5" order="12" side_tool="false" content_ui="tabs" />
       <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.46813187" sideWeight="0.0" order="10" side_tool="false" content_ui="tabs" />
-      <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.2912088" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
+      <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.290287" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Metrics" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3824176" sideWeight="0.5" order="13" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.2173913" sideWeight="0.27382258" order="1" side_tool="true" content_ui="tabs" />
-      <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.28107777" sideWeight="0.6043956" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.2112676" sideWeight="0.5582418" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.39987752" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Dependency Viewer" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="11" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.22657685" sideWeight="0.6043956" order="0" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.5153846" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
+      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.22657685" sideWeight="0.5582418" order="0" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.31428573" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="Phing Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3292683" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="JavaEE:App" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32276422" sideWeight="0.23229814" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.18922229" sideWeight="0.7351648" order="2" side_tool="false" content_ui="combo" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.31868133" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Web" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32276422" sideWeight="0.23229814" order="3" side_tool="true" content_ui="tabs" />
       <window_info id="Duplicates" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.0788609" sideWeight="0.5" order="13" side_tool="false" content_ui="tabs" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.22672509" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
@@ -1154,7 +915,7 @@
     <option name="CHECK_COMMIT_MESSAGE_SPELLING" value="true" />
     <option name="DEFAULT_PATCH_EXTENSION" value="patch" />
     <option name="FORCE_NON_EMPTY_COMMENT" value="false" />
-    <option name="LAST_COMMIT_MESSAGE" value="Подготовка и считывание запросов для тестирования" />
+    <option name="LAST_COMMIT_MESSAGE" value="Настройки парсера вынесены в файл." />
     <option name="MAKE_NEW_CHANGELIST_ACTIVE" value="true" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="false" />
     <option name="CHECK_FILES_UP_TO_DATE_BEFORE_COMMIT" value="false" />
@@ -1167,7 +928,6 @@
     <option name="UPDATE_GROUP_BY_CHANGELIST" value="false" />
     <option name="SHOW_FILE_HISTORY_AS_TREE" value="false" />
     <option name="FILE_HISTORY_SPLITTER_PROPORTION" value="0.6" />
-    <MESSAGE value="Мелкий рефакторинг + добавил считывание названия операции из папки" />
     <MESSAGE value="Исправил некоторые баги + небольшой рефакторинг." />
     <MESSAGE value="Добавил генерацию класса, реализующего интерфейс + исправления + рефакторинг" />
     <MESSAGE value="Добавил выбор аннотации в зависимости от типа запроса ( Insert, Delete, Select, Update )" />
@@ -1192,6 +952,7 @@
     <MESSAGE value="Сломанная версия. Мегарефакторинг." />
     <MESSAGE value="Рефакторинг. Теперь работает." />
     <MESSAGE value="Подготовка и считывание запросов для тестирования" />
+    <MESSAGE value="Настройки парсера вынесены в файл." />
   </component>
   <component name="VssConfiguration">
     <option name="CLIENT_PATH" value="" />
@@ -1254,9 +1015,37 @@
     </option>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/src/com/kreig133/daogenerator/testing/JDBCConnector.java">
+    <entry file="file://$PROJECT_DIR$/src/com/kreig133/daogenerator/files/parsers/TestParser.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="59" column="26" selection-start="1937" selection-end="1937" vertical-scroll-proportion="0.0">
+        <state line="9" column="13" selection-start="246" selection-end="246" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/kreig133/daogenerator/enums/Mode.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="21" column="16" selection-start="555" selection-end="555" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/kreig133/daogenerator/files/parsers/Parsers.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="37" column="63" selection-start="1416" selection-end="1416" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/kreig133/daogenerator/enums/JavaType.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="0" column="39" selection-start="8" selection-end="39" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/kreig133/daogenerator/files/JavaFilesUtils.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="23" column="23" selection-start="619" selection-end="619" vertical-scroll-proportion="0.0">
           <folding />
         </state>
       </provider>
@@ -1266,108 +1055,72 @@
         <state />
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/kreig133/daogenerator/enums/Mode.java">
+    <entry file="file://$PROJECT_DIR$/src/com/kreig133/daogenerator/files/parsers/ParsersUtils.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="10" column="39" selection-start="266" selection-end="266" vertical-scroll-proportion="0.0">
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/kreig133/daogenerator/files/parsers/Parsers.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="28" column="23" selection-start="987" selection-end="987" vertical-scroll-proportion="0.0">
+        <state line="18" column="9" selection-start="861" selection-end="861" vertical-scroll-proportion="0.0">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/kreig133/daogenerator/common/settings/OperationSettingsImpl.java">
+    <entry file="file://$PROJECT_DIR$/src/com/kreig133/daogenerator/files/mybatis/XmlMappingGenerator.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="67" column="0" selection-start="1370" selection-end="1370" vertical-scroll-proportion="0.0">
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/kreig133/daogenerator/enums/InputOrOutputType.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="15" column="0" selection-start="424" selection-end="424" vertical-scroll-proportion="0.0">
+        <state line="36" column="0" selection-start="1529" selection-end="1529" vertical-scroll-proportion="0.0">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/kreig133/daogenerator/files/parsers/InputFileParser.java">
+    <entry file="file://$PROJECT_DIR$/src/com/kreig133/daogenerator/files/mybatis/preparatory/ImplementationFilePreparatory.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="100" column="0" selection-start="3639" selection-end="3639" vertical-scroll-proportion="0.0">
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/kreig133/daogenerator/files/parsers/settings/parse.properties">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="6" column="8" selection-start="60" selection-end="60" vertical-scroll-proportion="0.0">
+        <state line="16" column="13" selection-start="499" selection-end="499" vertical-scroll-proportion="0.3292978">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/kreig133/daogenerator/files/parsers/settings/SettingsReader.java">
+    <entry file="file://$PROJECT_DIR$/src/com/kreig133/daogenerator/files/mybatis/MyBatis.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="0" column="56" selection-start="8" selection-end="56" vertical-scroll-proportion="0.0">
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
+        <state line="96" column="49" selection-start="3675" selection-end="3675" vertical-scroll-proportion="0.0">
+          <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/kreig133/daogenerator/files/parsers/OutputParametrParser.java">
+    <entry file="file://$PROJECT_DIR$/src/com/kreig133/daogenerator/files/mybatis/ImplementationMethodGenerator.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="40" column="65" selection-start="1435" selection-end="1435" vertical-scroll-proportion="0.0">
+        <state line="56" column="26" selection-start="1992" selection-end="1992" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/kreig133/daogenerator/sql/ProcedureCallCreator.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="44" column="9" selection-start="1885" selection-end="1885" vertical-scroll-proportion="0.0">
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/com/kreig133/daogenerator/Controller.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="101" column="32" selection-start="3835" selection-end="3835" vertical-scroll-proportion="0.0">
+        <state line="66" column="75" selection-start="2583" selection-end="2583" vertical-scroll-proportion="0.0">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/kreig133/daogenerator/files/parsers/ParsersUtils.java">
+    <entry file="jar://$MAVEN_REPOSITORY$/com/microsoft/sqlserver/sqljdbc/3.0/sqljdbc-3.0.jar!/com/microsoft/sqlserver/jdbc/SQLServerResultSet.class">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="9" column="0" selection-start="322" selection-end="322" vertical-scroll-proportion="0.0">
+        <state line="261" column="38" selection-start="14948" selection-end="14948" vertical-scroll-proportion="-5.44">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/kreig133/daogenerator/enums/JavaType.java">
+    <entry file="file://$PROJECT_DIR$/src/com/kreig133/daogenerator/testing/TypeAndNameComparator.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="31" column="0" selection-start="900" selection-end="900" vertical-scroll-proportion="0.0">
+        <state line="46" column="11" selection-start="1815" selection-end="1815" vertical-scroll-proportion="0.0">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/kreig133/daogenerator/parameter/Parameter.java">
+    <entry file="file://$PROJECT_DIR$/src/com/kreig133/daogenerator/testing/Tester.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="22" column="0" selection-start="509" selection-end="509" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/kreig133/daogenerator/parameter/InputParameter.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="0" column="44" selection-start="8" selection-end="44" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/kreig133/daogenerator/files/parsers/InputParameterParser.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="39" column="6" selection-start="1280" selection-end="1280" vertical-scroll-proportion="0.18613862">
+        <state line="34" column="0" selection-start="1290" selection-end="1290" vertical-scroll-proportion="0.5961123">
           <folding>
             <element signature="imports" expanded="true" />
           </folding>

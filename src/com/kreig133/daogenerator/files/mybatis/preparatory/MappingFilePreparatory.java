@@ -27,7 +27,11 @@ public class MappingFilePreparatory extends Preparatory{
             //TODO блок комментариев
             builder.append( "public interface " ).append( mapperFileName( operationSettings ) ).append( "{\n\n" );
         } else {
-            throw new RuntimeException( "Запили для ИАСКА. Быстро! " );
+            builder.append( "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" );
+            builder.append( "<!DOCTYPE mapper PUBLIC \"-//mybatis.org//DTD Mapper 3.0//EN\" \"http://mybatis" +
+                    ".org/dtd/mybatis-3-mapper.dtd\">\n" );
+            builder.append( "<mapper namespace=\"" ).append( operationSettings.getDaoPackage() ).append( "." )
+                    .append( interfaceFileName( operationSettings ) ).append( "\">\n" );
         }
         Utils.appendByteToFile( mappingFile( operationSettings ), builder.toString().getBytes() );
     }

@@ -20,13 +20,13 @@ public class JDBCConnector {
     private static final Properties properties = new Properties();
     private static String pathToProperties ="./src/com/kreig133/daogenerator/testing/settings/";
 
-    private static Connection connection;
 
-    public static void connectToDB(
+
+    public static Connection connectToDB(
             OperationSettings operationSettings
     ) throws IOException, SQLException {
 
-        if( connection != null ) throw  new AssertionError( "Соединение с базой уже было установлено!" );
+        Connection connection;
 
         FileInputStream props = null;
 
@@ -52,10 +52,12 @@ public class JDBCConnector {
                 properties.getProperty( USERNAME ),
                 properties.getProperty( PASSWORD )
         );
+
+        return connection;
     }
 
     public static void main( String[] args ) throws IOException, SQLException {
-        connectToDB( new OperationSettings() {
+        Connection connection = connectToDB( new OperationSettings() {
             @Override
             public Integer getPlaceOfParameter( String parameterKey ) {
                 return 0;  //To change body of implemented methods use File | Settings | File Templates.

@@ -14,6 +14,7 @@ import com.kreig133.daogenerator.sql.ProcedureCallCreator;
 import com.kreig133.daogenerator.sql.SelectQueryConverter;
 import com.kreig133.daogenerator.sql.wrappers.GenerateGenerator;
 import com.kreig133.daogenerator.sql.wrappers.GeneroutGenerator;
+import com.kreig133.daogenerator.testing.Tester;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -33,13 +34,19 @@ public class Controller {
 
     private static List< FunctionSettings > settingsList = new ArrayList<FunctionSettings>();
 
-    public static void doAction() throws IOException {
+    public static void doAction() {
 
         final OperationSettings operationSettings = DaoGenerator.getCurrentOperationSettings();
 
-        MyBatis.prepareFiles( operationSettings );
+        try {
+            MyBatis.prepareFiles( operationSettings );
 
-        SettingsReader.readProperties( operationSettings );
+            SettingsReader.readProperties( operationSettings );
+
+        } catch ( Throwable e ) {
+            System.err.println( ">>>Controller: Ошибка! При предварительной записи в файлы, произошла ошибка!" );
+            e.printStackTrace();
+        }
 
         for(
                 String s:
@@ -57,11 +64,15 @@ public class Controller {
 
         createQueries( operationSettings );
 
-        //TODO добавить тестирование
+        Tester.startFunctionTesting( operationSettings, settingsList.get( 1 ) );
 
-        writeFiles( operationSettings );
-
-        MyBatis.closeFiles( operationSettings );
+        try {
+            writeFiles( operationSettings );
+            MyBatis.closeFiles( operationSettings );
+        } catch ( IOException e ) {
+            System.err.println( ">>>Controller: Ошибка! При записи в файлы, произошла ошибка!" );
+            e.printStackTrace();
+        }
     }
 
     private static void createQueries( OperationSettings operationSettings ) {
@@ -87,7 +98,6 @@ public class Controller {
             File fileWithData,
             OperationSettings operationSettings
     ) {
-
         try {
             FunctionSettings currentSettings = new FunctionSettingsImpl();
 

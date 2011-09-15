@@ -35,7 +35,7 @@ public class Parsers {
                 mode.parse( operationSettings, query, line );
                 break;
             case IS_TESTING_QUERY:
-                mode.parse( operationSettings, inputParameterList, line );
+                mode.parse( operationSettings, functionSettings, line );
                 break;
         }
     }

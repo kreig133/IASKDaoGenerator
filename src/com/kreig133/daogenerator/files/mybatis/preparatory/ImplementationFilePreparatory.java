@@ -4,6 +4,7 @@ import com.kreig133.daogenerator.common.Utils;
 import com.kreig133.daogenerator.common.settings.FunctionSettings;
 import com.kreig133.daogenerator.common.settings.OperationSettings;
 import com.kreig133.daogenerator.enums.Type;
+import com.kreig133.daogenerator.files.JavaFilesUtils;
 
 import java.io.IOException;
 
@@ -28,12 +29,19 @@ public class ImplementationFilePreparatory extends InterfaceFilePreparatory {
             //TODO блок комментариев
             builder.append( "@Repository\n" );
             builder.append( "public class " ).append( implementationFileName( operationSettings ) ).
-                    append( "extends SqlSessionDaoSupport implements CloseDepoAccountDao {\n\n" );
-
-            Utils.appendByteToFile( implementationFile( operationSettings ), builder.toString().getBytes() );
+                    append( "extends SqlSessionDaoSupport implements ").
+                    append( interfaceFileName( operationSettings ) ).append( "{\n\n" );
         } else {
-            throw new RuntimeException( "Запили для ИАСКА. Быстро! " );
+            JavaFilesUtils.insertPackageLine( operationSettings.getDaoPackage(), builder );
+            builder.append( "import java.util.Date;\n" );
+            builder.append( "import java.util.List;\n\n" );
+            builder.append( "import " ).append( operationSettings.getEntityPackage() ).append( ".*;\n\n" );
+            builder.append( "public class " ).append( implementationFileName( operationSettings ) )
+                    .append( " extends AbstractDao implements " ).append( interfaceFileName( operationSettings ) )
+                    .append( "{\n\n" );
+
         }
+        Utils.appendByteToFile( implementationFile( operationSettings ), builder.toString().getBytes() );
     }
 
 }

@@ -98,7 +98,7 @@ public class InputFileParser {
     ){
         Integer placeOfParameter = operationSettings.getPlaceOfParameter( key );
         if( placeOfParameter != null  ){
-            ParsersUtils.checkPlaceOfParameter( false, strings.length, placeOfParameter );
+            ParsersUtils.checkPlaceOfParameter( false, strings, placeOfParameter );
             action.doAction( strings, placeOfParameter ,operationSettings, functionSettings );
         }
     }

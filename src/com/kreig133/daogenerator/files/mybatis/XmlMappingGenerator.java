@@ -35,7 +35,6 @@ public class XmlMappingGenerator {
 
         builder.append( functionSettings.getMyBatisQuery() );
 
-        builder.append( "        )}\n\n" );
         builder.append( "    </select>\n\n" );
 
         return builder.toString();

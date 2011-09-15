@@ -20,7 +20,7 @@ public class TypeAndNameComparator {
     ) throws SQLException {
         List<String> errorList = new ArrayList<String>(  );
 
-        for( int i = 0; i < metaData.getColumnCount(); i++ ){
+        for( int i = 1; i <= metaData.getColumnCount(); i++ ){
             boolean exist = false;
             String columnName = metaData.getColumnName( i );
             JavaType javaType = JavaType.getBySqlType( metaData.getColumnTypeName( i ) );

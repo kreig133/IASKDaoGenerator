@@ -2,6 +2,7 @@ package com.kreig133.daogenerator.sql;
 
 import com.kreig133.daogenerator.common.settings.FunctionSettings;
 import com.kreig133.daogenerator.common.strategy.FunctionalObjectWithoutFilter;
+import com.kreig133.daogenerator.enums.TestInfoType;
 import com.kreig133.daogenerator.parameter.Parameter;
 
 import static com.kreig133.daogenerator.common.Utils.iterateForParameterList;
@@ -38,7 +39,9 @@ public class ProcedureCallCreator {
         myBatisQuery    .append( "        )}" );
         queryForTesting .append( "        )}" );
 
-        functionSettings.setMyBatisQuery    ( myBatisQuery      .toString() );
-        functionSettings.appendToQueryForTesting( queryForTesting.toString() );
+        functionSettings.setMyBatisQuery        ( myBatisQuery      .toString() );
+        if( functionSettings.getTestInfoType() != TestInfoType.TQUERY ){
+            functionSettings.appendToQueryForTesting( queryForTesting.toString() );
+        }
     }
 }
