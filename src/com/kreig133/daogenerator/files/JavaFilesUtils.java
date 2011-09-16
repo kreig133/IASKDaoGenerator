@@ -26,7 +26,13 @@ public class JavaFilesUtils {
 
         switch ( operationSettings.getType() ){
             case IASK:
-                file = new File( operationSettings.getOutputPath() + "/" + operationSettings.getOperationName() + ".map.xml" );
+                file = new File(
+                        operationSettings.getOutputPath() +
+                        "/" +
+                        replacePointBySlash( operationSettings.getMapperPackage() )+
+                        "/" +
+                        operationSettings.getOperationName() +
+                        ".map.xml" );
                 break;
             case DEPO:
                 file = new File(

@@ -35,6 +35,7 @@ public class ImplementationFilePreparatory extends InterfaceFilePreparatory {
             JavaFilesUtils.insertPackageLine( operationSettings.getDaoPackage(), builder );
             builder.append( "import java.util.Date;\n" );
             builder.append( "import java.util.List;\n\n" );
+            builder.append( "import com.luxoft.sbrf.iask.persistence.common.dao.AbstractDao;\n" );
             builder.append( "import " ).append( operationSettings.getEntityPackage() ).append( ".*;\n\n" );
             builder.append( "public class " ).append( implementationFileName( operationSettings ) )
                     .append( " extends AbstractDao implements " ).append( interfaceFileName( operationSettings ) )
