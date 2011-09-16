@@ -199,7 +199,7 @@ public class Utils {
         StringBuilder builder = new StringBuilder();
 
         final String[] split = nameForCall.split( "_" );
-        builder.append( split[ 1 ] );
+        builder.append( split[ 0 ] );
         for( int i = 1; i < split.length ; i++ ){
             final char[] chars = split[ i ].toCharArray();
             chars[ 0 ] = Character.toUpperCase( chars[ 0 ] );

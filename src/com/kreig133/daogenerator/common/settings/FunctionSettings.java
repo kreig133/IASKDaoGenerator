@@ -14,7 +14,6 @@ import java.util.List;
  */
 public interface FunctionSettings {
 
-
     SelectType getSelectType();
 
     void setSelectType( SelectType selectType );

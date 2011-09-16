@@ -57,9 +57,9 @@ public class InterfaceMethodGenerator {
             }
         }
 
-        builder.append( name ).append( "(\n" );
-
+        builder.append( name ).append( "(" );
         if ( ! inputParameterList.isEmpty() ) {
+            builder.append( "\n" );
             if ( checkToNeedOwnInClass( operationSettings, functionSettings ) ) {
                 builder.append( "        " ).append( Utils.convertNameForClassNaming( name ) ).append( "In request\n" );
             } else {
@@ -73,8 +73,9 @@ public class InterfaceMethodGenerator {
                     }
                 } );
             }
+            builder.append( "    " );
         }
-        builder.append( "    )" );
+        builder.append( ")" );
 
         return builder.toString();
     }

@@ -78,14 +78,11 @@ public class InOutClass {
         for( Parameter p: parameters ){
             builder.append( "        this." ).append( p.getName() ).append( " = " ).append( p.getName() ).append(";\n");
         }
+        builder.append( "    }\n\n" );
     }
 
     public String getName() {
         return name;
-    }
-
-    public void setName( String name ) {
-        this.name = name;
     }
 
     public List<Parameter> getParameters() {

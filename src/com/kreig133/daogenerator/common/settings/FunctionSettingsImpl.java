@@ -15,6 +15,7 @@ import java.util.List;
  */
 public class FunctionSettingsImpl implements FunctionSettings {
 
+    private final OperationSettings OPERATION_SETTING;
     private final List<Parameter>  INPUT_PARAMETER_LIST = new ArrayList<Parameter>();
     private final List<Parameter> OUTPUT_PARAMETER_LIST = new ArrayList<Parameter>();
     private final List<String>      TEST_PARAMETER_LIST = new ArrayList<String>(  );
@@ -28,7 +29,11 @@ public class FunctionSettingsImpl implements FunctionSettings {
     private String          NAME_FOR_CALL;
     private SelectType      SELECT_TYPE  ;
     private ReturnType      RETURN_TYPE  ;
-    private TestInfoType    TEST_INFO_TYPE;
+    private TestInfoType    TEST_INFO_TYPE = TestInfoType.NONE;
+
+    public FunctionSettingsImpl( OperationSettings operationSettings ) {
+        OPERATION_SETTING = operationSettings;
+    }
 
     @Override
     public SelectType getSelectType() {
@@ -71,7 +76,13 @@ public class FunctionSettingsImpl implements FunctionSettings {
             case TQUERY:
                 return TEST_QUERY.toString();
             case TPARAM:
-                return Utils.replaceQuestionMarkWithStrings( TEST_PARAMETER_LIST, TEST_QUERY.toString() );
+                switch ( SELECT_TYPE ){
+                    case CALL:
+
+                    default:
+                        return Utils.replaceQuestionMarkWithStrings( TEST_PARAMETER_LIST, TEST_QUERY.toString() );
+                }
+
             case NONE:
                 throw new AssertionError( "Ошибка! Строка для тестирования не задана." );
         }
@@ -115,7 +126,7 @@ public class FunctionSettingsImpl implements FunctionSettings {
     public void setName( String functionName ) {
         if( NAME_FOR_CALL == null ){
             NAME_FOR_CALL = functionName;
-            NAME = Utils.convertPBNameToName( NAME_FOR_CALL );
+            NAME = Utils.convertPBNameToName( functionName );
         } else {
             throw new AssertionError( "NAME_FOR_CALL уже был устновлен!" );
         }

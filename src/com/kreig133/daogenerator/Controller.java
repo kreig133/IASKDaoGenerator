@@ -97,7 +97,7 @@ public class Controller {
             OperationSettings operationSettings
     ) {
         try {
-            FunctionSettings currentSettings = new FunctionSettingsImpl();
+            FunctionSettings currentSettings = new FunctionSettingsImpl( operationSettings );
 
             settingsList.add( currentSettings );
 
@@ -139,7 +139,8 @@ public class Controller {
             InOutClass inOutClass = new InOutClass(
                     operationSettings.getEntityPackage(),
                     type == InputOrOutputType.IN ? functionSettings.getInputParameterList(): functionSettings.getOutputParameterList(),
-                    Utils.convertNameForClassNaming( functionSettings.getName() ) + type
+                    Utils.convertNameForClassNaming( functionSettings.getName() ) +
+                            ( type == InputOrOutputType.IN ? "In" : "Out" )
             );
 
             File inClassFile = getInOrOutClassFile( operationSettings, inOutClass );
