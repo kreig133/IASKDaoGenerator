@@ -7,14 +7,12 @@ import com.kreig133.daogenerator.common.settings.OperationSettings;
 import com.kreig133.daogenerator.enums.InputOrOutputType;
 import com.kreig133.daogenerator.files.InOutClass;
 import com.kreig133.daogenerator.files.mybatis.MyBatis;
-import com.kreig133.daogenerator.files.mybatis.WrapperGenerators;
 import com.kreig133.daogenerator.files.parsers.InputFileParser;
 import com.kreig133.daogenerator.files.parsers.settings.SettingsReader;
 import com.kreig133.daogenerator.sql.ProcedureCallCreator;
 import com.kreig133.daogenerator.sql.SelectQueryConverter;
 import com.kreig133.daogenerator.sql.wrappers.GenerateGenerator;
 import com.kreig133.daogenerator.sql.wrappers.GeneroutGenerator;
-import com.kreig133.daogenerator.testing.Tester;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -64,7 +62,7 @@ public class Controller {
 
         createQueries( operationSettings );
 
-        Tester.startFunctionTesting( operationSettings, settingsList.get( 1 ) );
+//        Tester.startFunctionTesting( operationSettings, settingsList.get( 1 ) );
 
         try {
             writeFiles( operationSettings );
@@ -104,7 +102,7 @@ public class Controller {
             settingsList.add( currentSettings );
 
             //считываем название из файла ( название файла = название хранимки, запроса )
-            currentSettings.setFunctionName( fileWithData.getName().split( ".txt" )[ 0 ] );
+            currentSettings.setName( fileWithData.getName().split( ".txt" )[ 0 ] );
 
             InputFileParser.readFileWithDataForGenerateDao( fileWithData, operationSettings, currentSettings );
         } catch ( Throwable e ) {
@@ -141,7 +139,7 @@ public class Controller {
             InOutClass inOutClass = new InOutClass(
                     operationSettings.getEntityPackage(),
                     type == InputOrOutputType.IN ? functionSettings.getInputParameterList(): functionSettings.getOutputParameterList(),
-                    Utils.convertNameForClassNaming( functionSettings.getFunctionName() ) + type
+                    Utils.convertNameForClassNaming( functionSettings.getName() ) + type
             );
 
             File inClassFile = getInOrOutClassFile( operationSettings, inOutClass );

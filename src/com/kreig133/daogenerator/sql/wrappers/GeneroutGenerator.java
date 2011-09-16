@@ -21,7 +21,6 @@ public class GeneroutGenerator extends CommonWrapperGenerator{
 
     public static void generateWrapper( FunctionSettings functionSettings ) {
         final List<Parameter> inputParametrs    = functionSettings.getInputParameterList();
-        final String          name              = functionSettings.getFunctionName();
 
         StringBuilder myBatisQuery      = new StringBuilder();
         StringBuilder queryForTesting   = new StringBuilder();
@@ -50,7 +49,7 @@ public class GeneroutGenerator extends CommonWrapperGenerator{
         } );
 
         //Выполняем хранимую процедуру
-        myBatisQuery.append( "EXECUTE DBO." ).append( name ).append( "\n" );
+        myBatisQuery.append( "EXECUTE DBO." ).append( functionSettings.getNameForCall() ).append( "\n" );
 
         queryForTesting.append( myBatisQuery.toString() );
 
@@ -90,8 +89,8 @@ public class GeneroutGenerator extends CommonWrapperGenerator{
             }
         } );
 
-        functionSettings.setMyBatisQuery    ( myBatisQuery   .toString() );
-        functionSettings.appendToQueryForTesting( queryForTesting.toString() );
+        functionSettings.setMyBatisQuery         ( myBatisQuery   .toString() );
+        functionSettings.appendToQueryForTesting ( queryForTesting.toString() );
     }
 
     private static void insertExpressionWithParameter( StringBuilder builder, String rightPartOfExpr ) {

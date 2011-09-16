@@ -8,14 +8,15 @@ import java.util.*;
  * @version 1.0
  */
 public enum JavaType {
-    Long, String, Date, Double; 
+    Long, String, Date, Double, Byte;
 
     private static final Map< JavaType, List<String> > map = new HashMap<JavaType, List<String>>( 6 );
 
     static {
-        linkJavaTypeWithAliases( Long   , "int", "byte", "long", "smallint", "numeric" );
+        linkJavaTypeWithAliases( Long   , "int", "byte", "long", "smallint", "numeric", "tinyint" );
+        linkJavaTypeWithAliases( Byte   , "bit" );
         linkJavaTypeWithAliases( Date   , "datetime" );
-        linkJavaTypeWithAliases( String , "string", "varchar" );
+        linkJavaTypeWithAliases( String , "string", "varchar", "char" );
         linkJavaTypeWithAliases( Double , "decimal" );
     }
 
@@ -31,7 +32,7 @@ public enum JavaType {
 
         throw new RuntimeException( "Упс! Нашелся баг: я не шмогла преобразовать входной тип в java-тип ( "
                 +type
-                +"). Ай-я-я-яй"
+                +" ). Ай-я-я-яй"
         );
     }
 

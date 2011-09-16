@@ -15,9 +15,9 @@ import static com.kreig133.daogenerator.common.Utils.iterateForParameterList;
 public class GenerateGenerator extends CommonWrapperGenerator{
 
     public static void generateWrapper( FunctionSettings functionSettings ) {
-        final List<Parameter> outputParametrs   = functionSettings.getOutputParameterList();
+        final List<Parameter> outputParametrs  = functionSettings.getOutputParameterList();
         final List<Parameter> inputParametrs   = functionSettings.getInputParameterList();
-        final String          name              = functionSettings.getFunctionName();
+
 
         StringBuilder myBatisQuery      = new StringBuilder();
         StringBuilder queryForTesting   = new StringBuilder();
@@ -33,7 +33,7 @@ public class GenerateGenerator extends CommonWrapperGenerator{
 
         myBatisQuery.append( ");\n" );
         myBatisQuery.append( "insert into #TempTableForNamedResultSet\n" );
-        myBatisQuery.append( "     exec " ).append( name ).append( "\n" );
+        myBatisQuery.append( "     exec " ).append(  functionSettings.getNameForCall() ).append( "\n" );
 
         queryForTesting.append( myBatisQuery.toString() );
 

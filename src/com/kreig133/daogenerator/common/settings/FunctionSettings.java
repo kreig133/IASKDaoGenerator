@@ -35,9 +35,11 @@ public interface FunctionSettings {
 
     void addToTestParams ( String param );
 
-    String getFunctionName();
+    String getNameForCall();
 
-    void setFunctionName( String functionName );
+    String getName();
+
+    void setName( String functionName );
 
     ReturnType getReturnType();
 

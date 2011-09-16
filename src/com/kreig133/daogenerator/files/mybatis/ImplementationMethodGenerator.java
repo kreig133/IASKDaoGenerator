@@ -55,7 +55,7 @@ public class ImplementationMethodGenerator {
             builder.append( "List" );
         }
         builder.append( "(\"" ).append( operationSettings.getDaoPackage() ).append( "." )
-                .append( functionSettings.getFunctionName() ).append( "\" ");
+                .append( functionSettings.getName() ).append( "\" ");
         if( ! functionSettings.getInputParameterList().isEmpty() ){
             builder.append( "," );
         }
@@ -64,6 +64,6 @@ public class ImplementationMethodGenerator {
     private static void generateDepoStyleMethodCall( OperationSettings operationSettings, FunctionSettings functionSettings, StringBuilder builder ) {
         builder.append( "getSqlSession().getMapper( " ).append( operationSettings.getOperationName() );
         builder.append( JavaFilesUtils.MAPPER_PREFIX ).append( ".class )." );
-        builder.append( functionSettings.getFunctionName() ).append( "(" );
+        builder.append( functionSettings.getName() ).append( "(" );
     }
 }

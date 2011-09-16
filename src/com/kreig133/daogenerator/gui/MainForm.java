@@ -64,7 +64,8 @@ public class MainForm {
         operationSettings.setDaoPackage     ( interfacePackageTextField     .getText() );
         operationSettings.setEntityPackage  ( entityPackageTextField        .getText() );
         operationSettings.setMapperPackage  ( mappingPackageTextField       .getText() );
-        operationSettings.setOperationName  ( tempOperationName                        );
+        operationSettings.setOperationName  ( tempOperationName == null ?
+                new File( sourceDirTextField.getText()).getName() : tempOperationName );
 
         operationSettings.setType( IASKRadioButton.isSelected() ? Type.IASK : Type.DEPO );
     }
@@ -114,7 +115,7 @@ public class MainForm {
     private void setSourcePath() {
         int returnVal = fc.showOpenDialog( panel1 );
 
-        if (returnVal == JFileChooser.APPROVE_OPTION) {
+        if ( returnVal == JFileChooser.APPROVE_OPTION ) {
             File file           = fc.getSelectedFile();
             tempOperationName   = file.getName();
             sourceDirTextField.setText( file.getAbsolutePath() );

@@ -46,8 +46,12 @@ public class MyBatis {
         String s = "\n}";
         Utils.appendByteToFile( interfaceFile       ( operationSettings ), s.getBytes() );
         Utils.appendByteToFile( implementationFile  ( operationSettings ), s.getBytes() );
-        Utils.appendByteToFile( mappingFile         ( operationSettings ), s.getBytes() );
 
+        if( operationSettings.getType() == Type.DEPO ){
+            Utils.appendByteToFile( mappingFile         ( operationSettings ), s.getBytes() );
+        } else {
+            Utils.appendByteToFile( mappingFile         ( operationSettings ), "</mapper>".getBytes() );
+        }
     }
 
     private static void generateMapping(

@@ -24,7 +24,8 @@ public class FunctionSettingsImpl implements FunctionSettings {
 
     private String MY_BATIS_QUERY;
 
-    private String          FUNCTION_NAME;
+    private String          NAME;
+    private String          NAME_FOR_CALL;
     private SelectType      SELECT_TYPE  ;
     private ReturnType      RETURN_TYPE  ;
     private TestInfoType    TEST_INFO_TYPE;
@@ -47,8 +48,8 @@ public class FunctionSettingsImpl implements FunctionSettings {
         return QUERY;
     }
     @Override
-    public String getFunctionName() {
-        return FUNCTION_NAME;
+    public String getNameForCall() {
+        return NAME_FOR_CALL;
     }
 
     @Override
@@ -83,6 +84,11 @@ public class FunctionSettingsImpl implements FunctionSettings {
     }
 
     @Override
+    public String getName() {
+        return NAME;
+    }
+
+    @Override
     public void addToTestParams( String param ) {
         TEST_PARAMETER_LIST.add( param );
     }
@@ -106,11 +112,12 @@ public class FunctionSettingsImpl implements FunctionSettings {
     }
 
     @Override
-    public void setFunctionName( String functionName ) {
-        if( FUNCTION_NAME == null ){
-            FUNCTION_NAME = functionName;
+    public void setName( String functionName ) {
+        if( NAME_FOR_CALL == null ){
+            NAME_FOR_CALL = functionName;
+            NAME = Utils.convertPBNameToName( NAME_FOR_CALL );
         } else {
-            throw new AssertionError( "FUNCTION_NAME уже был устновлен!" );
+            throw new AssertionError( "NAME_FOR_CALL уже был устновлен!" );
         }
     }
 

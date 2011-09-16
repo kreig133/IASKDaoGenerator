@@ -17,9 +17,6 @@ public class AnnotationGenerator {
         FunctionSettings functionSettings
     ){
         SelectType selectType               = functionSettings.getSelectType();
-        List<Parameter> inputParameterList  = functionSettings.getInputParameterList();
-        String selectQuery                  = functionSettings.getSelectQuery().toString();
-        String name                         = functionSettings.getFunctionName();
 
         StringBuilder builder = new StringBuilder();
 

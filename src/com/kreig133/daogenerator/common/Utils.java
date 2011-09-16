@@ -189,4 +189,23 @@ public class Utils {
 
         return builder.toString();
     }
+
+    public static String convertPBNameToName( String nameForCall ) {
+        {
+            final char[] chars = nameForCall.toCharArray();
+            chars[ 0 ] = Character.toLowerCase( chars[ 0 ] );
+            nameForCall = new String( chars );
+        }
+        StringBuilder builder = new StringBuilder();
+
+        final String[] split = nameForCall.split( "_" );
+        builder.append( split[ 1 ] );
+        for( int i = 1; i < split.length ; i++ ){
+            final char[] chars = split[ i ].toCharArray();
+            chars[ 0 ] = Character.toUpperCase( chars[ 0 ] );
+            builder.append( new String( chars ) );
+        }
+
+        return builder.toString();
+    }
 }

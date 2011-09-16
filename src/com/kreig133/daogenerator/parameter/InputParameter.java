@@ -13,7 +13,7 @@ public class InputParameter extends Parameter {
     private InputOrOutputType inputType;
 
     public InputParameter(String name, String type, String defaultValue, String comment, InputOrOutputType inputType) {
-        super(comment, type, name);
+        super(comment, type, Utils.convertPBNameToName( name ) );
         this.defaultValue = Utils.handleDefaultValue( defaultValue );
         this.inputType = inputType;
     }

@@ -3,7 +3,6 @@ package com.kreig133.daogenerator.files.mybatis;
 import com.kreig133.daogenerator.common.Utils;
 import com.kreig133.daogenerator.common.settings.FunctionSettings;
 import com.kreig133.daogenerator.common.settings.OperationSettings;
-import com.kreig133.daogenerator.common.strategy.FunctionalObjectWithoutFilter;
 import com.kreig133.daogenerator.parameter.Parameter;
 
 import java.util.List;
@@ -22,7 +21,7 @@ public class XmlMappingGenerator {
     ){
         final List<Parameter> inputParameterList  = functionSettings.getInputParameterList();
         final List<Parameter> outputParameterList = functionSettings.getOutputParameterList();
-        final String name                         = functionSettings.getFunctionName();
+        final String name                         = functionSettings.getName();
         final String package_                     = operationSettings.getEntityPackage();
 
         StringBuilder builder = new StringBuilder();
@@ -35,7 +34,7 @@ public class XmlMappingGenerator {
 
         builder.append( functionSettings.getMyBatisQuery() );
 
-        builder.append( "    </select>\n\n" );
+        builder.append( "\n    </select>\n\n" );
 
         return builder.toString();
     }
