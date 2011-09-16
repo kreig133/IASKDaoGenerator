@@ -37,9 +37,7 @@ public class ImplementationMethodGenerator {
         } else {
             generateIaskStyleMethodCall( operationSettings, functionSettings, builder );
         }
-        if( ! functionSettings.getInputParameterList().isEmpty() ){
-            builder.append( "request" );
-        }
+
 
         builder.append( ");\n" );
         builder.append( "    }\n\n" );
@@ -55,9 +53,11 @@ public class ImplementationMethodGenerator {
             builder.append( "List" );
         }
         builder.append( "(\"" ).append( operationSettings.getDaoPackage() ).append( "." )
-                .append( functionSettings.getName() ).append( "\" ");
+                .append( functionSettings.getName() ).append( "\" ").append( "," );
         if( ! functionSettings.getInputParameterList().isEmpty() ){
-            builder.append( "," );
+            builder.append( "request" );
+        } else {
+            builder.append( "null" );
         }
     }
 
@@ -65,5 +65,8 @@ public class ImplementationMethodGenerator {
         builder.append( "getSqlSession().getMapper( " ).append( operationSettings.getOperationName() );
         builder.append( JavaFilesUtils.MAPPER_PREFIX ).append( ".class )." );
         builder.append( functionSettings.getName() ).append( "(" );
+        if( ! functionSettings.getInputParameterList().isEmpty() ){
+            builder.append( "request" );
+        }
     }
 }
