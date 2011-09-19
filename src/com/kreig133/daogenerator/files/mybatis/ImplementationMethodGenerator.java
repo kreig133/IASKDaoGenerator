@@ -45,7 +45,11 @@ public class ImplementationMethodGenerator {
         return builder.toString();
     }
 
-    private static void generateIaskStyleMethodCall( OperationSettings operationSettings, FunctionSettings functionSettings, StringBuilder builder ) {
+    private static void generateIaskStyleMethodCall(
+            OperationSettings operationSettings,
+            FunctionSettings  functionSettings,
+            StringBuilder     builder
+    ) {
         builder.append( "select" );
         if( functionSettings.getReturnType() == ReturnType.SINGLE ){
             builder.append( "One" );
@@ -53,6 +57,7 @@ public class ImplementationMethodGenerator {
             builder.append( "List" );
         }
         builder.append( "(\"" ).append( operationSettings.getDaoPackage() ).append( "." )
+                .append( JavaFilesUtils.interfaceFileName( operationSettings ) ).append( "." )
                 .append( functionSettings.getName() ).append( "\" ").append( "," );
         if( ! functionSettings.getInputParameterList().isEmpty() ){
             builder.append( "request" );

@@ -16,13 +16,13 @@ public class ProcedureCallCreator {
     ) {
         StringBuilder myBatisQuery      = new StringBuilder();
 
-        myBatisQuery.append( "        {CALL " ).append( functionSettings.getNameForCall() ).append( "(" );
+        myBatisQuery.append( "{CALL " ).append( functionSettings.getNameForCall() ).append( "(" );
 
         if( !functionSettings.getInputParameterList().isEmpty() ){
             myBatisQuery.append( "\n" );
         }
 
-        iterateForParameterList( myBatisQuery, functionSettings.getInputParameterList(), 3,
+        iterateForParameterList( myBatisQuery, functionSettings.getInputParameterList(),
                 new FunctionalObjectWithoutFilter() {
                     @Override
                     public void writeString( StringBuilder builder, Parameter p ) {
@@ -30,9 +30,6 @@ public class ProcedureCallCreator {
                     }
                 } );
 
-        if( !functionSettings.getInputParameterList().isEmpty() ){
-            myBatisQuery.append( "        " );
-        }
         myBatisQuery    .append( ")}" );
 
         functionSettings.setMyBatisQuery( myBatisQuery.toString() );

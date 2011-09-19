@@ -32,7 +32,7 @@ public class XmlMappingGenerator {
 
         builder.append( ">\n\n" );
 
-        builder.append( functionSettings.getMyBatisQuery() );
+        builder.append( Utils.addTabsBeforeLine( functionSettings.getMyBatisQuery(), 2 ) );
 
         builder.append( "\n    </select>\n\n" );
 

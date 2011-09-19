@@ -208,4 +208,16 @@ public class Utils {
 
         return builder.toString();
     }
+
+    public static String addTabsBeforeLine( String text, int tabsQuantity ){
+        String[] split = text.split( "\n" );
+        StringBuilder builder = new StringBuilder();
+        for( String s: split ){
+            for ( int i = 0; i < tabsQuantity; i ++ ){
+                builder.append( "\t" );
+            }
+            builder.append( s ).append( "\n" );
+        }
+        return builder.toString();
+    }
 }

@@ -15,7 +15,7 @@ public class CommonWrapperGenerator {
 
     protected static void declareInTypeParamInProcedure( StringBuilder builder, Parameter p ) {
         declareParamNameInProcedure( builder, p );
-        builder.append( "#{" ).append( p.getName() ).append( "}\n" );
+        builder.append( "#{" ).append( p.getName() ).append( "}" );
     }
 
     protected static int declareParamInProcedure( StringBuilder builder, Parameter p, int index) {
