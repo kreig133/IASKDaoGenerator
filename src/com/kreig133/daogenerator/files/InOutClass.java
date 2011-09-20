@@ -2,10 +2,13 @@ package com.kreig133.daogenerator.files;
 
 import com.kreig133.daogenerator.common.strategy.FuctionalObject;
 import com.kreig133.daogenerator.common.strategy.FunctionalObjectWithoutFilter;
+import com.kreig133.daogenerator.enums.ClassType;
 import com.kreig133.daogenerator.parameter.Parameter;
 
+import java.util.ArrayList;
 import java.util.List;
 import static com.kreig133.daogenerator.common.Utils.*;
+import static com.kreig133.daogenerator.files.JavaFilesUtils.*;
 
 /**
  * @author eshangareev
@@ -17,8 +20,6 @@ public class InOutClass {
                                            " * @author eshangareev\n" +
                                            " * @version 1.0\n" +
                                            " */\n";
-    private static final String IMPORTS = "import java.io.Serializable;\n" +
-                                  "import java.util.*;\n\n";
 
     private final String package_;
 
@@ -37,9 +38,20 @@ public class InOutClass {
         StringBuilder builder = new StringBuilder();
 
         builder.append( "package " ).append( package_ ).append( ";\n\n" );
-        builder.append( IMPORTS );
+
+        insertImport( builder, "java.io.Serializable" );
+        insertImport( builder, "java.util.*" );
+        builder.append( "\n" );
+
         builder.append( COMMENT_TO_CLASS );
-        builder.append( "public class " ).append(name).append( " implements Serializable {\n\n" );
+
+        insertClassDeclaration(
+                ClassType.Class,
+                builder,
+                name,
+                null,
+                new ArrayList<String>(){{add( "Serializable" );}}
+        );
 
         writeSerialVersionUID( builder );
         writeEmptyConstructor( builder );

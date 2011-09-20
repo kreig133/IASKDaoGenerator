@@ -28,7 +28,7 @@ public class ProcedureCallCreator {
                     public void writeString( StringBuilder builder, Parameter p ) {
                         builder.append( "#{" ).append( p.getName() ).append( "}" );
                     }
-                } );
+        } );
 
         myBatisQuery    .append( ")}" );
 

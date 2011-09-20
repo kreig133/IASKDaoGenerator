@@ -42,20 +42,21 @@ public class Controller {
             SettingsReader.readProperties( operationSettings );
 
         } catch ( Throwable e ) {
-            System.err.println( ">>>Controller: Ошибка! При предварительной записи в файлы, произошла ошибка!" );
+            System.err.println( ">>>Controller: Ошибка! При предварительной записи в файлы или " +
+                    "считывание настроек, произошла ошибка!" );
             e.printStackTrace();
         }
 
         for(
                 String s:
-                ( new File( operationSettings.getSourcePath() ) )
-                        .list(
-                                new FilenameFilter() {
-                                    public boolean accept( File dir, String name ) {
-                                        return name.endsWith( "txt" );
+                    ( new File( operationSettings.getSourcePath() ) )
+                            .list(
+                                    new FilenameFilter() {
+                                        public boolean accept( File dir, String name ) {
+                                            return name.endsWith( "txt" );
+                                        }
                                     }
-                                }
-                        )
+                            )
         ) {
             Controller.readFile( new File( operationSettings.getSourcePath() + "/" + s ), operationSettings );
         }
@@ -71,6 +72,8 @@ public class Controller {
             System.err.println( ">>>Controller: Ошибка! При записи в файлы, произошла ошибка!" );
             e.printStackTrace();
         }
+
+        System.exit( 0 );
     }
 
     private static void createQueries() {

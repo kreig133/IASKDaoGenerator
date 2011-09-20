@@ -1,6 +1,9 @@
 package com.kreig133.daogenerator.sql;
 
 import com.kreig133.daogenerator.common.settings.FunctionSettings;
+import com.kreig133.daogenerator.parameter.Parameter;
+
+import static com.kreig133.daogenerator.common.Utils.*;
 
 /**
  * @author eshangareev
@@ -13,6 +16,7 @@ public class SelectQueryConverter {
     ){
 
         String sqlQuery = functionSettings.getSelectQuery().toString();
+
         StringBuilder myBatisString = null;
         StringBuilder queryForTesting = null;
 
@@ -24,8 +28,9 @@ public class SelectQueryConverter {
             int index = 0;
 
             for( int i = 0; i < splitted.length - 1; i++ ){
-                myBatisString.append( splitted[i] ).append( "#{" );
-                myBatisString.append( functionSettings.getInputParameterList().get( index ).getName() ).append( "}" );
+                myBatisString.append( splitted[i] );
+                insertEscapedParamName( myBatisString, functionSettings.getInputParameterList().get( index ).getName
+                        () );
                 index ++ ;
             }
             myBatisString.append( splitted[ splitted.length - 1 ] );
@@ -43,10 +48,10 @@ public class SelectQueryConverter {
                     queryForTesting .append( splitted[ 0 ] );
                 } else {
                     queryForTesting.append( "?" );
-                    myBatisString  .append( "#{" );
 
                     String[] aftefSplit = splitted[i].split( "[ =;,\\)\\n\\t\\r\\*\\-\\+/<>]" );
-                    myBatisString.append( aftefSplit[ 0 ] ).append( "} " );
+
+                    insertEscapedParamName( myBatisString, aftefSplit[ 0 ] );
 
                     final String stringAfterParamName = splitted[ i ].substring( aftefSplit[ 0 ].length() + 1 );
                     queryForTesting.append( stringAfterParamName );
@@ -63,4 +68,5 @@ public class SelectQueryConverter {
                 queryForTesting == null ? sqlQuery : queryForTesting.toString()
         );
     }
+
 }

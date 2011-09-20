@@ -34,11 +34,7 @@ public class DaoGenerator {
                 frame.setVisible( true );
             }
         } );
-
-
     }
-
-
 
     public static OperationSettings getCurrentOperationSettings(){
         return operationSettings;

@@ -3,6 +3,7 @@ package com.kreig133.daogenerator.files.mybatis.preparatory;
 import com.kreig133.daogenerator.common.Utils;
 import com.kreig133.daogenerator.common.settings.FunctionSettings;
 import com.kreig133.daogenerator.common.settings.OperationSettings;
+import com.kreig133.daogenerator.enums.ClassType;
 
 import java.io.IOException;
 
@@ -23,7 +24,13 @@ public class InterfaceFilePreparatory extends Preparatory{
 
         startingLinesOfDaoFiles( operationSettings, builder );
         //TODO блок комментариев
-        builder.append( "public interface ").append( interfaceFileName( operationSettings ) ).append( "{\n\n" );
+        insertClassDeclaration(
+                ClassType.Interface,
+                builder,
+                interfaceFileName( operationSettings ),
+                null,
+                null
+        );
 
         Utils.appendByteToFile( interfaceFile( operationSettings ), builder.toString().getBytes() );
     }

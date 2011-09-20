@@ -220,4 +220,8 @@ public class Utils {
         }
         return builder.toString();
     }
+
+    public static void insertEscapedParamName(StringBuilder builder, String parameterName ){
+        builder.append( "#{" ).append( parameterName ).append( "}" );
+    }
 }

@@ -3,6 +3,7 @@ package com.kreig133.daogenerator.files.mybatis.preparatory;
 import com.kreig133.daogenerator.common.settings.FunctionSettings;
 import com.kreig133.daogenerator.common.settings.OperationSettings;
 
+import static com.kreig133.daogenerator.files.JavaFilesUtils.*;
 /**
  * @author eshangareev
  * @version 1.0
@@ -10,7 +11,6 @@ import com.kreig133.daogenerator.common.settings.OperationSettings;
 abstract public class Preparatory {
 
      protected static void commonImports( OperationSettings operationSettings, StringBuilder builder ) {
-        builder.append( "import " ).append( operationSettings.getEntityPackage() ).append( ".*;\n\n" );
-        builder.append( "import java.util.List;\n\n" );
+        insertImport( builder, operationSettings.getEntityPackage() + ".*;" );
     }
 }

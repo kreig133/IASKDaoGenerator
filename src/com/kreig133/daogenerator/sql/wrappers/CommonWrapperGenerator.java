@@ -1,5 +1,6 @@
 package com.kreig133.daogenerator.sql.wrappers;
 
+import com.kreig133.daogenerator.common.Utils;
 import com.kreig133.daogenerator.parameter.InputParameter;
 import com.kreig133.daogenerator.parameter.Parameter;
 
@@ -15,7 +16,7 @@ public class CommonWrapperGenerator {
 
     protected static void declareInTypeParamInProcedure( StringBuilder builder, Parameter p ) {
         declareParamNameInProcedure( builder, p );
-        builder.append( "#{" ).append( p.getName() ).append( "}" );
+        Utils.insertEscapedParamName( builder, p.getName() );
     }
 
     protected static int declareParamInProcedure( StringBuilder builder, Parameter p, int index) {

@@ -3,6 +3,7 @@ package com.kreig133.daogenerator.files.mybatis.preparatory;
 import com.kreig133.daogenerator.common.Utils;
 import com.kreig133.daogenerator.common.settings.FunctionSettings;
 import com.kreig133.daogenerator.common.settings.OperationSettings;
+import com.kreig133.daogenerator.enums.ClassType;
 import com.kreig133.daogenerator.enums.Type;
 
 import java.io.IOException;
@@ -20,12 +21,18 @@ public class MappingFilePreparatory extends Preparatory{
 
         if( operationSettings.getType() == Type.DEPO ){
             insertPackageLine( operationSettings.getMapperPackage(), builder );
-
             commonImports( operationSettings, builder );
 
-            builder.append( "import org.apache.ibatis.annotations.*;\n\n" );
+            insertImport( builder, "java.util.*" );
+            insertImport( builder, "org.apache.ibatis.annotations.*" );
             //TODO блок комментариев
-            builder.append( "public interface " ).append( mapperFileName( operationSettings ) ).append( "{\n\n" );
+            insertClassDeclaration(
+                    ClassType.Interface,
+                    builder,
+                    mapperFileName( operationSettings ),
+                    null,
+                    null
+            );
         } else {
             builder.append( "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" );
             builder.append( "<!DOCTYPE mapper PUBLIC \"-//mybatis.org//DTD Mapper 3.0//EN\" \"http://mybatis" +

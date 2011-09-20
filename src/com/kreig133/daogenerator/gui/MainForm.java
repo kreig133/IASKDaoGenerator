@@ -51,6 +51,7 @@ public class MainForm {
                 if( validate() ){
                     fillSettingsWithData();
                     Controller.doAction();
+                    panel1.getParent().setVisible( false );
                 }
             }
         } );

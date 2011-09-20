@@ -2,9 +2,11 @@ package com.kreig133.daogenerator.files;
 
 import com.kreig133.daogenerator.common.settings.FunctionSettings;
 import com.kreig133.daogenerator.common.settings.OperationSettings;
+import com.kreig133.daogenerator.enums.ClassType;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.List;
 
 /**
  * @author eshangareev
@@ -23,24 +25,15 @@ public class JavaFilesUtils {
 
     public static File mappingFile( OperationSettings operationSettings ) throws IOException {
         File file = null;
+        String path = operationSettings.getOutputPath() + "/" +
+                replacePointBySlash( operationSettings.getMapperPackage() ) + "/";
 
         switch ( operationSettings.getType() ){
             case IASK:
-                file = new File(
-                        operationSettings.getOutputPath() +
-                        "/" +
-                        replacePointBySlash( operationSettings.getMapperPackage() )+
-                        "/" +
-                        operationSettings.getOperationName() +
-                        ".map.xml" );
+                file = new File( path + operationSettings.getOperationName() + ".map.xml" );
                 break;
             case DEPO:
-                file = new File(
-                        operationSettings.getOutputPath() +
-                        "/" +
-                        replacePointBySlash( operationSettings.getMapperPackage() ) +
-                        "/" +
-                        mapperFileName( operationSettings ) + JAVA_EXTENSION );
+                file = new File( path + mapperFileName( operationSettings ) + JAVA_EXTENSION );
                 break;
         }
 
@@ -56,12 +49,17 @@ public class JavaFilesUtils {
     }
 
     public static File interfaceFile( OperationSettings operationSettings ) throws IOException {
+        return daoFile( operationSettings, interfaceFileName( operationSettings ) );
+    }
+
+    public static File implementationFile( OperationSettings operationSettings ) throws IOException {
+        return daoFile( operationSettings, implementationFileName( operationSettings ) );
+    }
+    public static File daoFile( OperationSettings operationSettings, String fileName ) throws IOException {
         File file = new File(
-                operationSettings.getOutputPath() +
-                "/" +
-                replacePointBySlash( operationSettings.getDaoPackage() ) +
-                "/" +
-                interfaceFileName( operationSettings ) + JAVA_EXTENSION );
+                operationSettings.getOutputPath() + "/" +
+                replacePointBySlash( operationSettings.getDaoPackage() ) + "/" +
+                fileName + JAVA_EXTENSION );
 
         createDirsAndFile( file.getParentFile() );
 
@@ -72,18 +70,7 @@ public class JavaFilesUtils {
         return operationSettings.getOperationName() + "Dao";
     }
 
-    public static File implementationFile( OperationSettings operationSettings ) throws IOException {
-        File file = new File(
-                operationSettings.getOutputPath() +
-                "/" +
-                replacePointBySlash( operationSettings.getDaoPackage() ) +
-                "/" +
-                implementationFileName( operationSettings ) + JAVA_EXTENSION );
 
-        createDirsAndFile( file.getParentFile() );
-
-        return file;
-    }
 
     public static String implementationFileName( OperationSettings operationSettings ) {
         return operationSettings.getOperationName() + "DaoImpl";
@@ -107,6 +94,35 @@ public class JavaFilesUtils {
 
     private static String replacePointBySlash( String string ){
         return string.replace( '.', '/' );
+    }
+
+    public static void insertImport( StringBuilder builder, String path ){
+        builder.append( "import " ).append( path ).append( ";\n" );
+    }
+
+    public static void insertClassDeclaration(
+            ClassType classType,
+            StringBuilder builder,
+            String name,
+            String parentClassName,
+            List< String > interfaces
+    ){
+        builder.append( "public " ).append( classType ).append( " " ).append( name );
+        if( ! ( parentClassName == null || "".equals( parentClassName.trim() ) ) ){
+            builder.append( " extends " ).append( parentClassName );
+        }
+
+        if( interfaces!= null && !interfaces.isEmpty() ){
+            builder.append( " implements " );
+            for( int i = 0; i < interfaces.size(); i++ ){
+                if( i > 0 ){
+                    builder.append( "," );
+                }
+                builder.append( interfaces.get( i ) );
+                builder.append( " " );
+            }
+        }
+        builder.append( "{\n\n" );
     }
 
     private static void createDirsAndFile( File file ) {
