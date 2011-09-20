@@ -94,7 +94,7 @@ public class MainForm {
         return Pattern.compile( "[\\w\\d]+(\\.[\\w\\d]+)+" ).matcher( packageName ).matches();
     }
 
-    JFileChooser fc = new JFileChooser( );
+    private final JFileChooser fc = new JFileChooser( );
     {
         fc.setMultiSelectionEnabled ( false );
         fc.setCurrentDirectory      ( new File( System.getProperty("user.dir") ) );

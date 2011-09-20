@@ -9,8 +9,8 @@ import com.kreig133.daogenerator.common.settings.OperationSettings;
  */
 public class TestParser implements IParser<FunctionSettings>{
 
-    TestParamsParser testParamsParser = new TestParamsParser();
-    TestQueryParser  testQueryParser  = new TestQueryParser ();
+    final TestParamsParser testParamsParser = new TestParamsParser();
+    final TestQueryParser  testQueryParser  = new TestQueryParser ();
 
     @Override
     public void parse( OperationSettings operationSettings, FunctionSettings input, String lineForParse ) {

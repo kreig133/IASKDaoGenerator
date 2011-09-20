@@ -69,7 +69,8 @@ public class InterfaceMethodGenerator {
                         if ( operationSettings.getType() == Type.DEPO && methodType == MethodType.MAPPER ) {
                             builder.append( "@Param(\"" ).append( p.getName() ).append( "\") " );
                         }
-                        builder.append( p.getType() ).append( " " ).append( p.getName() );
+                        builder.append( p.getType() ).append( " " )
+                                .append( operationSettings.getType() == Type.DEPO ? p.getName() : "request" );
                     }
                 } );
             }

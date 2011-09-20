@@ -30,7 +30,7 @@ import static com.kreig133.daogenerator.files.JavaFilesUtils.*;
  */
 public class Controller {
 
-    private static List< FunctionSettings > settingsList = new ArrayList<FunctionSettings>();
+    private static final List< FunctionSettings > settingsList = new ArrayList<FunctionSettings>();
 
     public static void doAction() {
 
@@ -60,7 +60,7 @@ public class Controller {
             Controller.readFile( new File( operationSettings.getSourcePath() + "/" + s ), operationSettings );
         }
 
-        createQueries( operationSettings );
+        createQueries();
 
 //        Tester.startFunctionTesting( operationSettings, settingsList.get( 1 ) );
 
@@ -73,7 +73,7 @@ public class Controller {
         }
     }
 
-    private static void createQueries( OperationSettings operationSettings ) {
+    private static void createQueries() {
         for( FunctionSettings settings : settingsList ){
             switch ( settings.getSelectType() ){
                 case CALL:
@@ -92,7 +92,7 @@ public class Controller {
         }
     }
 
-    static void readFile(
+    private static void readFile(
             File fileWithData,
             OperationSettings operationSettings
     ) {
@@ -111,7 +111,7 @@ public class Controller {
         }
     }
 
-    static void writeFiles(
+    private static void writeFiles(
         OperationSettings operationSettings
     ) throws IOException {
 
@@ -128,7 +128,7 @@ public class Controller {
         }
     }
 
-    static void createJavaClassForInputOutputEntities(
+    private static void createJavaClassForInputOutputEntities(
             OperationSettings operationSettings,
             FunctionSettings functionSettings,
             InputOrOutputType type

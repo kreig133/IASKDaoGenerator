@@ -14,6 +14,7 @@ import java.util.List;
  * @version 1.0
  */
 public class TypeAndNameComparator {
+
     public static List<String> compare(
             ResultSetMetaData metaData,
             FunctionSettings  functionSettings
@@ -44,7 +45,7 @@ public class TypeAndNameComparator {
                 }
             }
 
-            if( exist == false ) {
+            if( !exist ) {
                 errorList.add( "В ResultSet'e есть \"неописанная\" переменная : " + columnName );
             }
         }

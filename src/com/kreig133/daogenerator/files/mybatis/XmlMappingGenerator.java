@@ -25,7 +25,8 @@ public class XmlMappingGenerator {
         final String package_                     = operationSettings.getEntityPackage();
 
         StringBuilder builder = new StringBuilder();
-        builder.append( "    <select id=\"" ).append( name ).append( "\" statementType=\"CALLABLE\"" );
+        builder.append( "    <" ) .append( functionSettings.getSelectType().getAnnotation().toLowerCase() )
+                .append( " id=\"" ).append( name ).append( "\" statementType=\"CALLABLE\"" );
 
         writeParameterType(  inputParameterList, name, "parameterType", "In" , package_, builder );
         writeParameterType( outputParameterList, name, "resultType"   , "Out", package_, builder );
@@ -34,7 +35,8 @@ public class XmlMappingGenerator {
 
         builder.append( Utils.addTabsBeforeLine( functionSettings.getMyBatisQuery(), 2 ) );
 
-        builder.append( "\n    </select>\n\n" );
+        builder.append( "\n    </" ).append(functionSettings.getSelectType().getAnnotation().toLowerCase())
+                .append( ">\n\n" );
 
         return builder.toString();
     }

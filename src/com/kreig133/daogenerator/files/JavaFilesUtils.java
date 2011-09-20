@@ -44,9 +44,9 @@ public class JavaFilesUtils {
                 break;
         }
 
-        createDirsAndFile( file.getParentFile() );
-
         if( file == null ) throw new IllegalArgumentException();
+
+        createDirsAndFile( file.getParentFile() );
 
         return file;
     }
@@ -109,7 +109,7 @@ public class JavaFilesUtils {
         return string.replace( '.', '/' );
     }
 
-    private static void createDirsAndFile( File file ) throws IOException {
+    private static void createDirsAndFile( File file ) {
         if(!file.exists()){
             file.mkdirs();
         }

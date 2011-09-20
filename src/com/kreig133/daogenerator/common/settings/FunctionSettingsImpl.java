@@ -20,8 +20,8 @@ public class FunctionSettingsImpl implements FunctionSettings {
     private final List<Parameter> OUTPUT_PARAMETER_LIST = new ArrayList<Parameter>();
     private final List<String>      TEST_PARAMETER_LIST = new ArrayList<String>(  );
 
-    private StringBuilder QUERY         = new StringBuilder();
-    private StringBuilder TEST_QUERY    = new StringBuilder();
+    private final StringBuilder QUERY         = new StringBuilder();
+    private final StringBuilder TEST_QUERY    = new StringBuilder();
 
     private String MY_BATIS_QUERY;
 

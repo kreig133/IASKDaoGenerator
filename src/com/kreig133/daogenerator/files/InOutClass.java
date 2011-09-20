@@ -24,7 +24,7 @@ public class InOutClass {
 
 
     private final List< Parameter > parameters;
-    private String name;
+    private final String name;
 
     public InOutClass( String package_, List<Parameter> parameters, String name ) {
         this.package_ = package_;

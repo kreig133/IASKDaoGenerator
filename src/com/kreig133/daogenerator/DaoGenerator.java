@@ -18,7 +18,7 @@ import java.io.*;
  */
 public class DaoGenerator {
 
-    static OperationSettings operationSettings;
+    private static OperationSettings operationSettings;
 
 
     public static void main(String[] args) throws IOException {

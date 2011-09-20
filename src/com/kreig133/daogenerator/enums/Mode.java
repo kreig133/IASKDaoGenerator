@@ -19,6 +19,7 @@ public enum Mode {
 
     private final IParser parser;
 
+    @SuppressWarnings( { "unchecked" } )
     public void parse( OperationSettings operationSettings, Object input, String lineForParse ){
         parser.parse( operationSettings, input, lineForParse );
     }

@@ -19,6 +19,16 @@ import static com.kreig133.daogenerator.files.JavaFilesUtils.*;
  */
 public class MyBatis {
 
+    public static void prepareFiles(
+            OperationSettings operationSettings
+    ) throws IOException {
+
+        InterfaceFilePreparatory        .prepareFile( operationSettings );
+        ImplementationFilePreparatory   .prepareFile( operationSettings );
+        MappingFilePreparatory          .prepareFile( operationSettings );
+
+    }
+
     public static void generateFiles(
             OperationSettings operationSettingsSettings,
             FunctionSettings functionSettings
@@ -27,16 +37,6 @@ public class MyBatis {
         generateMapping         ( operationSettingsSettings, functionSettings );
         generateInterface       ( operationSettingsSettings, functionSettings );
         generateImplementation  ( operationSettingsSettings, functionSettings );
-
-    }
-
-    public static void prepareFiles(
-            OperationSettings operationSettings
-    ) throws IOException {
-
-        InterfaceFilePreparatory        .prepareFile( operationSettings );
-        ImplementationFilePreparatory   .prepareFile( operationSettings );
-        MappingFilePreparatory          .prepareFile( operationSettings );
 
     }
 
