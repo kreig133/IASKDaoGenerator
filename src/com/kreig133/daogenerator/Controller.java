@@ -13,6 +13,7 @@ import com.kreig133.daogenerator.sql.ProcedureCallCreator;
 import com.kreig133.daogenerator.sql.SelectQueryConverter;
 import com.kreig133.daogenerator.sql.wrappers.GenerateGenerator;
 import com.kreig133.daogenerator.sql.wrappers.GeneroutGenerator;
+import com.kreig133.daogenerator.testing.Tester;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -63,7 +64,11 @@ public class Controller {
 
         createQueries();
 
-//        Tester.startFunctionTesting( operationSettings, settingsList.get( 1 ) );
+        try {
+            Tester.startFunctionTesting( operationSettings, settingsList.get( 0 ) );
+        } catch ( Exception e ) {
+            e.printStackTrace(); 
+        }
 
         try {
             writeFiles( operationSettings );

@@ -21,6 +21,28 @@ public class TypeAndNameComparator {
     ) throws SQLException {
         List<String> errorList = new ArrayList<String>(  );
 
+        //TODO выкосить потом
+        int ii = 1 ;
+        System.out.println("FunctionSettings parametres");
+        for ( Parameter outputParameterList :functionSettings.getOutputParameterList() ){
+            System.out.println(
+                    ( ii++ ) +
+                            "  -  " +
+                            outputParameterList.getName()+
+                            "  -  " +
+                            outputParameterList.getType() );
+        }
+        ii = 0;
+        System.out.println("MetaData parametres");
+        for ( int i = 1; i <= metaData.getColumnCount(); i++ ){
+            System.out.println(
+                    i +
+                            "  -  " +
+                            metaData.getColumnName( i )+
+                            "  -  " +
+                            metaData.getColumnTypeName( i ) );
+        }
+
         for( int i = 1; i <= metaData.getColumnCount(); i++ ){
             boolean exist = false;
             String columnName = metaData.getColumnName( i );

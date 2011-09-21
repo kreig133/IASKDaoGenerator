@@ -61,13 +61,14 @@ public class JDBCConnector {
         Connection connection = connectToDB( new EmptyOperationSettingsImpl(){
             @Override
             public Type getType() {
-                return Type.DEPO;
+                return Type.IASK;
             }
         });
-        Statement statement = connection.createStatement();
+        CallableStatement statement = connection.prepareCall( "{? = CALL ychGetNumDivision(4, null, 1)}" );
 
-        ResultSet resultSet = statement.executeQuery( "SELECT * FROM DepoType" );
+        statement.registerOutParameter( 1, Types.OTHER );
 
+        ResultSet resultSet = statement.executeQuery();
         final ResultSetMetaData metaData = resultSet.getMetaData();
 
         for( int i = 1; i <= metaData.getColumnCount(); i++ ){

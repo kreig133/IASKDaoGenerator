@@ -1,6 +1,7 @@
 package com.kreig133.daogenerator.sql;
 
 import com.kreig133.daogenerator.common.settings.FunctionSettings;
+import com.kreig133.daogenerator.enums.TestInfoType;
 import com.kreig133.daogenerator.parameter.Parameter;
 
 import static com.kreig133.daogenerator.common.StringBufferUtils.*;
@@ -16,6 +17,8 @@ public class SelectQueryConverter {
     ){
 
         String sqlQuery = functionSettings.getSelectQuery().toString();
+
+        boolean testQNeed = functionSettings.getTestInfoType() != TestInfoType.TQUERY;
 
         StringBuilder myBatisString = null;
         StringBuilder queryForTesting = null;
@@ -62,9 +65,10 @@ public class SelectQueryConverter {
         functionSettings.setMyBatisQuery(
                 myBatisString == null ? sqlQuery : myBatisString.toString()
         );
-
-        functionSettings.appendToQueryForTesting(
-                queryForTesting == null ? sqlQuery : queryForTesting.toString()
-        );
+        if( testQNeed ){
+            functionSettings.appendToQueryForTesting(
+                    queryForTesting == null ? sqlQuery : queryForTesting.toString()
+            );
+        }
     }
 }
