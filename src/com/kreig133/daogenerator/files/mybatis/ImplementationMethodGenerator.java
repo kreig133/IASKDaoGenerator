@@ -7,6 +7,8 @@ import com.kreig133.daogenerator.enums.ReturnType;
 import com.kreig133.daogenerator.enums.Type;
 import com.kreig133.daogenerator.files.JavaFilesUtils;
 
+import static com.kreig133.daogenerator.common.StringBufferUtils.insertTabs;
+
 /**
  * @author eshangareev
  * @version 1.0
@@ -20,13 +22,13 @@ public class ImplementationMethodGenerator {
 
         StringBuilder builder = new StringBuilder();
 
-        builder.append( "    @Override\n    public " );
+        insertTabs( builder, 1 ).append( "@Override\n    public " );
         builder.append( InterfaceMethodGenerator.generateMethodSignature(
                 operationSettings,
                 functionSettings,
                 MethodType.DAO ) );
         builder.append( "{\n" );
-        builder.append( "        " );
+        insertTabs( builder, 2 );
 
         if( ! functionSettings.getOutputParameterList().isEmpty() ){
             builder.append( "return " );
@@ -40,7 +42,7 @@ public class ImplementationMethodGenerator {
 
 
         builder.append( ");\n" );
-        builder.append( "    }\n\n" );
+        insertTabs(builder, 1 ).append( "}\n\n" );
 
         return builder.toString();
     }

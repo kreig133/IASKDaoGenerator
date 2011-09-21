@@ -3,6 +3,9 @@ package com.kreig133.daogenerator.parameter;
 import com.kreig133.daogenerator.common.Utils;
 import com.kreig133.daogenerator.enums.JavaType;
 
+import static com.kreig133.daogenerator.common.StringBufferUtils.getJavaDocString;
+import static com.kreig133.daogenerator.common.StringBufferUtils.insertTabs;
+
 /**
  * @author eshangareev
  * @version 1.0
@@ -61,28 +64,28 @@ abstract public class Parameter {
     public String toString() {
         StringBuilder builder = new StringBuilder();
 
-        Utils.getJavaDocString( builder, new String[] { getCommentForJavaDoc() } );
-        builder.append( "    private " ).append( type ).append( " " ).append( name );
+        getJavaDocString( builder, new String[] { getCommentForJavaDoc() } );
+        insertTabs( builder, 1 ).append( "private " ).append( type ).append( " " ).append( name );
 
         return builder.toString();
     }
 
     public void generateGetter( StringBuilder builder){
-        Utils.getJavaDocString( builder, new String[]{"Получить ","\""+ getCommentForJavaDoc()+"\""});
+        getJavaDocString( builder, new String[] { "Получить ", "\"" + getCommentForJavaDoc() + "\"" } );
 
-        builder.append( "    public " ).append( type ).append( " get" );
+        insertTabs( builder, 1 ).append( "public " ).append( type ).append( " get" );
         builder.append( Utils.convertNameForGettersAndSetters( name ) ).append( "(){\n" );
-        builder.append( "        return " ).append( name ).append( ";\n");
-        builder.append( "    }\n\n" );
+        insertTabs( builder, 2 ).append( "return " ).append( name ).append( ";\n");
+        insertTabs( builder, 1 ).append( "}\n\n" );
     }
 
 
     public void generateSetter( StringBuilder builder ){
-        Utils.getJavaDocString( builder, new String[] { "Установить ", "\""+getCommentForJavaDoc()+"\""} );
-        builder.append( "    public void set").append( Utils.convertNameForGettersAndSetters( name ) );
+        getJavaDocString( builder, new String[] { "Установить ", "\"" + getCommentForJavaDoc() + "\"" } );
+        insertTabs( builder, 1 ).append( "public void set" ).append( Utils.convertNameForGettersAndSetters( name ) );
         builder.append( "( " ).append( type ).append( " " ).append( name ).append( " ){\n" );
-        builder.append( "        this." ).append( name ).append( " = " ).append( name ).append( ";\n" );
-        builder.append( "    }\n\n" );
+        insertTabs( builder, 2 ).append( "this." ).append( name ).append( " = " ).append( name ).append( ";\n" );
+        insertTabs( builder, 1 ).append( "}\n\n" );
     }
 
     private String getCommentForJavaDoc(){

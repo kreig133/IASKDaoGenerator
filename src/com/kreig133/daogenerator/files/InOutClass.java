@@ -7,7 +7,7 @@ import com.kreig133.daogenerator.parameter.Parameter;
 
 import java.util.ArrayList;
 import java.util.List;
-import static com.kreig133.daogenerator.common.Utils.*;
+import static com.kreig133.daogenerator.common.StringBufferUtils.*;
 import static com.kreig133.daogenerator.files.JavaFilesUtils.*;
 
 /**

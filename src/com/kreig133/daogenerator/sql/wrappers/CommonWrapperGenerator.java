@@ -4,6 +4,8 @@ import com.kreig133.daogenerator.common.Utils;
 import com.kreig133.daogenerator.parameter.InputParameter;
 import com.kreig133.daogenerator.parameter.Parameter;
 
+import static com.kreig133.daogenerator.common.StringBufferUtils.insertEscapedParamName;
+
 /**
  * @author eshangareev
  * @version 1.0
@@ -16,7 +18,7 @@ public class CommonWrapperGenerator {
 
     protected static void declareInTypeParamInProcedure( StringBuilder builder, Parameter p ) {
         declareParamNameInProcedure( builder, p );
-        Utils.insertEscapedParamName( builder, p.getName() );
+        insertEscapedParamName( builder, p.getName() );
     }
 
     protected static int declareParamInProcedure( StringBuilder builder, Parameter p, int index) {

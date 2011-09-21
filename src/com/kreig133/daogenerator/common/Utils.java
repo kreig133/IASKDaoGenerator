@@ -29,27 +29,6 @@ public class Utils {
                 ( inputParameterList.size() > 1 && type == Type.IASK );
     }
 
-    public static void getJavaDocString( StringBuilder builder, String[] commentsLine ) {
-
-        boolean commentsNotEmpty = false;
-        for ( String string : commentsLine ) {
-            if ( string != null && ! ( "".equals( string ) ) ) {
-                commentsNotEmpty = true;
-                break;
-            }
-        }
-
-        if ( ! commentsNotEmpty ) return;
-
-        builder.append( "\t/**\n" );
-        for ( String comment : commentsLine ) {
-            builder.append( "\t * " );
-            builder.append( comment );
-            builder.append( "\n" );
-        }
-        builder.append( "\t */\n" );
-    }
-
     public static String convertNameForGettersAndSetters( String name ) {
 
         if ( name == null || "".equals( name ) ) throw new IllegalArgumentException();
@@ -139,38 +118,7 @@ public class Utils {
         return string != null && ! ( "".equals( string ) );
     }
 
-    public static void iterateForParameterList(
-            StringBuilder builder,
-            List<Parameter> parameterList,
-            FuctionalObject functionalObject
-    ) {
-        iterateForParameterList( builder, parameterList, 1, functionalObject );
-    }
 
-    public static void iterateForParameterList(
-            StringBuilder builder,
-            List<Parameter> parameterList,
-            int tabs,
-            FuctionalObject functionalObject
-
-    ) {
-        boolean first = true;
-
-        for ( Parameter p : parameterList ) {
-            if ( functionalObject.filter( p ) ) {
-                for ( int i = 0; i < tabs; i++ ) {
-                    builder.append( "    " );
-                }
-                if ( ! first ) {
-                    builder.append( "," );
-                } else {
-                    first = false;
-                }
-                functionalObject.writeString( builder, p );
-                builder.append( "\n" );
-            }
-        }
-    }
 
     public static String replaceQuestionMarkWithStrings( List<String> testParameterList, String s ) {
         String[] afterSplit = s.split( "\\?" );
@@ -221,7 +169,5 @@ public class Utils {
         return builder.toString();
     }
 
-    public static void insertEscapedParamName(StringBuilder builder, String parameterName ){
-        builder.append( "#{" ).append( parameterName ).append( "}" );
-    }
+
 }

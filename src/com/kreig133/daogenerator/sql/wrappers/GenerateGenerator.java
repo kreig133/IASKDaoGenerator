@@ -6,7 +6,8 @@ import com.kreig133.daogenerator.parameter.Parameter;
 
 import java.util.List;
 
-import static com.kreig133.daogenerator.common.Utils.iterateForParameterList;
+import static com.kreig133.daogenerator.common.StringBufferUtils.insertTabs;
+import static com.kreig133.daogenerator.common.StringBufferUtils.iterateForParameterList;
 
 /**
  * @author eshangareev
@@ -33,7 +34,8 @@ public class GenerateGenerator extends CommonWrapperGenerator{
 
         myBatisQuery.append( ");\n" );
         myBatisQuery.append( "insert into #TempTableForNamedResultSet\n" );
-        myBatisQuery.append( "     exec " ).append(  functionSettings.getNameForCall() ).append( "\n" );
+        insertTabs( myBatisQuery, 1 ).append( "exec " ).append(  functionSettings.getNameForCall() ).append( "\n"
+        );
 
         queryForTesting.append( myBatisQuery.toString() );
 

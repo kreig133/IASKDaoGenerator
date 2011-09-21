@@ -25,10 +25,10 @@ public class ImplementationFilePreparatory extends InterfaceFilePreparatory {
 
         final StringBuilder builder = new StringBuilder();
 
+        startingLinesOfDaoFiles( operationSettings, builder );
+
         if( operationSettings.getType() == Type.DEPO ){
 
-            startingLinesOfDaoFiles( operationSettings, builder );
-            insertImport( builder, "java.util.*" );
             insertImport( builder, mapperFileName( operationSettings ) + ".*;" );
             insertImport( builder, "org.mybatis.spring.support.SqlSessionDaoSupport" );
             insertImport( builder, "org.springframework.stereotype.Repository" );
@@ -45,11 +45,12 @@ public class ImplementationFilePreparatory extends InterfaceFilePreparatory {
             );
 
         } else {
-            insertPackageLine( operationSettings.getDaoPackage(), builder );
 
-            insertImport( builder, "java.util.*" );
             insertImport( builder, "com.luxoft.sbrf.iask.persistence.common.dao.AbstractDao" );
-            insertImport( builder, operationSettings.getEntityPackage() + ".*" );
+            insertImport( builder, "org.springframework.stereotype.Repository" );
+
+            //TODO блок комментариев
+            builder.append( "@Repository\n" );
 
             insertClassDeclaration(
                     ClassType.Class,

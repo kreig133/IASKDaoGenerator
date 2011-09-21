@@ -7,6 +7,8 @@ import com.kreig133.daogenerator.parameter.Parameter;
 
 import java.util.List;
 
+import static com.kreig133.daogenerator.common.StringBufferUtils.insertTabs;
+
 /**
  * @author eshangareev
  * @version 1.0
@@ -22,11 +24,11 @@ public class AnnotationGenerator {
 
         assert selectType != null ;
         
-        builder.append( "    @" ).append( selectType.getAnnotation() ).append( "(\n" );
+        insertTabs(builder, 1).append( "@" ).append( selectType.getAnnotation() ).append( "(\n" );
 
         builder.append( Utils.wrapWithQuotes( functionSettings.getMyBatisQuery() ) );
 
-        builder.append( "    )\n" );
+        insertTabs( builder, 1 ).append( ")\n" );
 
         return builder.toString();
     }

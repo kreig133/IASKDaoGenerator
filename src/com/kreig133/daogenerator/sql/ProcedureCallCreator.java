@@ -4,7 +4,8 @@ import com.kreig133.daogenerator.common.settings.FunctionSettings;
 import com.kreig133.daogenerator.common.strategy.FunctionalObjectWithoutFilter;
 import com.kreig133.daogenerator.parameter.Parameter;
 
-import static com.kreig133.daogenerator.common.Utils.iterateForParameterList;
+import static com.kreig133.daogenerator.common.StringBufferUtils.insertEscapedParamName;
+import static com.kreig133.daogenerator.common.StringBufferUtils.iterateForParameterList;
 
 /**
  * @author eshangareev
@@ -26,7 +27,7 @@ public class ProcedureCallCreator {
                 new FunctionalObjectWithoutFilter() {
                     @Override
                     public void writeString( StringBuilder builder, Parameter p ) {
-                        builder.append( "#{" ).append( p.getName() ).append( "}" );
+                        insertEscapedParamName( builder, p.getName() );
                     }
         } );
 

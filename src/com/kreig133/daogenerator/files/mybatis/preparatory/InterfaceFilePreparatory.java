@@ -14,15 +14,11 @@ import static com.kreig133.daogenerator.files.JavaFilesUtils.*;
  */
 public class InterfaceFilePreparatory extends Preparatory{
 
-    protected static void startingLinesOfDaoFiles( OperationSettings operationSettings, StringBuilder builder ) {
-        insertPackageLine( operationSettings.getDaoPackage(), builder );
-        commonImports( operationSettings, builder );
-    }
-
     public static void prepareFile( OperationSettings operationSettings ) throws IOException {
         StringBuilder builder = new StringBuilder();
 
         startingLinesOfDaoFiles( operationSettings, builder );
+
         //TODO блок комментариев
         insertClassDeclaration(
                 ClassType.Interface,

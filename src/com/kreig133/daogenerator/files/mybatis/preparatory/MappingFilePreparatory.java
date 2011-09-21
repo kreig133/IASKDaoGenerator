@@ -20,10 +20,9 @@ public class MappingFilePreparatory extends Preparatory{
         StringBuilder builder = new StringBuilder();
 
         if( operationSettings.getType() == Type.DEPO ){
-            insertPackageLine( operationSettings.getMapperPackage(), builder );
-            commonImports( operationSettings, builder );
 
-            insertImport( builder, "java.util.*" );
+            startingLinesOfDaoFiles( operationSettings, builder );
+
             insertImport( builder, "org.apache.ibatis.annotations.*" );
             //TODO блок комментариев
             insertClassDeclaration(
@@ -40,6 +39,7 @@ public class MappingFilePreparatory extends Preparatory{
             builder.append( "<mapper namespace=\"" ).append( operationSettings.getDaoPackage() ).append( "." )
                     .append( interfaceFileName( operationSettings ) ).append( "\">\n" );
         }
+
         Utils.appendByteToFile( mappingFile( operationSettings ), builder.toString().getBytes() );
     }
 }

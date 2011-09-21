@@ -7,7 +7,7 @@ import com.kreig133.daogenerator.parameter.Parameter;
 
 import java.util.List;
 
-import static com.kreig133.daogenerator.common.Utils.iterateForParameterList;
+import static com.kreig133.daogenerator.common.StringBufferUtils.insertTabs;
 
 /**
  * @author eshangareev
@@ -25,7 +25,8 @@ public class XmlMappingGenerator {
         final String package_                     = operationSettings.getEntityPackage();
 
         StringBuilder builder = new StringBuilder();
-        builder.append( "    <" ) .append( functionSettings.getSelectType().getAnnotation().toLowerCase() )
+        insertTabs( builder, 1 ).append( "<" ) .append( functionSettings.getSelectType().getAnnotation()
+                .toLowerCase() )
                 .append( " id=\"" ).append( name ).append( "\" statementType=\"CALLABLE\"" );
 
         writeParameterType(  inputParameterList, name, "parameterType", "In" , package_, builder );
@@ -33,9 +34,9 @@ public class XmlMappingGenerator {
 
         builder.append( ">\n\n" );
 
-        builder.append( Utils.addTabsBeforeLine( functionSettings.getMyBatisQuery(), 2 ) );
+        builder.append( Utils.addTabsBeforeLine( functionSettings.getMyBatisQuery(), 2 ) ).append( "\n" );
 
-        builder.append( "\n    </" ).append(functionSettings.getSelectType().getAnnotation().toLowerCase())
+        insertTabs(builder, 1).append( "</" ).append( functionSettings.getSelectType().getAnnotation().toLowerCase() )
                 .append( ">\n\n" );
 
         return builder.toString();
@@ -47,17 +48,18 @@ public class XmlMappingGenerator {
             String type,
             String suffix,
             String package_,
-            StringBuilder result
+            StringBuilder builder
     ) {
         if ( ! outputParameterList.isEmpty() ) {
-            result.append( "\n        " ).append( type ).append( "=\"" );
+            builder.append( "\n" );
+            insertTabs( builder, 2 ).append( type ).append( "=\"" );
             if ( outputParameterList.size() > 1 ) {
-                result.append( package_ ).append( "." );
-                result.append( Utils.convertNameForClassNaming( name ) ).append( suffix );
+                builder.append( package_ ).append( "." );
+                builder.append( Utils.convertNameForClassNaming( name ) ).append( suffix );
             } else {
-                result.append( "java.lang." ).append( outputParameterList.get( 0 ).getType() );
+                builder.append( "java.lang." ).append( outputParameterList.get( 0 ).getType() );
             }
-            result.append( "\"" );
+            builder.append( "\"" );
         }
     }
 

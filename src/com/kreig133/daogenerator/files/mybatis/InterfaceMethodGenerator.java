@@ -11,8 +11,8 @@ import com.kreig133.daogenerator.parameter.Parameter;
 
 import java.util.List;
 
-import static com.kreig133.daogenerator.common.Utils.checkToNeedOwnInClass;
-import static com.kreig133.daogenerator.common.Utils.iterateForParameterList;
+import static com.kreig133.daogenerator.common.Utils.*;
+import static com.kreig133.daogenerator.common.StringBufferUtils.*;
 
 /**
  * @author eshangareev
@@ -24,7 +24,9 @@ public class InterfaceMethodGenerator {
             final OperationSettings operationSettings,
             final FunctionSettings functionSettings
     ) {
-        return "    " + generateMethodSignature( operationSettings, functionSettings, MethodType.DAO ) + ";\n";
+        return  addTabsBeforeLine(
+                    generateMethodSignature( operationSettings, functionSettings, MethodType.DAO ) + ";\n",
+                    1 );
     }
 
     public static String generateMethodSignature(
@@ -61,7 +63,7 @@ public class InterfaceMethodGenerator {
         if ( ! inputParameterList.isEmpty() ) {
             builder.append( "\n" );
             if ( checkToNeedOwnInClass( operationSettings, functionSettings ) ) {
-                builder.append( "        " ).append( Utils.convertNameForClassNaming( name ) ).append( "In request\n" );
+                insertTabs( builder, 2 ).append( Utils.convertNameForClassNaming( name ) ).append( "In request\n" );
             } else {
                 iterateForParameterList( builder, inputParameterList, 2, new FunctionalObjectWithoutFilter() {
                     @Override
@@ -74,7 +76,7 @@ public class InterfaceMethodGenerator {
                     }
                 } );
             }
-            builder.append( "    " );
+            insertTabs( builder, 1 );
         }
         builder.append( ")" );
 

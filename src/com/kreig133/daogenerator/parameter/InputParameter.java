@@ -39,7 +39,7 @@ public class InputParameter extends Parameter {
 
         return super.toString() +
                 (
-                        ( defaultValue == null || "".equals(defaultValue) )?
+                        ( defaultValue == null || "".equals(defaultValue.trim()) )?
                             "" :
                             " = " + defaultValue.toLowerCase() +
                                     (

@@ -9,8 +9,10 @@ import static com.kreig133.daogenerator.files.JavaFilesUtils.*;
  * @version 1.0
  */
 abstract public class Preparatory {
-
-     protected static void commonImports( OperationSettings operationSettings, StringBuilder builder ) {
+    protected static void startingLinesOfDaoFiles( OperationSettings operationSettings, StringBuilder builder ) {
+        insertPackageLine( builder, operationSettings.getDaoPackage() );
+        builder.append( "\n" );
+        insertImport( builder, "java.util.*" );
         insertImport( builder, operationSettings.getEntityPackage() + ".*;" );
     }
 }

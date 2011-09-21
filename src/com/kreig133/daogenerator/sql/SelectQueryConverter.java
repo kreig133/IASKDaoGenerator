@@ -3,7 +3,7 @@ package com.kreig133.daogenerator.sql;
 import com.kreig133.daogenerator.common.settings.FunctionSettings;
 import com.kreig133.daogenerator.parameter.Parameter;
 
-import static com.kreig133.daogenerator.common.Utils.*;
+import static com.kreig133.daogenerator.common.StringBufferUtils.*;
 
 /**
  * @author eshangareev
@@ -29,8 +29,7 @@ public class SelectQueryConverter {
 
             for( int i = 0; i < splitted.length - 1; i++ ){
                 myBatisString.append( splitted[i] );
-                insertEscapedParamName( myBatisString, functionSettings.getInputParameterList().get( index ).getName
-                        () );
+                insertEscapedParamName( myBatisString, functionSettings.getInputParameterList().get( index ).getName());
                 index ++ ;
             }
             myBatisString.append( splitted[ splitted.length - 1 ] );
@@ -68,5 +67,4 @@ public class SelectQueryConverter {
                 queryForTesting == null ? sqlQuery : queryForTesting.toString()
         );
     }
-
 }

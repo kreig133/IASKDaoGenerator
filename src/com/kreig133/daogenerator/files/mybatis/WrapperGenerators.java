@@ -2,6 +2,7 @@ package com.kreig133.daogenerator.files.mybatis;
 
 import com.kreig133.daogenerator.common.settings.FunctionSettings;
 import com.kreig133.daogenerator.sql.wrappers.GenerateGenerator;
+import com.kreig133.daogenerator.sql.wrappers.GeneroutGenerator;
 
 /**
  * @author eshangareev
@@ -18,7 +19,7 @@ public class WrapperGenerators {
                 GenerateGenerator.generateWrapper( functionSettings );
                 break;
             case GENEROUT:
-//              GeneroutGenerator.generateWrapper( functionSettings );
+                GeneroutGenerator.generateWrapper( functionSettings );
                 break;
         }
         throw new IllegalArgumentException();

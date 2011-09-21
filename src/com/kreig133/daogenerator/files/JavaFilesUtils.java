@@ -19,7 +19,7 @@ public class JavaFilesUtils {
 
 
 
-    public static void insertPackageLine( String packageName, StringBuilder builder ) {
+    public static void insertPackageLine( StringBuilder builder, String packageName ) {
         builder.append( "package " ).append( packageName ).append( ";\n\n" );
     }
 
