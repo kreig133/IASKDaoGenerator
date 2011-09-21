@@ -20,14 +20,14 @@ import static com.kreig133.daogenerator.testing.settings.SettingName.*;
 public class JDBCConnector {
     private static final Properties properties = new Properties();
     private static String pathToProperties ="./src/com/kreig133/daogenerator/testing/settings/";
-
+    private static Connection connection;
 
 
     public static Connection connectToDB(
             OperationSettings operationSettings
     ) throws IOException, SQLException {
 
-        Connection connection;
+        if( connection != null ) return connection;
 
         FileInputStream props = null;
 

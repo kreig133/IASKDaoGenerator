@@ -19,7 +19,9 @@ public class TestParser implements IParser<FunctionSettings>{
                 testQueryParser.parse( operationSettings, input, lineForParse );
                 break;
             case TPARAM:
+            case TGEN:
                 testParamsParser.parse( operationSettings,input, lineForParse );
+                break;
         }
     }
 }

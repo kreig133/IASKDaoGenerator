@@ -65,7 +65,11 @@ public class Controller {
         createQueries();
 
         try {
-            Tester.startFunctionTesting( operationSettings, settingsList.get( 0 ) );
+            if( !operationSettings.skipTesting() ){
+                for( FunctionSettings functionSettings: settingsList ){
+                    Tester.startFunctionTesting( operationSettings, functionSettings );
+                }
+            }
         } catch ( Exception e ) {
             e.printStackTrace(); 
         }
@@ -78,7 +82,7 @@ public class Controller {
             e.printStackTrace();
         }
 
-        System.exit( 0 );
+//        System.exit( 0 );
     }
 
     private static void createQueries() {

@@ -5,9 +5,12 @@ import com.kreig133.daogenerator.enums.ReturnType;
 import com.kreig133.daogenerator.enums.SelectType;
 import com.kreig133.daogenerator.enums.TestInfoType;
 import com.kreig133.daogenerator.parameter.Parameter;
+import com.kreig133.daogenerator.sql.wrappers.GenerateGenerator;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author eshangareev
@@ -18,7 +21,8 @@ public class FunctionSettingsImpl implements FunctionSettings {
     private final OperationSettings OPERATION_SETTING;
     private final List<Parameter>  INPUT_PARAMETER_LIST = new ArrayList<Parameter>();
     private final List<Parameter> OUTPUT_PARAMETER_LIST = new ArrayList<Parameter>();
-    private final List<String>      TEST_PARAMETER_LIST = new ArrayList<String>(  );
+
+    private final Map<Integer, String> TEST_PARAM = new HashMap<Integer, String>();
 
     private final StringBuilder QUERY         = new StringBuilder();
     private final StringBuilder TEST_QUERY    = new StringBuilder();
@@ -75,12 +79,15 @@ public class FunctionSettingsImpl implements FunctionSettings {
         switch ( TEST_INFO_TYPE ){
             case TQUERY:
                 return TEST_QUERY.toString();
+            case TGEN:
+                final String query = GenerateGenerator.generateWrapper( this, true );
+                return Utils.replaceQuestionMarkWithStrings( this, query );
             case TPARAM:
                 switch ( SELECT_TYPE ){
                     case CALL:
 
                     default:
-                        return Utils.replaceQuestionMarkWithStrings( TEST_PARAMETER_LIST, TEST_QUERY.toString() );
+                        return Utils.replaceQuestionMarkWithStrings( this, TEST_QUERY.toString() );
                 }
 
             case NONE:
@@ -100,8 +107,8 @@ public class FunctionSettingsImpl implements FunctionSettings {
     }
 
     @Override
-    public void addToTestParams( String param ) {
-        TEST_PARAMETER_LIST.add( param );
+    public Map<Integer, String> getTestParams() {
+        return TEST_PARAM;
     }
 
     @Override

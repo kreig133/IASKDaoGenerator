@@ -2,6 +2,7 @@ package com.kreig133.daogenerator.testing;
 
 import com.kreig133.daogenerator.common.settings.FunctionSettings;
 import com.kreig133.daogenerator.common.settings.OperationSettings;
+import com.kreig133.daogenerator.enums.TestInfoType;
 
 import java.io.IOException;
 import java.sql.*;
@@ -18,6 +19,8 @@ public class Tester {
         try {
             Connection connection = JDBCConnector.connectToDB( operationSettings );
 
+            if( functionSettings.getTestInfoType()== TestInfoType.NONE ) return;
+
             ResultSet resultSet = null;
 
             switch ( functionSettings.getSelectType() ){
@@ -28,6 +31,10 @@ public class Tester {
                             statement.registerOutParameter( 1, Types.OTHER );
                             resultSet = statement.executeQuery();
                             break;
+                        case TGEN:
+                            Statement statement1 = connection.createStatement();
+                            resultSet = statement1.executeQuery( functionSettings.getQueryForTesting() );
+                            break;
                         default:
                     }
                     break;
@@ -37,13 +44,20 @@ public class Tester {
                     switch ( functionSettings.getTestInfoType() ){
                         case TQUERY:
                             Statement statement = connection.createStatement();
-                            statement.execute(functionSettings.getQueryForTesting());
+                            statement.execute( functionSettings.getQueryForTesting() );
                             break;
                         default:
                     }
                     break;
+                case SELECT:
+                    switch ( functionSettings.getTestInfoType() ){
+                        case TQUERY:
+                            Statement statement = connection.createStatement();
+                            resultSet = statement.executeQuery( functionSettings.getQueryForTesting() );
+                            break;
+                    }
                 default:
-                    throw new IllegalArgumentException("Для этой фигни тестирование еще не готово");
+//                    throw new IllegalArgumentException("Для этой фигни тестирование еще не готово");
             }
 
             switch ( functionSettings.getSelectType() ){
@@ -64,17 +78,6 @@ public class Tester {
                 case UPDATE:
                     alertSuccess( functionSettings );
             }
-//            final Statement statement = connection.createStatement();
-//            statement.setEscapeProcessing( true );
-//             statement.executeQuery( functionSettings.getQueryForTesting() );
-////            final boolean execute = statement.execute( functionSettings.getQueryForTesting() );
-////            if ( execute ){
-//                final SQLWarning warnings = statement.getWarnings();
-//                final ResultSet resultSet = statement.getResultSet();
-//                TypeAndNameComparator.compare( resultSet.getMetaData(), functionSettings );
-////            } else {
-////
-////            }
         } catch ( IOException e ) {
             //TODO
 

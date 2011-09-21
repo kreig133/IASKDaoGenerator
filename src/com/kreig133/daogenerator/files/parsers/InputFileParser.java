@@ -45,7 +45,14 @@ public class InputFileParser {
             try{
 
                 if( ! isStopLine( line ) ){
-                    if( mode != null && ( mode == Mode.IS_SELECT_QUERY || line.length() > 7 ) ){
+                    if(
+                            mode != null &&
+                                    (
+                                            mode == Mode.IS_SELECT_QUERY  ||
+                                            mode == Mode.IS_TESTING_QUERY ||
+                                            line.length() > 7
+                                    )
+                    ) {
                         Parsers.readLine( operationSettings, functionSettings, mode, line );
                     }
                 }

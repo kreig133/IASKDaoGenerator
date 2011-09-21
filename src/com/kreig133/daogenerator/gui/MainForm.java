@@ -27,7 +27,7 @@ public class MainForm {
     private JTextField entityPackageTextField;
     private JTextField interfacePackageTextField;
     private JTextField mappingPackageTextField;
-    private JCheckBox сУказаниемInOutCheckBox;
+    private JCheckBox skipTestsCheckBox;
     private JButton startButton;
     private JRadioButton IASKRadioButton;
     private JRadioButton DEPORadioButton;
@@ -61,10 +61,11 @@ public class MainForm {
         OperationSettings operationSettings = DaoGenerator.getCurrentOperationSettings();
 
         operationSettings.setOutputPath     ( destDirTextField              .getText() + "/" + "src" );
-        operationSettings.setSourcePath     ( sourceDirTextField            .getText() );
-        operationSettings.setDaoPackage     ( interfacePackageTextField     .getText() );
-        operationSettings.setEntityPackage  ( entityPackageTextField        .getText() );
-        operationSettings.setMapperPackage  ( mappingPackageTextField       .getText() );
+        operationSettings.setSkipTesting    ( skipTestsCheckBox             .isSelected () );
+        operationSettings.setSourcePath     ( sourceDirTextField            .getText    () );
+        operationSettings.setDaoPackage     ( interfacePackageTextField     .getText    () );
+        operationSettings.setEntityPackage  ( entityPackageTextField        .getText    () );
+        operationSettings.setMapperPackage  ( mappingPackageTextField       .getText    () );
         operationSettings.setOperationName  ( tempOperationName == null ?
                 new File( sourceDirTextField.getText()).getName() : tempOperationName );
 

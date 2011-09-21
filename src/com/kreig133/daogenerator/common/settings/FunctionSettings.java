@@ -7,6 +7,7 @@ import com.kreig133.daogenerator.enums.Type;
 import com.kreig133.daogenerator.parameter.Parameter;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author eshangareev
@@ -32,7 +33,7 @@ public interface FunctionSettings {
 
     void appendToQueryForTesting( String queryForTesting );
 
-    void addToTestParams ( String param );
+    Map<Integer, String> getTestParams();
 
     String getNameForCall();
 

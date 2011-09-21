@@ -13,6 +13,6 @@ abstract public class Preparatory {
         insertPackageLine( builder, operationSettings.getDaoPackage() );
         builder.append( "\n" );
         insertImport( builder, "java.util.*" );
-        insertImport( builder, operationSettings.getEntityPackage() + ".*;" );
+        insertImport( builder, operationSettings.getEntityPackage() + ".*" );
     }
 }

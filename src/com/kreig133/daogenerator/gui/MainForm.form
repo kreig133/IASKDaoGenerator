@@ -114,12 +114,12 @@
           <text value="Start"/>
         </properties>
       </component>
-      <component id="a9ccf" class="javax.swing.JCheckBox" binding="сУказаниемInOutCheckBox" default-binding="true">
+      <component id="a9ccf" class="javax.swing.JCheckBox" binding="skipTestsCheckBox" default-binding="true">
         <constraints>
           <grid row="5" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
         </constraints>
         <properties>
-          <text value="С указанием In/Out у параметров"/>
+          <text value="Пропустить тесты"/>
         </properties>
       </component>
       <component id="d193c" class="javax.swing.JRadioButton" binding="IASKRadioButton" default-binding="true">

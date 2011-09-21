@@ -5,6 +5,7 @@ import com.kreig133.daogenerator.common.strategy.FunctionalObjectWithoutFilter;
 import com.kreig133.daogenerator.parameter.Parameter;
 
 import java.util.List;
+import java.util.Map;
 
 import static com.kreig133.daogenerator.common.StringBufferUtils.insertTabs;
 import static com.kreig133.daogenerator.common.StringBufferUtils.iterateForParameterList;
@@ -16,49 +17,48 @@ import static com.kreig133.daogenerator.common.StringBufferUtils.iterateForParam
 public class GenerateGenerator extends CommonWrapperGenerator{
 
     public static void generateWrapper( FunctionSettings functionSettings ) {
+        functionSettings.setMyBatisQuery   ( generateWrapper( functionSettings, false ) );
+    }
+
+    public static String generateWrapper( FunctionSettings functionSettings, boolean forTests ) {
         final List<Parameter> outputParametrs  = functionSettings.getOutputParameterList();
         final List<Parameter> inputParametrs   = functionSettings.getInputParameterList();
 
 
-        StringBuilder myBatisQuery      = new StringBuilder();
-        StringBuilder queryForTesting   = new StringBuilder();
+        StringBuilder builder      = new StringBuilder();
 
-        myBatisQuery.append( "create table #TempTableForNamedResultSet(\n" );
+        builder.append( "create table #TempTableForNamedResultSet(\n" );
 
-        iterateForParameterList( myBatisQuery, outputParametrs, new FunctionalObjectWithoutFilter() {
+        iterateForParameterList( builder, outputParametrs, new FunctionalObjectWithoutFilter() {
             @Override
             public void writeString( StringBuilder builder, Parameter p ) {
                 builder.append( p.getName() ).append( " " ).append( p.getSqlType() ).append( " " ).append( "NULL" );
             }
         } );
 
-        myBatisQuery.append( ");\n" );
-        myBatisQuery.append( "insert into #TempTableForNamedResultSet\n" );
-        insertTabs( myBatisQuery, 1 ).append( "exec " ).append(  functionSettings.getNameForCall() ).append( "\n"
-        );
+        builder.append( ");\n" );
+        builder.append( "insert into #TempTableForNamedResultSet\n" );
+        insertTabs( builder, 1 ).append( "exec " ).append(  functionSettings.getNameForCall() ).append( "\n" );
 
-        queryForTesting.append( myBatisQuery.toString() );
+        if( !forTests ){
+            iterateForParameterList( builder, inputParametrs, 2, new FunctionalObjectWithoutFilter() {
+                @Override
+                public void writeString( StringBuilder builder, Parameter p ) {
+                    declareInTypeParamInProcedure( builder, p );
+                }
+            } );
+        } else {
+            iterateForParameterList( builder, inputParametrs, 2, new FunctionalObjectWithoutFilter() {
+                @Override
+                public void writeString( StringBuilder builder, Parameter p ) {
+                    builder.append( " ?" );
+                }
+            } );
+        }
 
-        iterateForParameterList( myBatisQuery, inputParametrs, 2, new FunctionalObjectWithoutFilter() {
-            @Override
-            public void writeString( StringBuilder builder, Parameter p ) {
-                declareInTypeParamInProcedure( builder, p );
-            }
-        } );
+        builder.append( ";\n" );
+        builder.append( "SELECT * FROM #TempTableForNamedResultSet" );
 
-        iterateForParameterList( queryForTesting, inputParametrs, 2, new FunctionalObjectWithoutFilter() {
-            @Override
-            public void writeString( StringBuilder builder, Parameter p ) {
-                builder.append( " ?" );
-            }
-        } );
-
-        myBatisQuery.append( ";\n" );
-        queryForTesting.append( ";\n" );
-        myBatisQuery.append( "SELECT * FROM #TempTableForNamedResultSet" );
-        queryForTesting.append( "SELECT * FROM #TempTableForNamedResultSet" );
-
-        functionSettings.setMyBatisQuery   ( myBatisQuery   .toString() );
-        functionSettings.appendToQueryForTesting( queryForTesting.toString() );
+        return builder.toString();
     }
 }

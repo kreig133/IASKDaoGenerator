@@ -10,6 +10,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author eshangareev
@@ -120,21 +121,24 @@ public class Utils {
 
 
 
-    public static String replaceQuestionMarkWithStrings( List<String> testParameterList, String s ) {
+    public static String replaceQuestionMarkWithStrings( FunctionSettings functionSettings, String s ) {
+        Map<Integer, String> testParameterList = functionSettings.getTestParams();
         String[] afterSplit = s.split( "\\?" );
 
         StringBuilder builder = new StringBuilder();
         builder.append( afterSplit[ 0 ] );
 
-        if ( testParameterList.size() != afterSplit.length - 1 )
-            throw new AssertionError(
-                    "Количество параметров не совпадает с количеством вопросительных знаков в вопросе!" );
+//        if ( testParameterList.size() != afterSplit.length - 1 )
+//            throw new AssertionError(
+//                    "Количество параметров не совпадает с количеством вопросительных знаков в вопросе!" );
 
-        for( int i = 1; i < afterSplit.length; i++ ){
-            builder.append( testParameterList.get( i - 1 ) );
+        for( int i = 1; i <= functionSettings.getInputParameterList().size(); i++ ){
+            //TODO вставка параметров по дефолту
+            builder.append( testParameterList.get( i ) );
             builder.append( afterSplit[ i ] );
         }
 
+        System.out.println( builder );
         return builder.toString();
     }
 

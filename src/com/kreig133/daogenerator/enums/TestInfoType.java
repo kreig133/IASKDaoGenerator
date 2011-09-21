@@ -5,7 +5,7 @@ package com.kreig133.daogenerator.enums;
  * @version 1.0
  */
 public enum TestInfoType {
-    TQUERY, TPARAM, NONE;
+    TQUERY, TPARAM, NONE, TGEN;
 
     public static TestInfoType getByName( String name ){
         for( TestInfoType infoType: TestInfoType.values() ){
