@@ -22,19 +22,32 @@ public class Tester {
             if( functionSettings.getTestInfoType()== TestInfoType.NONE ) return;
 
             ResultSet resultSet = null;
+            ResultSetMetaData metaData = null;
+            boolean haveResultSet = false;
 
             switch ( functionSettings.getSelectType() ){
                 case CALL:
                     switch ( functionSettings.getTestInfoType() ){
                         case TQUERY:
-                            CallableStatement statement = connection.prepareCall(functionSettings.getQueryForTesting());
-                            statement.registerOutParameter( 1, Types.OTHER );
-                            resultSet = statement.executeQuery();
-                            break;
                         case TGEN:
-                            Statement statement1 = connection.createStatement();
-                            resultSet = statement1.executeQuery( functionSettings.getQueryForTesting() );
+                            Statement statement = connection.createStatement();
+                            haveResultSet = statement.execute(functionSettings.getQueryForTesting());
+//                            statement.execute();
+                            if( haveResultSet ){
+                                metaData = statement.getResultSet().getMetaData();
+                                break;
+                            }
+                            //Костыль
+                            for( int i = 0; i < 100; i ++ ){
+                                if( statement.getResultSet() != null  ){
+                                    metaData = statement.getResultSet().getMetaData();
+                                    break;
+                                }
+                                statement.getMoreResults();
+                            }
+
                             break;
+
                         default:
                     }
                     break;
@@ -56,8 +69,14 @@ public class Tester {
                             resultSet = statement.executeQuery( functionSettings.getQueryForTesting() );
                             break;
                     }
+                    break;
                 default:
-//                    throw new IllegalArgumentException("Для этой фигни тестирование еще не готово");
+                    throw new IllegalArgumentException("Для этой фигни тестирование еще не готово");
+            }
+
+            if( metaData == null ){
+                alertError( functionSettings, null );
+                return;
             }
 
             switch ( functionSettings.getSelectType() ){
@@ -65,7 +84,6 @@ public class Tester {
                 case SELECT:
                 case GENERATE:
                 case GENEROUT:
-                    final ResultSetMetaData metaData = resultSet.getMetaData();
                     final List<String> errors = TypeAndNameComparator.compare( metaData, functionSettings );
                     if( errors.isEmpty() ){
                         alertSuccess( functionSettings );
@@ -91,6 +109,9 @@ public class Tester {
 
     private static void alertError( FunctionSettings functionSettings, List<String> errors ) {
         System.out.println( ">>>> Проверка функции " + functionSettings.getName() + " провалена.");
+
+        if( errors == null ) return;
+        
         for( String s: errors ){
             System.out.println(s);
         }

@@ -27,7 +27,7 @@ public class JDBCConnector {
             OperationSettings operationSettings
     ) throws IOException, SQLException {
 
-        if( connection != null ) return connection;
+//        if( connection != null ) return connection;
 
         FileInputStream props = null;
 
@@ -64,19 +64,61 @@ public class JDBCConnector {
                 return Type.IASK;
             }
         });
-        CallableStatement statement = connection.prepareCall( "{? = CALL ychGetNumDivision(4, null, 1)}" );
+        CallableStatement statement = connection.prepareCall( "{? = CALL mav_CodAddress ( null, 0 , 2 , 6, null )}" );
 
         statement.registerOutParameter( 1, Types.OTHER );
+//        Statement statement = connection.createStatement();
 
-        ResultSet resultSet = statement.executeQuery();
-        final ResultSetMetaData metaData = resultSet.getMetaData();
+        statement.execute();
+                            for( int i = 0; i < 100; i ++ ){
+                               if(  statement.getMoreResults() ){
+                                   final ResultSetMetaData metaData = statement.getResultSet().getMetaData();
+//                System.out.println( metaData.getColumnCount() );
+                                   for ( int j = 1; j <= metaData.getColumnCount(); j++ ){
+                                       System.out.println(
+                                               j +
+                                                       "  -  " +
+                                                       metaData.getColumnName( j )+
+                                                       "  -  " +
+                                                       metaData.getColumnTypeName( j ) );
+                                   }
 
-        for( int i = 1; i <= metaData.getColumnCount(); i++ ){
-            System.out.println(
-                    metaData.getColumnName( i )+
-                    "    " +
-                    metaData.getColumnTypeName( i ) +
-                    "\n" );
-        }
+
+                               }
+                            }
+//        final boolean execute = statement.execute();
+//        ResultSet resultSet = statement.execute( "{CALL mav_CodAddress ( null, 0 , 2 , 6 )}" );
+//        statement.execute( "{CALL mav_CodAddress ( null, 0 , 2 , 6, null )}" );
+//        statement.execute( "{? = CALL mav_CodAddress ( null, 0 , 2 , 6, null )}" );
+            statement.getMoreResults();
+            if( statement.getMoreResults() ){
+                final ResultSetMetaData metaData = statement.getResultSet().getMetaData();
+//                System.out.println( metaData.getColumnCount() );
+                for ( int i = 1; i <= metaData.getColumnCount(); i++ ){
+                    System.out.println(
+                            i +
+                                    "  -  " +
+                                    metaData.getColumnName( i )+
+                                    "  -  " +
+                                    metaData.getColumnTypeName( i ) );
+                }
+            }
+//                for( int j = 0; j < 10; j++ ){
+//                    System.out.println(j);
+//                    if( statement.getResultSet() != null  ){
+//                        System.out.println( statement.getMoreResults() );
+//
+//                        break metka;
+//                    }
+//                }
+//        final ResultSetMetaData metaData = resultSet.getMetaData();
+//
+//        for( int i = 1; i <= metaData.getColumnCount(); i++ ){
+//            System.out.println(
+//                    metaData.getColumnName( i )+
+//                    "    " +
+//                    metaData.getColumnTypeName( i ) +
+//                    "\n" );
+//        }
     }
 }
