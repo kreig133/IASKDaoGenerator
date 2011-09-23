@@ -10,8 +10,10 @@ import com.kreig133.daogenerator.files.parsers.*;
 public enum Mode {
     IS_INPUT_PARAMETRS ( new InputParameterParser() ),
     IS_OUTPUT_PARAMETRS( new OutputParametrParser() ),
-    IS_SELECT_QUERY    ( new QueryParser         () ),
-    IS_TESTING_QUERY   ( new TestParser() );
+    IS_SELECT_QUERY    ( new SimpleParser        () ),
+    IS_TESTING_QUERY   ( new TestParser          () ),
+    IS_COMMENTARY      ( new SimpleParser        () );
+
 
     Mode( IParser parser ) {
         this.parser = parser;
