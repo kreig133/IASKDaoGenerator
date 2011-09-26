@@ -58,6 +58,6 @@ public class CommonWrapperGenerator {
     }
 
     private static void declareParamNameInProcedure( StringBuilder builder, Parameter p ) {
-        builder.append( "@" ).append( p.getName() ).append( " = " );
+        builder.append( "@" ).append( ( ( InputParameter ) p ).getRawName() ).append( " = " );
     }
 }

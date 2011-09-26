@@ -11,11 +11,13 @@ import com.kreig133.daogenerator.enums.JavaType;
 public class InputParameter extends Parameter {
     private String defaultValue;
     private InputOrOutputType inputType;
+    private String rawName;
 
     public InputParameter(String name, String type, String defaultValue, String comment, InputOrOutputType inputType) {
         super(comment, type, Utils.convertPBNameToName( name ) );
         this.defaultValue = Utils.handleDefaultValue( defaultValue );
         this.inputType = inputType;
+        this.rawName = name;
     }
 
     public String getDefaultValue() {
@@ -32,6 +34,10 @@ public class InputParameter extends Parameter {
 
     public void setInputType( InputOrOutputType inputType ) {
         this.inputType = inputType;
+    }
+
+    public String getRawName() {
+        return rawName;
     }
 
     @Override
