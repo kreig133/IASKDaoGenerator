@@ -1,10 +1,9 @@
 package com.kreig133.daogenerator.sql.wrappers;
 
-import com.kreig133.daogenerator.common.Utils;
 import com.kreig133.daogenerator.parameter.InputParameter;
 import com.kreig133.daogenerator.parameter.Parameter;
 
-import static com.kreig133.daogenerator.common.StringBufferUtils.insertEscapedParamName;
+import static com.kreig133.daogenerator.common.StringBuilderUtils.insertEscapedParamName;
 
 /**
  * @author eshangareev

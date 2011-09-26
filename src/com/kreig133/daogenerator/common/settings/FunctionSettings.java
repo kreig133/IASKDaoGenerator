@@ -23,7 +23,9 @@ public interface FunctionSettings {
 
     List<Parameter> getOutputParameterList();
 
-    StringBuilder getSelectQuery();
+    StringBuilder getSelectBuilder();
+
+    StringBuilder getCommentBuilder();
 
     String getMyBatisQuery();
 

@@ -53,7 +53,7 @@ public class InputFileParser {
                                             line.length() > 7
                                     )
                     ) {
-                        Parsers.readLine( operationSettings, functionSettings, mode, line );
+                        mode.parse( operationSettings, functionSettings, line );
                     }
                 }
 

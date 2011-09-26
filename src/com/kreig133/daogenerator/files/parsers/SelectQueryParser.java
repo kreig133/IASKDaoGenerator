@@ -7,13 +7,13 @@ import com.kreig133.daogenerator.common.settings.OperationSettings;
  * @author eshangareev
  * @version 1.0
  */
-public class TestQueryParser implements IParser{
-    @Override
+public class SelectQueryParser implements IParser{
+
     public void parse(
             OperationSettings operationSettings,
-            FunctionSettings  functionSettings,
+            FunctionSettings  functionSettings ,
             String lineForParse
     ) {
-        functionSettings.appendToQueryForTesting( lineForParse + "\n" );
+        functionSettings.getSelectBuilder().append( lineForParse ).append( "\n" );
     }
 }

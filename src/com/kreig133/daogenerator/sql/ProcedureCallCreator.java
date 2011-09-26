@@ -4,8 +4,8 @@ import com.kreig133.daogenerator.common.settings.FunctionSettings;
 import com.kreig133.daogenerator.common.strategy.FunctionalObjectWithoutFilter;
 import com.kreig133.daogenerator.parameter.Parameter;
 
-import static com.kreig133.daogenerator.common.StringBufferUtils.insertEscapedParamName;
-import static com.kreig133.daogenerator.common.StringBufferUtils.iterateForParameterList;
+import static com.kreig133.daogenerator.common.StringBuilderUtils.insertEscapedParamName;
+import static com.kreig133.daogenerator.common.StringBuilderUtils.iterateForParameterList;
 
 /**
  * @author eshangareev

@@ -9,7 +9,7 @@ import com.kreig133.daogenerator.parameter.Parameter;
 
 import java.util.List;
 
-import static com.kreig133.daogenerator.common.StringBufferUtils.iterateForParameterList;
+import static com.kreig133.daogenerator.common.StringBuilderUtils.iterateForParameterList;
 
 /**
  * @author eshangareev

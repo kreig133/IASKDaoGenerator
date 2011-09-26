@@ -1,5 +1,6 @@
 package com.kreig133.daogenerator.files.mybatis;
 
+import com.kreig133.daogenerator.common.StringBuilderUtils;
 import com.kreig133.daogenerator.common.Utils;
 import com.kreig133.daogenerator.common.settings.FunctionSettings;
 import com.kreig133.daogenerator.common.settings.OperationSettings;
@@ -85,9 +86,16 @@ public class MyBatis {
             FunctionSettings functionSettings
     ) throws IOException {
 
+        StringBuilder builder = new StringBuilder();
+
         Utils.appendByteToFile(
-                interfaceFile( operationSettings ) ,
-                InterfaceMethodGenerator.methodGenerator( operationSettings, functionSettings ).getBytes()
+                interfaceFile( operationSettings ),
+                StringBuilderUtils.getJavaDocString(
+                        builder,
+                        functionSettings.getCommentBuilder().toString().split( "\n" )
+                ).append(
+                        InterfaceMethodGenerator.methodGenerator( operationSettings, functionSettings )
+                ).toString().getBytes()
         );
     }
 

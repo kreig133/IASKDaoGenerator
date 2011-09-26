@@ -1,6 +1,7 @@
 package com.kreig133.daogenerator.files.parsers;
 
 import com.kreig133.daogenerator.common.Utils;
+import com.kreig133.daogenerator.common.settings.FunctionSettings;
 import com.kreig133.daogenerator.common.settings.OperationSettings;
 import com.kreig133.daogenerator.enums.InputOrOutputType;
 import com.kreig133.daogenerator.parameter.InputParameter;
@@ -15,13 +16,14 @@ import static com.kreig133.daogenerator.files.parsers.settings.SettingsReader.*;
  * @author eshangareev
  * @version 1.0
  */
-public class InputParameterParser implements IParser<List<Parameter>>{
+public class InputParameterParser implements IParser{
 
     public void parse(
             OperationSettings operationSettings,
-            List<Parameter> input,
+            FunctionSettings  functionSettings ,
             String lineForParse
     ) {
+        List<Parameter> input = functionSettings.getInputParameterList();
         final String[] params =  lineForParse.split( "\t" );
 
         String name;

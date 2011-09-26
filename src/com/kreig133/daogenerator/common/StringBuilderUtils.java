@@ -9,7 +9,7 @@ import java.util.List;
  * @author eshangareev
  * @version 1.0
  */
-public class StringBufferUtils {
+public class StringBuilderUtils {
 
     public static void insertEscapedParamName(StringBuilder builder, String parameterName ){
         builder.append( "#{" ).append( parameterName ).append( "}" );
@@ -48,7 +48,7 @@ public class StringBufferUtils {
         }
     }
 
-    public static void getJavaDocString( StringBuilder builder, String[] commentsLine ) {
+    public static StringBuilder getJavaDocString( StringBuilder builder, String[] commentsLine ) {
 
         boolean commentsNotEmpty = false;
         for ( String string : commentsLine ) {
@@ -58,7 +58,7 @@ public class StringBufferUtils {
             }
         }
 
-        if ( ! commentsNotEmpty ) return;
+        if ( ! commentsNotEmpty ) return builder;
 
         builder.append( "\t/**\n" );
         for ( String comment : commentsLine ) {
@@ -67,6 +67,8 @@ public class StringBufferUtils {
             builder.append( "\n" );
         }
         builder.append( "\t */\n" );
+
+        return builder;
     }
 
     public static StringBuilder insertTabs( StringBuilder builder, int tabsQuantity ){

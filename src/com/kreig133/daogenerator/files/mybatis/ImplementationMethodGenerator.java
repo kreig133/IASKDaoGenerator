@@ -7,7 +7,7 @@ import com.kreig133.daogenerator.enums.ReturnType;
 import com.kreig133.daogenerator.enums.Type;
 import com.kreig133.daogenerator.files.JavaFilesUtils;
 
-import static com.kreig133.daogenerator.common.StringBufferUtils.insertTabs;
+import static com.kreig133.daogenerator.common.StringBuilderUtils.insertTabs;
 
 /**
  * @author eshangareev

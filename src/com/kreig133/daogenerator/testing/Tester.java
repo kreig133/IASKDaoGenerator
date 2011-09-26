@@ -27,6 +27,7 @@ public class Tester {
 
             switch ( functionSettings.getSelectType() ){
                 case CALL:
+                case GENERATE:
                     switch ( functionSettings.getTestInfoType() ){
                         case TQUERY:
                         case TGEN:
@@ -71,6 +72,7 @@ public class Tester {
                     }
                     break;
                 default:
+                    System.out.println(">>>>>>" + functionSettings.getSelectType());
                     throw new IllegalArgumentException("Для этой фигни тестирование еще не готово");
             }
 

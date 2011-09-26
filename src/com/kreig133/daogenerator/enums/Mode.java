@@ -1,5 +1,6 @@
 package com.kreig133.daogenerator.enums;
 
+import com.kreig133.daogenerator.common.settings.FunctionSettings;
 import com.kreig133.daogenerator.common.settings.OperationSettings;
 import com.kreig133.daogenerator.files.parsers.*;
 
@@ -10,9 +11,9 @@ import com.kreig133.daogenerator.files.parsers.*;
 public enum Mode {
     IS_INPUT_PARAMETRS ( new InputParameterParser() ),
     IS_OUTPUT_PARAMETRS( new OutputParametrParser() ),
-    IS_SELECT_QUERY    ( new SimpleParser        () ),
+    IS_SELECT_QUERY    ( new SelectQueryParser   () ),
     IS_TESTING_QUERY   ( new TestParser          () ),
-    IS_COMMENTARY      ( new SimpleParser        () );
+    IS_COMMENTARY      ( new CommentParser       () );
 
 
     Mode( IParser parser ) {
@@ -22,8 +23,12 @@ public enum Mode {
     private final IParser parser;
 
     @SuppressWarnings( { "unchecked" } )
-    public void parse( OperationSettings operationSettings, Object input, String lineForParse ){
-        parser.parse( operationSettings, input, lineForParse );
+    public void parse(
+            OperationSettings operationSettings,
+            FunctionSettings  functionSettings ,
+            String lineForParse
+    ){
+        parser.parse( operationSettings, functionSettings, lineForParse );
     }
 
 

@@ -2,9 +2,8 @@ package com.kreig133.daogenerator.sql;
 
 import com.kreig133.daogenerator.common.settings.FunctionSettings;
 import com.kreig133.daogenerator.enums.TestInfoType;
-import com.kreig133.daogenerator.parameter.Parameter;
 
-import static com.kreig133.daogenerator.common.StringBufferUtils.*;
+import static com.kreig133.daogenerator.common.StringBuilderUtils.*;
 
 /**
  * @author eshangareev
@@ -16,7 +15,7 @@ public class SelectQueryConverter {
             final FunctionSettings functionSettings
     ){
 
-        String sqlQuery = functionSettings.getSelectQuery().toString();
+        String sqlQuery = functionSettings.getSelectBuilder().toString();
 
         boolean testQNeed = functionSettings.getTestInfoType() != TestInfoType.TQUERY;
 

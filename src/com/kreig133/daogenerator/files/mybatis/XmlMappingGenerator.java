@@ -7,7 +7,7 @@ import com.kreig133.daogenerator.parameter.Parameter;
 
 import java.util.List;
 
-import static com.kreig133.daogenerator.common.StringBufferUtils.insertTabs;
+import static com.kreig133.daogenerator.common.StringBuilderUtils.insertTabs;
 
 /**
  * @author eshangareev

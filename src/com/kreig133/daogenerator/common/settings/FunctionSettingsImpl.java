@@ -25,6 +25,7 @@ public class FunctionSettingsImpl implements FunctionSettings {
     private final Map<Integer, String> TEST_PARAM = new HashMap<Integer, String>();
 
     private final StringBuilder QUERY         = new StringBuilder();
+    private final StringBuilder COMMENT_QUERY = new StringBuilder();
     private final StringBuilder TEST_QUERY    = new StringBuilder();
 
     private String MY_BATIS_QUERY;
@@ -53,9 +54,15 @@ public class FunctionSettingsImpl implements FunctionSettings {
         return OUTPUT_PARAMETER_LIST;
     }
     @Override
-    public StringBuilder getSelectQuery() {
+    public StringBuilder getSelectBuilder() {
         return QUERY;
     }
+
+    @Override
+    public StringBuilder getCommentBuilder() {
+        return COMMENT_QUERY;
+    }
+
     @Override
     public String getNameForCall() {
         return NAME_FOR_CALL;

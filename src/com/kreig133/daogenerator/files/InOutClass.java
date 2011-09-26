@@ -1,13 +1,12 @@
 package com.kreig133.daogenerator.files;
 
-import com.kreig133.daogenerator.common.strategy.FuctionalObject;
 import com.kreig133.daogenerator.common.strategy.FunctionalObjectWithoutFilter;
 import com.kreig133.daogenerator.enums.ClassType;
 import com.kreig133.daogenerator.parameter.Parameter;
 
 import java.util.ArrayList;
 import java.util.List;
-import static com.kreig133.daogenerator.common.StringBufferUtils.*;
+import static com.kreig133.daogenerator.common.StringBuilderUtils.*;
 import static com.kreig133.daogenerator.files.JavaFilesUtils.*;
 
 /**

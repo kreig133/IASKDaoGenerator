@@ -7,7 +7,7 @@ import com.kreig133.daogenerator.common.settings.OperationSettings;
  * @author eshangareev
  * @version 1.0
  */
-public class TestParamsParser implements IParser<FunctionSettings>{
+public class TestParamsParser implements IParser{
     @Override
     public void parse( OperationSettings operationSettings,  FunctionSettings input, String lineForParse ) {
         if( lineForParse.trim().length() == 0  ) return;

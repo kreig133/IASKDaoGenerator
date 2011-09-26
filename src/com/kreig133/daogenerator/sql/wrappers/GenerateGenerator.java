@@ -5,10 +5,9 @@ import com.kreig133.daogenerator.common.strategy.FunctionalObjectWithoutFilter;
 import com.kreig133.daogenerator.parameter.Parameter;
 
 import java.util.List;
-import java.util.Map;
 
-import static com.kreig133.daogenerator.common.StringBufferUtils.insertTabs;
-import static com.kreig133.daogenerator.common.StringBufferUtils.iterateForParameterList;
+import static com.kreig133.daogenerator.common.StringBuilderUtils.insertTabs;
+import static com.kreig133.daogenerator.common.StringBuilderUtils.iterateForParameterList;
 
 /**
  * @author eshangareev

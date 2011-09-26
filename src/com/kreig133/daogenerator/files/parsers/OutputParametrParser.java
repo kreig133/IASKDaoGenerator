@@ -1,5 +1,6 @@
 package com.kreig133.daogenerator.files.parsers;
 
+import com.kreig133.daogenerator.common.settings.FunctionSettings;
 import com.kreig133.daogenerator.common.settings.OperationSettings;
 import com.kreig133.daogenerator.enums.InputOrOutputType;
 import com.kreig133.daogenerator.parameter.OutputParameter;
@@ -13,13 +14,14 @@ import static com.kreig133.daogenerator.files.parsers.settings.SettingsReader.*;
  * @author eshangareev
  * @version 1.0
  */
-public class OutputParametrParser implements IParser<List<Parameter>>{
+public class OutputParametrParser implements IParser{
 
     public void parse(
             OperationSettings operationSettings,
-            List<Parameter> input,
+            FunctionSettings  functionSettings ,
             String lineForParse
     ) {
+        List<Parameter> output = functionSettings.getOutputParameterList();
         final String[] params =  lineForParse.split( "\t" );
 
         String name;
@@ -42,7 +44,7 @@ public class OutputParametrParser implements IParser<List<Parameter>>{
             comment = params[ placeOfParam ];
         }
 
-        input.add(
+        output.add(
                 new OutputParameter(
                         comment,
                         type,

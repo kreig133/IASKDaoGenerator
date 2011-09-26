@@ -3,8 +3,8 @@ package com.kreig133.daogenerator.parameter;
 import com.kreig133.daogenerator.common.Utils;
 import com.kreig133.daogenerator.enums.JavaType;
 
-import static com.kreig133.daogenerator.common.StringBufferUtils.getJavaDocString;
-import static com.kreig133.daogenerator.common.StringBufferUtils.insertTabs;
+import static com.kreig133.daogenerator.common.StringBuilderUtils.getJavaDocString;
+import static com.kreig133.daogenerator.common.StringBuilderUtils.insertTabs;
 
 /**
  * @author eshangareev
