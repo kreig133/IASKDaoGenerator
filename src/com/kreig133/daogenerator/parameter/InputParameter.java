@@ -50,7 +50,7 @@ public class InputParameter extends Parameter {
                             " = " + defaultValue.toLowerCase() +
                                     (
                                             type == JavaType.Long ?
-                                                    ( "null".equals( defaultValue.toLowerCase() )?  "" :  "L" ) :
+                                                    ( "null".equals( defaultValue.toLowerCase().trim() )?  "" :  "L" ) :
                                                      ""
                                     )
                 ) + ";\n\n";
