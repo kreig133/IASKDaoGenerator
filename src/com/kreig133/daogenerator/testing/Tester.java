@@ -22,7 +22,6 @@ public class Tester {
             if( functionSettings.getTestInfoType()== TestInfoType.NONE ) return;
 
             ResultSet resultSet = null;
-            ResultSetMetaData metaData = null;
             boolean haveResultSet = false;
 
             switch ( functionSettings.getSelectType() ){
@@ -35,20 +34,18 @@ public class Tester {
                             haveResultSet = statement.execute(functionSettings.getQueryForTesting());
 //                            statement.execute();
                             if( haveResultSet ){
-                                metaData = statement.getResultSet().getMetaData();
+                                resultSet = statement.getResultSet();
                                 break;
                             }
                             //Костыль
                             for( int i = 0; i < 100; i ++ ){
-                                if( statement.getResultSet() != null  ){
-                                    metaData = statement.getResultSet().getMetaData();
+                                resultSet = statement.getResultSet();
+                                if( resultSet != null  ){
                                     break;
                                 }
                                 statement.getMoreResults();
                             }
-
                             break;
-
                         default:
                     }
                     break;
@@ -76,8 +73,12 @@ public class Tester {
                     throw new IllegalArgumentException("Для этой фигни тестирование еще не готово");
             }
 
-            if( metaData == null ){
-                alertError( functionSettings, null );
+            if( resultSet == null ){
+                if( !functionSettings.getOutputParameterList().isEmpty() ){
+                    alertError( functionSettings, null );
+                } else {
+                    alertSuccess( functionSettings );
+                }
                 return;
             }
 
@@ -86,7 +87,7 @@ public class Tester {
                 case SELECT:
                 case GENERATE:
                 case GENEROUT:
-                    final List<String> errors = TypeAndNameComparator.compare( metaData, functionSettings );
+                    final List<String> errors = TypeAndNameComparator.compare( resultSet, functionSettings );
                     if( errors.isEmpty() ){
                         alertSuccess( functionSettings );
                     } else {

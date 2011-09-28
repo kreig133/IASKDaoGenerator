@@ -2,8 +2,10 @@ package com.kreig133.daogenerator.testing;
 
 import com.kreig133.daogenerator.common.settings.FunctionSettings;
 import com.kreig133.daogenerator.enums.JavaType;
+import com.kreig133.daogenerator.enums.ReturnType;
 import com.kreig133.daogenerator.parameter.Parameter;
 
+import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -16,10 +18,17 @@ import java.util.List;
 public class TypeAndNameComparator {
 
     public static List<String> compare(
-            ResultSetMetaData metaData,
+            ResultSet resultSet,
             FunctionSettings  functionSettings
     ) throws SQLException {
+        ResultSetMetaData metaData = resultSet.getMetaData();
         List<String> errorList = new ArrayList<String>(  );
+
+        if( functionSettings.getReturnType() == ReturnType.SINGLE && resultSet.next() && resultSet.next() ){
+            errorList.add(
+                    "Количество резултатов в ResultSet'e больше 1, а ReturnType - SINGLE"
+            );
+        }
 
         //TODO выкосить потом
         int ii = 1 ;
@@ -32,7 +41,6 @@ public class TypeAndNameComparator {
                             "  -  " +
                             outputParameterList.getType() );
         }
-        ii = 0;
         System.out.println("MetaData parametres");
         for ( int i = 1; i <= metaData.getColumnCount(); i++ ){
             System.out.println(
