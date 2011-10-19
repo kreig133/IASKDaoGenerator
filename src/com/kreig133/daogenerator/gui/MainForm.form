@@ -15,7 +15,7 @@
           </grid>
         </constraints>
         <properties>
-          <text value="D:\ForGenerateDao\DefinitAccForLoan"/>
+          <text value="D:\ForGenerateDao\Operation148"/>
         </properties>
       </component>
       <component id="84d46" class="javax.swing.JLabel">
@@ -67,7 +67,7 @@
           </grid>
         </constraints>
         <properties>
-          <text value="ru.sbrf.iask.main.aplana.persistence.entity.defaccloan"/>
+          <text value="ru.sbrf.iask.so.aplana.persistence.entity.op148"/>
         </properties>
       </component>
       <component id="9d526" class="javax.swing.JLabel">
@@ -85,7 +85,7 @@
           </grid>
         </constraints>
         <properties>
-          <text value="ru.sbrf.iask.main.aplana.persistence.dao"/>
+          <text value="ru.sbrf.iask.so.aplana.persistence.dao"/>
         </properties>
       </component>
       <component id="d785e" class="javax.swing.JTextField" binding="mappingPackageTextField">
@@ -95,7 +95,7 @@
           </grid>
         </constraints>
         <properties>
-          <text value="ru.sbrf.iask.main.aplana.persistence.data"/>
+          <text value="ru.sbrf.iask.so.aplana.persistence.data"/>
         </properties>
       </component>
       <component id="1402e" class="javax.swing.JLabel">
