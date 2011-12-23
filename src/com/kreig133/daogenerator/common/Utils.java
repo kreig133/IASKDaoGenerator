@@ -12,6 +12,8 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
+import static com.kreig133.daogenerator.common.StringBuilderUtils.insertTabs;
+
 /**
  * @author eshangareev
  * @version 1.0
@@ -77,9 +79,9 @@ public class Utils {
 
         for ( int i = 0; i < strings.length; i++ ) {
             if ( i != 0 ) {
-                builder.append( "        +" );
+                insertTabs(builder, 2).append( "+" );
             } else {
-                builder.append( "        " );
+                insertTabs(builder, 2);
             }
             builder.append( "\"" ).append( strings[ i ] ).append( "\\n\"\n" );
         }

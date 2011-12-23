@@ -54,7 +54,7 @@ public class SelectQueryConverter {
 
                     insertEscapedParamName( myBatisString, aftefSplit[ 0 ] );
 
-                    final String stringAfterParamName = splitted[ i ].substring( aftefSplit[ 0 ].length() + 1 );
+                    final String stringAfterParamName = splitted[ i ].substring( aftefSplit[ 0 ].length() );
                     queryForTesting.append( stringAfterParamName );
                     myBatisString  .append( stringAfterParamName );
                 }

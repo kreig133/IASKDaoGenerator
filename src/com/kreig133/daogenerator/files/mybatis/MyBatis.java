@@ -73,7 +73,7 @@ public class MyBatis {
                                 operationSettings,
                                 functionSettings,
                                 MethodType.MAPPER  )
-                        + "\n";
+                        + ";\n";
                 Utils.appendByteToFile( mappingFile( operationSettings ),
                         method.getBytes() );
                 break;
