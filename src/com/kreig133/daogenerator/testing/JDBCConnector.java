@@ -4,11 +4,9 @@ import com.kreig133.daogenerator.common.settings.EmptyOperationSettingsImpl;
 import com.kreig133.daogenerator.common.settings.OperationSettings;
 import com.kreig133.daogenerator.enums.Type;
 
-import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.sql.*;
-import java.util.Map;
 import java.util.Properties;
 
 import static com.kreig133.daogenerator.testing.settings.SettingName.*;
@@ -19,9 +17,8 @@ import static com.kreig133.daogenerator.testing.settings.SettingName.*;
  */
 public class JDBCConnector {
     private static final Properties properties = new Properties();
-    private static String pathToProperties ="./src/com/kreig133/daogenerator/testing/settings/";
+    private static String pathToProperties = "./src/com/kreig133/daogenerator/testing/settings/";
     private static Connection connection;
-
 
     public static Connection connectToDB(
             OperationSettings operationSettings
@@ -31,7 +28,7 @@ public class JDBCConnector {
 
         FileInputStream props = null;
 
-        switch ( operationSettings.getType() ){
+        switch ( operationSettings.getType() ) {
             case IASK:
                 props = new FileInputStream( pathToProperties + "iask.properties" );
                 break;
@@ -39,7 +36,7 @@ public class JDBCConnector {
                 props = new FileInputStream( pathToProperties + "depo.properties" );
                 break;
         }
-        if( props != null ){
+        if ( props != null ) {
             properties.load( props );
             props.close();
         } else {
@@ -48,7 +45,7 @@ public class JDBCConnector {
 
         System.setProperty( "jdbc.driver", properties.getProperty( DRIVER ) );
 
-        connection =  DriverManager.getConnection(
+        connection = DriverManager.getConnection(
                 properties.getProperty( URL ),
                 properties.getProperty( USERNAME ),
                 properties.getProperty( PASSWORD )
@@ -58,51 +55,50 @@ public class JDBCConnector {
     }
 
     public static void main( String[] args ) throws IOException, SQLException {
-        Connection connection = connectToDB( new EmptyOperationSettingsImpl(){
+        Connection connection = connectToDB( new EmptyOperationSettingsImpl() {
             @Override
             public Type getType() {
                 return Type.IASK;
             }
-        });
+        } );
         CallableStatement statement = connection.prepareCall( "{? = CALL mav_CodAddress ( null, 0 , 2 , 6, null )}" );
 
         statement.registerOutParameter( 1, Types.OTHER );
 //        Statement statement = connection.createStatement();
 
         statement.execute();
-                            for( int i = 0; i < 100; i ++ ){
-                               if(  statement.getMoreResults() ){
-                                   final ResultSetMetaData metaData = statement.getResultSet().getMetaData();
+        for ( int i = 0; i < 100; i++ ) {
+            if ( statement.getMoreResults() ) {
+                final ResultSetMetaData metaData = statement.getResultSet().getMetaData();
 //                System.out.println( metaData.getColumnCount() );
-                                   for ( int j = 1; j <= metaData.getColumnCount(); j++ ){
-                                       System.out.println(
-                                               j +
-                                                       "  -  " +
-                                                       metaData.getColumnName( j )+
-                                                       "  -  " +
-                                                       metaData.getColumnTypeName( j ) );
-                                   }
+                for ( int j = 1; j <= metaData.getColumnCount(); j++ ) {
+                    System.out.println(
+                            j +
+                                    "  -  " +
+                                    metaData.getColumnName( j ) +
+                                    "  -  " +
+                                    metaData.getColumnTypeName( j ) );
+                }
 
-
-                               }
-                            }
+            }
+        }
 //        final boolean execute = statement.execute();
 //        ResultSet resultSet = statement.execute( "{CALL mav_CodAddress ( null, 0 , 2 , 6 )}" );
 //        statement.execute( "{CALL mav_CodAddress ( null, 0 , 2 , 6, null )}" );
 //        statement.execute( "{? = CALL mav_CodAddress ( null, 0 , 2 , 6, null )}" );
-            statement.getMoreResults();
-            if( statement.getMoreResults() ){
-                final ResultSetMetaData metaData = statement.getResultSet().getMetaData();
+        statement.getMoreResults();
+        if ( statement.getMoreResults() ) {
+            final ResultSetMetaData metaData = statement.getResultSet().getMetaData();
 //                System.out.println( metaData.getColumnCount() );
-                for ( int i = 1; i <= metaData.getColumnCount(); i++ ){
-                    System.out.println(
-                            i +
-                                    "  -  " +
-                                    metaData.getColumnName( i )+
-                                    "  -  " +
-                                    metaData.getColumnTypeName( i ) );
-                }
+            for ( int i = 1; i <= metaData.getColumnCount(); i++ ) {
+                System.out.println(
+                        i +
+                                "  -  " +
+                                metaData.getColumnName( i ) +
+                                "  -  " +
+                                metaData.getColumnTypeName( i ) );
             }
+        }
 //                for( int j = 0; j < 10; j++ ){
 //                    System.out.println(j);
 //                    if( statement.getResultSet() != null  ){

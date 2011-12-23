@@ -41,15 +41,7 @@ public class TypeAndNameComparator {
                             "  -  " +
                             outputParameterList.getType() );
         }
-        System.out.println("MetaData parametres");
-        for ( int i = 1; i <= metaData.getColumnCount(); i++ ){
-            System.out.println(
-                    i +
-                            "  -  " +
-                            metaData.getColumnName( i )+
-                            "  -  " +
-                            metaData.getColumnTypeName( i ) );
-        }
+        printResultSetMetaDataParametrs( metaData );
 
         for( int i = 1; i <= metaData.getColumnCount(); i++ ){
             boolean exist = false;
@@ -81,5 +73,17 @@ public class TypeAndNameComparator {
         }
 
         return errorList;
+    }
+
+    public static void printResultSetMetaDataParametrs( ResultSetMetaData metaData ) throws SQLException {
+        System.out.println("MetaData parametres");
+        for ( int i = 1; i <= metaData.getColumnCount(); i++ ){
+            System.out.println(
+                    i +
+                            "  -  " +
+                            metaData.getColumnName( i )+
+                            "  -  " +
+                            metaData.getColumnTypeName( i ) );
+        }
     }
 }
