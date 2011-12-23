@@ -62,6 +62,8 @@ public class InOutClass {
             p.generateGetter( builder );
             p.generateSetter( builder );
         }
+
+        writeToString( builder );
         builder.append( "}" );
 
         return builder.toString();
@@ -73,11 +75,11 @@ public class InOutClass {
     }
 
     private void writeEmptyConstructor( StringBuilder builder ) {
-        builder.append( "    public " ).append( name ).append( "(){\n    }\n\n" );
+        insertTabs( builder, 1 ).append( "public " ).append( name ).append( "(){\n    }\n\n" );
     }
 
     private void writeFullConstructor( StringBuilder builder ) {
-        builder.append( "    public " ).append( name ).append( "(\n" );
+        insertTabs( builder, 1 ).append( "public " ).append( name ).append( "(\n" );
         iterateForParameterList( builder, parameters, 2, new FunctionalObjectWithoutFilter() {
             @Override
             public void writeString( StringBuilder builder, Parameter p ) {
@@ -85,12 +87,28 @@ public class InOutClass {
             }
         } );
 
-        builder.append( "    ){\n" );
+        insertTabs( builder, 1 ).append( "){\n" );
         for( Parameter p: parameters ){
-            builder.append( "        this." ).append( p.getName() ).append( " = " ).append( p.getName() ).append(";\n");
+            insertTabs( builder, 2 ).append( "this." ).append( p.getName() ).append( " = " ).append( p.getName() )
+                    .append( ";\n" );
         }
         builder.append( "    }\n\n" );
     }
+
+    private void writeToString( StringBuilder builder ){
+        insertTabs( builder, 1 ).append( "@Override\n" );
+        insertTabs( builder, 1 ).append( "public String toString(){\n" );
+        insertTabs( builder, 2 ).append( "return \"" ).append( name ).append( "[\"\n" );
+        for( int i =  0; i < parameters.size(); i ++ ){
+            Parameter parameter = parameters.get( i );
+            insertTabs( builder,3 ).append( "+\"" ).append( i != 0 ? ", " : ""  )
+                    .append( parameter.getName() ).append( " = \"+" )
+                    .append( parameter.getName() ).append( "\n" );
+        }
+        insertTabs( builder, 2 ).append( "+\"]\";\n" );
+        insertTabs( builder, 1 ).append( "}" );
+    }
+
 
     public String getName() {
         return name;

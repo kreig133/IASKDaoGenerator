@@ -45,13 +45,12 @@ public class MyBatis {
             OperationSettings operationSettings
     ) throws IOException {
         String s = "\n}";
-        Utils.appendByteToFile( interfaceFile       ( operationSettings ), s.getBytes() );
-        Utils.appendByteToFile( implementationFile  ( operationSettings ), s.getBytes() );
-
-        if( operationSettings.getType() == Type.DEPO ){
-            Utils.appendByteToFile( mappingFile         ( operationSettings ), s.getBytes() );
-        } else {
+        if( operationSettings.getType() == Type.IASK ){
+            Utils.appendByteToFile( interfaceFile       ( operationSettings ), s.getBytes() );
+            Utils.appendByteToFile( implementationFile  ( operationSettings ), s.getBytes() );
             Utils.appendByteToFile( mappingFile         ( operationSettings ), "</mapper>".getBytes() );
+        } else {
+            Utils.appendByteToFile( mappingFile         ( operationSettings ), s.getBytes() );
         }
     }
 
@@ -85,18 +84,19 @@ public class MyBatis {
             OperationSettings operationSettings,
             FunctionSettings functionSettings
     ) throws IOException {
-
-        StringBuilder builder = new StringBuilder();
-
-        Utils.appendByteToFile(
-                interfaceFile( operationSettings ),
-                StringBuilderUtils.getJavaDocString(
-                        builder,
-                        functionSettings.getCommentBuilder().toString().split( "\n" )
-                ).append(
-                        InterfaceMethodGenerator.methodGenerator( operationSettings, functionSettings )
-                ).toString().getBytes()
-        );
+        if( operationSettings.getType() == Type.IASK ){
+            StringBuilder builder = new StringBuilder();
+    
+            Utils.appendByteToFile(
+                    interfaceFile( operationSettings ),
+                    StringBuilderUtils.getJavaDocString(
+                            builder,
+                            functionSettings.getCommentBuilder().toString().split( "\n" )
+                    ).append(
+                            InterfaceMethodGenerator.methodGenerator( operationSettings, functionSettings )
+                    ).toString().getBytes()
+            );
+        }
     }
 
     private static void generateImplementation(
@@ -104,9 +104,11 @@ public class MyBatis {
             FunctionSettings functionSettings
     ) throws IOException {
 
-        Utils.appendByteToFile(
-                implementationFile( operationSettings ),
-                ImplementationMethodGenerator.generateMethodImpl( operationSettings, functionSettings ).getBytes()
-        );
+        if( operationSettings.getType() == Type.IASK ){
+            Utils.appendByteToFile(
+                    implementationFile( operationSettings ),
+                    ImplementationMethodGenerator.generateMethodImpl( operationSettings, functionSettings ).getBytes()
+            );
+        }
     }
 }
