@@ -13,11 +13,11 @@ public enum JavaType {
     private static final Map< JavaType, List<String> > map = new HashMap<JavaType, List<String>>( 6 );
 
     static {
-        linkJavaTypeWithAliases( Long   , "int", "byte", "long", "smallint", "numeric", "tinyint" );
+        linkJavaTypeWithAliases( Long   , "int", "byte", "long", "smallint", "tinyint", "bigint" );
         linkJavaTypeWithAliases( Byte   , "bit" );
         linkJavaTypeWithAliases( Date   , "datetime" );
         linkJavaTypeWithAliases( String , "string", "varchar", "char" );
-        linkJavaTypeWithAliases( Double , "decimal" );
+        linkJavaTypeWithAliases( Double , "decimal", "numeric" );
     }
 
     public static JavaType getBySqlType( String type ) {

@@ -110,7 +110,7 @@ public class GeneroutGenerator extends CommonWrapperGenerator{
             case Date:
                 return "NULL";
             case String:
-                return "\"\"";
+                return "''";
         }
         throw new IllegalArgumentException();
     }
