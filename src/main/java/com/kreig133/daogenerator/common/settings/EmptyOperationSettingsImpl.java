@@ -12,62 +12,51 @@ import java.util.Map;
 public class EmptyOperationSettingsImpl implements OperationSettings{
     @Override
     public Type getType() {
-        return null;  //To change body of implemented methods use File | Settings | File Templates.
+        return null;
     }
 
     @Override
-    public void setType( Type type ) {
-        //To change body of implemented methods use File | Settings | File Templates.
-    }
+    public void setType( Type type ) { }
 
     @Override
     public String getOperationName() {
-        return null;  //To change body of implemented methods use File | Settings | File Templates.
+        return null;
     }
 
     @Override
-    public void setOperationName( String operationName ) {
-        //To change body of implemented methods use File | Settings | File Templates.
-    }
+    public void setOperationName( String operationName ) { }
 
     @Override
     public String getOutputPath() {
-        return null;  //To change body of implemented methods use File | Settings | File Templates.
+        return null;
     }
 
     @Override
-    public void setOutputPath( String outputPath ) {
-        //To change body of implemented methods use File | Settings | File Templates.
-    }
+    public void setOutputPath( String outputPath ) { }
 
     @Override
     public String getEntityPackage() {
-        return null;  //To change body of implemented methods use File | Settings | File Templates.
+        return null;
     }
 
     @Override
-    public void setEntityPackage( String entityPackage ) {
-        //To change body of implemented methods use File | Settings | File Templates.
-    }
+    public void setEntityPackage( String entityPackage ) { }
 
     @Override
     public String getMapperPackage() {
-        return null;  //To change body of implemented methods use File | Settings | File Templates.
+        return null;
     }
 
     @Override
-    public void setMapperPackage( String mapperPackage ) {
-        //To change body of implemented methods use File | Settings | File Templates.
-    }
+    public void setMapperPackage( String mapperPackage ) { }
 
     @Override
     public String getDaoPackage() {
-        return null;  //To change body of implemented methods use File | Settings | File Templates.
+        return null;
     }
 
     @Override
-    public void setDaoPackage( String daoPackage ) {
-    }
+    public void setDaoPackage( String daoPackage ) { }
 
     @Override
     public String getSourcePath() {
@@ -79,13 +68,11 @@ public class EmptyOperationSettingsImpl implements OperationSettings{
 
     @Override
     public boolean skipTesting() {
-        return false;  //To change body of implemented methods use File | Settings | File Templates.
+        return false;
     }
 
     @Override
-    public void setSkipTesting( boolean skipTesting ) {
-        //To change body of implemented methods use File | Settings | File Templates.
-    }
+    public void setSkipTesting( boolean skipTesting ) { }
 
     @Override
     public File getFileWithSettings() {
@@ -93,17 +80,13 @@ public class EmptyOperationSettingsImpl implements OperationSettings{
     }
 
     @Override
-    public void setFileWithSettings( File fileWithSettings ) {
-        //To change body of implemented methods use File | Settings | File Templates.
-    }
+    public void setFileWithSettings( File fileWithSettings ) { }
 
     @Override
     public Integer getPlaceOfParameter( String parameterKey ) {
-        return null;  //To change body of implemented methods use File | Settings | File Templates.
+        return null;
     }
 
     @Override
-    public void setParameterPlaces( Map<String, Integer> settings ) {
-        //To change body of implemented methods use File | Settings | File Templates.
-    }
+    public void setParameterPlaces( Map<String, Integer> settings ) { }
 }

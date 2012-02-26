@@ -17,8 +17,6 @@ import static com.kreig133.daogenerator.testing.settings.SettingName.*;
  */
 public class JDBCConnector {
     private static final Properties properties = new Properties();
-    private static String pathToProperties = "./src/com/kreig133/daogenerator/testing/settings/";
-    private static Connection connection;
 
     public static Connection connectToDB(
             OperationSettings operationSettings
@@ -30,10 +28,10 @@ public class JDBCConnector {
 
         switch ( operationSettings.getType() ) {
             case IASK:
-                props = new FileInputStream( pathToProperties + "iask.properties" );
+                props = new FileInputStream( "properties/db/iask.properties" );
                 break;
             case DEPO:
-                props = new FileInputStream( pathToProperties + "depo.properties" );
+                props = new FileInputStream( "properties/db/depo.properties" );
                 break;
         }
         if ( props != null ) {
@@ -45,7 +43,7 @@ public class JDBCConnector {
 
         System.setProperty( "jdbc.driver", properties.getProperty( DRIVER ) );
 
-        connection = DriverManager.getConnection(
+        Connection connection = DriverManager.getConnection(
                 properties.getProperty( URL ),
                 properties.getProperty( USERNAME ),
                 properties.getProperty( PASSWORD )

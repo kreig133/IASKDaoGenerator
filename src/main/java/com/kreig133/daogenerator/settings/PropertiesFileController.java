@@ -42,7 +42,7 @@ public class PropertiesFileController {
     }
 
     private static File getDefaultPropertiesFile() {
-        return new File( SettingName.PROPERTIES_FILE_NAME );
+        return new File( "properties/" + SettingName.PROPERTIES_FILE_NAME );
     }
 
     public static Properties getPropertiesFromSourceDir( String sourceDirPath ) {

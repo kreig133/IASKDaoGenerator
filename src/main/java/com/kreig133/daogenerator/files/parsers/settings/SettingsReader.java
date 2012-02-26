@@ -3,12 +3,9 @@ package com.kreig133.daogenerator.files.parsers.settings;
 import com.kreig133.daogenerator.common.settings.EmptyOperationSettingsImpl;
 import com.kreig133.daogenerator.common.settings.OperationSettings;
 import com.kreig133.daogenerator.enums.InputOrOutputType;
-import com.kreig133.daogenerator.enums.Type;
-import com.sun.org.apache.bcel.internal.generic.RETURN;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
@@ -32,7 +29,7 @@ public class SettingsReader {
     public static final String TEST     = "test";
 
     private static final Properties properties = new Properties();
-    private static final String pathToProperties ="./src/com/kreig133/daogenerator/files/parsers/settings/parse.properties";
+    private static final String pathToProperties = "properties/parse.properties";
 
     private static final Map<String, Integer> settings = new HashMap<String, Integer>( 10 );
 
