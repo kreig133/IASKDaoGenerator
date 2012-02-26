@@ -3,7 +3,6 @@ package com.kreig133.daogenerator.common;
 import com.kreig133.daogenerator.common.settings.FunctionSettings;
 import com.kreig133.daogenerator.common.settings.OperationSettings;
 import com.kreig133.daogenerator.enums.Type;
-import com.kreig133.daogenerator.common.strategy.FuctionalObject;
 import com.kreig133.daogenerator.parameter.Parameter;
 
 import java.io.File;
@@ -175,5 +174,7 @@ public class Utils {
         return builder.toString();
     }
 
-
+    public static File getFileFromDirectoryByName( String directoryPath, String fileName ) {
+        return new File( new File( directoryPath ).getAbsolutePath() + "/" + fileName );
+    }
 }

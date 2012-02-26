@@ -5,10 +5,13 @@ import com.kreig133.daogenerator.common.Utils;
 import com.kreig133.daogenerator.common.settings.FunctionSettingsImpl;
 import com.kreig133.daogenerator.common.settings.OperationSettings;
 import com.kreig133.daogenerator.enums.InputOrOutputType;
+import com.kreig133.daogenerator.enums.Type;
 import com.kreig133.daogenerator.files.InOutClass;
 import com.kreig133.daogenerator.files.mybatis.MyBatis;
 import com.kreig133.daogenerator.files.parsers.InputFileParser;
 import com.kreig133.daogenerator.files.parsers.settings.SettingsReader;
+import com.kreig133.daogenerator.gui.MainForm;
+import com.kreig133.daogenerator.settings.PropertiesFileController;
 import com.kreig133.daogenerator.sql.ProcedureCallCreator;
 import com.kreig133.daogenerator.sql.SelectQueryConverter;
 import com.kreig133.daogenerator.sql.wrappers.GenerateGenerator;
@@ -21,7 +24,9 @@ import java.io.FilenameFilter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Properties;
 
+import static com.kreig133.daogenerator.settings.SettingName.*;
 import static com.kreig133.daogenerator.common.Utils.checkToNeedOwnInClass;
 import static com.kreig133.daogenerator.files.JavaFilesUtils.*;
 
@@ -31,11 +36,13 @@ import static com.kreig133.daogenerator.files.JavaFilesUtils.*;
  */
 public class Controller {
 
-    private static final List< FunctionSettings > settingsList = new ArrayList<FunctionSettings>();
+    private static final List<FunctionSettings> settingsList = new ArrayList<FunctionSettings>();
 
     public static void doAction() {
 
         final OperationSettings operationSettings = DaoGenerator.getCurrentOperationSettings();
+
+        saveProperties( operationSettings );
 
         try {
             MyBatis.prepareFiles( operationSettings );
@@ -59,7 +66,7 @@ public class Controller {
                                     }
                             )
         ) {
-            Controller.readFile( new File( operationSettings.getSourcePath() + "/" + s ), operationSettings );
+            Controller.readFile( Utils.getFileFromDirectoryByName(operationSettings.getSourcePath(), s ), operationSettings );
         }
 
         createQueries();
@@ -79,10 +86,8 @@ public class Controller {
             MyBatis.closeFiles( operationSettings );
         } catch ( IOException e ) {
             System.err.println( ">>>Controller: Ошибка! При записи в файлы, произошла ошибка!" );
-            e.printStackTrace();
+            throw new RuntimeException( e );
         }
-
-//        System.exit( 0 );
     }
 
     private static void createQueries() {
@@ -163,5 +168,29 @@ public class Controller {
         } finally {
             if (writer != null) writer.close();
         }
+    }
+
+    private static void saveProperties( OperationSettings operationSettings ) {
+        Properties properties = new Properties();
+
+        properties.setProperty( SKIP_TESTS          , String.valueOf( operationSettings.skipTesting() ) );
+
+        properties.setProperty( IASK                , String.valueOf( operationSettings.getType() == Type.IASK ) );
+        properties.setProperty( DEPO                , String.valueOf( operationSettings.getType() == Type.DEPO ) );
+
+        properties.setProperty( WIDTH               , String.valueOf( ( int ) MainForm.getInstance().getSize().getWidth () ) );
+        properties.setProperty( HEIGHT              , String.valueOf( ( int ) MainForm.getInstance().getSize().getHeight() ) );
+
+        properties.setProperty( DEST_DIR            , operationSettings.getOutputPath   () );
+        properties.setProperty( ENTITY_PACKAGE      , operationSettings.getEntityPackage() );
+        properties.setProperty( INTERFACE_PACKAGE   , operationSettings.getDaoPackage   () );
+        properties.setProperty( MAPPING_PACKAGE     , operationSettings.getMapperPackage() );
+
+        PropertiesFileController.saveSpecificProperties( operationSettings.getSourcePath(), properties );
+
+        properties.setProperty( SOURCE_DIR          , operationSettings.getSourcePath() );
+
+        PropertiesFileController.saveCommonProperties( properties );
+
     }
 }
