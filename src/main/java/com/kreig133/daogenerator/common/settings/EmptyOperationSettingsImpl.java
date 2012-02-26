@@ -67,18 +67,15 @@ public class EmptyOperationSettingsImpl implements OperationSettings{
 
     @Override
     public void setDaoPackage( String daoPackage ) {
-        //To change body of implemented methods use File | Settings | File Templates.
     }
 
     @Override
     public String getSourcePath() {
-        return null;  //To change body of implemented methods use File | Settings | File Templates.
+        return null;
     }
 
     @Override
-    public void setSourcePath( String path ) {
-        //To change body of implemented methods use File | Settings | File Templates.
-    }
+    public void setSourcePath( String path ) {}
 
     @Override
     public boolean skipTesting() {
@@ -92,7 +89,7 @@ public class EmptyOperationSettingsImpl implements OperationSettings{
 
     @Override
     public File getFileWithSettings() {
-        return null;  //To change body of implemented methods use File | Settings | File Templates.
+        return null;
     }
 
     @Override

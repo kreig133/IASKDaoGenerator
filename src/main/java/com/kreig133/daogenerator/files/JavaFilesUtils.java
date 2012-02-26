@@ -1,6 +1,5 @@
 package com.kreig133.daogenerator.files;
 
-import com.kreig133.daogenerator.common.settings.FunctionSettings;
 import com.kreig133.daogenerator.common.settings.OperationSettings;
 import com.kreig133.daogenerator.enums.ClassType;
 
@@ -36,8 +35,6 @@ public class JavaFilesUtils {
                 file = new File( path + mapperFileName( operationSettings ) + JAVA_EXTENSION );
                 break;
         }
-
-        if( file == null ) throw new IllegalArgumentException();
 
         createDirsAndFile( file.getParentFile() );
 

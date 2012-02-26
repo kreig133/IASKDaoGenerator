@@ -1,6 +1,5 @@
 package com.kreig133.daogenerator.enums;
 
-import java.math.BigDecimal;
 import java.util.*;
 
 /**

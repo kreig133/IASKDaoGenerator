@@ -1,9 +1,9 @@
 package com.kreig133.daogenerator.files.mybatis.preparatory;
 
-import com.kreig133.daogenerator.common.settings.FunctionSettings;
 import com.kreig133.daogenerator.common.settings.OperationSettings;
 
-import static com.kreig133.daogenerator.files.JavaFilesUtils.*;
+import static com.kreig133.daogenerator.files.JavaFilesUtils.insertImport;
+import static com.kreig133.daogenerator.files.JavaFilesUtils.insertPackageLine;
 /**
  * @author eshangareev
  * @version 1.0

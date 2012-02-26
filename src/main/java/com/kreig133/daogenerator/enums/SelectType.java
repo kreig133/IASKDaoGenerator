@@ -1,8 +1,5 @@
 package com.kreig133.daogenerator.enums;
 
-import java.util.HashMap;
-import java.util.Map;
-
 /**
  * @author eshangareev
  * @version 1.0

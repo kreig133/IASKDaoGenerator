@@ -1,13 +1,11 @@
 package com.kreig133.daogenerator.files.parsers;
 
-import com.kreig133.daogenerator.common.Utils;
 import com.kreig133.daogenerator.common.settings.FunctionSettings;
 import com.kreig133.daogenerator.common.settings.OperationSettings;
 import com.kreig133.daogenerator.enums.InputOrOutputType;
 import com.kreig133.daogenerator.parameter.InputParameter;
 import com.kreig133.daogenerator.parameter.Parameter;
 
-import javax.swing.text.html.parser.Parser;
 import java.util.List;
 
 import static com.kreig133.daogenerator.files.parsers.settings.SettingsReader.*;
