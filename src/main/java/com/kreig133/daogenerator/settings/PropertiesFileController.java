@@ -2,6 +2,7 @@ package com.kreig133.daogenerator.settings;
 
 import com.kreig133.daogenerator.common.Utils;
 
+import javax.swing.*;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -15,6 +16,7 @@ import java.util.Properties;
 public class PropertiesFileController {
 
     private static final String COMMENTS = "Settings for DaoGenerator";
+    private static final String CREATE_FILE_MESSAGE = "Создать файл" + SettingName.PROPERTIES_FILE_NAME + "в папке \"%s\"?";
 
     public static Properties getDefaultProperties() {
         try{
@@ -51,7 +53,7 @@ public class PropertiesFileController {
 
             File file = getSpecificPropertiesFile( sourceDirPath );
 
-            if( !file.exists() ){
+            if( file == null || !file.exists() ){
                 return null;
             }
 
@@ -69,9 +71,15 @@ public class PropertiesFileController {
         final File fileFromDirectoryByName =
                 Utils.getFileFromDirectoryByName( sourceDirPath, SettingName.PROPERTIES_FILE_NAME );
         if ( ! fileFromDirectoryByName.exists() ) {
-            //TODO по идее можно спрашивать юзера
             try {
-                fileFromDirectoryByName.createNewFile();
+                if(     JOptionPane.showConfirmDialog( null, String.format( CREATE_FILE_MESSAGE , sourceDirPath ) )
+                        ==
+                        JOptionPane.OK_OPTION
+                ){
+                    fileFromDirectoryByName.createNewFile();
+                } else {
+                    return null;
+                }
             } catch ( IOException e ) {
                 e.printStackTrace();
             }
