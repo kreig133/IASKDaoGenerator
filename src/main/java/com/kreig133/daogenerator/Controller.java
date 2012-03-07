@@ -4,13 +4,13 @@ import com.kreig133.daogenerator.common.settings.FunctionSettings;
 import com.kreig133.daogenerator.common.Utils;
 import com.kreig133.daogenerator.common.settings.FunctionSettingsImpl;
 import com.kreig133.daogenerator.common.settings.OperationSettings;
-import com.kreig133.daogenerator.enums.InputOrOutputType;
 import com.kreig133.daogenerator.enums.Type;
 import com.kreig133.daogenerator.files.InOutClass;
 import com.kreig133.daogenerator.files.mybatis.MyBatis;
 import com.kreig133.daogenerator.files.parsers.InputFileParser;
 import com.kreig133.daogenerator.files.parsers.settings.SettingsReader;
 import com.kreig133.daogenerator.gui.MainForm;
+import com.kreig133.daogenerator.jaxb.InOutType;
 import com.kreig133.daogenerator.settings.PropertiesFileController;
 import com.kreig133.daogenerator.sql.ProcedureCallCreator;
 import com.kreig133.daogenerator.sql.SelectQueryConverter;
@@ -134,11 +134,11 @@ public class Controller {
 
         for ( FunctionSettings settings: settingsList ) {
             if ( checkToNeedOwnInClass( operationSettings, settings ) ) {
-                createJavaClassForInputOutputEntities( operationSettings, settings, InputOrOutputType.IN );
+                createJavaClassForInputOutputEntities( operationSettings, settings, InOutType.IN );
             }
 
             if ( settings.getOutputParameterList().size() > 1 ) {
-                createJavaClassForInputOutputEntities( operationSettings, settings, InputOrOutputType.OUT );
+                createJavaClassForInputOutputEntities( operationSettings, settings, InOutType.OUT );
             }
 
             MyBatis.generateFiles( operationSettings, settings );
@@ -148,16 +148,16 @@ public class Controller {
     private static void createJavaClassForInputOutputEntities(
             OperationSettings operationSettings,
             FunctionSettings functionSettings,
-            InputOrOutputType type
+            InOutType type
     ) throws IOException {
 
         FileWriter writer = null;
         try {
             InOutClass inOutClass = new InOutClass(
                     operationSettings.getEntityPackage(),
-                    type == InputOrOutputType.IN ? functionSettings.getInputParameterList(): functionSettings.getOutputParameterList(),
+                    type == InOutType.IN ? functionSettings.getInputParameterList(): functionSettings.getOutputParameterList(),
                     Utils.convertNameForClassNaming( functionSettings.getName() ) +
-                            ( type == InputOrOutputType.IN ? "In" : "Out" )
+                            ( type == InOutType.IN ? "In" : "Out" )
             );
 
             File inClassFile = getInOrOutClassFile( operationSettings, inOutClass );

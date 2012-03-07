@@ -2,7 +2,7 @@ package com.kreig133.daogenerator.files.parsers.settings;
 
 import com.kreig133.daogenerator.common.settings.EmptyOperationSettingsImpl;
 import com.kreig133.daogenerator.common.settings.OperationSettings;
-import com.kreig133.daogenerator.enums.InputOrOutputType;
+import com.kreig133.daogenerator.jaxb.InOutType;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -46,12 +46,12 @@ public class SettingsReader {
             String   param  = properties.getProperty( key );
             String[] params = param.split( "," );
 
-            settings.put( key + InputOrOutputType.IN, convertToInteger( params[0] ) );
+            settings.put( key + InOutType.IN, convertToInteger( params[0] ) );
 
             if( params.length == 2 ){
-                settings.put( key + InputOrOutputType.OUT, convertToInteger( params[1] ) );
+                settings.put( key + InOutType.OUT, convertToInteger( params[1] ) );
             } else {
-                settings.put( key + InputOrOutputType.OUT, convertToInteger( params[0] ) );
+                settings.put( key + InOutType.OUT, convertToInteger( params[0] ) );
             }
         }
 

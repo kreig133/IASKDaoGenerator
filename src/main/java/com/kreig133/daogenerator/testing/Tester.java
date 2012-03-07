@@ -2,6 +2,7 @@ package com.kreig133.daogenerator.testing;
 
 import com.kreig133.daogenerator.common.settings.FunctionSettings;
 import com.kreig133.daogenerator.common.settings.OperationSettings;
+import com.kreig133.daogenerator.db.JDBCConnector;
 import com.kreig133.daogenerator.enums.TestInfoType;
 
 import java.io.IOException;
@@ -99,10 +100,6 @@ public class Tester {
                 case UPDATE:
                     alertSuccess( functionSettings );
             }
-        } catch ( IOException e ) {
-            //TODO
-
-            e.printStackTrace();
         } catch ( SQLException e ) {
             //TODO собирать сообщения об ошибках
             alertError( functionSettings, new ArrayList<String>() );

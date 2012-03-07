@@ -1,4 +1,4 @@
-package com.kreig133.daogenerator.testing;
+package com.kreig133.daogenerator.db;
 
 import com.kreig133.daogenerator.common.settings.EmptyOperationSettingsImpl;
 import com.kreig133.daogenerator.common.settings.OperationSettings;
@@ -20,34 +20,39 @@ public class JDBCConnector {
 
     public static Connection connectToDB(
             OperationSettings operationSettings
-    ) throws IOException, SQLException {
+    ) {
 
 //        if( connection != null ) return connection;
 
         FileInputStream props = null;
 
-        switch ( operationSettings.getType() ) {
-            case IASK:
-                props = new FileInputStream( "properties/db/iask.properties" );
-                break;
-            case DEPO:
-                props = new FileInputStream( "properties/db/depo.properties" );
-                break;
-        }
-        if ( props != null ) {
+        try {
+            switch ( operationSettings.getType() ) {
+                case IASK:
+                    props = new FileInputStream( "properties/db/iask.properties" );
+                    break;
+                case DEPO:
+                    props = new FileInputStream( "properties/db/depo.properties" );
+                    break;
+            }
             properties.load( props );
             props.close();
-        } else {
-            throw new IOException( "Не удалось загрузить параметры соединения" );
+        } catch ( IOException e ) {
+            throw new RuntimeException( "Не удалось загрузить параметры соединения", e );
         }
 
         System.setProperty( "jdbc.driver", properties.getProperty( DRIVER ) );
 
-        Connection connection = DriverManager.getConnection(
-                properties.getProperty( URL ),
-                properties.getProperty( USERNAME ),
-                properties.getProperty( PASSWORD )
-        );
+        Connection connection = null;
+        try {
+            connection = DriverManager.getConnection(
+                    properties.getProperty( URL ),
+                    properties.getProperty( USERNAME ),
+                    properties.getProperty( PASSWORD )
+            );
+        } catch ( SQLException e ) {
+            throw new RuntimeException( "Не удалось подключиться к базе", e );
+        }
 
         return connection;
     }

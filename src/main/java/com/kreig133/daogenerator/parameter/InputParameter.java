@@ -1,8 +1,8 @@
 package com.kreig133.daogenerator.parameter;
 
 import com.kreig133.daogenerator.common.Utils;
-import com.kreig133.daogenerator.enums.InputOrOutputType;
-import com.kreig133.daogenerator.enums.JavaType;
+import com.kreig133.daogenerator.jaxb.InOutType;
+import com.kreig133.daogenerator.jaxb.JavaType;
 
 /**
  * @author eshangareev
@@ -10,10 +10,10 @@ import com.kreig133.daogenerator.enums.JavaType;
  */
 public class InputParameter extends Parameter {
     private String defaultValue;
-    private InputOrOutputType inputType;
+    private InOutType inputType;
     private String rawName;
 
-    public InputParameter(String name, String type, String defaultValue, String comment, InputOrOutputType inputType) {
+    public InputParameter(String name, String type, String defaultValue, String comment, InOutType inputType) {
         super(comment, type, Utils.convertPBNameToName( name ) );
         this.defaultValue = Utils.handleDefaultValue( defaultValue );
         this.inputType = inputType;
@@ -28,11 +28,11 @@ public class InputParameter extends Parameter {
         this.defaultValue = defaultValue;
     }
 
-    public InputOrOutputType getInputType() {
+    public InOutType getInputType() {
         return inputType;
     }
 
-    public void setInputType( InputOrOutputType inputType ) {
+    public void setInputType( InOutType inputType ) {
         this.inputType = inputType;
     }
 
@@ -49,7 +49,7 @@ public class InputParameter extends Parameter {
                             "" :
                             " = " + defaultValue.toLowerCase().trim() +
                                     (
-                                            type == JavaType.Long ?
+                                            type == JavaType.LONG ?
                                                     ( "null".equals( defaultValue.toLowerCase().trim() )?  "" :  "L" ) :
                                                      ""
                                     )

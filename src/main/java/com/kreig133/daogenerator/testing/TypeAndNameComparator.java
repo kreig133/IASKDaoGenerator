@@ -1,8 +1,8 @@
 package com.kreig133.daogenerator.testing;
 
 import com.kreig133.daogenerator.common.settings.FunctionSettings;
-import com.kreig133.daogenerator.enums.JavaType;
 import com.kreig133.daogenerator.enums.ReturnType;
+import com.kreig133.daogenerator.jaxb.JavaType;
 import com.kreig133.daogenerator.parameter.Parameter;
 
 import java.sql.ResultSet;

@@ -2,7 +2,7 @@ package com.kreig133.daogenerator.files.parsers;
 
 import com.kreig133.daogenerator.common.settings.FunctionSettings;
 import com.kreig133.daogenerator.common.settings.OperationSettings;
-import com.kreig133.daogenerator.enums.InputOrOutputType;
+import com.kreig133.daogenerator.jaxb.InOutType;
 import com.kreig133.daogenerator.parameter.InputParameter;
 import com.kreig133.daogenerator.parameter.Parameter;
 
@@ -28,9 +28,9 @@ public class InputParameterParser implements IParser{
         String type;
         String defaultValue = null;
         String comment = null;
-        InputOrOutputType inOutType = InputOrOutputType.OUT;
+        InOutType inOutType = InOutType.OUT;
 
-        String suffix = InputOrOutputType.IN.toString();
+        String suffix = InOutType.IN.toString();
         Integer placeOfParam;
 
         placeOfParam = operationSettings.getPlaceOfParameter( NAME + suffix );
@@ -53,7 +53,7 @@ public class InputParameterParser implements IParser{
 
         placeOfParam = operationSettings.getPlaceOfParameter( IN_OUT + suffix );
         if( placeOfParam != null ){
-            inOutType = InputOrOutputType.getByName( params[ placeOfParam ] );
+            inOutType = InOutType.getByName( params[ placeOfParam ] );
         }
 
         input.add(
