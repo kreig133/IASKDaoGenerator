@@ -19,7 +19,6 @@ public class ImplementationFilePreparatory extends InterfaceFilePreparatory {
     public static void prepareFile(
             final OperationSettings operationSettings
     ) throws IOException {
-        if( operationSettings.getType() == Type.IASK ){
             final StringBuilder builder = new StringBuilder();
     
             startingLinesOfDaoFiles( builder );
@@ -42,6 +41,5 @@ public class ImplementationFilePreparatory extends InterfaceFilePreparatory {
                     }
             );
             Utils.appendByteToFile( implementationFile(), builder.toString().getBytes() );
-        }
     }
 }

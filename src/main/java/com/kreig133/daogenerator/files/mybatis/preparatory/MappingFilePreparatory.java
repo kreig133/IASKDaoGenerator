@@ -5,6 +5,7 @@ import com.kreig133.daogenerator.common.Utils;
 import com.kreig133.daogenerator.common.settings.OperationSettings;
 import com.kreig133.daogenerator.enums.ClassType;
 import com.kreig133.daogenerator.enums.Type;
+import com.kreig133.daogenerator.files.Appender;
 
 import java.io.IOException;
 
@@ -16,7 +17,7 @@ import static com.kreig133.daogenerator.files.JavaFilesUtils.*;
  */
 public class MappingFilePreparatory extends Preparatory{
 
-    public static void prepareFile() throws IOException {
+    public static void prepareFile( Appender appender ) throws IOException {
         StringBuilder builder = new StringBuilder();
 
         if( DaoGenerator.getCurrentOperationSettings().getType() == Type.DEPO ){
@@ -40,6 +41,6 @@ public class MappingFilePreparatory extends Preparatory{
                     .append( "." ).append( interfaceFileName() ).append( "\">\n" );
         }
 
-        Utils.appendByteToFile( mappingFile(), builder.toString().getBytes() );
+        appender.appendStringToFile( mappingFile(), builder.toString() );
     }
 }

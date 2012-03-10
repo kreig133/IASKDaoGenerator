@@ -3,9 +3,9 @@ package com.kreig133.daogenerator;
 import com.kreig133.daogenerator.common.Utils;
 import com.kreig133.daogenerator.common.settings.OperationSettings;
 import com.kreig133.daogenerator.enums.Type;
+import com.kreig133.daogenerator.files.Appender;
 import com.kreig133.daogenerator.files.InOutClass;
 import com.kreig133.daogenerator.files.mybatis.MyBatis;
-import com.kreig133.old_version_converter.parsers.settings.SettingsReader;
 import com.kreig133.daogenerator.gui.MainForm;
 import com.kreig133.daogenerator.jaxb.DaoMethod;
 import com.kreig133.daogenerator.jaxb.InOutType;
@@ -51,12 +51,24 @@ public class Controller {
 
         final OperationSettings operationSettings = DaoGenerator.getCurrentOperationSettings();
 
-        saveProperties( operationSettings );
+        saveProperties();
+
+        final Appender appender = new Appender() {
+            @Override
+            public void appendStringToFile( File file, String string ) {
+                try {
+                    Utils.appendByteToFile( file, string.getBytes() );
+                } catch ( IOException e ) {
+                    //TODO
+                    e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+                }
+            }
+        };
 
         try {
-            MyBatis.prepareFiles( operationSettings );
 
-            SettingsReader.readProperties( operationSettings );
+
+            MyBatis.prepareFiles( appender );
 
         } catch ( Throwable e ) {
             System.err.println( ">>>Controller: Ошибка! При предварительной записи в файлы или " +
@@ -162,8 +174,10 @@ public class Controller {
         }
     }
 
-    private static void saveProperties( OperationSettings operationSettings ) {
+    private static void saveProperties() {
         Properties properties = new Properties();
+
+        final OperationSettings operationSettings = DaoGenerator.getCurrentOperationSettings();
 
         properties.setProperty( SKIP_TESTS          , String.valueOf( operationSettings.skipTesting() ) );
 
@@ -173,9 +187,9 @@ public class Controller {
         properties.setProperty( WIDTH               , String.valueOf( ( int ) MainForm.getInstance().getSize().getWidth () ) );
         properties.setProperty( HEIGHT              , String.valueOf( ( int ) MainForm.getInstance().getSize().getHeight() ) );
 
-        properties.setProperty( DEST_DIR            , operationSettings.getOutputPath   () );
+        properties.setProperty( DEST_DIR            , operationSettings.getOutputPath() );
         properties.setProperty( ENTITY_PACKAGE      , operationSettings.getEntityPackage() );
-        properties.setProperty( INTERFACE_PACKAGE   , operationSettings.getDaoPackage   () );
+        properties.setProperty( INTERFACE_PACKAGE   , operationSettings.getDaoPackage() );
         properties.setProperty( MAPPING_PACKAGE     , operationSettings.getMapperPackage() );
 
         PropertiesFileController.saveSpecificProperties( operationSettings.getSourcePath(), properties );

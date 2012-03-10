@@ -21,10 +21,6 @@ public class OperationSettingsImpl implements OperationSettings{
     private String OUTPUT_PATH;
     private String SOURCE_PATH;
 
-    private File FILE_WITH_SETTINGS;
-
-    private Map<String, Integer> SETTINGS;
-
     @Override
     public Type getType() {
         return TYPE;
@@ -64,23 +60,10 @@ public class OperationSettingsImpl implements OperationSettings{
     }
 
     @Override
-    public File getFileWithSettings() {
-        return FILE_WITH_SETTINGS;
-    }
-
-
-    @Override
     public boolean skipTesting() {
         return SKIP_TESTING;
     }
 
-    @Override
-    public Integer getPlaceOfParameter( String parameterKey ) {
-        if( SETTINGS == null ){
-            throw new AssertionError( "SETTINGS еще не был установлен!" );
-        }
-        return SETTINGS.get( parameterKey );
-    }
 
     @Override
     public void setType( Type type ) {
@@ -150,18 +133,5 @@ public class OperationSettingsImpl implements OperationSettings{
     @Override
     public void setSkipTesting( boolean skipTesting ) {
         this.SKIP_TESTING = skipTesting;
-    }
-
-    @Override
-    public void setFileWithSettings( File fileWithSettings ) {
-        FILE_WITH_SETTINGS = fileWithSettings;
-    }
-
-    @Override
-    public void setParameterPlaces( Map<String, Integer> settings ) {
-        if( SETTINGS != null ){
-            throw new AssertionError( "SETTINGS уже был установлен!" );
-        }
-        SETTINGS = settings;
     }
 }

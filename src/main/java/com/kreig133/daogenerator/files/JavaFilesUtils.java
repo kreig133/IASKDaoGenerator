@@ -90,7 +90,11 @@ public class JavaFilesUtils {
     }
 
     private static String replacePointBySlash( String string ){
-        return string.replace( '.', '/' );
+        if( string != null ){
+            return string.replace( '.', '/' );
+        }
+
+        return null;
     }
 
     public static void insertImport( StringBuilder builder, String path ){

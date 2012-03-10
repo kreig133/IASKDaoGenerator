@@ -6,6 +6,7 @@ import com.kreig133.daogenerator.common.Utils;
 import com.kreig133.daogenerator.common.settings.OperationSettings;
 import com.kreig133.daogenerator.enums.MethodType;
 import com.kreig133.daogenerator.enums.Type;
+import com.kreig133.daogenerator.files.Appender;
 import com.kreig133.daogenerator.files.mybatis.preparatory.ImplementationFilePreparatory;
 import com.kreig133.daogenerator.files.mybatis.preparatory.InterfaceFilePreparatory;
 import com.kreig133.daogenerator.files.mybatis.preparatory.MappingFilePreparatory;
@@ -22,12 +23,15 @@ import static com.kreig133.daogenerator.files.JavaFilesUtils.*;
 public class MyBatis {
 
     public static void prepareFiles(
-            OperationSettings operationSettings
+            Appender appender
     ) throws IOException {
 
-        InterfaceFilePreparatory        .prepareFile();
-        ImplementationFilePreparatory   .prepareFile();
-        MappingFilePreparatory          .prepareFile();
+        if( DaoGenerator.getCurrentOperationSettings().getType() ==  Type.IASK ){
+            InterfaceFilePreparatory        .prepareFile( appender );
+            ImplementationFilePreparatory   .prepareFile( appender );
+        }
+
+        MappingFilePreparatory          .prepareFile( appender );
 
     }
 

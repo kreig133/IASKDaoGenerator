@@ -14,7 +14,7 @@ import java.io.IOException;
  */
 public class DaoGenerator {
 
-    private static OperationSettings operationSettings;
+    private static OperationSettings operationSettings = new OperationSettingsImpl();
 
     public static void main(String[] args) throws IOException {
 
@@ -24,7 +24,6 @@ public class DaoGenerator {
             e.printStackTrace();
         }
 
-        operationSettings = new OperationSettingsImpl();
         EventQueue.invokeLater( new Runnable() {
             @Override
             public void run() {

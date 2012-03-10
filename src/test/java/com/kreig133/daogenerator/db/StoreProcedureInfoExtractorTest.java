@@ -1,4 +1,4 @@
-package com.kreig133.daogenerator.common;
+package com.kreig133.daogenerator.db;
 
 import com.kreig133.daogenerator.db.StoreProcedureInfoExtractor;
 import com.kreig133.daogenerator.jaxb.JavaType;

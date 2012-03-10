@@ -41,13 +41,4 @@ public interface OperationSettings {
     boolean skipTesting();
 
     void setSkipTesting( boolean skipTesting );
-
-    File getFileWithSettings();
-
-    void setFileWithSettings( File fileWithSettings );
-
-    Integer getPlaceOfParameter( String parameterKey );
-
-    void setParameterPlaces( Map<String, Integer> settings );
-
 }

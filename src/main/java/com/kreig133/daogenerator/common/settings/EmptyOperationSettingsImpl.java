@@ -74,19 +74,4 @@ public class EmptyOperationSettingsImpl implements OperationSettings{
     @Override
     public void setSkipTesting( boolean skipTesting ) { }
 
-    @Override
-    public File getFileWithSettings() {
-        return null;
-    }
-
-    @Override
-    public void setFileWithSettings( File fileWithSettings ) { }
-
-    @Override
-    public Integer getPlaceOfParameter( String parameterKey ) {
-        return null;
-    }
-
-    @Override
-    public void setParameterPlaces( Map<String, Integer> settings ) { }
 }
