@@ -8,6 +8,7 @@
 
 package com.kreig133.daogenerator.jaxb;
 
+
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
@@ -24,7 +25,7 @@ import javax.xml.bind.annotation.XmlValue;
  * &lt;complexType name="configurationType">
  *   &lt;simpleContent>
  *     &lt;extension base="&lt;http://www.w3.org/2001/XMLSchema>string">
- *       &lt;attribute name="type" use="required" type="{com.aplana.dao-generator}typeType" />
+ *       &lt;attribute name="type" use="required" type="{com.aplana.dao-generator}selectType" />
  *       &lt;attribute name="multipleResult" use="required" type="{http://www.w3.org/2001/XMLSchema}boolean" />
  *       &lt;attribute name="testingType" use="required" type="{com.aplana.dao-generator}testingType" />
  *     &lt;/extension>
@@ -43,7 +44,7 @@ public class ConfigurationType {
     @XmlValue
     protected String value;
     @XmlAttribute(required = true)
-    protected TypeType type;
+    protected SelectType type;
     @XmlAttribute(required = true)
     protected boolean multipleResult;
     @XmlAttribute(required = true)
@@ -78,10 +79,10 @@ public class ConfigurationType {
      * 
      * @return
      *     possible object is
-     *     {@link TypeType }
+     *     {@link SelectType }
      *     
      */
-    public TypeType getType() {
+    public SelectType getType() {
         return type;
     }
 
@@ -90,10 +91,10 @@ public class ConfigurationType {
      * 
      * @param value
      *     allowed object is
-     *     {@link TypeType }
+     *     {@link SelectType }
      *     
      */
-    public void setType(TypeType value) {
+    public void setType(SelectType value) {
         this.type = value;
     }
 

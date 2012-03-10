@@ -1,9 +1,10 @@
 package com.kreig133.daogenerator.common;
 
-import com.kreig133.daogenerator.common.settings.FunctionSettings;
+import com.kreig133.daogenerator.DaoGenerator;
 import com.kreig133.daogenerator.common.settings.OperationSettings;
 import com.kreig133.daogenerator.enums.Type;
-import com.kreig133.daogenerator.parameter.Parameter;
+import com.kreig133.daogenerator.jaxb.DaoMethod;
+import com.kreig133.daogenerator.jaxb.ParameterType;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -19,23 +20,34 @@ import static com.kreig133.daogenerator.common.StringBuilderUtils.insertTabs;
  */
 public class Utils {
 
+    /**
+     * Проверяет нужно ли создавать in-класс
+     * @param daoMethod
+     * @return
+     */
     public static boolean checkToNeedOwnInClass(
-            OperationSettings operationSettings,
-            FunctionSettings functionSettings
+            DaoMethod daoMethod
     ) {
-        final List<Parameter> inputParameterList = functionSettings.getInputParameterList();
+        final List<ParameterType> parameters = daoMethod.getInputParametrs().getParameter();
 
-        final Type type = operationSettings.getType();
+        final Type type = DaoGenerator.getCurrentOperationSettings().getType();
 
-        return  ( inputParameterList.size() > 3 && type == Type.DEPO ) ||
-                ( inputParameterList.size() > 1 && type == Type.IASK );
+        //TODO магические цифры, да и вообще вынести отсюда например, в тот же Parametrs
+        return  ( parameters.size() > 3 && type == Type.DEPO ) ||
+                ( parameters.size() > 1 && type == Type.IASK );
     }
 
+    /**
+     * Конвертирует имя для использования в геттерах и сеттерах
+     * @param name
+     * @return
+     */
     public static String convertNameForGettersAndSetters( String name ) {
 
         if ( name == null || "".equals( name ) ) throw new IllegalArgumentException();
 
         final char[] chars = name.toCharArray();
+
         if ( Character.isLowerCase( chars[ 0 ] ) ) {
             if ( chars.length == 1 || Character.isLowerCase( chars[ 1 ] ) ) {
                 chars[ 0 ] = Character.toUpperCase( chars[ 0 ] );
@@ -52,6 +64,11 @@ public class Utils {
         return new String( chars );
     }
 
+    /**
+     * Заменяет SQL-овские одинарные кавычки, на Java-всие, нужно в-основном для обработки значений по умолчанию
+     * @param string
+     * @return
+     */
     public static String handleDefaultValue( String string ) {
         if ( string == null ) return string;
         final char[] chars = string.toCharArray();
@@ -64,10 +81,15 @@ public class Utils {
         return new String( chars );
     }
 
-    public static String[] splitIt( String string ) {
-        return string.split( " " );
-    }
+//    public static String[] splitIt( String string ) {
+//        return string.split( " " );
+//    }
 
+    /**
+     * Обрамляет каждую новую строку в кавычки и конкатенацию строк
+     * @param string
+     * @return
+     */
     public static String wrapWithQuotes( String string ) {
 
         String[] strings = string.split( "\n" );
@@ -87,6 +109,11 @@ public class Utils {
         return builder.toString();
     }
 
+    /**
+     * Удаляет пустые строки из массива
+     * @param in
+     * @return
+     */
     private static String[] deleteEmptyStrings( String[] in ) {
         String[] temp = new String[ in.length ];
 
@@ -122,27 +149,32 @@ public class Utils {
 
 
 
-    public static String replaceQuestionMarkWithStrings( FunctionSettings functionSettings, String s ) {
-        Map<Integer, String> testParameterList = functionSettings.getTestParams();
-        String[] afterSplit = s.split( "\\?" );
+//    public static String replaceQuestionMarkWithStrings( DaoMethod daoMethod, String s ) {
+//        Map<Integer, String> testParameterList = functionSettings.getTestParams();
+//        String[] afterSplit = s.split( "\\?" );
+//
+//        StringBuilder builder = new StringBuilder();
+//        builder.append( afterSplit[ 0 ] );
+//
+////        if ( testParameterList.size() != afterSplit.length - 1 )
+////            throw new AssertionError(
+////                    "Количество параметров не совпадает с количеством вопросительных знаков в вопросе!" );
+//
+//        for( int i = 1; i <= functionSettings.getInputParameterList().size(); i++ ){
+//            //TODO вставка параметров по дефолту
+//            builder.append( testParameterList.get( i ) );
+//            builder.append( afterSplit[ i ] );
+//        }
+//
+//        System.out.println( builder );
+//        return builder.toString();
+//    }
 
-        StringBuilder builder = new StringBuilder();
-        builder.append( afterSplit[ 0 ] );
-
-//        if ( testParameterList.size() != afterSplit.length - 1 )
-//            throw new AssertionError(
-//                    "Количество параметров не совпадает с количеством вопросительных знаков в вопросе!" );
-
-        for( int i = 1; i <= functionSettings.getInputParameterList().size(); i++ ){
-            //TODO вставка параметров по дефолту
-            builder.append( testParameterList.get( i ) );
-            builder.append( afterSplit[ i ] );
-        }
-
-        System.out.println( builder );
-        return builder.toString();
-    }
-
+    /**
+     * Пытается переделать имя в Java-style
+     * @param nameForCall
+     * @return
+     */
     public static String convertPBNameToName( String nameForCall ) {
         {
             final char[] chars = nameForCall.toCharArray();
@@ -162,6 +194,12 @@ public class Utils {
         return builder.toString();
     }
 
+    /**
+     * Добавляет заданное количество табов перед каждой строкой
+     * @param text
+     * @param tabsQuantity
+     * @return
+     */
     public static String addTabsBeforeLine( String text, int tabsQuantity ){
         String[] split = text.split( "\n" );
         StringBuilder builder = new StringBuilder();
@@ -173,6 +211,7 @@ public class Utils {
         }
         return builder.toString();
     }
+
 
     public static File getFileFromDirectoryByName( String directoryPath, String fileName ) {
         return new File( new File( directoryPath ).getAbsolutePath() + "/" + fileName );

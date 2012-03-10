@@ -1,11 +1,10 @@
 package com.kreig133.daogenerator.sql.wrappers;
 
-import com.kreig133.daogenerator.common.settings.FunctionSettings;
 import com.kreig133.daogenerator.common.strategy.FuctionalObject;
 import com.kreig133.daogenerator.common.strategy.FunctionalObjectWithoutFilter;
+import com.kreig133.daogenerator.jaxb.DaoMethod;
 import com.kreig133.daogenerator.jaxb.InOutType;
-import com.kreig133.daogenerator.parameter.InputParameter;
-import com.kreig133.daogenerator.parameter.Parameter;
+import com.kreig133.daogenerator.jaxb.ParameterType;
 
 import java.util.List;
 
@@ -19,18 +18,17 @@ public class GeneroutGenerator extends CommonWrapperGenerator{
 
     private static int index = 0;
 
-    public static void generateWrapper( FunctionSettings functionSettings ) {
-        final List<Parameter> inputParametrs    = functionSettings.getInputParameterList();
+    public static String generateWrapper( DaoMethod daoMethod ) {
+        final List<ParameterType> inputParametrs    = daoMethod.getInputParametrs().getParameter();
 
         StringBuilder myBatisQuery      = new StringBuilder();
-        StringBuilder queryForTesting   = new StringBuilder();
 
         //Декларация переменных
         myBatisQuery.append( "DECLARE\n" );
 
         iterateForParameterList( myBatisQuery, inputParametrs, new FunctionalObjectForOutParametres() {
             @Override
-            public void writeString( StringBuilder builder, Parameter p ) {
+            public void writeString( StringBuilder builder, ParameterType p ) {
                 insertExpressionWithParameter( builder, p.getSqlType() );
             }
         } );
@@ -43,54 +41,35 @@ public class GeneroutGenerator extends CommonWrapperGenerator{
         index = 0;
         iterateForParameterList( myBatisQuery, inputParametrs, new FunctionalObjectForOutParametres() {
             @Override
-            public void writeString( StringBuilder builder, Parameter p ) {
+            public void writeString( StringBuilder builder, ParameterType p ) {
                 insertExpressionWithParameter( builder, "= " + defaultValue( p ) );
             }
         } );
 
         //Выполняем хранимую процедуру
-        myBatisQuery.append( "EXECUTE DBO." ).append( functionSettings.getNameForCall() ).append( "\n" );
-
-        queryForTesting.append( myBatisQuery.toString() );
+        myBatisQuery.append( "EXECUTE DBO." ).append( daoMethod.getCommon().getSpName() ).append( "\n" );
 
         index = 0;
         iterateForParameterList( myBatisQuery, inputParametrs, new FunctionalObjectWithoutFilter() {
             @Override
-            public void writeString( StringBuilder builder, Parameter p ) {
+            public void writeString( StringBuilder builder, ParameterType p ) {
                 index = declareParamInProcedure( builder, p, index );
-            }
-        } );
-
-        index = 0;
-        iterateForParameterList( queryForTesting, inputParametrs, new FunctionalObjectWithoutFilter() {
-            @Override
-            public void writeString( StringBuilder builder, Parameter p ) {
-                index = declareParamInProcedureForTesting( builder, p, index );
             }
         } );
 
         //вернуть полученные значения
 
         myBatisQuery    .append( "\nSELECT\n" );
-        queryForTesting .append( "\nSELECT\n" );
 
         index = 0;
         iterateForParameterList( myBatisQuery, inputParametrs, new FunctionalObjectForOutParametres() {
             @Override
-            public void writeString( StringBuilder builder, Parameter p ) {
-                insertExpressionWithParameter( builder, p.getName() );
-            }
-        } );
-        index = 0;
-        iterateForParameterList( queryForTesting, inputParametrs, new FunctionalObjectForOutParametres() {
-            @Override
-            public void writeString( StringBuilder builder, Parameter p ) {
+            public void writeString( StringBuilder builder, ParameterType p ) {
                 insertExpressionWithParameter( builder, p.getName() );
             }
         } );
 
-        functionSettings.setMyBatisQuery         ( myBatisQuery   .toString() );
-        functionSettings.appendToQueryForTesting ( queryForTesting.toString() );
+        return myBatisQuery.toString();
     }
 
     private static void insertExpressionWithParameter( StringBuilder builder, String rightPartOfExpr ) {
@@ -98,11 +77,11 @@ public class GeneroutGenerator extends CommonWrapperGenerator{
         builder.append( rightPartOfExpr );
     }
 
-    static boolean isOutParameter( InputParameter p ) {
-        return p.getInputType() == InOutType.OUT;
+    static boolean isOutParameter( ParameterType p ) {
+        return p.getInOut() == InOutType.OUT;
     }
 
-    private static String defaultValue( Parameter parameter ) {
+    private static String defaultValue( ParameterType parameter ) {
         switch ( parameter.getType() ){
             case DOUBLE:
             case LONG:
@@ -118,7 +97,7 @@ public class GeneroutGenerator extends CommonWrapperGenerator{
 
 abstract class FunctionalObjectForOutParametres implements FuctionalObject{
     @Override
-    public boolean filter( Parameter p ) {
-        return GeneroutGenerator.isOutParameter( ( InputParameter ) p );
+    public boolean filter( ParameterType p ) {
+        return GeneroutGenerator.isOutParameter( p );
     }
 }

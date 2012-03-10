@@ -1,6 +1,6 @@
 package com.kreig133.daogenerator.common.strategy;
 
-import com.kreig133.daogenerator.parameter.Parameter;
+import com.kreig133.daogenerator.jaxb.ParameterType;
 
 /**
  * @author eshangareev
@@ -8,7 +8,7 @@ import com.kreig133.daogenerator.parameter.Parameter;
  */
 public interface FuctionalObject {
 
-    void writeString( StringBuilder builder, Parameter p );
+    void writeString( StringBuilder builder, ParameterType p );
 
-    boolean filter( Parameter p );
+    boolean filter( ParameterType p );
 }

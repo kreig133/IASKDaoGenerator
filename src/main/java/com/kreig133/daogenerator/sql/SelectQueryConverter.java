@@ -1,7 +1,7 @@
 package com.kreig133.daogenerator.sql;
 
-import com.kreig133.daogenerator.common.settings.FunctionSettings;
 import com.kreig133.daogenerator.enums.TestInfoType;
+import com.kreig133.daogenerator.jaxb.DaoMethod;
 
 import static com.kreig133.daogenerator.common.StringBuilderUtils.*;
 
@@ -11,13 +11,12 @@ import static com.kreig133.daogenerator.common.StringBuilderUtils.*;
  */
 public class SelectQueryConverter {
 
-    public static void processSelectQueryString(
-            final FunctionSettings functionSettings
+    //TODO rename
+    public static String processSelectQueryString(
+            final DaoMethod daoMethod
     ){
 
-        String sqlQuery = functionSettings.getSelectBuilder().toString();
-
-        boolean testQNeed = functionSettings.getTestInfoType() != TestInfoType.TQUERY;
+        String sqlQuery = daoMethod.getCommon().getQuery();
 
         StringBuilder myBatisString = null;
         StringBuilder queryForTesting = null;
@@ -31,7 +30,7 @@ public class SelectQueryConverter {
 
             for( int i = 0; i < splitted.length - 1; i++ ){
                 myBatisString.append( splitted[i] );
-                insertEscapedParamName( myBatisString, functionSettings.getInputParameterList().get( index ).getName());
+                insertEscapedParamName( myBatisString, daoMethod.getInputParametrs().getParameter().get( index ).getName());
                 index ++ ;
             }
             myBatisString.append( splitted[ splitted.length - 1 ] );
@@ -61,13 +60,7 @@ public class SelectQueryConverter {
             }
         }
 
-        functionSettings.setMyBatisQuery(
-                myBatisString == null ? sqlQuery : myBatisString.toString()
-        );
-        if( testQNeed ){
-            functionSettings.appendToQueryForTesting(
-                    queryForTesting == null ? sqlQuery : queryForTesting.toString()
-            );
-        }
+
+        return myBatisString == null ? sqlQuery : myBatisString.toString();
     }
 }

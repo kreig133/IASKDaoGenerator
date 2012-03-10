@@ -1,7 +1,7 @@
-package com.kreig133.daogenerator.files.parsers.strategy;
+package com.kreig133.old_version_converter.parsers.strategy;
 
-import com.kreig133.daogenerator.common.settings.FunctionSettings;
 import com.kreig133.daogenerator.common.settings.OperationSettings;
+import com.kreig133.daogenerator.jaxb.DaoMethod;
 
 /**
  * @author eshangareev
@@ -11,6 +11,6 @@ public interface Action{
     public void doAction(
             String[] strings,
             Integer place,
-            OperationSettings operationSettings,
-            FunctionSettings functionSettings);
+            DaoMethod daoMethod
+    );
 }

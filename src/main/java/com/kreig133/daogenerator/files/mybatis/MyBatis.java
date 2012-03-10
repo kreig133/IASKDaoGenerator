@@ -1,14 +1,15 @@
 package com.kreig133.daogenerator.files.mybatis;
 
+import com.kreig133.daogenerator.DaoGenerator;
 import com.kreig133.daogenerator.common.StringBuilderUtils;
 import com.kreig133.daogenerator.common.Utils;
-import com.kreig133.daogenerator.common.settings.FunctionSettings;
 import com.kreig133.daogenerator.common.settings.OperationSettings;
 import com.kreig133.daogenerator.enums.MethodType;
 import com.kreig133.daogenerator.enums.Type;
 import com.kreig133.daogenerator.files.mybatis.preparatory.ImplementationFilePreparatory;
 import com.kreig133.daogenerator.files.mybatis.preparatory.InterfaceFilePreparatory;
 import com.kreig133.daogenerator.files.mybatis.preparatory.MappingFilePreparatory;
+import com.kreig133.daogenerator.jaxb.DaoMethod;
 
 import java.io.IOException;
 
@@ -24,91 +25,84 @@ public class MyBatis {
             OperationSettings operationSettings
     ) throws IOException {
 
-        InterfaceFilePreparatory        .prepareFile( operationSettings );
-        ImplementationFilePreparatory   .prepareFile( operationSettings );
-        MappingFilePreparatory          .prepareFile( operationSettings );
+        InterfaceFilePreparatory        .prepareFile();
+        ImplementationFilePreparatory   .prepareFile();
+        MappingFilePreparatory          .prepareFile();
 
     }
 
     public static void generateFiles(
-            OperationSettings operationSettingsSettings,
-            FunctionSettings functionSettings
+            DaoMethod daoMethod
     ) throws IOException {
 
-        generateMapping         ( operationSettingsSettings, functionSettings );
-        generateInterface       ( operationSettingsSettings, functionSettings );
-        generateImplementation  ( operationSettingsSettings, functionSettings );
+        generateMapping         ( daoMethod );
+
+        if( DaoGenerator.getCurrentOperationSettings().getType() == Type.IASK ){
+            generateInterface       ( daoMethod );
+            generateImplementation  ( daoMethod );
+        }
 
     }
 
-    public static void closeFiles(
-            OperationSettings operationSettings
-    ) throws IOException {
+    public static void closeFiles() throws IOException {
         String s = "\n}";
-        if( operationSettings.getType() == Type.IASK ){
-            Utils.appendByteToFile( interfaceFile       ( operationSettings ), s.getBytes() );
-            Utils.appendByteToFile( implementationFile  ( operationSettings ), s.getBytes() );
-            Utils.appendByteToFile( mappingFile         ( operationSettings ), "</mapper>".getBytes() );
+        if( DaoGenerator.getCurrentOperationSettings().getType() == Type.IASK ){
+            Utils.appendByteToFile( interfaceFile       (), s.getBytes() );
+            Utils.appendByteToFile( implementationFile  (), s.getBytes() );
+            Utils.appendByteToFile( mappingFile         (), "</mapper>".getBytes() );
         } else {
-            Utils.appendByteToFile( mappingFile         ( operationSettings ), s.getBytes() );
+            Utils.appendByteToFile( mappingFile         (), s.getBytes() );
         }
     }
 
     private static void generateMapping(
-        OperationSettings operationSettings,
-        FunctionSettings functionSettings
+        DaoMethod daoMethod
     ) throws IOException {
         String method;
 
-        switch (  operationSettings.getType() ){
+        switch ( DaoGenerator.getCurrentOperationSettings().getType() ){
             case IASK:
-                Utils.appendByteToFile( mappingFile( operationSettings ),
-                        XmlMappingGenerator.generateXmlMapping( operationSettings, functionSettings ).getBytes() );
+                Utils.appendByteToFile( mappingFile(),
+                        XmlMappingGenerator.generateXmlMapping( daoMethod ).getBytes() );
                 break;
             case DEPO:
                 method =
-                        AnnotationGenerator.generateAnnotation( functionSettings )
+                        AnnotationGenerator.generateAnnotation( daoMethod )
                         +"    public "
                         + InterfaceMethodGenerator.generateMethodSignature(
-                                operationSettings,
-                                functionSettings,
+                                daoMethod,
                                 MethodType.MAPPER  )
                         + ";\n";
-                Utils.appendByteToFile( mappingFile( operationSettings ),
+                Utils.appendByteToFile( mappingFile(),
                         method.getBytes() );
                 break;
         }
     }
 
     private static void generateInterface(
-            OperationSettings operationSettings,
-            FunctionSettings functionSettings
+            DaoMethod daoMethod
     ) throws IOException {
-        if( operationSettings.getType() == Type.IASK ){
-            StringBuilder builder = new StringBuilder();
-    
-            Utils.appendByteToFile(
-                    interfaceFile( operationSettings ),
-                    StringBuilderUtils.getJavaDocString(
-                            builder,
-                            functionSettings.getCommentBuilder().toString().split( "\n" )
-                    ).append(
-                            InterfaceMethodGenerator.methodGenerator( operationSettings, functionSettings )
-                    ).toString().getBytes()
-            );
-        }
+
+        StringBuilder builder = new StringBuilder();
+
+        Utils.appendByteToFile(
+                interfaceFile(),
+                StringBuilderUtils.getJavaDocString(
+                        builder,
+                        daoMethod.getCommon().getComment().split( "\n" )
+                ).append(
+                        InterfaceMethodGenerator.methodGenerator( daoMethod )
+                ).toString().getBytes()
+        );
     }
 
     private static void generateImplementation(
-            OperationSettings operationSettings,
-            FunctionSettings functionSettings
+            DaoMethod daoMethod
     ) throws IOException {
 
-        if( operationSettings.getType() == Type.IASK ){
-            Utils.appendByteToFile(
-                    implementationFile( operationSettings ),
-                    ImplementationMethodGenerator.generateMethodImpl( operationSettings, functionSettings ).getBytes()
-            );
-        }
+        Utils.appendByteToFile(
+                implementationFile(),
+                ImplementationMethodGenerator.generateMethodImpl( daoMethod ).getBytes()
+        );
     }
 }

@@ -8,12 +8,16 @@
 
 package com.kreig133.daogenerator.jaxb;
 
+import com.kreig133.daogenerator.common.Utils;
+
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlType;
 import javax.xml.bind.annotation.XmlValue;
 
+import static com.kreig133.daogenerator.common.StringBuilderUtils.getJavaDocString;
+import static com.kreig133.daogenerator.common.StringBuilderUtils.insertTabs;
 
 /**
  * <p>Java class for parameterType complex type.
@@ -51,8 +55,6 @@ public class ParameterType {
     @XmlAttribute(required = true)
     protected JavaType type;
     @XmlAttribute
-    protected String sqlType;
-    @XmlAttribute
     protected InOutType inOut;
     @XmlAttribute
     protected String defaultValue;
@@ -60,6 +62,10 @@ public class ParameterType {
     protected String testValue;
     @XmlAttribute
     protected String renameTo;
+    @XmlAttribute
+    protected String sqlType;
+    @XmlAttribute
+    protected String comment;
 
     /**
      * Gets the value of the value property.
@@ -252,5 +258,67 @@ public class ParameterType {
     public void setSqlType(String value) {
         this.sqlType = value;
     }
+
+    /**
+     * Gets the value of the comment property.
+     *
+     * @return
+     *     possible object is
+     *     {@link String }
+     *
+     */
+    public String getComment() {
+        return comment;
+    }
+
+    /**
+     * Sets the value of the comment property.
+     *
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *
+     */
+    public void setComment(String value) {
+        this.comment = value;
+    }
+
+
+    //TODO переделать, вынести в отдельный класс генерацию поля для класса
+
+    @Override
+    public String toString() {
+        StringBuilder builder = new StringBuilder();
+
+        getJavaDocString( builder, new String[] { getCommentForJavaDoc() } );
+        insertTabs( builder, 1 ).append( "private " ).append( type ).append( " " ).append( name );
+
+        return builder.toString();
+    }
+
+    public void generateGetter( StringBuilder builder){
+        getJavaDocString( builder, new String[] { "Получить ", "\"" + getCommentForJavaDoc() + "\"" } );
+
+        insertTabs( builder, 1 ).append( "public " ).append( type ).append( " get" );
+        builder.append( Utils.convertNameForGettersAndSetters( name ) ).append( "(){\n" );
+        insertTabs( builder, 2 ).append( "return " ).append( name ).append( ";\n");
+        insertTabs( builder, 1 ).append( "}\n\n" );
+    }
+
+
+    public void generateSetter( StringBuilder builder ){
+        getJavaDocString( builder, new String[] { "Установить ", "\"" + getCommentForJavaDoc() + "\"" } );
+        insertTabs( builder, 1 ).append( "public void set" ).append( Utils.convertNameForGettersAndSetters( name ) );
+        builder.append( "( " ).append( type ).append( " " ).append( name ).append( " ){\n" );
+        insertTabs( builder, 2 ).append( "this." ).append( name ).append( " = " ).append( name ).append( ";\n" );
+        insertTabs( builder, 1 ).append( "}\n\n" );
+    }
+
+    private String getCommentForJavaDoc(){
+        if( comment == null || "".equals( comment ) || comment.toLowerCase().equals( "null" ) ) return name;
+        return comment;
+    }
+
+
 
 }

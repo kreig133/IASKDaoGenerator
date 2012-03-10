@@ -28,17 +28,22 @@
     <xs:complexType name="configurationType">
         <xs:simpleContent>
             <xs:extension base="xs:string">
-                <xs:attribute type="this:typeType"    name="type"            use="required"/>
+                <xs:attribute type="this:selectType"    name="type"            use="required"/>
                 <xs:attribute type="xs:boolean"       name="multipleResult"  use="required"/>
                 <xs:attribute type="this:testingType" name="testingType"     use="required"/>
             </xs:extension>
         </xs:simpleContent>
     </xs:complexType>
 
-    <xs:simpleType name="typeType">
+    <xs:simpleType name="selectType">
         <xs:restriction base="xs:string">
-            <xs:enumeration value="IASK"/>
-            <xs:enumeration value="DEPO"/>
+            <xs:enumeration value="CALL"/>
+            <xs:enumeration value="SELECT"/>
+            <xs:enumeration value="GENERATE"/>
+            <xs:enumeration value="GENEROUT"/>
+            <xs:enumeration value="INSERT"/>
+            <xs:enumeration value="DELETE"/>
+            <xs:enumeration value="UPDATE"/>
         </xs:restriction>
     </xs:simpleType>
 
@@ -68,6 +73,7 @@
                 <xs:attribute type="xs:string"      name="testValue"     use="optional"/>
                 <xs:attribute type="xs:string"      name="renameTo"      use="optional"/>
                 <xs:attribute type="xs:string"      name="sqlType"       use="optional"/>
+                <xs:attribute type="xs:string"      name="comment"       use="optional"/>
             </xs:extension>
         </xs:simpleContent>
     </xs:complexType>

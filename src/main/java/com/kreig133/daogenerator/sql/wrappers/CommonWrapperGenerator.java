@@ -1,7 +1,6 @@
 package com.kreig133.daogenerator.sql.wrappers;
 
-import com.kreig133.daogenerator.parameter.InputParameter;
-import com.kreig133.daogenerator.parameter.Parameter;
+import com.kreig133.daogenerator.jaxb.ParameterType;
 
 import static com.kreig133.daogenerator.common.StringBuilderUtils.insertEscapedParamName;
 
@@ -11,17 +10,17 @@ import static com.kreig133.daogenerator.common.StringBuilderUtils.insertEscapedP
  */
 public class CommonWrapperGenerator {
 
-    protected static void declareParamInProcedure( StringBuilder builder, Parameter p ) {
+    protected static void declareParamInProcedure( StringBuilder builder, ParameterType p ) {
         declareInTypeParamInProcedure( builder, p );
     }
 
-    protected static void declareInTypeParamInProcedure( StringBuilder builder, Parameter p ) {
+    protected static void declareInTypeParamInProcedure( StringBuilder builder, ParameterType p ) {
         declareParamNameInProcedure( builder, p );
         insertEscapedParamName( builder, p.getName() );
     }
 
-    protected static int declareParamInProcedure( StringBuilder builder, Parameter p, int index) {
-        switch ( ( ( InputParameter ) p ).getInputType() ){
+    protected static int declareParamInProcedure( StringBuilder builder, ParameterType p, int index) {
+        switch ( p.getInOut() ){
             case IN:
                 declareInTypeParamInProcedure( builder, p );
                 return index;
@@ -32,8 +31,8 @@ public class CommonWrapperGenerator {
         throw new AssertionError();
     }
 
-    protected static int declareParamInProcedureForTesting( StringBuilder builder, Parameter p, int index ){
-        switch ( ( ( InputParameter ) p ).getInputType() ) {
+    protected static int declareParamInProcedureForTesting( StringBuilder builder, ParameterType p, int index ){
+        switch (  p.getInOut() ) {
             case IN:
                 declareParamNameInProcedure( builder, p );
                 builder.append( " ?" );
@@ -51,13 +50,13 @@ public class CommonWrapperGenerator {
         return ++index;
     }
 
-    private static void declareOutTypeParamInProcedure( StringBuilder builder, Parameter p , int index) {
-        declareParamNameInProcedure ( builder, p );
-        parameterName               ( builder, index );
+    private static void declareOutTypeParamInProcedure( StringBuilder builder, ParameterType p, int index ) {
+        declareParamNameInProcedure( builder, p );
+        parameterName( builder, index );
         builder.append( " output" );
     }
 
-    private static void declareParamNameInProcedure( StringBuilder builder, Parameter p ) {
-        builder.append( "@" ).append( ( ( InputParameter ) p ).getRawName() ).append( " = " );
+    private static void declareParamNameInProcedure( StringBuilder builder, ParameterType p ) {
+        builder.append( "@" ).append( p.getName() ).append( " = " );
     }
 }

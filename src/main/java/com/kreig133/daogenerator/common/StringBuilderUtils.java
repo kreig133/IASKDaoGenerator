@@ -1,7 +1,7 @@
 package com.kreig133.daogenerator.common;
 
 import com.kreig133.daogenerator.common.strategy.FuctionalObject;
-import com.kreig133.daogenerator.parameter.Parameter;
+import com.kreig133.daogenerator.jaxb.ParameterType;
 
 import java.util.List;
 
@@ -17,7 +17,7 @@ public class StringBuilderUtils {
 
     public static void iterateForParameterList(
             StringBuilder builder,
-            List<Parameter> parameterList,
+            List<ParameterType> parameterList,
             FuctionalObject functionalObject
     ) {
         iterateForParameterList( builder, parameterList, 1, functionalObject );
@@ -25,14 +25,14 @@ public class StringBuilderUtils {
 
     public static void iterateForParameterList(
             StringBuilder builder,
-            List<Parameter> parameterList,
+            List<ParameterType> parameterList,
             int tabs,
             FuctionalObject functionalObject
 
     ) {
         boolean first = true;
 
-        for ( Parameter p : parameterList ) {
+        for ( ParameterType p : parameterList ) {
             if ( functionalObject.filter( p ) ) {
                 for ( int i = 0; i < tabs; i++ ) {
                     builder.append( "    " );

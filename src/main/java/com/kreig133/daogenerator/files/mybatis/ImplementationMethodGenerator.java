@@ -1,11 +1,10 @@
 package com.kreig133.daogenerator.files.mybatis;
 
-import com.kreig133.daogenerator.common.settings.FunctionSettings;
-import com.kreig133.daogenerator.common.settings.OperationSettings;
+import com.kreig133.daogenerator.DaoGenerator;
 import com.kreig133.daogenerator.enums.MethodType;
-import com.kreig133.daogenerator.enums.ReturnType;
 import com.kreig133.daogenerator.enums.Type;
 import com.kreig133.daogenerator.files.JavaFilesUtils;
+import com.kreig133.daogenerator.jaxb.DaoMethod;
 
 import static com.kreig133.daogenerator.common.StringBuilderUtils.insertTabs;
 
@@ -16,28 +15,26 @@ import static com.kreig133.daogenerator.common.StringBuilderUtils.insertTabs;
 public class ImplementationMethodGenerator {
 
     public static String generateMethodImpl(
-            OperationSettings operationSettings,
-            FunctionSettings functionSettings
+            DaoMethod daoMethod
     ){
 
         StringBuilder builder = new StringBuilder();
 
         insertTabs( builder, 1 ).append( "@Override\n    public " );
         builder.append( InterfaceMethodGenerator.generateMethodSignature(
-                operationSettings,
-                functionSettings,
+                daoMethod,
                 MethodType.DAO ) );
         builder.append( "{\n" );
         insertTabs( builder, 2 );
 
-        if( ! functionSettings.getOutputParameterList().isEmpty() ){
+        if( ! daoMethod.getOutputParametrs().getParameter().isEmpty() ){
             builder.append( "return " );
         }
 
-        if( operationSettings.getType() == Type.DEPO ){
-            generateDepoStyleMethodCall( operationSettings, functionSettings, builder );
+        if( DaoGenerator.getCurrentOperationSettings().getType() == Type.DEPO ){
+            generateDepoStyleMethodCall( daoMethod, builder );
         } else {
-            generateIaskStyleMethodCall( operationSettings, functionSettings, builder );
+            generateIaskStyleMethodCall( daoMethod, builder );
         }
 
 
@@ -48,31 +45,33 @@ public class ImplementationMethodGenerator {
     }
 
     private static void generateIaskStyleMethodCall(
-            OperationSettings operationSettings,
-            FunctionSettings  functionSettings,
+            DaoMethod  daoMethod,
             StringBuilder     builder
     ) {
         builder.append( "select" );
-        if( functionSettings.getReturnType() == ReturnType.SINGLE ){
-            builder.append( "One" );
-        } else {
+        if ( daoMethod.getCommon().getConfiguration().isMultipleResult() ) {
             builder.append( "List" );
+        } else {
+            builder.append( "One" );
         }
-        builder.append( "(\"" ).append( operationSettings.getDaoPackage() ).append( "." )
-                .append( JavaFilesUtils.interfaceFileName( operationSettings ) ).append( "." )
-                .append( functionSettings.getName() ).append( "\" ").append( "," );
-        if( ! functionSettings.getInputParameterList().isEmpty() ){
+
+        builder.append( "(\"" ).append( DaoGenerator.getCurrentOperationSettings().getDaoPackage() ).append( "." )
+                .append( JavaFilesUtils.interfaceFileName() ).append( "." )
+                .append( daoMethod.getCommon().getMethodName() ).append( "\" ").append( "," );
+        if( ! daoMethod.getInputParametrs().getParameter().isEmpty() ){
             builder.append( "request" );
         } else {
             builder.append( "null" );
         }
     }
 
-    private static void generateDepoStyleMethodCall( OperationSettings operationSettings, FunctionSettings functionSettings, StringBuilder builder ) {
-        builder.append( "getSqlSession().getMapper( " ).append( operationSettings.getOperationName() );
-        builder.append( JavaFilesUtils.MAPPER_PREFIX ).append( ".class )." );
-        builder.append( functionSettings.getName() ).append( "(" );
-        if( ! functionSettings.getInputParameterList().isEmpty() ){
+    private static void generateDepoStyleMethodCall( DaoMethod daoMethod, StringBuilder builder ) {
+        builder.append( "getSqlSession().getMapper( " ).append(
+                DaoGenerator.getCurrentOperationSettings().getOperationName()
+        ).append( JavaFilesUtils.MAPPER_PREFIX ).append( ".class )." ).append( daoMethod.getCommon().getMethodName() )
+                .append( "(" );
+
+        if ( ! daoMethod.getInputParametrs().getParameter().isEmpty() ){
             builder.append( "request" );
         }
     }

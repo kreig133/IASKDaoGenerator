@@ -1,6 +1,6 @@
 package com.kreig133.daogenerator.common.strategy;
 
-import com.kreig133.daogenerator.parameter.Parameter;
+import com.kreig133.daogenerator.jaxb.ParameterType;
 
 /**
  * @author eshangareev
@@ -8,7 +8,7 @@ import com.kreig133.daogenerator.parameter.Parameter;
  */
 abstract public class FunctionalObjectWithoutFilter implements FuctionalObject {
     @Override
-    public boolean filter( Parameter p ) {
+    public boolean filter( ParameterType p ) {
         return true;
     }
 }

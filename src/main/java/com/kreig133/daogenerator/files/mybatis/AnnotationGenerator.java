@@ -1,8 +1,8 @@
 package com.kreig133.daogenerator.files.mybatis;
 
 import com.kreig133.daogenerator.common.Utils;
-import com.kreig133.daogenerator.common.settings.FunctionSettings;
-import com.kreig133.daogenerator.enums.SelectType;
+import com.kreig133.daogenerator.jaxb.DaoMethod;
+import com.kreig133.daogenerator.jaxb.SelectType;
 
 import static com.kreig133.daogenerator.common.StringBuilderUtils.insertTabs;
 
@@ -13,17 +13,17 @@ import static com.kreig133.daogenerator.common.StringBuilderUtils.insertTabs;
 public class AnnotationGenerator {
 
     public static String generateAnnotation(
-        FunctionSettings functionSettings
+        DaoMethod daoMethod
     ){
-        SelectType selectType               = functionSettings.getSelectType();
+        SelectType selectType               = daoMethod.getCommon().getConfiguration().getType();
 
         StringBuilder builder = new StringBuilder();
 
         assert selectType != null ;
         
         insertTabs(builder, 1).append( "@" ).append( selectType.getAnnotation() ).append( "(\n" );
-
-        builder.append( Utils.wrapWithQuotes( functionSettings.getMyBatisQuery() ) );
+//TODO
+//        builder.append( Utils.wrapWithQuotes( daoMethod.getMyBatisQuery() ) );
 
         insertTabs( builder, 1 ).append( ")\n" );
 

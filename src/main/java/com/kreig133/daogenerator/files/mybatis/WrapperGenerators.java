@@ -1,6 +1,6 @@
 package com.kreig133.daogenerator.files.mybatis;
 
-import com.kreig133.daogenerator.common.settings.FunctionSettings;
+import com.kreig133.daogenerator.jaxb.DaoMethod;
 import com.kreig133.daogenerator.sql.wrappers.GenerateGenerator;
 import com.kreig133.daogenerator.sql.wrappers.GeneroutGenerator;
 
@@ -12,16 +12,16 @@ public class WrapperGenerators {
 
     //TODO разобраться куда это пихать
     public static void generateWrapperProcedure (
-        FunctionSettings functionSettings
+        DaoMethod daoMethod
     ){
-        switch ( functionSettings.getSelectType() ){
-            case GENERATE:
-                GenerateGenerator.generateWrapper( functionSettings );
-                break;
-            case GENEROUT:
-                GeneroutGenerator.generateWrapper( functionSettings );
-                break;
-        }
-        throw new IllegalArgumentException();
+//        switch ( functionSettings.getSelectType() ){
+//            case GENERATE:
+//                GenerateGenerator.generateWrapper( functionSettings );
+//                break;
+//            case GENEROUT:
+//                GeneroutGenerator.generateWrapper( functionSettings );
+//                break;
+//        }
+//        throw new IllegalArgumentException();
     }
 }

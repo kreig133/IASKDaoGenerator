@@ -1,7 +1,7 @@
 package com.kreig133.daogenerator.files.mybatis.preparatory;
 
+import com.kreig133.daogenerator.DaoGenerator;
 import com.kreig133.daogenerator.common.Utils;
-import com.kreig133.daogenerator.common.settings.FunctionSettings;
 import com.kreig133.daogenerator.common.settings.OperationSettings;
 import com.kreig133.daogenerator.enums.ClassType;
 import com.kreig133.daogenerator.enums.Type;
@@ -16,19 +16,19 @@ import static com.kreig133.daogenerator.files.JavaFilesUtils.*;
  */
 public class MappingFilePreparatory extends Preparatory{
 
-    public static void prepareFile( OperationSettings operationSettings ) throws IOException {
+    public static void prepareFile() throws IOException {
         StringBuilder builder = new StringBuilder();
 
-        if( operationSettings.getType() == Type.DEPO ){
+        if( DaoGenerator.getCurrentOperationSettings().getType() == Type.DEPO ){
 
-            startingLinesOfDaoFiles( operationSettings, builder );
+            startingLinesOfDaoFiles( builder );
 
             insertImport( builder, "org.apache.ibatis.annotations.*" );
             //TODO блок комментариев
             insertClassDeclaration(
                     ClassType.Interface,
                     builder,
-                    mapperFileName( operationSettings ),
+                    mapperFileName(),
                     null,
                     null
             );
@@ -36,10 +36,10 @@ public class MappingFilePreparatory extends Preparatory{
             builder.append( "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" );
             builder.append( "<!DOCTYPE mapper PUBLIC \"-//mybatis.org//DTD Mapper 3.0//EN\" \"http://mybatis" +
                     ".org/dtd/mybatis-3-mapper.dtd\">\n" );
-            builder.append( "<mapper namespace=\"" ).append( operationSettings.getDaoPackage() ).append( "." )
-                    .append( interfaceFileName( operationSettings ) ).append( "\">\n" );
+            builder.append( "<mapper namespace=\"" ).append( DaoGenerator.getCurrentOperationSettings().getDaoPackage())
+                    .append( "." ).append( interfaceFileName() ).append( "\">\n" );
         }
 
-        Utils.appendByteToFile( mappingFile( operationSettings ), builder.toString().getBytes() );
+        Utils.appendByteToFile( mappingFile(), builder.toString().getBytes() );
     }
 }

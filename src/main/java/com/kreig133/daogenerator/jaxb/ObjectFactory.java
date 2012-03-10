@@ -8,8 +8,6 @@
 
 package com.kreig133.daogenerator.jaxb;
 
-import com.kreig133.daogenerator.jaxb.CommonType;
-
 import javax.xml.bind.annotation.XmlRegistry;
 
 
@@ -39,11 +37,27 @@ public class ObjectFactory {
     }
 
     /**
+     * Create an instance of {@link ParametersType }
+     * 
+     */
+    public ParametersType createParametersType() {
+        return new ParametersType();
+    }
+
+    /**
      * Create an instance of {@link CommonType }
      * 
      */
     public CommonType createCommonType() {
         return new CommonType();
+    }
+
+    /**
+     * Create an instance of {@link ConfigurationType }
+     * 
+     */
+    public ConfigurationType createConfigurationType() {
+        return new ConfigurationType();
     }
 
     /**
@@ -60,22 +74,6 @@ public class ObjectFactory {
      */
     public DaoMethod createDaoMethod() {
         return new DaoMethod();
-    }
-
-    /**
-     * Create an instance of {@link ParametersType }
-     * 
-     */
-    public ParametersType createParametersType() {
-        return new ParametersType();
-    }
-
-    /**
-     * Create an instance of {@link ConfigurationType }
-     * 
-     */
-    public ConfigurationType createConfigurationType() {
-        return new ConfigurationType();
     }
 
 }

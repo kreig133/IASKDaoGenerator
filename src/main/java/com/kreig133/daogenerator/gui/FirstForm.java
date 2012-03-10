@@ -1,6 +1,8 @@
 package com.kreig133.daogenerator.gui;
 
+import com.kreig133.daogenerator.DaoGenerator;
 import com.kreig133.daogenerator.db.StoreProcedureInfoExtractor;
+import com.kreig133.daogenerator.enums.Type;
 import com.kreig133.daogenerator.jaxb.ParameterType;
 
 import javax.swing.*;
@@ -85,6 +87,7 @@ public class FirstForm {
 
 
     public static void main( String[] args ) {
+        DaoGenerator.getCurrentOperationSettings().setType( Type.IASK );
         EventQueue.invokeLater( new Runnable() {
             @Override
             public void run() {

@@ -1,4 +1,4 @@
-package com.kreig133.daogenerator.files.parsers.settings;
+package com.kreig133.old_version_converter.parsers.settings;
 
 import com.kreig133.daogenerator.common.settings.EmptyOperationSettingsImpl;
 import com.kreig133.daogenerator.common.settings.OperationSettings;

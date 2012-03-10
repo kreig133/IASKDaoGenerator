@@ -1,23 +1,22 @@
 package com.kreig133.daogenerator;
 
-import com.kreig133.daogenerator.common.settings.FunctionSettings;
 import com.kreig133.daogenerator.common.Utils;
-import com.kreig133.daogenerator.common.settings.FunctionSettingsImpl;
 import com.kreig133.daogenerator.common.settings.OperationSettings;
 import com.kreig133.daogenerator.enums.Type;
 import com.kreig133.daogenerator.files.InOutClass;
 import com.kreig133.daogenerator.files.mybatis.MyBatis;
-import com.kreig133.daogenerator.files.parsers.InputFileParser;
-import com.kreig133.daogenerator.files.parsers.settings.SettingsReader;
+import com.kreig133.old_version_converter.parsers.settings.SettingsReader;
 import com.kreig133.daogenerator.gui.MainForm;
+import com.kreig133.daogenerator.jaxb.DaoMethod;
 import com.kreig133.daogenerator.jaxb.InOutType;
 import com.kreig133.daogenerator.settings.PropertiesFileController;
 import com.kreig133.daogenerator.sql.ProcedureCallCreator;
 import com.kreig133.daogenerator.sql.SelectQueryConverter;
 import com.kreig133.daogenerator.sql.wrappers.GenerateGenerator;
 import com.kreig133.daogenerator.sql.wrappers.GeneroutGenerator;
-import com.kreig133.daogenerator.testing.Tester;
 
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.Unmarshaller;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.FilenameFilter;
@@ -36,7 +35,17 @@ import static com.kreig133.daogenerator.files.JavaFilesUtils.*;
  */
 public class Controller {
 
-    private static final List<FunctionSettings> settingsList = new ArrayList<FunctionSettings>();
+    private static final List<DaoMethod> daoMethods = new ArrayList<DaoMethod>();
+    private static JAXBContext jc;
+    private static Unmarshaller unmarshaller;
+    
+//    static {
+//        try{
+//            jc = JAXBContext.newInstance(  );
+//        } catch (  ){
+//
+//        }
+//    }
 
     public static void doAction() {
 
@@ -66,101 +75,84 @@ public class Controller {
                                     }
                             )
         ) {
-            Controller.readFile( Utils.getFileFromDirectoryByName(operationSettings.getSourcePath(), s ), operationSettings );
-        }
-
-        createQueries();
-
-        try {
-            if( !operationSettings.skipTesting() ){
-                for( FunctionSettings functionSettings: settingsList ){
-                    Tester.startFunctionTesting( operationSettings, functionSettings );
-                }
-            }
-        } catch ( Exception e ) {
-            e.printStackTrace(); 
+            Controller.unmarshallFile( Utils.getFileFromDirectoryByName( operationSettings.getSourcePath(), s ) );
         }
 
         try {
-            writeFiles( operationSettings );
-            MyBatis.closeFiles( operationSettings );
+            writeFiles();
+            MyBatis.closeFiles();
         } catch ( IOException e ) {
             System.err.println( ">>>Controller: Ошибка! При записи в файлы, произошла ошибка!" );
             throw new RuntimeException( e );
         }
     }
 
-    private static void createQueries() {
-        for( FunctionSettings settings : settingsList ){
-            switch ( settings.getSelectType() ){
-                case CALL:
-                    ProcedureCallCreator.generateProcedureCall( settings );
-                    break;
-                case GENERATE:
-                    GenerateGenerator.generateWrapper( settings );
-                    break;
-                case GENEROUT:
-                    GeneroutGenerator.generateWrapper( settings );
-                    break;
-                default:
-                    SelectQueryConverter.processSelectQueryString( settings );
-                    break;
-            }
+    private static String createQueries( DaoMethod daoMethod ) {
+        switch ( daoMethod.getCommon().getConfiguration().getType() ){
+            case CALL:
+                return ProcedureCallCreator.generateProcedureCall( daoMethod );
+            case GENERATE:
+                return GenerateGenerator.generateWrapper( daoMethod );
+            case GENEROUT:
+                return GeneroutGenerator.generateWrapper( daoMethod );
+            default:
+                return SelectQueryConverter.processSelectQueryString( daoMethod );
         }
     }
 
-    private static void readFile(
-            File fileWithData,
-            OperationSettings operationSettings
+    private static DaoMethod unmarshallFile(
+            File fileWithData
     ) {
         try {
-            FunctionSettings currentSettings = new FunctionSettingsImpl( operationSettings );
+            DaoMethod daoMethod = new DaoMethod();
+//
+//            daoMethods.add( currentSettings );
+//
+//            //считываем название из файла ( название файла = название хранимки, запроса )
+//            currentSettings.setName( fileWithData.getName().split( ".txt" )[ 0 ] );
+//
+//            InputFileParser.readFileWithDataForGenerateDao( fileWithData, operationSettings, currentSettings );
 
-            settingsList.add( currentSettings );
-
-            //считываем название из файла ( название файла = название хранимки, запроса )
-            currentSettings.setName( fileWithData.getName().split( ".txt" )[ 0 ] );
-
-            InputFileParser.readFileWithDataForGenerateDao( fileWithData, operationSettings, currentSettings );
+            return daoMethod;
         } catch ( Throwable e ) {
             System.err.println( ">>>Controller: Ошибка! Файл - " + fileWithData.getName() );
             e.printStackTrace();
+            return null;
         }
     }
 
-    private static void writeFiles(
-        OperationSettings operationSettings
-    ) throws IOException {
+    private static void writeFiles() throws IOException {
 
-        for ( FunctionSettings settings: settingsList ) {
-            if ( checkToNeedOwnInClass( operationSettings, settings ) ) {
-                createJavaClassForInputOutputEntities( operationSettings, settings, InOutType.IN );
+        for ( DaoMethod daoMethod: daoMethods ) {
+            if ( checkToNeedOwnInClass( daoMethod ) ) {
+                createJavaClassForInputOutputEntities( daoMethod, InOutType.IN );
             }
 
-            if ( settings.getOutputParameterList().size() > 1 ) {
-                createJavaClassForInputOutputEntities( operationSettings, settings, InOutType.OUT );
+            if ( daoMethod.getOutputParametrs().getParameter().size() > 1 ) {
+                createJavaClassForInputOutputEntities( daoMethod, InOutType.OUT );
             }
 
-            MyBatis.generateFiles( operationSettings, settings );
+            MyBatis.generateFiles( daoMethod );
         }
     }
 
     private static void createJavaClassForInputOutputEntities(
-            OperationSettings operationSettings,
-            FunctionSettings functionSettings,
+            DaoMethod daoMethod,
             InOutType type
     ) throws IOException {
 
         FileWriter writer = null;
         try {
             InOutClass inOutClass = new InOutClass(
-                    operationSettings.getEntityPackage(),
-                    type == InOutType.IN ? functionSettings.getInputParameterList(): functionSettings.getOutputParameterList(),
-                    Utils.convertNameForClassNaming( functionSettings.getName() ) +
+                    DaoGenerator.getCurrentOperationSettings().getEntityPackage(),
+                    type == InOutType.IN ?
+                            daoMethod.getInputParametrs().getParameter():
+                            daoMethod.getOutputParametrs().getParameter(),
+                    Utils.convertNameForClassNaming( daoMethod.getCommon().getMethodName() ) +
                             ( type == InOutType.IN ? "In" : "Out" )
             );
 
-            File inClassFile = getInOrOutClassFile( operationSettings, inOutClass );
+            File inClassFile = getInOrOutClassFile( inOutClass );
             inClassFile.createNewFile();
 
             writer = new FileWriter(inClassFile);

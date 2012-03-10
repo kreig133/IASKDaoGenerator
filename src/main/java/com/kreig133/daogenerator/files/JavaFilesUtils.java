@@ -1,5 +1,6 @@
 package com.kreig133.daogenerator.files;
 
+import com.kreig133.daogenerator.DaoGenerator;
 import com.kreig133.daogenerator.common.settings.OperationSettings;
 import com.kreig133.daogenerator.enums.ClassType;
 
@@ -22,17 +23,17 @@ public class JavaFilesUtils {
         builder.append( "package " ).append( packageName ).append( ";\n\n" );
     }
 
-    public static File mappingFile( OperationSettings operationSettings ) throws IOException {
+    public static File mappingFile() throws IOException {
         File file = null;
-        String path = operationSettings.getOutputPath() + "/" +
-                replacePointBySlash( operationSettings.getMapperPackage() ) + "/";
+        String path = DaoGenerator.getCurrentOperationSettings().getOutputPath() + "/" +
+                replacePointBySlash( DaoGenerator.getCurrentOperationSettings().getMapperPackage() ) + "/";
 
-        switch ( operationSettings.getType() ){
+        switch ( DaoGenerator.getCurrentOperationSettings().getType() ){
             case IASK:
-                file = new File( path + operationSettings.getOperationName() + ".map.xml" );
+                file = new File( path + DaoGenerator.getCurrentOperationSettings().getOperationName() + ".map.xml" );
                 break;
             case DEPO:
-                file = new File( path + mapperFileName( operationSettings ) + JAVA_EXTENSION );
+                file = new File( path + mapperFileName() + JAVA_EXTENSION );
                 break;
         }
 
@@ -41,21 +42,21 @@ public class JavaFilesUtils {
         return file;
     }
 
-    public static String mapperFileName( OperationSettings operationSettings ) {
-        return operationSettings.getOperationName() + MAPPER_PREFIX;
+    public static String mapperFileName() {
+        return DaoGenerator.getCurrentOperationSettings().getOperationName() + MAPPER_PREFIX;
     }
 
-    public static File interfaceFile( OperationSettings operationSettings ) throws IOException {
-        return daoFile( operationSettings, interfaceFileName( operationSettings ) );
+    public static File interfaceFile() throws IOException {
+        return daoFile( interfaceFileName() );
     }
 
-    public static File implementationFile( OperationSettings operationSettings ) throws IOException {
-        return daoFile( operationSettings, implementationFileName( operationSettings ) );
+    public static File implementationFile() throws IOException {
+        return daoFile( implementationFileName( ) );
     }
-    public static File daoFile( OperationSettings operationSettings, String fileName ) throws IOException {
+    public static File daoFile( String fileName ) throws IOException {
         File file = new File(
-                operationSettings.getOutputPath() + "/" +
-                replacePointBySlash( operationSettings.getDaoPackage() ) + "/" +
+                DaoGenerator.getCurrentOperationSettings().getOutputPath() + "/" +
+                replacePointBySlash( DaoGenerator.getCurrentOperationSettings().getDaoPackage() ) + "/" +
                 fileName + JAVA_EXTENSION );
 
         createDirsAndFile( file.getParentFile() );
@@ -63,24 +64,23 @@ public class JavaFilesUtils {
         return file;
     }
 
-    public static String interfaceFileName( OperationSettings operationSettings ) {
-        return operationSettings.getOperationName() + "Dao";
+    public static String interfaceFileName() {
+        return DaoGenerator.getCurrentOperationSettings().getOperationName() + "Dao";
     }
 
 
 
-    public static String implementationFileName( OperationSettings operationSettings ) {
-        return operationSettings.getOperationName() + "DaoImpl";
+    public static String implementationFileName() {
+        return DaoGenerator.getCurrentOperationSettings().getOperationName() + "DaoImpl";
     }
 
     public static File getInOrOutClassFile(
-            OperationSettings operationSettings,
             InOutClass inOutClass
     ) throws IOException {
         File file = new File(
-                operationSettings.getOutputPath   () +
+                DaoGenerator.getCurrentOperationSettings().getOutputPath() +
                 "/" +
-                replacePointBySlash( operationSettings.getEntityPackage() ) +
+                replacePointBySlash( DaoGenerator.getCurrentOperationSettings().getEntityPackage() ) +
                 "/" +
                 inOutClass.getName() + JAVA_EXTENSION);
 

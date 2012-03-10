@@ -1,9 +1,10 @@
 package com.kreig133.daogenerator.files.mybatis;
 
+import com.kreig133.daogenerator.DaoGenerator;
 import com.kreig133.daogenerator.common.Utils;
-import com.kreig133.daogenerator.common.settings.FunctionSettings;
 import com.kreig133.daogenerator.common.settings.OperationSettings;
-import com.kreig133.daogenerator.parameter.Parameter;
+import com.kreig133.daogenerator.jaxb.DaoMethod;
+import com.kreig133.daogenerator.jaxb.ParameterType;
 
 import java.util.List;
 
@@ -16,16 +17,15 @@ import static com.kreig133.daogenerator.common.StringBuilderUtils.insertTabs;
 public class XmlMappingGenerator {
 
     public static String generateXmlMapping(
-        final OperationSettings operationSettings,
-        final FunctionSettings functionSettings
+        final DaoMethod daoMethod
     ){
-        final List<Parameter> inputParameterList  = functionSettings.getInputParameterList();
-        final List<Parameter> outputParameterList = functionSettings.getOutputParameterList();
-        final String name                         = functionSettings.getName();
-        final String package_                     = operationSettings.getEntityPackage();
+        final List<ParameterType> inputParameterList  = daoMethod.getInputParametrs ().getParameter();
+        final List<ParameterType> outputParameterList = daoMethod.getOutputParametrs().getParameter();
+        final String name                         = daoMethod.getCommon().getMethodName();
+        final String package_                     = DaoGenerator.getCurrentOperationSettings().getEntityPackage();
 
         StringBuilder builder = new StringBuilder();
-        insertTabs( builder, 1 ).append( "<" ) .append( functionSettings.getSelectType().getAnnotation()
+        insertTabs( builder, 1 ).append( "<" ) .append( daoMethod.getCommon().getConfiguration().getType().getAnnotation()
                 .toLowerCase() )
                 .append( " id=\"" ).append( name ).append( "\" statementType=\"CALLABLE\"" );
 
@@ -33,17 +33,17 @@ public class XmlMappingGenerator {
         writeParameterType( outputParameterList, name, "resultType"   , "Out", package_, builder );
 
         builder.append( ">\n\n" );
+//TODO
+//        builder.append( Utils.addTabsBeforeLine( daoMethod.getMyBatisQuery(), 2 ) ).append( "\n" );
 
-        builder.append( Utils.addTabsBeforeLine( functionSettings.getMyBatisQuery(), 2 ) ).append( "\n" );
-
-        insertTabs(builder, 1).append( "</" ).append( functionSettings.getSelectType().getAnnotation().toLowerCase() )
-                .append( ">\n\n" );
+        insertTabs(builder, 1).append( "</" ).append( daoMethod.getCommon().getConfiguration().getType()
+                .getAnnotation().toLowerCase() ).append( ">\n\n" );
 
         return builder.toString();
     }
 
     private static void writeParameterType(
-            List<Parameter> outputParameterList,
+            List<ParameterType> outputParameterList,
             String name,
             String type,
             String suffix,

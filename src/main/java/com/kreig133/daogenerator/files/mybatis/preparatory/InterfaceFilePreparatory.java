@@ -1,7 +1,7 @@
 package com.kreig133.daogenerator.files.mybatis.preparatory;
 
+import com.kreig133.daogenerator.DaoGenerator;
 import com.kreig133.daogenerator.common.Utils;
-import com.kreig133.daogenerator.common.settings.FunctionSettings;
 import com.kreig133.daogenerator.common.settings.OperationSettings;
 import com.kreig133.daogenerator.enums.ClassType;
 import com.kreig133.daogenerator.enums.Type;
@@ -15,22 +15,22 @@ import static com.kreig133.daogenerator.files.JavaFilesUtils.*;
  */
 public class InterfaceFilePreparatory extends Preparatory{
 
-    public static void prepareFile( OperationSettings operationSettings ) throws IOException {
-        if( operationSettings.getType() ==  Type.IASK ){
+    public static void prepareFile() throws IOException {
+        if( DaoGenerator.getCurrentOperationSettings().getType() ==  Type.IASK ){
             StringBuilder builder = new StringBuilder();
     
-            startingLinesOfDaoFiles( operationSettings, builder );
+            startingLinesOfDaoFiles( builder );
     
             //TODO блок комментариев
             insertClassDeclaration(
                     ClassType.Interface,
                     builder,
-                    interfaceFileName( operationSettings ),
+                    interfaceFileName(),
                     null,
                     null
             );
     
-            Utils.appendByteToFile( interfaceFile( operationSettings ), builder.toString().getBytes() );
+            Utils.appendByteToFile( interfaceFile(), builder.toString().getBytes() );
         }
     }
 }

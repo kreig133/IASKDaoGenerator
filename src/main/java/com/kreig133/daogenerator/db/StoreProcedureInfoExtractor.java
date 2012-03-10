@@ -1,5 +1,6 @@
 package com.kreig133.daogenerator.db;
 
+import com.kreig133.daogenerator.DaoGenerator;
 import com.kreig133.daogenerator.common.Utils;
 import com.kreig133.daogenerator.common.settings.EmptyOperationSettingsImpl;
 import com.kreig133.daogenerator.enums.Type;
@@ -23,23 +24,16 @@ public class StoreProcedureInfoExtractor {
 
     private static final String GET_SP_TEXT = "{CALL sp_helptext(?)}";
 
-    public static final String PARAMETER_NAME_COLUMN = "PARAMETER_NAME";
-    public static final String DATA_TYPE_COLUMN      = "DATA_TYPE";
-    private static final String CHARACTER_MAXIMUM_LENGTH = "CHARACTER_MAXIMUM_LENGTH";
-    private static final String PARAMETER_MODE = "PARAMETER_MODE";
+    public static final String PARAMETER_NAME_COLUMN    = "PARAMETER_NAME";
+    public static final String DATA_TYPE_COLUMN         = "DATA_TYPE";
+    public static final String CHARACTER_MAXIMUM_LENGTH = "CHARACTER_MAXIMUM_LENGTH";
+    public static final String PARAMETER_MODE           = "PARAMETER_MODE";
 
     public static List<ParameterType> getInputParametrsForSP( String spName )  {
         final List<ParameterType> result = new ArrayList<ParameterType>();
 
         try {
-            final Connection connection = JDBCConnector.connectToDB(
-                    new EmptyOperationSettingsImpl() {
-                        @Override
-                        public Type getType() {
-                            return Type.IASK;
-                        }
-                    }
-            );
+            final Connection connection = JDBCConnector.connectToDB();
             final PreparedStatement preparedStatement = connection.prepareStatement( GET_INPUT_PARAMETRS_QUERY );
 
             preparedStatement.setString( 1, spName );
@@ -51,7 +45,7 @@ public class StoreProcedureInfoExtractor {
             }
 
         } catch ( SQLException e ) {
-            throw new RuntimeException( "Не удалось получить параметры для хранимой процедуры", e );
+            throw new RuntimeException( "Не удалось получить параметры для хранимой процедуры " + spName, e );
         }
 
         return result;
@@ -93,14 +87,7 @@ public class StoreProcedureInfoExtractor {
     }
 
     public static String getSPText( String spName ){
-        final Connection connection = JDBCConnector.connectToDB(
-                new EmptyOperationSettingsImpl() {
-                    @Override
-                    public Type getType() {
-                        return Type.IASK;
-                    }
-                }
-        );
+        final Connection connection = JDBCConnector.connectToDB();
 
         String result = null;
 

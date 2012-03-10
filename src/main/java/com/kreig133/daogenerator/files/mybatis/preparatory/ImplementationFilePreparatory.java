@@ -22,7 +22,7 @@ public class ImplementationFilePreparatory extends InterfaceFilePreparatory {
         if( operationSettings.getType() == Type.IASK ){
             final StringBuilder builder = new StringBuilder();
     
-            startingLinesOfDaoFiles( operationSettings, builder );
+            startingLinesOfDaoFiles( builder );
     
             insertImport( builder, "com.luxoft.sbrf.iask.persistence.common.dao.AbstractDao" );
             insertImport( builder, "org.springframework.stereotype.Repository" );
@@ -33,15 +33,15 @@ public class ImplementationFilePreparatory extends InterfaceFilePreparatory {
             insertClassDeclaration(
                     ClassType.Class,
                     builder,
-                    implementationFileName( operationSettings ),
+                    implementationFileName(),
                     "AbstractDao",
                     new ArrayList<String>() {
                         {
-                            add( interfaceFileName( operationSettings ) );
+                            add( interfaceFileName() );
                         }
                     }
             );
-            Utils.appendByteToFile( implementationFile( operationSettings ), builder.toString().getBytes() );
+            Utils.appendByteToFile( implementationFile(), builder.toString().getBytes() );
         }
     }
 }
