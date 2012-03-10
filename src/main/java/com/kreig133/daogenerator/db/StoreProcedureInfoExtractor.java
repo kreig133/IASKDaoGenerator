@@ -1,7 +1,9 @@
 package com.kreig133.daogenerator.db;
 
+import com.kreig133.daogenerator.common.Utils;
 import com.kreig133.daogenerator.common.settings.EmptyOperationSettingsImpl;
 import com.kreig133.daogenerator.enums.Type;
+import com.kreig133.daogenerator.jaxb.InOutType;
 import com.kreig133.daogenerator.jaxb.JavaType;
 import com.kreig133.daogenerator.jaxb.ParameterType;
 
@@ -24,6 +26,7 @@ public class StoreProcedureInfoExtractor {
     public static final String PARAMETER_NAME_COLUMN = "PARAMETER_NAME";
     public static final String DATA_TYPE_COLUMN      = "DATA_TYPE";
     private static final String CHARACTER_MAXIMUM_LENGTH = "CHARACTER_MAXIMUM_LENGTH";
+    private static final String PARAMETER_MODE = "PARAMETER_MODE";
 
     public static List<ParameterType> getInputParametrsForSP( String spName )  {
         final List<ParameterType> result = new ArrayList<ParameterType>();
@@ -33,7 +36,7 @@ public class StoreProcedureInfoExtractor {
                     new EmptyOperationSettingsImpl() {
                         @Override
                         public Type getType() {
-                            return Type.DEPO;
+                            return Type.IASK;
                         }
                     }
             );
@@ -59,21 +62,33 @@ public class StoreProcedureInfoExtractor {
 
         final ParameterType parameterType = new ParameterType();
 
-        parameterType.setName   ( resultSet.getString( PARAMETER_NAME_COLUMN ) );
+        parameterType.setName   ( getParameterNameFromResultSet( resultSet ) );
         parameterType.setSqlType( getSqlTypeFromResultSet( resultSet ) );
-        parameterType.setType( JavaType.getBySqlType( resultSet.getString( DATA_TYPE_COLUMN ) ) );
-
+        parameterType.setType   ( JavaType.getBySqlType( resultSet.getString( DATA_TYPE_COLUMN ) ) );
+        parameterType.setInOut  ( InOutType.getByName( resultSet.getString( PARAMETER_MODE ) ) );
+        parameterType.setRenameTo( Utils. convertPBNameToName( parameterType.getName() ) );
         return parameterType;
+    }
+
+    private static String getParameterNameFromResultSet( ResultSet resultSet ) throws SQLException {
+        String result = resultSet.getString( PARAMETER_NAME_COLUMN );
+
+        if( result.startsWith( "@" )){
+            return new String( result.substring( 1 ) );
+        }
+        return result;
     }
 
     private static String getSqlTypeFromResultSet( ResultSet resultSet ) throws SQLException {
         String sqlType = resultSet.getString( DATA_TYPE_COLUMN );
 
         if( JavaType.getBySqlType( sqlType ) == JavaType.STRING ){
-            sqlType = sqlType + "(" + resultSet.getString( CHARACTER_MAXIMUM_LENGTH ) + ")";
+            return sqlType + "(" + resultSet.getString( CHARACTER_MAXIMUM_LENGTH ) + ")";
         }
 
-        if()
+        return sqlType;
+        //TODO добавить для Double
+//        if( JavaType.getBySqlType( sqlType ))
 
     }
 
@@ -82,7 +97,7 @@ public class StoreProcedureInfoExtractor {
                 new EmptyOperationSettingsImpl() {
                     @Override
                     public Type getType() {
-                        return Type.DEPO;
+                        return Type.IASK;
                     }
                 }
         );

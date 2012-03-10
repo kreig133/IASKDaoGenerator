@@ -51,7 +51,7 @@ public class PropertiesFileController {
         try{
             Properties settings = new Properties();
 
-            File file = getSpecificPropertiesFile( sourceDirPath );
+            File file = getSpecificPropertiesFile( sourceDirPath, false );
 
             if( file == null || !file.exists() ){
                 return null;
@@ -67,21 +67,26 @@ public class PropertiesFileController {
         }
     }
 
-    private static File getSpecificPropertiesFile( String sourceDirPath ) {
+    private static File getSpecificPropertiesFile( String sourceDirPath, boolean createIfNotExist ) {
+
         final File fileFromDirectoryByName =
                 Utils.getFileFromDirectoryByName( sourceDirPath, SettingName.PROPERTIES_FILE_NAME );
         if ( ! fileFromDirectoryByName.exists() ) {
-            try {
-                if(     JOptionPane.showConfirmDialog( null, String.format( CREATE_FILE_MESSAGE , sourceDirPath ) )
-                        ==
-                        JOptionPane.OK_OPTION
-                ){
-                    fileFromDirectoryByName.createNewFile();
-                } else {
-                    return null;
+            if ( createIfNotExist ) {
+                try {
+                    if ( JOptionPane.showConfirmDialog( null, String.format( CREATE_FILE_MESSAGE, sourceDirPath ) )
+                            ==
+                            JOptionPane.OK_OPTION
+                            ) {
+                        fileFromDirectoryByName.createNewFile();
+                    } else {
+                        return null;
+                    }
+                } catch ( IOException e ) {
+                    e.printStackTrace();
                 }
-            } catch ( IOException e ) {
-                e.printStackTrace();
+            } else {
+                return null;
             }
         }
         return fileFromDirectoryByName;
@@ -97,7 +102,7 @@ public class PropertiesFileController {
 
     public static void saveSpecificProperties( String sourcePath, Properties properties ) {
         try {
-            properties.store( new FileOutputStream( getSpecificPropertiesFile( sourcePath ) ), COMMENTS );
+            properties.store( new FileOutputStream( getSpecificPropertiesFile( sourcePath, true ) ), COMMENTS );
         } catch ( IOException e ) {
             e.printStackTrace();
         }
