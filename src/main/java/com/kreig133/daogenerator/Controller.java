@@ -16,6 +16,7 @@ import com.kreig133.daogenerator.sql.wrappers.GenerateGenerator;
 import com.kreig133.daogenerator.sql.wrappers.GeneroutGenerator;
 
 import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBException;
 import javax.xml.bind.Unmarshaller;
 import java.io.File;
 import java.io.FileWriter;
@@ -35,71 +36,60 @@ import static com.kreig133.daogenerator.files.JavaFilesUtils.*;
  */
 public class Controller {
 
-    private static final List<DaoMethod> daoMethods = new ArrayList<DaoMethod>();
-    private static JAXBContext jc;
-    private static Unmarshaller unmarshaller;
-    
-//    static {
-//        try{
-//            jc = JAXBContext.newInstance(  );
-//        } catch (  ){
-//
-//        }
-//    }
+    protected static final List<DaoMethod> daoMethods = new ArrayList<DaoMethod>();
+    protected static JAXBContext jc;
+    protected static Unmarshaller unmarshaller;
 
+    protected static final Appender appender = new Appender() {
+        @Override
+        public void appendStringToFile( File file, String string ) {
+            try {
+                Utils.appendByteToFile( file, string.getBytes() );
+            } catch ( IOException e ) {
+                //TODO
+                e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+            }
+        }
+    };
+    
     public static void doAction() {
 
         final OperationSettings operationSettings = DaoGenerator.getCurrentOperationSettings();
 
         saveProperties();
 
-        final Appender appender = new Appender() {
-            @Override
-            public void appendStringToFile( File file, String string ) {
-                try {
-                    Utils.appendByteToFile( file, string.getBytes() );
-                } catch ( IOException e ) {
-                    //TODO
-                    e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
-                }
-            }
-        };
-
         try {
-
-
             MyBatis.prepareFiles( appender );
-
         } catch ( Throwable e ) {
-            System.err.println( ">>>Controller: Ошибка! При предварительной записи в файлы или " +
-                    "считывание настроек, произошла ошибка!" );
-            e.printStackTrace();
+            throw new RuntimeException( "Ошибка! При предварительной записи в файлы или считывании настроек.", e );
         }
 
-        for(
-                String s:
-                    ( new File( operationSettings.getSourcePath() ) )
-                            .list(
-                                    new FilenameFilter() {
-                                        public boolean accept( File dir, String name ) {
-                                            return name.endsWith( "txt" );
-                                        }
-                                    }
-                            )
-        ) {
-            Controller.unmarshallFile( Utils.getFileFromDirectoryByName( operationSettings.getSourcePath(), s ) );
+        for( String s : getXmlFileNamesInDirectory() ) {
+            unmarshallFile( Utils.getFileFromDirectoryByName( operationSettings.getSourcePath(), s ) );
         }
 
         try {
             writeFiles();
             MyBatis.closeFiles();
         } catch ( IOException e ) {
-            System.err.println( ">>>Controller: Ошибка! При записи в файлы, произошла ошибка!" );
             throw new RuntimeException( e );
         }
     }
 
-    private static String createQueries( DaoMethod daoMethod ) {
+    protected static String[] getXmlFileNamesInDirectory( ) {
+        return ( new File( DaoGenerator.getCurrentOperationSettings() .getSourcePath() ) )
+                .list(
+                        new FilenameFilter() {
+                            public boolean accept( File dir, String name ) {
+                                return name.endsWith( "xml" );
+                            }
+                        }
+                );
+    }
+    
+
+
+    protected static String createQueries( DaoMethod daoMethod ) {
         switch ( daoMethod.getCommon().getConfiguration().getType() ){
             case CALL:
                 return ProcedureCallCreator.generateProcedureCall( daoMethod );
@@ -112,28 +102,18 @@ public class Controller {
         }
     }
 
-    private static DaoMethod unmarshallFile(
+    protected static DaoMethod unmarshallFile(
             File fileWithData
     ) {
         try {
-            DaoMethod daoMethod = new DaoMethod();
-//
-//            daoMethods.add( currentSettings );
-//
-//            //считываем название из файла ( название файла = название хранимки, запроса )
-//            currentSettings.setName( fileWithData.getName().split( ".txt" )[ 0 ] );
-//
-//            InputFileParser.readFileWithDataForGenerateDao( fileWithData, operationSettings, currentSettings );
-
+            DaoMethod daoMethod = ( DaoMethod ) getUnmarshaller().unmarshal( fileWithData );
             return daoMethod;
         } catch ( Throwable e ) {
-            System.err.println( ">>>Controller: Ошибка! Файл - " + fileWithData.getName() );
-            e.printStackTrace();
-            return null;
+            throw new RuntimeException( e );
         }
     }
 
-    private static void writeFiles() throws IOException {
+    protected static void writeFiles() throws IOException {
 
         for ( DaoMethod daoMethod: daoMethods ) {
             if ( checkToNeedOwnInClass( daoMethod ) ) {
@@ -148,7 +128,7 @@ public class Controller {
         }
     }
 
-    private static void createJavaClassForInputOutputEntities(
+    protected static void createJavaClassForInputOutputEntities(
             DaoMethod daoMethod,
             InOutType type
     ) throws IOException {
@@ -174,7 +154,7 @@ public class Controller {
         }
     }
 
-    private static void saveProperties() {
+    protected static void saveProperties() {
         Properties properties = new Properties();
 
         final OperationSettings operationSettings = DaoGenerator.getCurrentOperationSettings();
@@ -198,5 +178,28 @@ public class Controller {
 
         PropertiesFileController.saveCommonProperties( properties );
 
+    }
+
+    protected static JAXBContext getJaxbContext() {
+        if( jc == null ) {
+            try {
+                jc = JAXBContext.newInstance( "com.kreig133.daogenerator.jaxb" );
+            } catch ( JAXBException e ) {
+                throw new RuntimeException( "Ошибка при получении JAXBContext'а", e );
+            }
+        }
+        return jc;
+    }
+
+    protected static Unmarshaller getUnmarshaller(){
+        if( unmarshaller == null ){
+            try {
+                unmarshaller = getJaxbContext().createUnmarshaller();
+            } catch ( JAXBException e ) {
+                throw new RuntimeException( e );
+            }
+        }
+
+        return unmarshaller;
     }
 }

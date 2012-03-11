@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<com:daoMethod xmlns:com="com.aplana.dao-generator">
+  <com:common>
+    <com:configuration type="INSERT" multipleResult="true" testingType="TPARAM">string</com:configuration>
+    <!--Optional:-->
+    <com:methodName>string</com:methodName>
+    <!--Optional:-->
+    <com:comment>string</com:comment>
+    <!--Optional:-->
+    <com:query>string</com:query>
+    <!--Optional:-->
+    <com:spName>string</com:spName>
+  </com:common>
+  <!--Optional:-->
+  <com:inputParametrs>
+    <!--1 or more repetitions:-->
+    <com:parameter name="string" type="Double" inOut="INOUT" defaultValue="string" testValue="string" renameTo="string" sqlType="string" comment="string">string</com:parameter>
+  </com:inputParametrs>
+  <!--Optional:-->
+  <com:outputParametrs>
+    <!--1 or more repetitions:-->
+    <com:parameter name="string" type="Byte" inOut="INOUT" defaultValue="string" testValue="string" renameTo="string" sqlType="string" comment="string">string</com:parameter>
+  </com:outputParametrs>
+</com:daoMethod>
