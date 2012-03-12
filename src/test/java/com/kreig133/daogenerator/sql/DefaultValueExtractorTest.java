@@ -62,7 +62,13 @@ public class DefaultValueExtractorTest {
 
     }
 
-
+    @Test
+    public void test4(){
+        Pattern stringPattern = Pattern.compile( "(?isu)@sVSign\\s+[^@]+?--(.+?)\n" );
+        final Matcher matcher = stringPattern.matcher( s );
+        final boolean b = matcher.find();
+        System.out.println( matcher.group( 1 ) );
+    }
 
     String s = "\n" +
             "\n" +

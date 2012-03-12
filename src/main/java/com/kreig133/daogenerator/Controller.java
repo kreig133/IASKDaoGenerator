@@ -88,8 +88,7 @@ public class Controller {
             File fileWithData
     ) {
         try {
-            DaoMethod daoMethod = ( DaoMethod ) getUnmarshaller().unmarshal( fileWithData );
-            return daoMethod;
+            return ( DaoMethod ) getUnmarshaller().unmarshal( fileWithData );
         } catch ( Throwable e ) {
             throw new RuntimeException( e );
         }

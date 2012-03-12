@@ -50,8 +50,10 @@ public class StoreProcedureInfoExtractor {
 
         getSPText( spName );
 
+        String storeProcedureDefinition = getDefinitionFormSpText( spText );
         for ( ParameterType parameterType : result ) {
-            fillDefaultValues( parameterType, getSPText() );
+            fillDefaultValues( parameterType, storeProcedureDefinition );
+            fillComments( parameterType, storeProcedureDefinition );
             parameterType.setTestValue( parameterType.getDefaultValue() );
         }
 
@@ -119,9 +121,7 @@ public class StoreProcedureInfoExtractor {
         }
     }
 
-    public static void fillDefaultValues( ParameterType type, String spText ) {
-        String storeProcedureDefinition = getDefinitionFormSpText( spText );
-
+    public static void fillDefaultValues( ParameterType type, String storeProcedureDefinition ) {
         switch ( type.getType() ){
             case LONG:
             case BYTE:
@@ -132,7 +132,14 @@ public class StoreProcedureInfoExtractor {
                 type.setDefaultValue( getDefaultValueForStringFromSpDefinition( type, storeProcedureDefinition ) );
                 break;
             default:
-                System.out.println( type.getName() + "type is "+ type.getType().value() );
+                System.err.println( type.getName() + "type is " + type.getType().value() );
+        }
+    }
+
+    private static void fillComments( ParameterType type, String storeProcedureDefinition ) {
+        final Matcher matcher = getCommentPattern( type.getName() ).matcher( storeProcedureDefinition );
+        if ( matcher.find() ) {
+            type.setComment( matcher.group( 1 ) );
         }
     }
 
@@ -167,8 +174,13 @@ public class StoreProcedureInfoExtractor {
     private static Pattern getNullPatternForParameter( String parameterName ) {
         return Pattern.compile( String.format( "(?isu)@%s\\s+[^@]+?=\\s*null\\b", parameterName) );
     }
+
     private static Pattern getNumberPatternForParameter( String parameterName ) {
         return Pattern.compile( String.format( "(?isu)@%s\\s+[^@]+?=\\s*([\\d\\.]+)\\b", parameterName ) );
+    }
+
+    private static Pattern getCommentPattern( String parameterName ) {
+        return Pattern.compile( String.format( "(?isu)@%s\\s+[^@]+?--(.+?)\n", parameterName ) );
     }
 
     private static String getDefinitionFormSpText( String spText ) {
@@ -179,7 +191,7 @@ public class StoreProcedureInfoExtractor {
         if( matcher.find() ){
             return matcher.group( 1 );
         } else {
-            return null;
+            return "";
         }
     }
 

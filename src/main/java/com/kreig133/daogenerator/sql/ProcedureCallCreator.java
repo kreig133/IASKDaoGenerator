@@ -40,7 +40,7 @@ public class ProcedureCallCreator {
                     new FunctionalObjectWithoutFilter() {
                         @Override
                         public void writeString( StringBuilder builder, ParameterType p ) {
-                            builder.append( "@" ).append( p.getName() ).append( " = " ).append( p.getTestValue() );
+                            builder.append( "@" ).append( p.getName() ).append( " = " ).append( getTestValue(p) );
                         }
                     }:
                     new FunctionalObjectWithoutFilter() {
@@ -50,5 +50,9 @@ public class ProcedureCallCreator {
                         }
                     }
         );
+    }
+
+    private static String getTestValue( ParameterType p ) {
+
     }
 }

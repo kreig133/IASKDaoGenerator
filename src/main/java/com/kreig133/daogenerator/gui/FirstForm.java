@@ -1,9 +1,11 @@
 package com.kreig133.daogenerator.gui;
 
 import com.kreig133.daogenerator.DaoGenerator;
+import com.kreig133.daogenerator.common.Utils;
+import com.kreig133.daogenerator.db.GetOutputParametersFromResultSet;
 import com.kreig133.daogenerator.db.StoreProcedureInfoExtractor;
 import com.kreig133.daogenerator.enums.Type;
-import com.kreig133.daogenerator.jaxb.ParameterType;
+import com.kreig133.daogenerator.jaxb.*;
 
 import javax.swing.*;
 import javax.swing.table.AbstractTableModel;
@@ -56,6 +58,32 @@ public class FirstForm {
             }
         } );
 
+        getOutParamsButton.addActionListener( new ActionListener() {
+            @Override
+            public void actionPerformed( ActionEvent e ) {
+                GetOutputParametersFromResultSet.getOutputParameters( getCurrentDaoMethods() );
+            }
+        } );
+    }
+
+    private DaoMethod getCurrentDaoMethods(){
+        final DaoMethod result = new DaoMethod();
+
+        result.setCommon( new CommonType() );
+        result.getCommon().setSpName( storeProcedure.getText() );
+        result.getCommon().setMethodName( Utils.convertPBNameToName( storeProcedure.getText() ) );
+
+        result.getCommon().setConfiguration( new ConfigurationType() );
+        result.getCommon().getConfiguration().setType( SelectType.CALL );
+        result.getCommon().getConfiguration().setMultipleResult( true );
+
+        result.setInputParametrs( new ParametersType() );
+        result.getInputParametrs().getParameter().clear();
+        result.getInputParametrs().getParameter().addAll(
+                ( (ParametrsModel) ( inputParametrs.getModel() ) ).getParameterTypes()
+        );
+
+        return result;
     }
 
     private boolean checkSPName( ) {
