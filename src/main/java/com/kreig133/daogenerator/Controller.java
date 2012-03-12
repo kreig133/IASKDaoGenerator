@@ -9,11 +9,8 @@ import com.kreig133.daogenerator.files.mybatis.MyBatis;
 import com.kreig133.daogenerator.gui.MainForm;
 import com.kreig133.daogenerator.jaxb.DaoMethod;
 import com.kreig133.daogenerator.jaxb.InOutType;
+import com.kreig133.daogenerator.jaxb.ParameterType;
 import com.kreig133.daogenerator.settings.PropertiesFileController;
-import com.kreig133.daogenerator.sql.ProcedureCallCreator;
-import com.kreig133.daogenerator.sql.SelectQueryConverter;
-import com.kreig133.daogenerator.sql.wrappers.GenerateGenerator;
-import com.kreig133.daogenerator.sql.wrappers.GeneroutGenerator;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
@@ -54,7 +51,7 @@ public class Controller {
     
     public static void doAction() {
 
-        final OperationSettings operationSettings = DaoGenerator.getCurrentOperationSettings();
+        final OperationSettings opSettings = DaoGenerator.getCurrentOperationSettings();
 
         saveProperties();
 
@@ -65,7 +62,7 @@ public class Controller {
         }
 
         for( String s : getXmlFileNamesInDirectory() ) {
-            unmarshallFile( Utils.getFileFromDirectoryByName( operationSettings.getSourcePath(), s ) );
+            daoMethods.add( unmarshallFile( Utils.getFileFromDirectoryByName( opSettings.getSourcePath(), s ) ) );
         }
 
         try {
@@ -85,21 +82,6 @@ public class Controller {
                             }
                         }
                 );
-    }
-    
-
-
-    protected static String createQueries( DaoMethod daoMethod ) {
-        switch ( daoMethod.getCommon().getConfiguration().getType() ){
-            case CALL:
-                return ProcedureCallCreator.generateProcedureCall( daoMethod );
-            case GENERATE:
-                return GenerateGenerator.generateWrapper( daoMethod );
-            case GENEROUT:
-                return GeneroutGenerator.generateWrapper( daoMethod );
-            default:
-                return SelectQueryConverter.processSelectQueryString( daoMethod );
-        }
     }
 
     protected static DaoMethod unmarshallFile(
@@ -135,14 +117,7 @@ public class Controller {
 
         FileWriter writer = null;
         try {
-            InOutClass inOutClass = new InOutClass(
-                    DaoGenerator.getCurrentOperationSettings().getEntityPackage(),
-                    type == InOutType.IN ?
-                            daoMethod.getInputParametrs().getParameter():
-                            daoMethod.getOutputParametrs().getParameter(),
-                    Utils.convertNameForClassNaming( daoMethod.getCommon().getMethodName() ) +
-                            ( type == InOutType.IN ? "In" : "Out" )
-            );
+            InOutClass inOutClass = getInOutClass( daoMethod, type );
 
             File inClassFile = getInOrOutClassFile( inOutClass );
             inClassFile.createNewFile();
@@ -152,6 +127,17 @@ public class Controller {
         } finally {
             if (writer != null) writer.close();
         }
+    }
+
+    protected static InOutClass getInOutClass( DaoMethod daoMethod, InOutType type ) {
+        return new InOutClass(
+                DaoGenerator.getCurrentOperationSettings().getEntityPackage(),
+                type == InOutType.IN ?
+                        daoMethod.getInputParametrs().getParameter():
+                        daoMethod.getOutputParametrs().getParameter(),
+                Utils.convertNameForClassNaming( daoMethod.getCommon().getMethodName() ) +
+                        ( type == InOutType.IN ? "In" : "Out" )
+        );
     }
 
     protected static void saveProperties() {

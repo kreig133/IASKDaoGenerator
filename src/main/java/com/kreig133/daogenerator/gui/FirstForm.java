@@ -50,7 +50,7 @@ public class FirstForm {
             public void actionPerformed( ActionEvent e ) {
                 if( checkSPName() ) return;
 
-                SPTextView.setText( StoreProcedureInfoExtractor.getSPText( storeProcedure.getText() ) );
+                SPTextView.setText( StoreProcedureInfoExtractor.getSPText() );
 
                 getWindowWithSPText().setVisible( true );
             }
@@ -99,7 +99,7 @@ public class FirstForm {
                 JFrame frame = new JFrame( "MainForm" );
                 frame.setContentPane( FirstForm.getInstance() );
                 frame.setDefaultCloseOperation( JFrame.EXIT_ON_CLOSE );
-                frame.setSize( FirstForm.getInstance().getSize() );
+                frame.setSize( 800, 600 );
                 frame.setVisible( true );
             }
         } );
@@ -117,7 +117,7 @@ public class FirstForm {
 class ParametrsModel extends AbstractTableModel {
 
     static String[] columnsName = { "№", "Название", "Тип", "SQL-тип", "IN/OUT", "По умолчанию", "Для теста",
-            "Переименовать в" };
+            "Переименовать в", "Комментарий" };
 
     List<ParameterType> parameterTypes = new ArrayList<ParameterType>();
 
@@ -148,7 +148,7 @@ class ParametrsModel extends AbstractTableModel {
             case 1:
                 return parameterTypes.get( rowIndex ).getName();
             case 2:
-                return parameterTypes.get( rowIndex ).getType();
+                return parameterTypes.get( rowIndex ).getType().value();
             case 3:
                 return parameterTypes.get( rowIndex ).getSqlType();
             case 4:
@@ -159,6 +159,8 @@ class ParametrsModel extends AbstractTableModel {
                 return parameterTypes.get( rowIndex ).getTestValue();
             case 7:
                 return parameterTypes.get( rowIndex ).getRenameTo();
+            case 8:
+                return parameterTypes.get( rowIndex ).getComment();
             default:
                 throw new RuntimeException( "Ошибка при работе с таблицей" );
         }
@@ -187,6 +189,8 @@ class ParametrsModel extends AbstractTableModel {
                 break;
             case 7:
                 parameterTypes.get( rowIndex ).setRenameTo( ( String ) aValue );
+            case 8:
+                parameterTypes.get( rowIndex ).setComment( ( String ) aValue );
         }
     }
 

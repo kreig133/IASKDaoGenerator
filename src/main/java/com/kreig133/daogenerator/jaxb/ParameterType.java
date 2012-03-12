@@ -291,34 +291,44 @@ public class ParameterType {
         StringBuilder builder = new StringBuilder();
 
         getJavaDocString( builder, new String[] { getCommentForJavaDoc() } );
-        insertTabs( builder, 1 ).append( "private " ).append( type ).append( " " ).append( name );
+        insertTabs( builder, 1 ).append( "private " ).append( type.value() ).append( " " ).append( renameTo );
 
+        if(
+                defaultValue!=null  && ! defaultValue.isEmpty()
+        ){
+            builder.append( " = ").append( getDefaultValueForJavaCode() );
+        }
+
+        builder.append( ";\n\n" );
         return builder.toString();
     }
 
     public void generateGetter( StringBuilder builder){
         getJavaDocString( builder, new String[] { "Получить ", "\"" + getCommentForJavaDoc() + "\"" } );
 
-        insertTabs( builder, 1 ).append( "public " ).append( type ).append( " get" );
-        builder.append( Utils.convertNameForGettersAndSetters( name ) ).append( "(){\n" );
-        insertTabs( builder, 2 ).append( "return " ).append( name ).append( ";\n");
+        insertTabs( builder, 1 ).append( "public " ).append( type.value() ).append( " get" );
+        builder.append( Utils.convertNameForGettersAndSetters( renameTo ) ).append( "(){\n" );
+        insertTabs( builder, 2 ).append( "return " ).append( renameTo ).append( ";\n");
         insertTabs( builder, 1 ).append( "}\n\n" );
     }
 
 
     public void generateSetter( StringBuilder builder ){
         getJavaDocString( builder, new String[] { "Установить ", "\"" + getCommentForJavaDoc() + "\"" } );
-        insertTabs( builder, 1 ).append( "public void set" ).append( Utils.convertNameForGettersAndSetters( name ) );
-        builder.append( "( " ).append( type ).append( " " ).append( name ).append( " ){\n" );
-        insertTabs( builder, 2 ).append( "this." ).append( name ).append( " = " ).append( name ).append( ";\n" );
+        insertTabs( builder, 1 ).append( "public void set" ).append( Utils.convertNameForGettersAndSetters( renameTo ) );
+        builder.append( "( " ).append( type.value() ).append( " " ).append( renameTo ).append( " ){\n" );
+        insertTabs( builder, 2 ).append( "this." ).append( renameTo ).append( " = " ).append( renameTo ).append( ";\n" );
         insertTabs( builder, 1 ).append( "}\n\n" );
     }
 
     private String getCommentForJavaDoc(){
-        if( comment == null || "".equals( comment ) || comment.toLowerCase().equals( "null" ) ) return name;
+        if( comment == null || "".equals( comment ) || comment.toLowerCase().equals( "null" ) ) return renameTo;
         return comment;
     }
 
-
-
+    public String getDefaultValueForJavaCode() {
+        return defaultValue.trim() +
+                ( type == JavaType.LONG ?
+                        ( "null".equals( defaultValue.toLowerCase().trim() ) ? "" : "L" ) : "" );
+    }
 }

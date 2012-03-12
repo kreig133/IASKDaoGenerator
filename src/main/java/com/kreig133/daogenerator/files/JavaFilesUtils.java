@@ -8,6 +8,8 @@ import java.io.File;
 import java.io.IOException;
 import java.util.List;
 
+import static com.kreig133.daogenerator.common.StringBuilderUtils.insertTabs;
+
 /**
  * @author eshangareev
  * @version 1.0
@@ -99,6 +101,15 @@ public class JavaFilesUtils {
 
     public static void insertImport( StringBuilder builder, String path ){
         builder.append( "import " ).append( path ).append( ";\n" );
+    }
+
+    public static void writeSerialVersionUID( StringBuilder builder ) {
+        builder.append( "\n    private static final long serialVersionUID = " );
+        builder.append( (long)( Math.random() * Long.MAX_VALUE ) ).append( "L;\n\n" );
+    }
+
+    public static void writeEmptyConstructor( StringBuilder builder, String className ) {
+        insertTabs( builder, 1 ).append( "public " ).append( className ).append( "(){\n    }\n\n" );
     }
 
     public static void insertClassDeclaration(

@@ -1,7 +1,6 @@
 package com.kreig133.daogenerator.common;
 
 import com.kreig133.daogenerator.DaoGenerator;
-import com.kreig133.daogenerator.common.settings.OperationSettings;
 import com.kreig133.daogenerator.enums.Type;
 import com.kreig133.daogenerator.jaxb.DaoMethod;
 import com.kreig133.daogenerator.jaxb.ParameterType;
@@ -10,7 +9,6 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.List;
-import java.util.Map;
 
 import static com.kreig133.daogenerator.common.StringBuilderUtils.insertTabs;
 

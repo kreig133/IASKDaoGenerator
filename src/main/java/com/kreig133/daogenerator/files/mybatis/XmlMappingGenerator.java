@@ -5,6 +5,7 @@ import com.kreig133.daogenerator.common.Utils;
 import com.kreig133.daogenerator.common.settings.OperationSettings;
 import com.kreig133.daogenerator.jaxb.DaoMethod;
 import com.kreig133.daogenerator.jaxb.ParameterType;
+import com.kreig133.daogenerator.sql.SqlQueryCreator;
 
 import java.util.List;
 
@@ -33,8 +34,7 @@ public class XmlMappingGenerator {
         writeParameterType( outputParameterList, name, "resultType"   , "Out", package_, builder );
 
         builder.append( ">\n\n" );
-//TODO
-//        builder.append( Utils.addTabsBeforeLine( daoMethod.getMyBatisQuery(), 2 ) ).append( "\n" );
+        builder.append( Utils.addTabsBeforeLine( SqlQueryCreator.createQueries( daoMethod, false ), 2 ) ).append( "\n" );
 
         insertTabs(builder, 1).append( "</" ).append( daoMethod.getCommon().getConfiguration().getType()
                 .getAnnotation().toLowerCase() ).append( ">\n\n" );

@@ -3,6 +3,7 @@ package com.kreig133.daogenerator.files.mybatis;
 import com.kreig133.daogenerator.common.Utils;
 import com.kreig133.daogenerator.jaxb.DaoMethod;
 import com.kreig133.daogenerator.jaxb.SelectType;
+import com.kreig133.daogenerator.sql.SqlQueryCreator;
 
 import static com.kreig133.daogenerator.common.StringBuilderUtils.insertTabs;
 
@@ -22,8 +23,8 @@ public class AnnotationGenerator {
         assert selectType != null ;
         
         insertTabs(builder, 1).append( "@" ).append( selectType.getAnnotation() ).append( "(\n" );
-//TODO
-//        builder.append( Utils.wrapWithQuotes( daoMethod.getMyBatisQuery() ) );
+
+        builder.append( Utils.wrapWithQuotes( SqlQueryCreator.createQueries( daoMethod, false ) ) );
 
         insertTabs( builder, 1 ).append( ")\n" );
 

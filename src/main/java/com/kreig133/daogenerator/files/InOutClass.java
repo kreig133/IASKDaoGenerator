@@ -36,7 +36,7 @@ public class InOutClass {
     public String toString() {
         StringBuilder builder = new StringBuilder();
 
-        builder.append( "package " ).append( package_ ).append( ";\n\n" );
+        insertPackageLine( builder, package_ );
 
         insertImport( builder, "java.io.Serializable" );
         insertImport( builder, "java.util.*" );
@@ -53,12 +53,14 @@ public class InOutClass {
         );
 
         writeSerialVersionUID( builder );
-        writeEmptyConstructor( builder );
+        writeEmptyConstructor( builder, name );
         writeFullConstructor ( builder );
 
         for(ParameterType p : parameters){
             builder.append( p.toString() );
+        }
 
+        for( ParameterType p: parameters ){
             p.generateGetter( builder );
             p.generateSetter( builder );
         }
@@ -69,21 +71,14 @@ public class InOutClass {
         return builder.toString();
     }
 
-    private void writeSerialVersionUID( StringBuilder builder ) {
-        builder.append( "\n    private static final long serialVersionUID = " );
-        builder.append( (long)( Math.random() * Long.MAX_VALUE ) ).append( "L;\n\n" );
-    }
 
-    private void writeEmptyConstructor( StringBuilder builder ) {
-        insertTabs( builder, 1 ).append( "public " ).append( name ).append( "(){\n    }\n\n" );
-    }
 
     private void writeFullConstructor( StringBuilder builder ) {
         insertTabs( builder, 1 ).append( "public " ).append( name ).append( "(\n" );
         iterateForParameterList( builder, parameters, 2, new FunctionalObjectWithoutFilter() {
             @Override
             public void writeString( StringBuilder builder, ParameterType p ) {
-                builder.append( p.getType() ).append( " " ).append( p.getName() );
+                builder.append( p.getType().value() ).append( " " ).append( p.getRenameTo() );
             }
         } );
 

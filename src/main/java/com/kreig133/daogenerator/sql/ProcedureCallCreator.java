@@ -1,5 +1,6 @@
 package com.kreig133.daogenerator.sql;
 
+import com.kreig133.daogenerator.common.strategy.FuctionalObject;
 import com.kreig133.daogenerator.common.strategy.FunctionalObjectWithoutFilter;
 import com.kreig133.daogenerator.jaxb.DaoMethod;
 import com.kreig133.daogenerator.jaxb.ParameterType;
@@ -12,8 +13,9 @@ import static com.kreig133.daogenerator.common.StringBuilderUtils.iterateForPara
  * @version 1.0
  */
 public class ProcedureCallCreator {
-    public static String generateProcedureCall(
-        DaoMethod daoMethod
+    protected static String generateProcedureCall(
+            DaoMethod daoMethod,
+            FuctionalObject functionalObject
     ) {
         StringBuilder myBatisQuery      = new StringBuilder();
 
@@ -23,16 +25,30 @@ public class ProcedureCallCreator {
             myBatisQuery.append( "\n" );
         }
 
-        iterateForParameterList( myBatisQuery, daoMethod.getInputParametrs().getParameter(),
-                new FunctionalObjectWithoutFilter() {
-                    @Override
-                    public void writeString( StringBuilder builder, ParameterType p ) {
-                        insertEscapedParamName( builder, p.getName() );
-                    }
-                } );
+        iterateForParameterList( myBatisQuery, daoMethod.getInputParametrs().getParameter(), functionalObject );
 
         myBatisQuery.append( ")}" );
 
         return myBatisQuery.toString();
+    }
+    
+    
+    public static String generateProcedureCall( DaoMethod daoMethod, boolean forTest ){
+        return ProcedureCallCreator.generateProcedureCall(
+                daoMethod,
+                forTest ?
+                    new FunctionalObjectWithoutFilter() {
+                        @Override
+                        public void writeString( StringBuilder builder, ParameterType p ) {
+                            builder.append( "@" ).append( p.getName() ).append( " = " ).append( p.getTestValue() );
+                        }
+                    }:
+                    new FunctionalObjectWithoutFilter() {
+                        @Override
+                        public void writeString( StringBuilder builder, ParameterType p ) {
+                            insertEscapedParamName( builder, p.getName() );
+                        }
+                    }
+        );
     }
 }

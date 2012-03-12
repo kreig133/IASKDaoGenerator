@@ -1,6 +1,6 @@
 package com.kreig133.daogenerator;
 
-import com.kreig133.daogenerator.jaxb.DaoMethod;
+import com.kreig133.daogenerator.jaxb.*;
 import junit.framework.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -28,10 +28,16 @@ public class ControllerTest extends Controller{
     }
 
     @Test
-    public void test() {
+    public void testUnmarshallFile() {
         File xml = new File( "xml/Example.xsd.xml" );
         Assert.assertTrue( xml.isFile() && xml.exists() );
         final DaoMethod daoMethod = Controller.unmarshallFile( xml );
         Assert.assertTrue( daoMethod != null );
+    }
+
+    @Test
+    public void test(){
+        final DaoMethod daoMethod = TestHelper.getDaoMethodForTest();
+        System.out.println( Controller.getInOutClass( daoMethod, InOutType.IN ) );
     }
 }

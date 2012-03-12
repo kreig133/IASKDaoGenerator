@@ -1,17 +1,15 @@
 package com.kreig133.daogenerator.db;
 
-import com.kreig133.daogenerator.DaoGenerator;
 import com.kreig133.daogenerator.common.Utils;
-import com.kreig133.daogenerator.common.settings.EmptyOperationSettingsImpl;
-import com.kreig133.daogenerator.enums.Type;
 import com.kreig133.daogenerator.jaxb.InOutType;
 import com.kreig133.daogenerator.jaxb.JavaType;
 import com.kreig133.daogenerator.jaxb.ParameterType;
 
-import java.io.IOException;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * @author eshangareev
@@ -28,6 +26,8 @@ public class StoreProcedureInfoExtractor {
     public static final String DATA_TYPE_COLUMN         = "DATA_TYPE";
     public static final String CHARACTER_MAXIMUM_LENGTH = "CHARACTER_MAXIMUM_LENGTH";
     public static final String PARAMETER_MODE           = "PARAMETER_MODE";
+
+    private static String spText = null;
 
     public static List<ParameterType> getInputParametrsForSP( String spName )  {
         final List<ParameterType> result = new ArrayList<ParameterType>();
@@ -48,8 +48,15 @@ public class StoreProcedureInfoExtractor {
             throw new RuntimeException( "Не удалось получить параметры для хранимой процедуры " + spName, e );
         }
 
-        return result;
+        getSPText( spName );
 
+        for ( ParameterType parameterType : result ) {
+            fillDefaultValues( parameterType, getSPText() );
+            parameterType.setTestValue( parameterType.getDefaultValue() );
+        }
+
+
+        return result;
     }
 
     public static ParameterType extractDataFromResultSetRow( ResultSet resultSet ) throws SQLException {
@@ -68,7 +75,7 @@ public class StoreProcedureInfoExtractor {
         String result = resultSet.getString( PARAMETER_NAME_COLUMN );
 
         if( result.startsWith( "@" )){
-            return new String( result.substring( 1 ) );
+            return result.substring( 1 );
         }
         return result;
     }
@@ -86,10 +93,13 @@ public class StoreProcedureInfoExtractor {
 
     }
 
-    public static String getSPText( String spName ){
-        final Connection connection = JDBCConnector.connectToDB();
+    public static String getSPText(){
+        return spText;
+    }
 
-        String result = null;
+
+    protected static void getSPText( String spName ){
+        final Connection connection = JDBCConnector.connectToDB();
 
         try {
             final CallableStatement callableStatement = connection.prepareCall( GET_SP_TEXT );
@@ -103,11 +113,75 @@ public class StoreProcedureInfoExtractor {
             while ( resultSet.next() ) {
                 builder.append( resultSet.getString( 1 ) );
             }
-            result = builder.toString();
+            spText = builder.toString();
         } catch ( SQLException e ) {
             throw new RuntimeException( "Не удалось получить текст хранимки" );
         }
-
-        return result;
     }
+
+    public static void fillDefaultValues( ParameterType type, String spText ) {
+        String storeProcedureDefinition = getDefinitionFormSpText( spText );
+
+        switch ( type.getType() ){
+            case LONG:
+            case BYTE:
+            case DOUBLE:
+                type.setDefaultValue( getDefaultValueForNumberFromSpDefinition( type, storeProcedureDefinition ) );
+                break;
+            case STRING:
+                type.setDefaultValue( getDefaultValueForStringFromSpDefinition( type, storeProcedureDefinition ) );
+                break;
+            default:
+                System.out.println( type.getName() + "type is "+ type.getType().value() );
+        }
+    }
+
+    private static String getDefaultValueForStringFromSpDefinition( ParameterType type, String storeProcedureDefinition ) {
+        if ( getNullPatternForParameter( type.getName() ).matcher( storeProcedureDefinition ).find() ){
+            return NULL;
+        }
+        final Matcher matcher = getStringPatternForParameter( type.getName() ).matcher( storeProcedureDefinition );
+        if( matcher.find() ){
+            return matcher.group( 1 );
+        } else {
+            return "";
+        }
+    }
+
+    private static String getDefaultValueForNumberFromSpDefinition( ParameterType type, String storeProcedureDefinition ) {
+        if ( getNullPatternForParameter( type.getName() ).matcher( storeProcedureDefinition ).find() ){
+            return NULL;
+        }
+        final Matcher matcher = getNumberPatternForParameter( type.getName() ).matcher( storeProcedureDefinition );
+        if( matcher.find() ){
+            return matcher.group( 1 );
+        } else {
+            return "";
+        }
+    }
+
+    private static Pattern getStringPatternForParameter( String name ) {
+        return Pattern.compile( String.format( "(?isu)@%s\\s+[^@]+?=\\s*['\"](.*?)['\"]", name ) );
+    }
+
+    private static Pattern getNullPatternForParameter( String parameterName ) {
+        return Pattern.compile( String.format( "(?isu)@%s\\s+[^@]+?=\\s*null\\b", parameterName) );
+    }
+    private static Pattern getNumberPatternForParameter( String parameterName ) {
+        return Pattern.compile( String.format( "(?isu)@%s\\s+[^@]+?=\\s*([\\d\\.]+)\\b", parameterName ) );
+    }
+
+    private static String getDefinitionFormSpText( String spText ) {
+        //TODO есть косяк ( если в комментариях встретися \bAS\b, то сработает неправильно
+        //TODO Есть вариант выпиливать предварительно комментарии
+
+        final Matcher matcher = Pattern.compile( "(?isu)create\\s+procedure(.*?)\\bas\\b" ).matcher( spText );
+        if( matcher.find() ){
+            return matcher.group( 1 );
+        } else {
+            return null;
+        }
+    }
+
+    public static final String NULL = "null";
 }

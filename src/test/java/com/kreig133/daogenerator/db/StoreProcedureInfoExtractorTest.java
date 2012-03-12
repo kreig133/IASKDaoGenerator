@@ -1,24 +1,23 @@
 package com.kreig133.daogenerator.db;
 
-import com.kreig133.daogenerator.db.StoreProcedureInfoExtractor;
+import com.kreig133.daogenerator.TestHelper;
+import com.kreig133.daogenerator.jaxb.DaoMethod;
 import com.kreig133.daogenerator.jaxb.JavaType;
 import com.kreig133.daogenerator.jaxb.ParameterType;
 import org.junit.Test;
-import org.mockito.Mock;
 import org.mockito.Mockito;
 
 import static org.junit.Assert.*;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.List;
 
 /**
  * @author eshangareev
  * @version 1.0
  */
-public class StoreProcedureInfoExtractorTest {
+public class StoreProcedureInfoExtractorTest extends StoreProcedureInfoExtractor{
 
     @Test
     public void test(){
@@ -43,9 +42,15 @@ public class StoreProcedureInfoExtractorTest {
 
     @Test
     public void test3(){
-        final String sp_bilPg_getBillMakerList = StoreProcedureInfoExtractor.getSPText( "sp_bilPg_GetBillMakerList" );
+        StoreProcedureInfoExtractor.getSPText( "sp_bilPg_GetBillMakerList" );
+        final String sp_bilPg_getBillMakerList =  getSPText();
         System.out.println( "sp_bilPg_getBillMakerList = " + sp_bilPg_getBillMakerList );
         assertNotNull( sp_bilPg_getBillMakerList );
 
+    }
+    
+    @Test
+    public void test4(){
+//        StoreProcedureInfoExtractor.fillDefaultValues( daoMethod, "" );
     }
 }

@@ -28,7 +28,7 @@
     <xs:complexType name="configurationType">
         <xs:simpleContent>
             <xs:extension base="xs:string">
-                <xs:attribute type="this:selectType"    name="type"            use="required"/>
+                <xs:attribute type="this:selectType"  name="type"            use="required"/>
                 <xs:attribute type="xs:boolean"       name="multipleResult"  use="required"/>
                 <xs:attribute type="this:testingType" name="testingType"     use="required"/>
             </xs:extension>

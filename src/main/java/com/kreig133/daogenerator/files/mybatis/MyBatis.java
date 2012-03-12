@@ -3,7 +3,6 @@ package com.kreig133.daogenerator.files.mybatis;
 import com.kreig133.daogenerator.DaoGenerator;
 import com.kreig133.daogenerator.common.StringBuilderUtils;
 import com.kreig133.daogenerator.common.Utils;
-import com.kreig133.daogenerator.common.settings.OperationSettings;
 import com.kreig133.daogenerator.enums.MethodType;
 import com.kreig133.daogenerator.enums.Type;
 import com.kreig133.daogenerator.files.Appender;
@@ -62,7 +61,6 @@ public class MyBatis {
     private static void generateMapping(
         DaoMethod daoMethod
     ) throws IOException {
-        String method;
 
         switch ( DaoGenerator.getCurrentOperationSettings().getType() ){
             case IASK:
@@ -70,7 +68,7 @@ public class MyBatis {
                         XmlMappingGenerator.generateXmlMapping( daoMethod ).getBytes() );
                 break;
             case DEPO:
-                method =
+                String method =
                         AnnotationGenerator.generateAnnotation( daoMethod )
                         +"    public "
                         + InterfaceMethodGenerator.generateMethodSignature(
@@ -109,4 +107,6 @@ public class MyBatis {
                 ImplementationMethodGenerator.generateMethodImpl( daoMethod ).getBytes()
         );
     }
+
+
 }
