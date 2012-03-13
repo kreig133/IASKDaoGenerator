@@ -30,6 +30,13 @@ public class FirstForm {
     private JButton SPTextButton;
     private JButton button1;
     private JButton getOutParamsButton;
+    private JTabbedPane tabbedPane1;
+    private JTextArea textArea1;
+    private JTextField textField1;
+    private JTextArea textArea2;
+    private JRadioButton xRadioButton;
+    private JRadioButton GENERATERadioButton;
+    private JRadioButton CALLRadioButton;
 
     private JFrame windowWithSPText;
     
