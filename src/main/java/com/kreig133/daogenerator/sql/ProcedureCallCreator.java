@@ -1,8 +1,10 @@
 package com.kreig133.daogenerator.sql;
 
+import com.kreig133.daogenerator.common.Utils;
 import com.kreig133.daogenerator.common.strategy.FuctionalObject;
 import com.kreig133.daogenerator.common.strategy.FunctionalObjectWithoutFilter;
 import com.kreig133.daogenerator.jaxb.DaoMethod;
+import com.kreig133.daogenerator.jaxb.JavaType;
 import com.kreig133.daogenerator.jaxb.ParameterType;
 
 import static com.kreig133.daogenerator.common.StringBuilderUtils.insertEscapedParamName;
@@ -40,7 +42,7 @@ public class ProcedureCallCreator {
                     new FunctionalObjectWithoutFilter() {
                         @Override
                         public void writeString( StringBuilder builder, ParameterType p ) {
-                            builder.append( "@" ).append( p.getName() ).append( " = " ).append( getTestValue(p) );
+                            builder.append( "@" ).append( p.getName() ).append( " = " ).append( getTestValue( p ) );
                         }
                     }:
                     new FunctionalObjectWithoutFilter() {
@@ -52,7 +54,15 @@ public class ProcedureCallCreator {
         );
     }
 
-    private static String getTestValue( ParameterType p ) {
+    protected static String getTestValue( ParameterType p ) {
+        if ( p.getTestValue() == null || "null".equals( p.getTestValue() ) ) {
+            return "NULL";
+        }
 
+        if ( p.getType() == JavaType.STRING || p.getType() == JavaType.DATE ) {
+            return Utils.wrapWithQuotes( p.getDefaultValue() );
+        }
+
+        return p.getTestValue();
     }
 }
