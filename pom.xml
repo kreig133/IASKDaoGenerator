@@ -40,6 +40,13 @@
             <version>1.9.0-rc1</version>
             <scope>test</scope>
         </dependency>
+
+        <dependency>
+            <groupId>com.intellij</groupId>
+            <artifactId>annotations</artifactId>
+            <version>9.0.4</version>
+            <scope>compile</scope>
+        </dependency>
     </dependencies>
 
     <build>
