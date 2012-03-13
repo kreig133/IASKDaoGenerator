@@ -4,6 +4,7 @@ import com.kreig133.daogenerator.jaxb.CommonType;
 import com.kreig133.daogenerator.jaxb.DaoMethod;
 import com.kreig133.daogenerator.jaxb.ParametersType;
 import org.intellij.lang.annotations.Language;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -31,5 +32,6 @@ public class SqlQueryParserTest {
 
         final DaoMethod daoMethod1 = SqlQueryParser.parseSqlQueryAndParameters( daoMethod );
         System.out.println( daoMethod );
+        Assert.assertTrue( daoMethod.getInputParametrs().getParameter().size() == 2 );
     }
 }

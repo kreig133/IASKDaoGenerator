@@ -8,6 +8,7 @@ import com.kreig133.daogenerator.db.GetOutputParametersFromResultSet;
 import com.kreig133.daogenerator.db.StoreProcedureInfoExtractor;
 import com.kreig133.daogenerator.enums.Type;
 import com.kreig133.daogenerator.jaxb.*;
+import com.kreig133.daogenerator.sql.SqlQueryParser;
 
 import javax.swing.*;
 import javax.swing.table.AbstractTableModel;
@@ -60,27 +61,37 @@ public class FirstForm {
         getInParamsButton.addActionListener( new ActionListener() {
             @Override
             public void actionPerformed( ActionEvent e ) {
+                List<ParameterType> inputParametrsForSP;
                 if ( tabbedPane1.getSelectedIndex() == SP_TAB_INDEX ) {
                     if ( checkSPName() ) return;
 
                     methodNameFieldSpTab.setText( Utils.convertPBNameToName( storeProcedureField.getText() ) );
 
-                    final List<ParameterType> parameterTypes =
-                            ( ( ParametrsModel ) ( inputParametrs.getModel() ) ).getParameterTypes();
-
-                    parameterTypes.clear();
-
-                    parameterTypes.addAll(
-                            StoreProcedureInfoExtractor.getInputParametrsForSP( storeProcedureField.getText() )
-                    );
-                    ( ( ParametrsModel ) ( outputParametrs.getModel() ) ).getParameterTypes().clear();
+                    inputParametrsForSP =
+                            StoreProcedureInfoExtractor.getInputParametrsForSP( storeProcedureField.getText() );
 
                     SPTextButton.setEnabled( true );
                     getOutParamsButton.setEnabled( true );
-                    inputParametrs.updateUI();
+
                 } else {
-                    //TODO parsing query
+                    if ( queryTextArea.getText() == null || queryTextArea.getText().equals( "" ) ){
+                        JOptionPane.showMessageDialog( getInParamsButton, "Введите текст запроса" );
+                    }
+
+                    inputParametrsForSP = SqlQueryParser.parseSqlQueryAndParameters( getCurrentDaoMethods() )
+                                        .getInputParametrs().getParameter();
+
                 }
+                final List<ParameterType> parameterTypes =
+                        ( ( ParametrsModel ) ( inputParametrs.getModel() ) ).getParameterTypes();
+
+                parameterTypes.clear();
+
+                parameterTypes.addAll( inputParametrsForSP );
+
+                ( ( ParametrsModel ) ( outputParametrs.getModel() ) ).getParameterTypes().clear();
+
+                inputParametrs.updateUI();
             }
         } );
         
@@ -127,12 +138,6 @@ public class FirstForm {
                 }
             }
         } );
-        getInParamsButton.addActionListener( new ActionListener() {
-            @Override
-            public void actionPerformed( ActionEvent e ) {
-
-            }
-        } );
     }
 
     private DaoMethod getCurrentDaoMethods(){
@@ -153,6 +158,8 @@ public class FirstForm {
             result.getCommon().setQuery( queryTextArea.getText() );
             result.getCommon().getConfiguration().setType( getQueryType() );
             result.getCommon().getConfiguration().setMultipleResult( isMultipleResultCheckBoxSelectTab.isSelected() );
+            // Для того, чтобы получить запрос с ? вместо наших данных
+            SqlQueryParser.parseSqlQueryAndParameters( result );
         }
 
         result.setInputParametrs( new ParametersType() );
@@ -241,8 +248,9 @@ public class FirstForm {
 
 class ParametrsModel extends AbstractTableModel {
 
-    static String[] columnsName = { "№", "Название", "Тип", "SQL-тип", "IN/OUT", "По умолчанию", "Для теста",
-            "Переименовать в", "Комментарий" };
+    static String[] columnsName = {
+            "№", "Название", "Тип", "SQL-тип", "IN/OUT", "По умолчанию", "Для теста", "Переименовать в", "Комментарий"
+    };
 
     List<ParameterType> parameterTypes = new ArrayList<ParameterType>();
 
@@ -314,8 +322,10 @@ class ParametrsModel extends AbstractTableModel {
                 break;
             case 7:
                 parameterTypes.get( rowIndex ).setRenameTo( ( String ) aValue );
+                break;
             case 8:
                 parameterTypes.get( rowIndex ).setComment( ( String ) aValue );
+                break;
         }
     }
 
