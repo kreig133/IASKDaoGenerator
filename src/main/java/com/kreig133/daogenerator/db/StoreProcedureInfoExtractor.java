@@ -180,7 +180,7 @@ public class StoreProcedureInfoExtractor {
     }
 
     private static Pattern getCommentPattern( String parameterName ) {
-        return Pattern.compile( String.format( "(?isu)@%s\\s+[^@]+?--([^@]+?)", parameterName ) );
+        return Pattern.compile( String.format( "(?isu)@%s\\s+[^@]+?--([^@]+)", parameterName ) );
     }
 
     private static String getDefinitionFormSpText( String spText ) {

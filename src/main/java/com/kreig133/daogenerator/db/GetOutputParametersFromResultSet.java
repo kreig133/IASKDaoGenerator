@@ -37,7 +37,7 @@ public class GetOutputParametersFromResultSet {
             for ( int i = 1; i <= metaData.getColumnCount(); i++ ) {
                 final ParameterType parameterType = new ParameterType();
                 parameterType.setName( metaData.getColumnName( i ) );
-                parameterType.setRenameTo( Utils. convertPBNameToName( parameterType.getName() ) );
+                parameterType.setRenameTo( parameterType.getName() );
                 parameterType.setSqlType( metaData.getColumnTypeName( i ) );
                 parameterType.setType( JavaType.getBySqlType( metaData.getColumnTypeName( i )) );
 

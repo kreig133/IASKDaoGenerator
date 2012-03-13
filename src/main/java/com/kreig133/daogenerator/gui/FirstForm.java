@@ -13,6 +13,7 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
+import java.util.Enumeration;
 import java.util.List;
 
 /**
@@ -22,35 +23,61 @@ import java.util.List;
 public class FirstForm {
     private static FirstForm INSTANCE;
 
-    private JTextField storeProcedure;
+    private JTextField storeProcedureField;
     private JPanel mainPanel;
     private JTable inputParametrs;
     private JTable outputParametrs;
     private JButton getInParamsButton;
     private JButton SPTextButton;
-    private JButton button1;
+    private JButton generateXMLButton;
     private JButton getOutParamsButton;
     private JTabbedPane tabbedPane1;
-    private JTextArea textArea1;
-    private JTextField textField1;
-    private JTextArea textArea2;
+    private JTextField methodNameFieldSpTab;
+    private JTextArea commentTextAreaSpTab;
     private JRadioButton xRadioButton;
     private JRadioButton GENERATERadioButton;
     private JRadioButton CALLRadioButton;
-
+    private JRadioButton GENEROUTRadioButton;
+    private JCheckBox isMultipleResultCheckBoxSpTab;
+    private JCheckBox isMultipleResultCheckBoxSelectTab;
+    private JTextArea textArea3;
+    private JTextField methodNameFieldSelectTab;
+    private JTextArea commentTextAreaSelectTab;
+    private ButtonGroup spTypeRadioGroup;
     private JFrame windowWithSPText;
+    private static final int SP_TAB_INDEX = 0;
     
     public FirstForm() {
+        spTypeRadioGroup = new ButtonGroup();
+        spTypeRadioGroup.add( GENERATERadioButton );
+        spTypeRadioGroup.add( CALLRadioButton );
+        spTypeRadioGroup.add( GENEROUTRadioButton );
+
         getInParamsButton.addActionListener( new ActionListener() {
             @Override
             public void actionPerformed( ActionEvent e ) {
-                if ( checkSPName() ) return;
+                if ( tabbedPane1.getSelectedIndex() == SP_TAB_INDEX ) {
+                    if ( checkSPName() ) return;
 
-                ( (ParametrsModel) ( inputParametrs.getModel() ) ).getParameterTypes().addAll(
-                        StoreProcedureInfoExtractor.getInputParametrsForSP( storeProcedure.getText() )
-                );
+                    if ( methodNameFieldSpTab.getText() == null || "".equals( methodNameFieldSpTab.getText() ) ) {
+                        methodNameFieldSpTab.setText( Utils.convertPBNameToName( storeProcedureField.getText() ) );
+                    }
 
-                inputParametrs.updateUI();
+                    final List<ParameterType> parameterTypes =
+                            ( ( ParametrsModel ) ( inputParametrs.getModel() ) ).getParameterTypes();
+
+                    parameterTypes.clear();
+
+                    parameterTypes.addAll(
+                            StoreProcedureInfoExtractor.getInputParametrsForSP( storeProcedureField.getText() )
+                    );
+
+                    SPTextButton.setEnabled( true );
+                    getOutParamsButton.setEnabled( true );
+                    inputParametrs.updateUI();
+                } else {
+                    //TODO parsing query
+                }
             }
         } );
         
@@ -70,9 +97,11 @@ public class FirstForm {
             public void actionPerformed( ActionEvent e ) {
                 final DaoMethod daoMethod =
                         GetOutputParametersFromResultSet.getOutputParameters( getCurrentDaoMethods() );
-                ( (ParametrsModel) ( outputParametrs.getModel() ) ).getParameterTypes().addAll(
-                        daoMethod.getOutputParametrs().getParameter()
-                );
+                final List<ParameterType> parameterTypes =
+                        ( ( ParametrsModel ) ( outputParametrs.getModel() ) ).getParameterTypes();
+                parameterTypes.clear();
+                parameterTypes.addAll( daoMethod.getOutputParametrs().getParameter() );
+                outputParametrs.updateUI();
             }
         } );
     }
@@ -81,12 +110,20 @@ public class FirstForm {
         final DaoMethod result = new DaoMethod();
 
         result.setCommon( new CommonType() );
-        result.getCommon().setSpName( storeProcedure.getText() );
-        result.getCommon().setMethodName( Utils.convertPBNameToName( storeProcedure.getText() ) );
-
         result.getCommon().setConfiguration( new ConfigurationType() );
-        result.getCommon().getConfiguration().setType( SelectType.CALL );
-        result.getCommon().getConfiguration().setMultipleResult( true );
+
+        if( tabbedPane1.getSelectedIndex() == SP_TAB_INDEX ){
+            result.getCommon().setSpName( storeProcedureField.getText() );
+            result.getCommon().setMethodName( methodNameFieldSpTab.getText() );
+            result.getCommon().setComment( commentTextAreaSpTab.getText() );
+            result.getCommon().getConfiguration().setType( getSpType() );
+            result.getCommon().getConfiguration().setMultipleResult( isMultipleResultCheckBoxSpTab.isSelected() );
+        } else{
+            result.getCommon().setMethodName( methodNameFieldSelectTab.getText() );
+            result.getCommon().setComment( commentTextAreaSelectTab.getText() );
+            result.getCommon().getConfiguration().setType( getQueryType() );
+            result.getCommon().getConfiguration().setMultipleResult( isMultipleResultCheckBoxSelectTab.isSelected() );
+        }
 
         result.setInputParametrs( new ParametersType() );
         result.getInputParametrs().getParameter().clear();
@@ -94,11 +131,31 @@ public class FirstForm {
                 ( (ParametrsModel) ( inputParametrs.getModel() ) ).getParameterTypes()
         );
 
+        result.setOutputParametrs( new ParametersType() );
+        result.getOutputParametrs().getParameter().addAll(
+                ( (ParametrsModel) ( outputParametrs.getModel() ) ).getParameterTypes()
+        );
+
         return result;
     }
 
+    private SelectType getQueryType() {
+        //TODO
+        return null;  //To change body of created methods use File | Settings | File Templates.
+    }
+
+    private SelectType getSpType() {
+        for ( Enumeration e = spTypeRadioGroup.getElements(); e.hasMoreElements(); ) {
+            JRadioButton b = ( JRadioButton ) e.nextElement();
+            if ( b.getModel() == spTypeRadioGroup.getSelection() ) {
+                return SelectType.getByName( b.getText() );
+            }
+        }
+        return null;
+    }
+
     private boolean checkSPName( ) {
-        String text = storeProcedure.getText();
+        String text = storeProcedureField.getText();
         
         if( text == null || "".equals( text )  ){
             JOptionPane.showMessageDialog( getInParamsButton, "Введите название хранимой процедуры" );
@@ -111,6 +168,7 @@ public class FirstForm {
     public JFrame getWindowWithSPText() {
         if ( windowWithSPText == null ) {
             windowWithSPText = new JFrame();
+            windowWithSPText.setSize( 400, 700 );
             windowWithSPText.setDefaultCloseOperation( WindowConstants.HIDE_ON_CLOSE );
             windowWithSPText.add( SPTextView.getInstance() );
         }
@@ -122,8 +180,6 @@ public class FirstForm {
         inputParametrs  = new JTable( new ParametrsModel() );
         outputParametrs = new JTable( new ParametrsModel() );
     }
-
-
 
     public static void main( String[] args ) {
         DaoGenerator.getCurrentOperationSettings().setType( Type.IASK );
