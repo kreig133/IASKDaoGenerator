@@ -31,7 +31,7 @@ public class ControllerTest extends Controller{
     public void testUnmarshallFile() {
         File xml = new File( "xml/Example.xsd.xml" );
         Assert.assertTrue( xml.isFile() && xml.exists() );
-        final DaoMethod daoMethod = Controller.unmarshallFile( xml );
+        final DaoMethod daoMethod = JaxbHandler.unmarshallFile( xml );
         Assert.assertTrue( daoMethod != null );
     }
 

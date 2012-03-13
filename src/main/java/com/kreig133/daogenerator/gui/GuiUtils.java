@@ -11,7 +11,7 @@ public class GuiUtils {
     public static JFileChooser getFileChooser(){
         final JFileChooser jFileChooser = new JFileChooser();
         jFileChooser.setMultiSelectionEnabled( false );
-        jFileChooser.setCurrentDirectory( new File( System.getProperty( "user.dir" ) ) );
+        jFileChooser.setCurrentDirectory( new File( System.getProperty( "user.home" ) ) );
         jFileChooser.setFileSelectionMode( JFileChooser.DIRECTORIES_ONLY );
         return jFileChooser;
     }

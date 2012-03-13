@@ -2,6 +2,7 @@ package com.kreig133.daogenerator.gui;
 
 import com.kreig133.daogenerator.Controller;
 import com.kreig133.daogenerator.DaoGenerator;
+import com.kreig133.daogenerator.JaxbHandler;
 import com.kreig133.daogenerator.common.Utils;
 import com.kreig133.daogenerator.db.GetOutputParametersFromResultSet;
 import com.kreig133.daogenerator.db.StoreProcedureInfoExtractor;
@@ -62,9 +63,7 @@ public class FirstForm {
                 if ( tabbedPane1.getSelectedIndex() == SP_TAB_INDEX ) {
                     if ( checkSPName() ) return;
 
-                    if ( methodNameFieldSpTab.getText() == null || "".equals( methodNameFieldSpTab.getText() ) ) {
-                        methodNameFieldSpTab.setText( Utils.convertPBNameToName( storeProcedureField.getText() ) );
-                    }
+                    methodNameFieldSpTab.setText( Utils.convertPBNameToName( storeProcedureField.getText() ) );
 
                     final List<ParameterType> parameterTypes =
                             ( ( ParametrsModel ) ( inputParametrs.getModel() ) ).getParameterTypes();
@@ -74,6 +73,7 @@ public class FirstForm {
                     parameterTypes.addAll(
                             StoreProcedureInfoExtractor.getInputParametrsForSP( storeProcedureField.getText() )
                     );
+                    ( ( ParametrsModel ) ( outputParametrs.getModel() ) ).getParameterTypes().clear();
 
                     SPTextButton.setEnabled( true );
                     getOutParamsButton.setEnabled( true );
@@ -113,11 +113,11 @@ public class FirstForm {
         generateXMLButton.addActionListener( new ActionListener() {
             @Override
             public void actionPerformed( ActionEvent e ) {
-                if ( fileChooserForXml.showOpenDialog( mainPanel ) == JFileChooser.APPROVE_OPTION ) {
+                if ( fileChooserForXml.showSaveDialog( mainPanel ) == JFileChooser.APPROVE_OPTION ) {
                     final File dirForSave = fileChooserForXml.getSelectedFile();
                     final DaoMethod currentDaoMethods = getCurrentDaoMethods();
 
-                    Controller.marshallInFile(
+                    JaxbHandler.marshallInFile(
                             new File(
                                     dirForSave.getAbsolutePath() + "/" +
                                             currentDaoMethods.getCommon().getMethodName() + ".xml"
@@ -125,6 +125,12 @@ public class FirstForm {
                             currentDaoMethods
                     );
                 }
+            }
+        } );
+        getInParamsButton.addActionListener( new ActionListener() {
+            @Override
+            public void actionPerformed( ActionEvent e ) {
+
             }
         } );
     }
