@@ -186,7 +186,7 @@
                 <properties/>
                 <border type="none" title="QUERY"/>
                 <children>
-                  <component id="52253" class="javax.swing.JTextArea" binding="textArea3" default-binding="true">
+                  <component id="52253" class="javax.swing.JTextArea" binding="queryTextArea">
                     <constraints/>
                     <properties/>
                   </component>

@@ -1,5 +1,6 @@
 package com.kreig133.daogenerator.gui;
 
+import com.kreig133.daogenerator.Controller;
 import com.kreig133.daogenerator.DaoGenerator;
 import com.kreig133.daogenerator.common.Utils;
 import com.kreig133.daogenerator.db.GetOutputParametersFromResultSet;
@@ -12,6 +13,7 @@ import javax.swing.table.AbstractTableModel;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.List;
@@ -34,18 +36,19 @@ public class FirstForm {
     private JTabbedPane tabbedPane1;
     private JTextField methodNameFieldSpTab;
     private JTextArea commentTextAreaSpTab;
-    private JRadioButton xRadioButton;
     private JRadioButton GENERATERadioButton;
     private JRadioButton CALLRadioButton;
     private JRadioButton GENEROUTRadioButton;
     private JCheckBox isMultipleResultCheckBoxSpTab;
     private JCheckBox isMultipleResultCheckBoxSelectTab;
-    private JTextArea textArea3;
+    private JTextArea queryTextArea;
     private JTextField methodNameFieldSelectTab;
     private JTextArea commentTextAreaSelectTab;
     private ButtonGroup spTypeRadioGroup;
     private JFrame windowWithSPText;
     private static final int SP_TAB_INDEX = 0;
+
+    private final JFileChooser fileChooserForXml = GuiUtils.getFileChooser();
     
     public FirstForm() {
         spTypeRadioGroup = new ButtonGroup();
@@ -102,6 +105,26 @@ public class FirstForm {
                 parameterTypes.clear();
                 parameterTypes.addAll( daoMethod.getOutputParametrs().getParameter() );
                 outputParametrs.updateUI();
+
+                generateXMLButton.setEnabled( true );
+            }
+        } );
+
+        generateXMLButton.addActionListener( new ActionListener() {
+            @Override
+            public void actionPerformed( ActionEvent e ) {
+                if ( fileChooserForXml.showOpenDialog( mainPanel ) == JFileChooser.APPROVE_OPTION ) {
+                    final File dirForSave = fileChooserForXml.getSelectedFile();
+                    final DaoMethod currentDaoMethods = getCurrentDaoMethods();
+
+                    Controller.marshallInFile(
+                            new File(
+                                    dirForSave.getAbsolutePath() + "/" +
+                                            currentDaoMethods.getCommon().getMethodName() + ".xml"
+                            ),
+                            currentDaoMethods
+                    );
+                }
             }
         } );
     }
@@ -121,6 +144,7 @@ public class FirstForm {
         } else{
             result.getCommon().setMethodName( methodNameFieldSelectTab.getText() );
             result.getCommon().setComment( commentTextAreaSelectTab.getText() );
+            result.getCommon().setQuery( queryTextArea.getText() );
             result.getCommon().getConfiguration().setType( getQueryType() );
             result.getCommon().getConfiguration().setMultipleResult( isMultipleResultCheckBoxSelectTab.isSelected() );
         }

@@ -128,11 +128,14 @@ public class MainForm {
     }
 
     private boolean validate() {
-        if ( (   IASKRadioButton.isSelected() &&   DEPORadioButton.isSelected() )  ||
-             ( ! IASKRadioButton.isSelected() && ! DEPORadioButton.isSelected() ) ){
+        if (
+                (   IASKRadioButton.isSelected() &&   DEPORadioButton.isSelected() )  ||
+                ( ! IASKRadioButton.isSelected() && ! DEPORadioButton.isSelected() )
+        ){
             JOptionPane.showMessageDialog( mainPanel, "Выберите один (!) тип проекта." );
             return false;
         }
+
         if(
                 ( ! isPackageName( interfacePackageTextField.getText() ) ) ||
                 ( ! isPackageName( entityPackageTextField   .getText() ) ) ||
@@ -151,12 +154,7 @@ public class MainForm {
         return Pattern.compile( "[\\w\\d]+(\\.[\\w\\d]+)+" ).matcher( packageName ).matches();
     }
 
-    private final JFileChooser fc = new JFileChooser( );
-    {
-        fc.setMultiSelectionEnabled ( false );
-        fc.setCurrentDirectory      ( new File( System.getProperty("user.dir") ) );
-        fc.setFileSelectionMode     ( JFileChooser.DIRECTORIES_ONLY );
-    }
+    private final JFileChooser fc = GuiUtils.getFileChooser();
 
     private void setOutputPath() {
         int returnVal = fc.showSaveDialog( null );
@@ -170,9 +168,7 @@ public class MainForm {
     private String tempOperationName;
 
     private void setSourcePath() {
-        int returnVal = fc.showOpenDialog( mainPanel );
-
-        if ( returnVal == JFileChooser.APPROVE_OPTION ) {
+        if ( fc.showOpenDialog( mainPanel ) == JFileChooser.APPROVE_OPTION ) {
             File file           = fc.getSelectedFile();
             tempOperationName   = file.getName();
             sourceDirTextField.setText( file.getAbsolutePath() );

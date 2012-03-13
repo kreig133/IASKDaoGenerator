@@ -14,6 +14,7 @@ import com.kreig133.daogenerator.settings.PropertiesFileController;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
+import javax.xml.bind.Marshaller;
 import javax.xml.bind.Unmarshaller;
 import java.io.File;
 import java.io.FileWriter;
@@ -33,9 +34,10 @@ import static com.kreig133.daogenerator.files.JavaFilesUtils.*;
  */
 public class Controller {
 
-    protected static final List<DaoMethod> daoMethods = new ArrayList<DaoMethod>();
-    protected static JAXBContext jc;
-    protected static Unmarshaller unmarshaller;
+    private static final List<DaoMethod> daoMethods = new ArrayList<DaoMethod>();
+    private static JAXBContext jc;
+    private static Unmarshaller unmarshaller;
+    private static Marshaller marshaller;
 
     protected static final Appender appender = new Appender() {
         @Override
@@ -48,7 +50,7 @@ public class Controller {
             }
         }
     };
-    
+
     public static void doAction() {
 
         final OperationSettings opSettings = DaoGenerator.getCurrentOperationSettings();
@@ -91,6 +93,20 @@ public class Controller {
             return ( DaoMethod ) getUnmarshaller().unmarshal( fileWithData );
         } catch ( Throwable e ) {
             throw new RuntimeException( e );
+        }
+    }
+    
+    public static void marshallInFile( File file, DaoMethod daoMethod ){
+
+        try {
+            if ( !file.exists() ) {
+                file.createNewFile();
+            }
+            getMarshaller().marshal( daoMethod, file );
+        } catch ( JAXBException e ) {
+            e.printStackTrace(); //TODO
+        } catch ( IOException e ) {
+            e.printStackTrace(); //TODO
         }
     }
 
@@ -186,5 +202,16 @@ public class Controller {
         }
 
         return unmarshaller;
+    }
+
+    protected static Marshaller getMarshaller(){
+        if ( marshaller == null ) {
+            try {
+                marshaller = getJaxbContext().createMarshaller();
+            } catch ( JAXBException e ) {
+                throw new RuntimeException( e );
+            }
+        }
+        return marshaller;
     }
 }
