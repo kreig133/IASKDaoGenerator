@@ -61,7 +61,11 @@ public class FirstForm {
         getOutParamsButton.addActionListener( new ActionListener() {
             @Override
             public void actionPerformed( ActionEvent e ) {
-                GetOutputParametersFromResultSet.getOutputParameters( getCurrentDaoMethods() );
+                final DaoMethod daoMethod =
+                        GetOutputParametersFromResultSet.getOutputParameters( getCurrentDaoMethods() );
+                ( (ParametrsModel) ( outputParametrs.getModel() ) ).getParameterTypes().addAll(
+                        daoMethod.getOutputParametrs().getParameter()
+                );
             }
         } );
     }

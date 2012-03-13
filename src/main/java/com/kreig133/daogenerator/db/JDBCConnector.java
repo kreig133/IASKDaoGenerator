@@ -19,7 +19,16 @@ import static com.kreig133.daogenerator.testing.settings.SettingName.*;
 public class JDBCConnector {
     private static final Properties properties = new Properties();
 
+    private static Connection connection = null;
     public static Connection connectToDB() {
+
+        try {
+            if ( connection != null && !connection.isClosed() ) {
+                return connection;
+            }
+        } catch ( SQLException e ) {
+            e.printStackTrace();
+        }
 
         FileInputStream props = null;
 
@@ -40,7 +49,6 @@ public class JDBCConnector {
 
         System.setProperty( "jdbc.driver", properties.getProperty( DRIVER ) );
 
-        Connection connection = null;
         try {
             connection = DriverManager.getConnection(
                     properties.getProperty( URL ),

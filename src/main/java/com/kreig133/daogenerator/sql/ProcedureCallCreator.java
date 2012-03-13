@@ -60,7 +60,7 @@ public class ProcedureCallCreator {
         }
 
         if ( p.getType() == JavaType.STRING || p.getType() == JavaType.DATE ) {
-            return Utils.wrapWithQuotes( p.getDefaultValue() );
+            return "'" +p.getTestValue() + "'";
         }
 
         return p.getTestValue();
