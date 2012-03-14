@@ -9,6 +9,7 @@
 package com.kreig133.daogenerator.jaxb;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -73,4 +74,14 @@ public class ParametersType {
         return this.parameter;
     }
 
+    public List<Integer> getIndexOfUnnamedParameters() {
+        final List<Integer> result = new LinkedList<Integer>();
+
+        for ( ParameterType parameterType : parameter ) {
+            if ( "".equals( parameterType.getName().trim() ) ) {
+                result.add( parameter.indexOf( parameterType ) );
+            }
+        }
+        return result;
+    }
 }

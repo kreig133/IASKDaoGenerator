@@ -5,6 +5,8 @@ import com.kreig133.daogenerator.jaxb.DaoMethod;
 import com.kreig133.daogenerator.jaxb.SelectType;
 import com.kreig133.daogenerator.sql.SqlQueryCreator;
 
+import java.util.List;
+
 import static com.kreig133.daogenerator.common.StringBuilderUtils.insertTabs;
 
 /**
@@ -29,6 +31,18 @@ public class AnnotationGenerator {
         insertTabs( builder, 1 ).append( ")\n" );
         if( daoMethod.getCommon().getConfiguration().getType() == SelectType.CALL ) {
             insertTabs( builder, 1 ).append( "@Options(statementType=StatementType.CALLABLE)\n" );
+        }
+
+        final List<Integer> indexOfUnnamedParameters = daoMethod.getOutputParametrs().getIndexOfUnnamedParameters();
+
+        if( ! indexOfUnnamedParameters.isEmpty() ) {
+            if ( indexOfUnnamedParameters.size() == 1 ) {
+                insertTabs( builder, 1 ).append( "@Results(value = {@Result(property=\"" ).append(
+                    daoMethod.getOutputParametrs().getParameter().get( indexOfUnnamedParameters.get( 1 ) ).getRenameTo()
+                ).append( "\", column=\"\")})" );
+            } else {
+                throw new RuntimeException( "Не реализованная функциональность!" );
+            }
         }
 
         return builder.toString();

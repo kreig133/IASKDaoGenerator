@@ -13,8 +13,8 @@ public class SqlQueryCreator {
         switch ( daoMethod.getCommon().getConfiguration().getType() ){
             case CALL:
                 return ProcedureCallCreator.generateProcedureCall( daoMethod, forTest );
-            case GENERATE:
-                return GenerateGenerator.generateWrapper( daoMethod );
+//            case GENERATE:
+//                return GenerateGenerator.generateWrapper( daoMethod );
 //            case GENEROUT:
 //                return GeneroutGenerator.generateWrapper( daoMethod );
             default:

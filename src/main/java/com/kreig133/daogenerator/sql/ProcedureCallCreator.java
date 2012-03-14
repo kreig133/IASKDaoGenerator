@@ -36,6 +36,7 @@ public class ProcedureCallCreator {
     
     
     public static String generateProcedureCall( final DaoMethod daoMethod, boolean forTest ){
+        //TODO в зависимости от количества безымянных столбцов генерировать или CALL или GENERATE
         return ProcedureCallCreator.generateProcedureCall(
                 daoMethod,
                 forTest ?
