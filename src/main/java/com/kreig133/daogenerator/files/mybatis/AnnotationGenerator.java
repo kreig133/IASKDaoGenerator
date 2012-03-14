@@ -27,6 +27,9 @@ public class AnnotationGenerator {
         builder.append( Utils.wrapWithQuotes( SqlQueryCreator.createQueries( daoMethod, false ) ) );
 
         insertTabs( builder, 1 ).append( ")\n" );
+        if( daoMethod.getCommon().getConfiguration().getType() == SelectType.CALL ) {
+            builder.append( "@Options(statementType=StatementType.CALLABLE)\n" );
+        }
 
         return builder.toString();
     }
