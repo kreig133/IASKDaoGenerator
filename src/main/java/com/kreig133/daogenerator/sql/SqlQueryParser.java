@@ -1,6 +1,7 @@
 package com.kreig133.daogenerator.sql;
 
 import com.kreig133.daogenerator.jaxb.DaoMethod;
+import com.kreig133.daogenerator.jaxb.InOutType;
 import com.kreig133.daogenerator.jaxb.JavaType;
 import com.kreig133.daogenerator.jaxb.ParameterType;
 
@@ -31,20 +32,28 @@ public class SqlQueryParser {
             parameterType.setRenameTo( split[ 0 ] );
             parameterType.setSqlType( split[ 1 ] );
             parameterType.setType( JavaType.getBySqlType( parameterType.getSqlType() ) );
-            parameterType.setTestValue( split[ 2 ] );
+            if ( split.length > 2 ) {
+                parameterType.setTestValue( split[ 2 ] );
+            }
             if( split.length ==  4 ){
                 parameterType.setComment( split[ 3 ] );
             }
 
+            parameterType.setInOut( InOutType.IN );
+
             daoMethod.getInputParametrs().getParameter().add( parameterType );
         }
 
-        daoMethod.getCommon().setQuery( query.replaceAll( pattern.pattern(), "?" ) );
+
 
         return daoMethod;
     }
 
     private static Matcher getMatcher( String query ) {
         return pattern.matcher( query );
+    }
+    
+    public static String getQueryStringWithoutMetaData( String query ){
+        return query.replaceAll( pattern.pattern(), "?" ) ;
     }
 }

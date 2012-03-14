@@ -1,6 +1,5 @@
 package com.kreig133.daogenerator.gui;
 
-import com.kreig133.daogenerator.Controller;
 import com.kreig133.daogenerator.DaoGenerator;
 import com.kreig133.daogenerator.JaxbHandler;
 import com.kreig133.daogenerator.common.Utils;
@@ -35,7 +34,7 @@ public class FirstForm {
     private JButton SPTextButton;
     private JButton generateXMLButton;
     private JButton getOutParamsButton;
-    private JTabbedPane tabbedPane1;
+    private JTabbedPane tabbedPane;
     private JTextField methodNameFieldSpTab;
     private JTextArea commentTextAreaSpTab;
     private JRadioButton GENERATERadioButton;
@@ -53,6 +52,7 @@ public class FirstForm {
     private final JFileChooser fileChooserForXml = GuiUtils.getFileChooser();
     
     public FirstForm() {
+
         spTypeRadioGroup = new ButtonGroup();
         spTypeRadioGroup.add( GENERATERadioButton );
         spTypeRadioGroup.add( CALLRadioButton );
@@ -62,7 +62,7 @@ public class FirstForm {
             @Override
             public void actionPerformed( ActionEvent e ) {
                 List<ParameterType> inputParametrsForSP;
-                if ( tabbedPane1.getSelectedIndex() == SP_TAB_INDEX ) {
+                if ( tabbedPane.getSelectedIndex() == SP_TAB_INDEX ) {
                     if ( checkSPName() ) return;
 
                     methodNameFieldSpTab.setText( Utils.convertPBNameToName( storeProcedureField.getText() ) );
@@ -81,6 +81,10 @@ public class FirstForm {
                     inputParametrsForSP = SqlQueryParser.parseSqlQueryAndParameters( getCurrentDaoMethods() )
                                         .getInputParametrs().getParameter();
 
+                    final boolean isSelect = getQueryType() == SelectType.SELECT;
+
+                    getOutParamsButton.setEnabled( isSelect );
+                    generateXMLButton.setEnabled( ! isSelect );
                 }
                 final List<ParameterType> parameterTypes =
                         ( ( ParametrsModel ) ( inputParametrs.getModel() ) ).getParameterTypes();
@@ -109,14 +113,13 @@ public class FirstForm {
         getOutParamsButton.addActionListener( new ActionListener() {
             @Override
             public void actionPerformed( ActionEvent e ) {
-                final DaoMethod daoMethod =
-                        GetOutputParametersFromResultSet.getOutputParameters( getCurrentDaoMethods() );
+                final DaoMethod daoMethod  = GetOutputParametersFromResultSet.getOutputParameters( getCurrentDaoMethods() );;
+
                 final List<ParameterType> parameterTypes =
                         ( ( ParametrsModel ) ( outputParametrs.getModel() ) ).getParameterTypes();
                 parameterTypes.clear();
                 parameterTypes.addAll( daoMethod.getOutputParametrs().getParameter() );
                 outputParametrs.updateUI();
-
                 generateXMLButton.setEnabled( true );
             }
         } );
@@ -146,7 +149,7 @@ public class FirstForm {
         result.setCommon( new CommonType() );
         result.getCommon().setConfiguration( new ConfigurationType() );
 
-        if( tabbedPane1.getSelectedIndex() == SP_TAB_INDEX ){
+        if( tabbedPane.getSelectedIndex() == SP_TAB_INDEX ){
             result.getCommon().setSpName( storeProcedureField.getText() );
             result.getCommon().setMethodName( methodNameFieldSpTab.getText() );
             result.getCommon().setComment( commentTextAreaSpTab.getText() );
@@ -158,8 +161,6 @@ public class FirstForm {
             result.getCommon().setQuery( queryTextArea.getText() );
             result.getCommon().getConfiguration().setType( getQueryType() );
             result.getCommon().getConfiguration().setMultipleResult( isMultipleResultCheckBoxSelectTab.isSelected() );
-            // Для того, чтобы получить запрос с ? вместо наших данных
-            SqlQueryParser.parseSqlQueryAndParameters( result );
         }
 
         result.setInputParametrs( new ParametersType() );
@@ -177,8 +178,13 @@ public class FirstForm {
     }
 
     private SelectType getQueryType() {
-        //TODO
-        return null;  //To change body of created methods use File | Settings | File Templates.
+        if ( tabbedPane.getSelectedIndex() == SP_TAB_INDEX ) {
+            return SelectType.CALL;
+        }
+
+        final String firstWord = queryTextArea.getText().trim().split( "\\s" )[0];
+
+        return SelectType.getByName( firstWord );
     }
 
     private SelectType getSpType() {
@@ -219,7 +225,7 @@ public class FirstForm {
     }
 
     public static void main( String[] args ) {
-        DaoGenerator.getCurrentOperationSettings().setType( Type.IASK );
+        DaoGenerator.getCurrentOperationSettings().setType( Type.DEPO );
         EventQueue.invokeLater( new Runnable() {
             @Override
             public void run() {

@@ -1,7 +1,6 @@
 package com.kreig133.daogenerator.sql;
 
 import com.kreig133.daogenerator.jaxb.DaoMethod;
-import com.kreig133.daogenerator.jaxb.ParameterType;
 import com.kreig133.daogenerator.sql.wrappers.GenerateGenerator;
 import com.kreig133.daogenerator.sql.wrappers.GeneroutGenerator;
 
@@ -19,7 +18,7 @@ public class SqlQueryCreator {
             case GENEROUT:
                 return GeneroutGenerator.generateWrapper( daoMethod );
             default:
-                return SelectQueryConverter.processSelectQueryString( daoMethod );
+                return SelectQueryConverter.getSelectQueryString( daoMethod, false );
         }
     }
 }

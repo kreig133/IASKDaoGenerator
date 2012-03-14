@@ -3,6 +3,7 @@ package com.kreig133.daogenerator.sql;
 import com.kreig133.daogenerator.jaxb.DaoMethod;
 
 import static com.kreig133.daogenerator.common.StringBuilderUtils.*;
+import static com.kreig133.daogenerator.sql.SqlQueryParser.getQueryStringWithoutMetaData;
 
 /**
  * @author eshangareev
@@ -11,56 +12,36 @@ import static com.kreig133.daogenerator.common.StringBuilderUtils.*;
 public class SelectQueryConverter {
 
     //TODO rename
-    public static String processSelectQueryString(
-            final DaoMethod daoMethod
+    public static String getSelectQueryString(
+            final DaoMethod daoMethod,
+            boolean forTest
     ){
 
-        String sqlQuery = daoMethod.getCommon().getQuery();
+        String sqlQuery = getQueryStringWithoutMetaData( daoMethod.getCommon().getQuery() );
 
-        StringBuilder myBatisString = null;
-        StringBuilder queryForTesting = null;
+        StringBuilder builder = null;
 
         String[] splitted = sqlQuery.split( "\\?" );
         if( splitted.length > 1 ){
 
-            myBatisString = new StringBuilder();
+            builder = new StringBuilder();
 
             int index = 0;
 
             for( int i = 0; i < splitted.length - 1; i++ ){
-                myBatisString.append( splitted[i] );
-                insertEscapedParamName( myBatisString,
-                        daoMethod.getInputParametrs().getParameter().get( index ).getName() );
-                index ++ ;
-            }
-            myBatisString.append( splitted[ splitted.length - 1 ] );
-        }
-
-        splitted = sqlQuery.split( ":" );
-        if( splitted.length > 1 ){
-
-            myBatisString   = new StringBuilder();
-            queryForTesting = new StringBuilder(  );
-
-            for( int i = 0; i < splitted.length ; i++ ){
-                if( i == 0 ){
-                    myBatisString   .append( splitted[ 0 ] );
-                    queryForTesting .append( splitted[ 0 ] );
+                builder.append( splitted[i] );
+                if ( ! forTest ){
+                    insertEscapedParamName( builder,
+                            daoMethod.getInputParametrs().getParameter().get( index ).getName() );
                 } else {
-                    queryForTesting.append( "?" );
-
-                    String[] aftefSplit = splitted[i].split( "[ =;,\\)\\n\\t\\r\\*\\-\\+/<>]" );
-
-                    insertEscapedParamName( myBatisString, aftefSplit[ 0 ] );
-
-                    final String stringAfterParamName = splitted[ i ].substring( aftefSplit[ 0 ].length() );
-                    queryForTesting.append( stringAfterParamName );
-                    myBatisString  .append( stringAfterParamName );
+                    builder.append(
+                            SqlUtils.getTestValue( daoMethod.getInputParametrs().getParameter().get( index ) ) );
                 }
+                index++;
             }
+            builder.append( splitted[ splitted.length - 1 ] );
         }
 
-
-        return myBatisString == null ? sqlQuery : myBatisString.toString();
+        return builder == null ? sqlQuery : builder.toString();
     }
 }

@@ -1,14 +1,13 @@
 package com.kreig133.daogenerator.sql;
 
-import com.kreig133.daogenerator.common.Utils;
 import com.kreig133.daogenerator.common.strategy.FuctionalObject;
 import com.kreig133.daogenerator.common.strategy.FunctionalObjectWithoutFilter;
 import com.kreig133.daogenerator.jaxb.DaoMethod;
-import com.kreig133.daogenerator.jaxb.JavaType;
 import com.kreig133.daogenerator.jaxb.ParameterType;
 
 import static com.kreig133.daogenerator.common.StringBuilderUtils.insertEscapedParamName;
 import static com.kreig133.daogenerator.common.StringBuilderUtils.iterateForParameterList;
+import static com.kreig133.daogenerator.sql.SqlUtils.getTestValue;
 
 /**
  * @author eshangareev
@@ -52,17 +51,5 @@ public class ProcedureCallCreator {
                         }
                     }
         );
-    }
-
-    protected static String getTestValue( ParameterType p ) {
-        if ( p.getTestValue() == null || "null".equals( p.getTestValue() ) ) {
-            return "NULL";
-        }
-
-        if ( p.getType() == JavaType.STRING || p.getType() == JavaType.DATE ) {
-            return "'" +p.getTestValue() + "'";
-        }
-
-        return p.getTestValue();
     }
 }
