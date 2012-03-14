@@ -11,10 +11,14 @@ import java.util.List;
  */
 public class StringBuilderUtils {
 
-    public static void insertEscapedParamName(StringBuilder builder, ParameterType parameterType ){
-        builder.append( "#{" ).append( parameterType.getRenameTo() )
-                .append( ", mode=" ).append( parameterType.getInOut())
-                .append( ", jdbcType=" ).append( parameterType.getJdbcType() ).append( "}" );
+    //TODO что это тут делает?
+    public static void insertEscapedParamName(StringBuilder builder, ParameterType parameterType, boolean fullFormat ){
+        builder.append( "#{" ).append( parameterType.getRenameTo() );
+        if ( fullFormat ) {
+            builder.append( ", mode=" ).append( parameterType.getInOut())
+            .append( ", jdbcType=" ).append( parameterType.getJdbcType() );
+        }
+        builder.append( "}" );
     }
 
     public static void iterateForParameterList(

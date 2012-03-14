@@ -16,7 +16,7 @@ public class CommonWrapperGenerator {
 
     protected static void declareInTypeParamInProcedure( StringBuilder builder, ParameterType p ) {
         declareParamNameInProcedure( builder, p );
-        insertEscapedParamName( builder, p );
+        insertEscapedParamName( builder, p, false ); //TODO че за код ваще?
     }
 
     protected static int declareParamInProcedure( StringBuilder builder, ParameterType p, int index) {

@@ -3,6 +3,7 @@ package com.kreig133.daogenerator.files;
 import com.kreig133.daogenerator.DaoGenerator;
 import com.kreig133.daogenerator.common.settings.OperationSettings;
 import com.kreig133.daogenerator.enums.ClassType;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
 import java.io.IOException;
@@ -116,8 +117,8 @@ public class JavaFilesUtils {
             ClassType classType,
             StringBuilder builder,
             String name,
-            String parentClassName,
-            List< String > interfaces
+            @Nullable String parentClassName,
+            @Nullable List< String > interfaces
     ){
         builder.append( "public " ).append( classType ).append( " " ).append( name );
         if( ! ( parentClassName == null || "".equals( parentClassName.trim() ) ) ){

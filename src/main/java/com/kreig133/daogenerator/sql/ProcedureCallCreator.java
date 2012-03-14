@@ -4,6 +4,7 @@ import com.kreig133.daogenerator.common.strategy.FuctionalObject;
 import com.kreig133.daogenerator.common.strategy.FunctionalObjectWithoutFilter;
 import com.kreig133.daogenerator.jaxb.DaoMethod;
 import com.kreig133.daogenerator.jaxb.ParameterType;
+import com.kreig133.daogenerator.jaxb.SelectType;
 
 import static com.kreig133.daogenerator.common.StringBuilderUtils.insertEscapedParamName;
 import static com.kreig133.daogenerator.common.StringBuilderUtils.iterateForParameterList;
@@ -34,7 +35,7 @@ public class ProcedureCallCreator {
     }
     
     
-    public static String generateProcedureCall( DaoMethod daoMethod, boolean forTest ){
+    public static String generateProcedureCall( final DaoMethod daoMethod, boolean forTest ){
         return ProcedureCallCreator.generateProcedureCall(
                 daoMethod,
                 forTest ?
@@ -47,7 +48,12 @@ public class ProcedureCallCreator {
                     new FunctionalObjectWithoutFilter() {
                         @Override
                         public void writeString( StringBuilder builder, ParameterType p ) {
-                            insertEscapedParamName( insertParameterName( builder, p ), p );
+                            final SelectType type = daoMethod.getCommon().getConfiguration().getType();
+                            insertEscapedParamName(
+                                    insertParameterName( builder, p ),
+                                    p,
+                                    type == SelectType.SELECT || type == SelectType.CALL
+                            );
                         }
                     }
         );
