@@ -360,4 +360,19 @@ public class ParameterType {
                 ( type == JavaType.LONG ?
                         ( "null".equals( defaultValue.toLowerCase().trim() ) ? "" : "L" ) : "" );
     }
+    
+    public static String getDefaultTestValue( ParameterType parameterType ) {
+        switch ( parameterType.getType() ) {
+            case DATE:
+                return "12-12-2012 0:00:00.000";
+            case BYTE:
+            case DOUBLE:
+            case LONG:
+                return "0";
+            case STRING:
+                return " ";
+            default:
+                return null;
+        }
+    }
 }

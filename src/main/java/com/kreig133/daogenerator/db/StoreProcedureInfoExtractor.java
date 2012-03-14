@@ -54,9 +54,12 @@ public class StoreProcedureInfoExtractor {
         for ( ParameterType parameterType : result ) {
             fillDefaultValues( parameterType, storeProcedureDefinition );
             fillComments( parameterType, storeProcedureDefinition );
-            parameterType.setTestValue( parameterType.getDefaultValue() );
+            parameterType.setTestValue(
+                    parameterType.getDefaultValue() == null || "".equals( parameterType.getDefaultValue() ) ?
+                            ParameterType.getDefaultTestValue( parameterType ):
+                            parameterType.getDefaultValue()
+            );
         }
-
 
         return result;
     }
