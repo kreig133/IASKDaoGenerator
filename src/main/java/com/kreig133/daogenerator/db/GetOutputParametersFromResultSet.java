@@ -29,7 +29,10 @@ public class GetOutputParametersFromResultSet {
                     final Connection connection = JDBCConnector.connectToDB();
                     final CallableStatement callableStatement = connection.prepareCall( query );
                     connection.createStatement().execute( "SET NOCOUNT ON;" );
-                    final ResultSet resultSet = callableStatement.executeQuery();
+                    ResultSet resultSet = null;
+                    if( callableStatement.execute() ){
+                        resultSet = callableStatement.getResultSet();
+                    }
                     connection.createStatement().execute( "SET NOCOUNT OFF;" );
                     
                     fillJdbcTypeForInputParameters( callableStatement.getParameterMetaData(), daoMethod );
@@ -55,7 +58,7 @@ public class GetOutputParametersFromResultSet {
                         statement.setString( i + 1, SqlUtils.getTestValue( parameterTypes.get( i ) ) );
                     }
 
-                    return statement.executeQuery();
+                    return statement.execute() ? statement.getResultSet() : null ;
                 }
             } );
         }
@@ -74,22 +77,23 @@ public class GetOutputParametersFromResultSet {
 
         try {
             final ResultSet resultSet = action.getResultSet();
+            if( resultSet != null ){
 
-            final ResultSetMetaData metaData = resultSet.getMetaData();
-            final List<ParameterType> parameterTypes = new LinkedList<ParameterType>();
-            for ( int i = 1; i <= metaData.getColumnCount(); i++ ) {
-                final ParameterType parameterType = new ParameterType();
-                parameterType.setName( metaData.getColumnName( i ) );
-                parameterType.setRenameTo( parameterType.getName() );
-                parameterType.setSqlType( metaData.getColumnTypeName( i ) );
-                parameterType.setType( JavaType.getBySqlType( metaData.getColumnTypeName( i ) ) );
+                final ResultSetMetaData metaData = resultSet.getMetaData();
+                final List<ParameterType> parameterTypes = new LinkedList<ParameterType>();
+                for ( int i = 1; i <= metaData.getColumnCount(); i++ ) {
+                    final ParameterType parameterType = new ParameterType();
+                    parameterType.setName( metaData.getColumnName( i ) );
+                    parameterType.setRenameTo( parameterType.getName() );
+                    parameterType.setSqlType( metaData.getColumnTypeName( i ) );
+                    parameterType.setType( JavaType.getBySqlType( metaData.getColumnTypeName( i ) ) );
 
-                parameterTypes.add( parameterType );
+                    parameterTypes.add( parameterType );
+                }
+
+                daoMethod.setOutputParametrs( new ParametersType() );
+                daoMethod.getOutputParametrs().getParameter().addAll( parameterTypes );
             }
-
-            daoMethod.setOutputParametrs( new ParametersType() );
-            daoMethod.getOutputParametrs().getParameter().addAll( parameterTypes );
-
         } catch ( SQLException e ) {
             e.printStackTrace(); // TODO
         }
