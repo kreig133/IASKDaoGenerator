@@ -11,8 +11,10 @@ import java.util.List;
  */
 public class StringBuilderUtils {
 
-    public static void insertEscapedParamName(StringBuilder builder, String parameterName ){
-        builder.append( "#{" ).append( parameterName ).append( "}" );
+    public static void insertEscapedParamName(StringBuilder builder, ParameterType parameterType ){
+        builder.append( "#{" ).append( parameterType.getRenameTo() )
+                .append( ", mode=" ).append( parameterType.getInOut())
+                .append( ", jdbcType=" ).append( parameterType.getJdbcType() ).append( "}" );
     }
 
     public static void iterateForParameterList(

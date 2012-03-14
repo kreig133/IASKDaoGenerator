@@ -41,15 +41,19 @@ public class ProcedureCallCreator {
                     new FunctionalObjectWithoutFilter() {
                         @Override
                         public void writeString( StringBuilder builder, ParameterType p ) {
-                            builder.append( "@" ).append( p.getName() ).append( " = " ).append( getTestValue( p ) );
+                            insertParameterName( builder, p ).append( getTestValue( p ) );
                         }
                     }:
                     new FunctionalObjectWithoutFilter() {
                         @Override
                         public void writeString( StringBuilder builder, ParameterType p ) {
-                            insertEscapedParamName( builder, p.getName() );
+                            insertEscapedParamName( insertParameterName( builder, p ), p );
                         }
                     }
         );
+    }
+
+    private static StringBuilder insertParameterName( StringBuilder builder, ParameterType p ) {
+        return builder.append( "@" ).append( p.getName() ).append( " = " );
     }
 }

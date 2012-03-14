@@ -32,7 +32,7 @@ public class SelectQueryConverter {
                 builder.append( splitted[i] );
                 if ( ! forTest ){
                     insertEscapedParamName( builder,
-                            daoMethod.getInputParametrs().getParameter().get( index ).getName() );
+                            daoMethod.getInputParametrs().getParameter().get( index ) );
                 } else {
                     builder.append(
                             SqlUtils.getTestValue( daoMethod.getInputParametrs().getParameter().get( index ) ) );

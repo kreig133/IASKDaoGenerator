@@ -15,8 +15,8 @@ public class SqlQueryCreator {
                 return ProcedureCallCreator.generateProcedureCall( daoMethod, forTest );
             case GENERATE:
                 return GenerateGenerator.generateWrapper( daoMethod );
-            case GENEROUT:
-                return GeneroutGenerator.generateWrapper( daoMethod );
+//            case GENEROUT:
+//                return GeneroutGenerator.generateWrapper( daoMethod );
             default:
                 return SelectQueryConverter.getSelectQueryString( daoMethod, false );
         }
