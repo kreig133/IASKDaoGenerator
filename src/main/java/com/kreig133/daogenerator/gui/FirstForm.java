@@ -136,21 +136,20 @@ public class FirstForm {
     }
 
     private void updateOutputParameters( List<ParameterType> inputParametrsForSP ) {
-        final List<ParameterType> parameterTypes =
-                ( ( ParametrsModel ) ( outputParametrs.getModel() ) ).getParameterTypes();
-        parameterTypes.clear();
-        parameterTypes.addAll( inputParametrsForSP );
-        outputParametrs.updateUI();
+        updateTable( outputParametrs, inputParametrsForSP );
     }
 
-    private void updateInputParameters( List<ParameterType> inputParametrsForSP ) {
+    private void updateTable( JTable table, List<ParameterType> inputParametrsForSP ) {
         final List<ParameterType> parameterTypes =
-                ( ( ParametrsModel ) ( inputParametrs.getModel() ) ).getParameterTypes();
-
+                ( ( ParametrsModel ) ( table.getModel() ) ).getParameterTypes();
         parameterTypes.clear();
-
         parameterTypes.addAll( inputParametrsForSP );
-        inputParametrs.updateUI();
+        table.updateUI();
+    }
+
+
+    private void updateInputParameters( List<ParameterType> inputParametrsForSP ) {
+        updateTable( inputParametrs, inputParametrsForSP );
     }
 
     private DaoMethod getCurrentDaoMethods(){

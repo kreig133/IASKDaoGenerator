@@ -147,22 +147,19 @@ public class StoreProcedureInfoExtractor {
     }
 
     private static String getDefaultValueForStringFromSpDefinition( ParameterType type, String storeProcedureDefinition ) {
-        if ( getNullPatternForParameter( type.getName() ).matcher( storeProcedureDefinition ).find() ){
-            return NULL;
-        }
-        final Matcher matcher = getStringPatternForParameter( type.getName() ).matcher( storeProcedureDefinition );
-        if( matcher.find() ){
-            return matcher.group( 1 );
-        } else {
-            return "";
-        }
+        return getDefaultValue( type, storeProcedureDefinition,
+                getStringPatternForParameter( type.getName() ).matcher( storeProcedureDefinition ) );
     }
 
     private static String getDefaultValueForNumberFromSpDefinition( ParameterType type, String storeProcedureDefinition ) {
+        return getDefaultValue( type, storeProcedureDefinition,
+                getNumberPatternForParameter( type.getName() ).matcher( storeProcedureDefinition ) );
+    }
+    
+    private static String getDefaultValue( ParameterType type, String storeProcedureDefinition, Matcher matcher  ){
         if ( getNullPatternForParameter( type.getName() ).matcher( storeProcedureDefinition ).find() ){
             return NULL;
         }
-        final Matcher matcher = getNumberPatternForParameter( type.getName() ).matcher( storeProcedureDefinition );
         if( matcher.find() ){
             return matcher.group( 1 );
         } else {
