@@ -31,6 +31,15 @@ public class GetOutputParametersFromResultSet {
                     connection.createStatement().execute( "SET NOCOUNT ON;" );
                     final ResultSet resultSet = callableStatement.executeQuery();
                     connection.createStatement().execute( "SET NOCOUNT OFF;" );
+                    
+                    final ParameterMetaData parameterMetaData = callableStatement.getParameterMetaData();
+
+                    for ( ParameterType p : daoMethod.getInputParametrs().getParameter() ) {
+                        p.setJdbcType( JBDCTypeIdConverter.getJdbcTypeNameById( parameterMetaData.getParameterType(
+                                daoMethod.getInputParametrs().getParameter().indexOf( p ) + 1
+                        ) ) );
+                    }
+
                     return resultSet;
                 }
             } );

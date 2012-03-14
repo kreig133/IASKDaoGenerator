@@ -86,17 +86,11 @@ public class FirstForm {
                     getOutParamsButton.setEnabled( isSelect );
                     generateXMLButton.setEnabled( ! isSelect );
                 }
-                final List<ParameterType> parameterTypes =
-                        ( ( ParametrsModel ) ( inputParametrs.getModel() ) ).getParameterTypes();
-
-                parameterTypes.clear();
-
-                parameterTypes.addAll( inputParametrsForSP );
+                updateInputParameters( inputParametrsForSP );
 
                 ( ( ParametrsModel ) ( outputParametrs.getModel() ) ).getParameterTypes().clear();
-
-                inputParametrs.updateUI();
             }
+
         } );
         
         SPTextButton.addActionListener( new ActionListener() {
@@ -115,11 +109,9 @@ public class FirstForm {
             public void actionPerformed( ActionEvent e ) {
                 final DaoMethod daoMethod  = GetOutputParametersFromResultSet.getOutputParameters( getCurrentDaoMethods() );;
 
-                final List<ParameterType> parameterTypes =
-                        ( ( ParametrsModel ) ( outputParametrs.getModel() ) ).getParameterTypes();
-                parameterTypes.clear();
-                parameterTypes.addAll( daoMethod.getOutputParametrs().getParameter() );
-                outputParametrs.updateUI();
+                updateOutputParameters( daoMethod.getOutputParametrs().getParameter() );
+                updateInputParameters( daoMethod.getInputParametrs().getParameter() );
+
                 generateXMLButton.setEnabled( true );
             }
         } );
@@ -141,6 +133,24 @@ public class FirstForm {
                 }
             }
         } );
+    }
+
+    private void updateOutputParameters( List<ParameterType> inputParametrsForSP ) {
+        final List<ParameterType> parameterTypes =
+                ( ( ParametrsModel ) ( outputParametrs.getModel() ) ).getParameterTypes();
+        parameterTypes.clear();
+        parameterTypes.addAll( inputParametrsForSP );
+        outputParametrs.updateUI();
+    }
+
+    private void updateInputParameters( List<ParameterType> inputParametrsForSP ) {
+        final List<ParameterType> parameterTypes =
+                ( ( ParametrsModel ) ( inputParametrs.getModel() ) ).getParameterTypes();
+
+        parameterTypes.clear();
+
+        parameterTypes.addAll( inputParametrsForSP );
+        inputParametrs.updateUI();
     }
 
     private DaoMethod getCurrentDaoMethods(){
@@ -255,7 +265,8 @@ public class FirstForm {
 class ParametrsModel extends AbstractTableModel {
 
     static String[] columnsName = {
-            "№", "Название", "Тип", "SQL-тип", "IN/OUT", "По умолчанию", "Для теста", "Переименовать в", "Комментарий"
+            "№", "Название", "Тип", "SQL-тип", "IN/OUT", "По умолчанию",
+             "Для теста", "Переименовать в", "JDBC-тип", "Комментарий"
     };
 
     List<ParameterType> parameterTypes = new ArrayList<ParameterType>();
@@ -299,6 +310,8 @@ class ParametrsModel extends AbstractTableModel {
             case 7:
                 return parameterTypes.get( rowIndex ).getRenameTo();
             case 8:
+                return parameterTypes.get( rowIndex ).getJdbcType();
+            case 9:
                 return parameterTypes.get( rowIndex ).getComment();
             default:
                 throw new RuntimeException( "Ошибка при работе с таблицей" );
@@ -330,6 +343,8 @@ class ParametrsModel extends AbstractTableModel {
                 parameterTypes.get( rowIndex ).setRenameTo( ( String ) aValue );
                 break;
             case 8:
+                break;
+            case 9:
                 parameterTypes.get( rowIndex ).setComment( ( String ) aValue );
                 break;
         }

@@ -35,6 +35,8 @@ import static com.kreig133.daogenerator.common.StringBuilderUtils.insertTabs;
  *       &lt;attribute name="testValue" type="{http://www.w3.org/2001/XMLSchema}string" />
  *       &lt;attribute name="renameTo" type="{http://www.w3.org/2001/XMLSchema}string" />
  *       &lt;attribute name="sqlType" type="{http://www.w3.org/2001/XMLSchema}string" />
+ *       &lt;attribute name="comment" type="{http://www.w3.org/2001/XMLSchema}string" />
+ *       &lt;attribute name="jdbcType" type="{http://www.w3.org/2001/XMLSchema}string" />
  *     &lt;/extension>
  *   &lt;/simpleContent>
  * &lt;/complexType>
@@ -66,6 +68,8 @@ public class ParameterType {
     protected String sqlType;
     @XmlAttribute
     protected String comment;
+    @XmlAttribute
+    protected String jdbcType;
 
     /**
      * Gets the value of the value property.
@@ -281,6 +285,31 @@ public class ParameterType {
      */
     public void setComment(String value) {
         this.comment = value;
+    }
+
+
+    /**
+     * Gets the value of the jdbcType property.
+     *
+     * @return
+     *     possible object is
+     *     {@link String }
+     *
+     */
+    public String getJdbcType() {
+        return jdbcType;
+    }
+
+    /**
+     * Sets the value of the jdbcType property.
+     *
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *
+     */
+    public void setJdbcType(String value) {
+        this.jdbcType = value;
     }
 
 
