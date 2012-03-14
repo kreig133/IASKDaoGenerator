@@ -32,13 +32,7 @@ public class GetOutputParametersFromResultSet {
                     final ResultSet resultSet = callableStatement.executeQuery();
                     connection.createStatement().execute( "SET NOCOUNT OFF;" );
                     
-                    final ParameterMetaData parameterMetaData = callableStatement.getParameterMetaData();
-
-                    for ( ParameterType p : daoMethod.getInputParametrs().getParameter() ) {
-                        p.setJdbcType( JBDCTypeIdConverter.getJdbcTypeNameById( parameterMetaData.getParameterType(
-                                daoMethod.getInputParametrs().getParameter().indexOf( p ) + 1
-                        ) ) );
-                    }
+                    fillJdbcTypeForInputParameters( callableStatement.getParameterMetaData(), daoMethod );
 
                     return resultSet;
                 }
@@ -55,6 +49,8 @@ public class GetOutputParametersFromResultSet {
                     final PreparedStatement statement = connection.prepareStatement( query );
                     final List<ParameterType> parameterTypes = daoMethod.getInputParametrs().getParameter();
 
+                    fillJdbcTypeForInputParameters( statement.getParameterMetaData(), daoMethod );
+
                     for ( int i = 0; i < parameterTypes.size(); i++ ) {
                         statement.setString( i + 1, SqlUtils.getTestValue( parameterTypes.get( i ) ) );
                     }
@@ -64,6 +60,16 @@ public class GetOutputParametersFromResultSet {
             } );
         }
     }
+
+    private static void fillJdbcTypeForInputParameters( ParameterMetaData parameterMetaData, DaoMethod daoMethod )
+            throws SQLException {
+        for ( ParameterType p : daoMethod.getInputParametrs().getParameter() ) {
+            p.setJdbcType( JBDCTypeIdConverter.getJdbcTypeNameById( parameterMetaData.getParameterType(
+                    daoMethod.getInputParametrs().getParameter().indexOf( p ) + 1
+            ) ) );
+        }
+    }
+
     protected static DaoMethod getOutputParameters( final DaoMethod daoMethod, Action action ){
 
         try {
