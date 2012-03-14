@@ -115,7 +115,7 @@ public class MainForm {
     private void fillSettingsWithData() {
         OperationSettings operationSettings = DaoGenerator.getCurrentOperationSettings();
 
-        operationSettings.setOutputPath     ( destDirTextField              .getText() + "/" + "src" );
+        operationSettings.setOutputPath     ( destDirTextField              .getText    () );
         operationSettings.setSkipTesting    ( skipTestsCheckBox             .isSelected () );
         operationSettings.setSourcePath     ( sourceDirTextField            .getText    () );
         operationSettings.setDaoPackage     ( interfacePackageTextField     .getText    () );
