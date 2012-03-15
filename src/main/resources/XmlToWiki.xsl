@@ -114,7 +114,7 @@
         <xsl:param name="query" />
         <xsl:param name="nodes" />
 
-        <xsl:variable name="before" select="substring-before($query, '?')" as="xs:string"/>
+        <xsl:variable name="before" select="substring-before($query, '${')" as="xs:string"/>
 
         <xsl:value-of select="$before"/>
         <xsl:call-template name="printTestValue">
@@ -122,7 +122,7 @@
             <xsl:with-param name="testValue" select="$nodes[1]/@testValue"/>
         </xsl:call-template>
 
-        <xsl:variable name="newQuery" select="substring($query, (string-length($before) + 2 ) )"/>
+        <xsl:variable name="newQuery" select="substring-after($query, '}' )"/>
 
         <xsl:choose>
             <xsl:when test=" string-length($newQuery) &gt; 0 ">

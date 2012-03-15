@@ -1,6 +1,9 @@
 package com.kreig133.daogenerator.sql;
 
 import com.kreig133.daogenerator.jaxb.DaoMethod;
+import com.kreig133.daogenerator.jaxb.ParameterType;
+
+import java.util.List;
 
 import static com.kreig133.daogenerator.common.StringBuilderUtils.*;
 import static com.kreig133.daogenerator.sql.SqlQueryParser.getQueryStringWithoutMetaData;
@@ -17,25 +20,38 @@ public class SelectQueryConverter {
             boolean forTest
     ){
 
-        String sqlQuery = getQueryStringWithoutMetaData( daoMethod.getCommon().getQuery() );
+        String sqlQuery = daoMethod.getCommon().getQuery();
 
         StringBuilder builder = null;
 
-        String[] splitted = sqlQuery.split( "\\?" );
+        String[] splitted = sqlQuery.split( "\\$\\{.+?\\}" );
         if( splitted.length > 1 ){
 
             builder = new StringBuilder();
 
             int index = 0;
 
+            final List<String> listOfParametrNames =
+                    SqlQueryParser.getListOfParametrNames( daoMethod.getCommon().getQuery() );
+
             for( int i = 0; i < splitted.length - 1; i++ ){
                 builder.append( splitted[i] );
+
+                ParameterType parameterType = null;
+
+                for ( ParameterType type : daoMethod.getInputParametrs().getParameter() ) {
+                        if ( type.getName().equals( listOfParametrNames.get( i ) ) ) {
+                            parameterType = type;
+                            break;
+                        }
+                }
+
                 if ( ! forTest ){
                     insertEscapedParamName( builder,
-                            daoMethod.getInputParametrs().getParameter().get( index ), false );
+                            parameterType, false );
                 } else {
                     builder.append(
-                            SqlUtils.getTestValue( daoMethod.getInputParametrs().getParameter().get( index ) ) );
+                            SqlUtils.getTestValue( parameterType ) );
                 }
                 index++;
             }

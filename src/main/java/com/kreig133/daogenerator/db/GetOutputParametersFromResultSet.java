@@ -49,16 +49,24 @@ public class GetOutputParametersFromResultSet {
                     final PreparedStatement statement = connection.prepareStatement( query );
                     final List<ParameterType> parameterTypes = daoMethod.getInputParametrs().getParameter();
 
-                    for ( int i = 0; i < parameterTypes.size(); i++ ) {
-                        statement.setString( i + 1, SqlUtils.getTestValue( parameterTypes.get( i ) ) );
+                    List<String> names = SqlQueryParser.getListOfParametrNames( daoMethod.getCommon().getQuery() );
+
+                    for ( int i = 0; i < names.size(); i++ ) {
+                        ParameterType parameterType = null;
+                        for ( ParameterType type : parameterTypes ) {
+                            if ( type.getName().equals( names.get( i ) ) ) {
+                                parameterType = type;
+                                break;
+                            }
+                        }
+
+                        statement.setString( i + 1, SqlUtils.getTestValue( parameterType ) );
                     }
 
                     ResultSet resultSet = null;
                     if( statement.execute() ){
                         resultSet = statement.getResultSet();
                     }
-
-//                    fillJdbcTypeForInputParameters( statement.getParameterMetaData(), daoMethod );
 
                     return resultSet ;
                 }
