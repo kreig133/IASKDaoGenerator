@@ -21,6 +21,7 @@ public class SqlQueryParser {
 
         Matcher matcher = getMatcher( query );
 
+        daoMethod.getInputParametrs().getParameter().clear();
 
         while( matcher.find() ){
 

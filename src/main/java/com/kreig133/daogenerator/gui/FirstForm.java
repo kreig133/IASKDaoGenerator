@@ -61,13 +61,13 @@ public class FirstForm {
         getInParamsButton.addActionListener( new ActionListener() {
             @Override
             public void actionPerformed( ActionEvent e ) {
-                List<ParameterType> inputParametrsForSP;
+                List<ParameterType> inputParametrs;
                 if ( tabbedPane.getSelectedIndex() == SP_TAB_INDEX ) {
                     if ( checkSPName() ) return;
 
                     methodNameFieldSpTab.setText( Utils.convertPBNameToName( storeProcedureField.getText() ) );
 
-                    inputParametrsForSP =
+                    inputParametrs =
                             StoreProcedureInfoExtractor.getInputParametrsForSP( storeProcedureField.getText() );
 
                     SPTextButton.setEnabled( true );
@@ -78,7 +78,7 @@ public class FirstForm {
                         JOptionPane.showMessageDialog( getInParamsButton, "Введите текст запроса" );
                     }
 
-                    inputParametrsForSP = SqlQueryParser.parseSqlQueryAndParameters( getCurrentDaoMethods() )
+                    inputParametrs = SqlQueryParser.parseSqlQueryAndParameters( getCurrentDaoMethods() )
                                         .getInputParametrs().getParameter();
 
                     final boolean isSelect = getQueryType() == SelectType.SELECT;
@@ -86,7 +86,7 @@ public class FirstForm {
                     getOutParamsButton.setEnabled( isSelect );
                     generateXMLButton.setEnabled( ! isSelect );
                 }
-                updateInputParameters( inputParametrsForSP );
+                updateInputParameters( inputParametrs );
 
                 ( ( ParametrsModel ) ( outputParametrs.getModel() ) ).getParameterTypes().clear();
             }

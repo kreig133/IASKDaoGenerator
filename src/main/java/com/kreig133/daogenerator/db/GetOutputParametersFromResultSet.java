@@ -1,9 +1,6 @@
 package com.kreig133.daogenerator.db;
 
-import com.kreig133.daogenerator.jaxb.DaoMethod;
-import com.kreig133.daogenerator.jaxb.JavaType;
-import com.kreig133.daogenerator.jaxb.ParameterType;
-import com.kreig133.daogenerator.jaxb.ParametersType;
+import com.kreig133.daogenerator.jaxb.*;
 import com.kreig133.daogenerator.sql.SqlQueryCreator;
 import com.kreig133.daogenerator.sql.SqlQueryParser;
 import com.kreig133.daogenerator.sql.SqlUtils;
@@ -19,7 +16,7 @@ import java.util.List;
 public class GetOutputParametersFromResultSet {
 
     public static DaoMethod getOutputParameters( final DaoMethod daoMethod ){
-        if ( daoMethod.getCommon().getQuery() == null || "".equals( daoMethod.getCommon().getQuery() ) ){
+        if ( daoMethod.getCommon().getConfiguration().getType() == SelectType.CALL ){
             return getOutputParameters( daoMethod, new Action() {
                 @Override
                 public ResultSet getResultSet() throws SQLException {
@@ -52,13 +49,18 @@ public class GetOutputParametersFromResultSet {
                     final PreparedStatement statement = connection.prepareStatement( query );
                     final List<ParameterType> parameterTypes = daoMethod.getInputParametrs().getParameter();
 
-                    fillJdbcTypeForInputParameters( statement.getParameterMetaData(), daoMethod );
-
                     for ( int i = 0; i < parameterTypes.size(); i++ ) {
                         statement.setString( i + 1, SqlUtils.getTestValue( parameterTypes.get( i ) ) );
                     }
 
-                    return statement.execute() ? statement.getResultSet() : null ;
+                    ResultSet resultSet = null;
+                    if( statement.execute() ){
+                        resultSet = statement.getResultSet();
+                    }
+
+//                    fillJdbcTypeForInputParameters( statement.getParameterMetaData(), daoMethod );
+
+                    return resultSet ;
                 }
             } );
         }
