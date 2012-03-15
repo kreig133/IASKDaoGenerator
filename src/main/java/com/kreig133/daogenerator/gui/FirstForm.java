@@ -123,6 +123,12 @@ public class FirstForm {
                     final File dirForSave = fileChooserForXml.getSelectedFile();
                     final DaoMethod currentDaoMethods = getCurrentDaoMethods();
 
+                    if ( currentDaoMethods.getCommon().getConfiguration().getType() != SelectType.CALL ) {
+                        currentDaoMethods.getCommon().setQuery(
+                                SqlQueryParser.getQueryStringWithoutMetaData( currentDaoMethods.getCommon().getQuery() )
+                        );
+                    }
+
                     JaxbHandler.marshallInFile(
                             new File(
                                     dirForSave.getAbsolutePath() + "/" +
