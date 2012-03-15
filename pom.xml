@@ -63,6 +63,15 @@
 
     </dependencies>
 
+    <repositories>
+        <repository>
+            <id>irisa</id>
+            <name>public-snapshot</name>
+            <url>http://maven.irisa.fr/artifactory/public-snapshot</url>
+        </repository>
+
+    </repositories>
+
     <build>
         <resources>
             <resource>
