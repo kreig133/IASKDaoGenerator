@@ -219,7 +219,7 @@
                     <properties/>
                     <border type="none" title="QUERY"/>
                     <children>
-                      <component id="52253" class="javax.swing.JTextArea" binding="queryTextArea">
+                      <component id="5bcb6" class="javax.swing.JEditorPane" binding="queryTextArea">
                         <constraints/>
                         <properties>
                           <text value=""/>

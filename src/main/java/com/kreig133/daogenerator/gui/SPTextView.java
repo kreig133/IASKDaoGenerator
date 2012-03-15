@@ -9,7 +9,7 @@ import javax.swing.*;
 public class SPTextView {
     private static SPTextView INSTANCE;
 
-    private JTextArea textArea;
+    private JEditorPane textArea;
     private JPanel panel;
 
 
@@ -24,6 +24,7 @@ public class SPTextView {
     public static void setText( String s  ){
         if ( INSTANCE == null ) {
             INSTANCE = new SPTextView();
+            INSTANCE.textArea.setContentType( "text/sql" );
         }
         INSTANCE.textArea.setText( s );
     }

@@ -8,6 +8,7 @@ import com.kreig133.daogenerator.db.StoreProcedureInfoExtractor;
 import com.kreig133.daogenerator.enums.Type;
 import com.kreig133.daogenerator.jaxb.*;
 import com.kreig133.daogenerator.sql.SqlQueryParser;
+import jsyntaxpane.DefaultSyntaxKit;
 
 import javax.swing.*;
 import javax.swing.table.AbstractTableModel;
@@ -42,7 +43,7 @@ public class FirstForm {
     private JRadioButton GENEROUTRadioButton;
     private JCheckBox isMultipleResultCheckBoxSpTab;
     private JCheckBox isMultipleResultCheckBoxSelectTab;
-    private JTextArea queryTextArea;
+    private JEditorPane queryTextArea;
     private JTextField methodNameFieldSelectTab;
     private JTextArea commentTextAreaSelectTab;
     private ButtonGroup spTypeRadioGroup;
@@ -53,6 +54,7 @@ public class FirstForm {
     
     public FirstForm() {
 
+        queryTextArea.setContentType( "text/sql" );
         spTypeRadioGroup = new ButtonGroup();
         spTypeRadioGroup.add( GENERATERadioButton );
         spTypeRadioGroup.add( CALLRadioButton );
@@ -239,6 +241,7 @@ public class FirstForm {
             @Override
             public void run() {
                 try {
+                    DefaultSyntaxKit.initKit();
                     UIManager.setLookAndFeel("com.sun.java.swing.plaf.nimbus.NimbusLookAndFeel");
                 } catch ( Exception e ) {
                     e.printStackTrace();

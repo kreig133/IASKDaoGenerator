@@ -15,7 +15,7 @@
         <properties/>
         <border type="none"/>
         <children>
-          <component id="a8b26" class="javax.swing.JTextArea" binding="textArea">
+          <component id="31bee" class="javax.swing.JEditorPane" binding="textArea">
             <constraints/>
             <properties/>
           </component>
