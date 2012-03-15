@@ -47,6 +47,14 @@
             <version>9.0.4</version>
             <scope>compile</scope>
         </dependency>
+
+        <dependency>
+            <groupId>xalan</groupId>
+            <artifactId>xalan</artifactId>
+            <scope>runtime</scope>
+            <version>2.7.1</version>
+        </dependency>
+
     </dependencies>
 
     <build>
