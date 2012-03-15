@@ -74,7 +74,7 @@ public class Controller {
         }
     }
 
-    protected static String[] getXmlFileNamesInDirectory( ) {
+    public static String[] getXmlFileNamesInDirectory( ) {
         return ( new File( DaoGenerator.getCurrentOperationSettings() .getSourcePath() ) )
                 .list(
                         new FilenameFilter() {
