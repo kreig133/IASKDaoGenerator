@@ -43,7 +43,7 @@ public class InterfaceMethodGenerator {
                 builder.append( "List<" );
             }
             if ( outputParameterList.size() == 1 ) {
-                builder.append( outputParameterList.get( 0 ).getType() );
+                builder.append( outputParameterList.get( 0 ).getType().value() );
             } else {
                 builder.append( Utils.convertNameForClassNaming( name ) ).append( "Out" );
             }
@@ -69,7 +69,7 @@ public class InterfaceMethodGenerator {
                         ) {
                             builder.append( "@Param(\"" ).append( p.getName() ).append( "\") " );
                         }
-                        builder.append( p.getType() ).append( " " )
+                        builder.append( p.getType().value() ).append( " " )
                             .append(
                                     DaoGenerator.getCurrentOperationSettings().getType() == Type.DEPO ?
                                             p.getName()

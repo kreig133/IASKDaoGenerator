@@ -57,7 +57,7 @@ public class XmlMappingGenerator {
                 builder.append( package_ ).append( "." );
                 builder.append( Utils.convertNameForClassNaming( name ) ).append( suffix );
             } else {
-                builder.append( "java.lang." ).append( outputParameterList.get( 0 ).getType() );
+                builder.append( "java.lang." ).append( outputParameterList.get( 0 ).getType().value() );
             }
             builder.append( "\"" );
         }
