@@ -90,7 +90,7 @@ public class Utils {
      */
     public static String wrapWithQuotes( String string ) {
 
-        String[] strings = string.split( "\n" );
+        String[] strings = string.split( "[\n\r]" );
 
         strings = deleteEmptyStrings( strings );
 

@@ -26,7 +26,9 @@ public class AnnotationGenerator {
         
         insertTabs(builder, 1).append( "@" ).append( selectType.getAnnotation() ).append( "(\n" );
 
-        builder.append( Utils.wrapWithQuotes( SqlQueryCreator.createQueries( daoMethod, false ) ) );
+        builder.append( Utils.wrapWithQuotes(
+                SqlQueryCreator.createQueries( daoMethod, false ).replaceAll( "\"", "\\\\\"" )
+        ) );
 
         insertTabs( builder, 1 ).append( ")\n" );
         if( daoMethod.getCommon().getConfiguration().getType() == SelectType.CALL ) {
