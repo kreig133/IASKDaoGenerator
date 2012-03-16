@@ -60,12 +60,6 @@ public class OperationSettingsImpl implements OperationSettings{
     }
 
     @Override
-    public boolean skipTesting() {
-        return SKIP_TESTING;
-    }
-
-
-    @Override
     public void setType( Type type ) {
         this.TYPE = type;
     }
@@ -123,11 +117,5 @@ public class OperationSettingsImpl implements OperationSettings{
         } else {
             throw new RuntimeException( "SOURCE_PATH уже установле!" );
         }
-    }
-
-
-    @Override
-    public void setSkipTesting( boolean skipTesting ) {
-        this.SKIP_TESTING = skipTesting;
     }
 }

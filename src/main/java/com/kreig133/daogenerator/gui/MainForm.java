@@ -32,7 +32,6 @@ public class MainForm {
     private JTextField   entityPackageTextField;
     private JTextField   interfacePackageTextField;
     private JTextField   mappingPackageTextField;
-    private JCheckBox    skipTestsCheckBox;
     private JButton      startButton;
     private JRadioButton IASKRadioButton;
     private JRadioButton DEPORadioButton;
@@ -93,7 +92,6 @@ public class MainForm {
             return;
         }
 
-        skipTestsCheckBox           .setSelected( Boolean.parseBoolean( settings.getProperty( SKIP_TESTS,   "0" ) ) );
         IASKRadioButton             .setSelected( Boolean.parseBoolean( settings.getProperty( IASK,         "1" ) ) );
         DEPORadioButton             .setSelected( Boolean.parseBoolean( settings.getProperty( DEPO,         "0" ) ) );
         
@@ -116,7 +114,6 @@ public class MainForm {
         OperationSettings operationSettings = DaoGenerator.getCurrentOperationSettings();
 
         operationSettings.setOutputPath     ( destDirTextField              .getText    () );
-        operationSettings.setSkipTesting    ( skipTestsCheckBox             .isSelected () );
         operationSettings.setSourcePath     ( sourceDirTextField            .getText    () );
         operationSettings.setDaoPackage     ( interfacePackageTextField     .getText    () );
         operationSettings.setEntityPackage  ( entityPackageTextField        .getText    () );

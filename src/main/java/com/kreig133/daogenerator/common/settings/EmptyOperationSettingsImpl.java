@@ -65,13 +65,4 @@ public class EmptyOperationSettingsImpl implements OperationSettings{
 
     @Override
     public void setSourcePath( String path ) {}
-
-    @Override
-    public boolean skipTesting() {
-        return false;
-    }
-
-    @Override
-    public void setSkipTesting( boolean skipTesting ) { }
-
 }

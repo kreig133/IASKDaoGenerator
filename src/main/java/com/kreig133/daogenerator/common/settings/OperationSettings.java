@@ -38,7 +38,4 @@ public interface OperationSettings {
 
     void setSourcePath( String path );
 
-    boolean skipTesting();
-
-    void setSkipTesting( boolean skipTesting );
 }

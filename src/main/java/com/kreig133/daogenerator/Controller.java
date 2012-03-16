@@ -135,8 +135,6 @@ public class Controller {
 
         final OperationSettings operationSettings = DaoGenerator.getCurrentOperationSettings();
 
-        properties.setProperty( SKIP_TESTS          , String.valueOf( operationSettings.skipTesting() ) );
-
         properties.setProperty( IASK                , String.valueOf( operationSettings.getType() == Type.IASK ) );
         properties.setProperty( DEPO                , String.valueOf( operationSettings.getType() == Type.DEPO ) );
 

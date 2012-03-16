@@ -21,5 +21,4 @@ public class SettingName {
     public static final String MAPPING_PACKAGE = "mappingPackage";
     public static final String IASK = "iask";
     public static final String DEPO = "depo";
-    public static final String SKIP_TESTS = "skipTests";
 }
