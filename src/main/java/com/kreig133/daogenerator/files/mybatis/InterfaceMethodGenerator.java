@@ -67,12 +67,12 @@ public class InterfaceMethodGenerator {
                                 ==
                                 Type.DEPO && methodType == MethodType.MAPPER
                         ) {
-                            builder.append( "@Param(\"" ).append( p.getName() ).append( "\") " );
+                            builder.append( "@Param(\"" ).append( p.getRenameTo() ).append( "\") " );
                         }
                         builder.append( p.getType().value() ).append( " " )
                             .append(
                                     DaoGenerator.getCurrentOperationSettings().getType() == Type.DEPO ?
-                                            p.getName()
+                                            p.getRenameTo()
                                             : "request"
                             );
                     }

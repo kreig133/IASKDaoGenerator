@@ -84,7 +84,7 @@ public class InOutClass {
 
         insertTabs( builder, 1 ).append( "){\n" );
         for( ParameterType p: parameters ){
-            insertTabs( builder, 2 ).append( "this." ).append( p.getName() ).append( " = " ).append( p.getName() )
+            insertTabs( builder, 2 ).append( "this." ).append( p.getRenameTo() ).append( " = " ).append( p.getRenameTo() )
                     .append( ";\n" );
         }
         builder.append( "    }\n\n" );
@@ -97,8 +97,8 @@ public class InOutClass {
         for( int i =  0; i < parameters.size(); i ++ ){
             ParameterType parameter = parameters.get( i );
             insertTabs( builder,3 ).append( "+\"" ).append( i != 0 ? ", " : ""  )
-                    .append( parameter.getName() ).append( " = \"+" )
-                    .append( parameter.getName() ).append( "\n" );
+                    .append( parameter.getRenameTo() ).append( " = \"+" )
+                    .append( parameter.getRenameTo() ).append( "\n" );
         }
         insertTabs( builder, 2 ).append( "+\"]\";\n" );
         insertTabs( builder, 1 ).append( "}" );
