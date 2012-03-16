@@ -101,7 +101,6 @@
                 <xsl:variable name="query" select="//apl:query/text()"/>
                 <xsl:call-template name="fillQuery">
                     <xsl:with-param name="query" select="$query"/>
-                    <xsl:with-param name="nodes" select="//apl:inputParametrs/apl:parameter"/>
                 </xsl:call-template>
             </xsl:otherwise>
         </xsl:choose>
@@ -112,14 +111,16 @@
 
     <xsl:template name="fillQuery">
         <xsl:param name="query" />
-        <xsl:param name="nodes" />
 
         <xsl:variable name="before" select="substring-before($query, '${')" as="xs:string"/>
 
         <xsl:value-of select="$before"/>
-        <xsl:call-template name="printTestValue">
-            <xsl:with-param name="type" select="$nodes[1]/@type"/>
-            <xsl:with-param name="testValue" select="$nodes[1]/@testValue"/>
+
+        <xsl:variable name="nameOfParamWithTail" select="substring-after( $query, '${')"/>
+        <xsl:variable name="nameOfParam" select="substring-before( $nameOfParamWithTail, ';')"/>
+
+        <xsl:call-template name="findParam">
+            <xsl:with-param name="name" select="$nameOfParam"/>
         </xsl:call-template>
 
         <xsl:variable name="newQuery" select="substring-after($query, '}' )"/>
@@ -128,10 +129,21 @@
             <xsl:when test=" string-length($newQuery) &gt; 0 ">
                 <xsl:call-template name="fillQuery">
                     <xsl:with-param name="query" select="$newQuery"/>
-                    <xsl:with-param name="nodes" select="$nodes[ position()&gt;1 ]"/>
                 </xsl:call-template>
             </xsl:when>
+            <xsl:otherwise>
+                <xsl:value-of select="$query"/>
+            </xsl:otherwise>
         </xsl:choose>
+    </xsl:template>
+
+    <xsl:template name="findParam">
+        <xsl:param name="name"/>
+
+        <xsl:call-template name="printTestValue">
+            <xsl:with-param name="type" select="//apl:inputParametrs/apl:parameter[@name = $name ]/@type"/>
+            <xsl:with-param name="testValue" select="//apl:inputParametrs/apl:parameter[@name = $name ]/@testValue"/>
+        </xsl:call-template>
     </xsl:template>
 
     <xsl:template name="printTestValue">
