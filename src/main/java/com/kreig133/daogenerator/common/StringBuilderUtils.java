@@ -54,28 +54,7 @@ public class StringBuilderUtils {
         }
     }
 
-    public static StringBuilder getJavaDocString( StringBuilder builder, String[] commentsLine ) {
 
-        boolean commentsNotEmpty = false;
-        for ( String string : commentsLine ) {
-            if ( string != null && ! ( "".equals( string ) ) ) {
-                commentsNotEmpty = true;
-                break;
-            }
-        }
-
-        if ( ! commentsNotEmpty ) return builder;
-
-        builder.append( "\t/**\n" );
-        for ( String comment : commentsLine ) {
-            builder.append( "\t * " );
-            builder.append( comment );
-            builder.append( "\n" );
-        }
-        builder.append( "\t */\n" );
-
-        return builder;
-    }
 
     public static StringBuilder insertTabs( StringBuilder builder, int tabsQuantity ){
         for( int i = 0 ; i < tabsQuantity; i ++ ){

@@ -7,6 +7,10 @@ package com.kreig133.daogenerator.enums;
 public enum Type  {
     IASK, DEPO;
 
+    public String pathToProperty(){
+        return "properties/db/" + this.toString().toLowerCase() + ".properties";
+    }
+    
     public static Type getByName( String name ){
         name = name.trim().toLowerCase();
 

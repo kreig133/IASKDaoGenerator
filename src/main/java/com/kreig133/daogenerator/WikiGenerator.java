@@ -19,7 +19,7 @@ public class WikiGenerator {
 
             for ( String s : xmlFileNamesInDirectory ) {
                 final String[] cmdarray = { "cmd", "/C",
-                        "java  -classpath DaoGenerator-1.0.jar org.apache.xalan.xslt.Process " +
+                        "java  -classpath DaoGenerator-2.3.jar org.apache.xalan.xslt.Process " +
                                 "-IN " + DaoGenerator.getCurrentOperationSettings().getSourcePath()+ "\\" + s +
                                 " -XSL XmlToWiki.xsl " +
                                 "-OUT "+DaoGenerator.getCurrentOperationSettings().getSourcePath()+ "\\" + s + ".txt"  };

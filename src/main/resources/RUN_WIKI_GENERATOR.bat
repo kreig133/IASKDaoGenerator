@@ -1,2 +1,2 @@
-java -classpath DaoGenerator-1.0.jar com.kreig133.daogenerator.WikiGenerator
+java -classpath DaoGenerator-2.3.jar com.kreig133.daogenerator.WikiGenerator
 pause

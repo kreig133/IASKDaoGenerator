@@ -18,22 +18,7 @@ import static com.kreig133.daogenerator.common.StringBuilderUtils.insertTabs;
  */
 public class Utils {
 
-    /**
-     * Проверяет нужно ли создавать in-класс
-     * @param daoMethod
-     * @return
-     */
-    public static boolean checkToNeedOwnInClass(
-            DaoMethod daoMethod
-    ) {
-        final List<ParameterType> parameters = daoMethod.getInputParametrs().getParameter();
 
-        final Type type = DaoGenerator.getCurrentOperationSettings().getType();
-
-        //TODO магические цифры, да и вообще вынести отсюда например, в тот же Parametrs
-        return  ( parameters.size() > 3 && type == Type.DEPO ) ||
-                ( parameters.size() > 1 && type == Type.IASK );
-    }
 
     /**
      * Конвертирует имя для использования в геттерах и сеттерах
@@ -129,16 +114,6 @@ public class Utils {
         System.arraycopy( temp, 0, result, 0, length );
 
         return result;
-    }
-
-    public static void appendByteToFile( File file, byte[] data ) throws IOException {
-        FileOutputStream writer = null;
-        try {
-            writer = new FileOutputStream( file, true );
-            writer.write( data );
-        } finally {
-            if ( writer != null ) writer.close();
-        }
     }
 
     public static boolean stringNotEmpty( String string ) {

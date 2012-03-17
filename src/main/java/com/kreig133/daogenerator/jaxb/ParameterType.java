@@ -16,7 +16,6 @@ import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlType;
 import javax.xml.bind.annotation.XmlValue;
 
-import static com.kreig133.daogenerator.common.StringBuilderUtils.getJavaDocString;
 import static com.kreig133.daogenerator.common.StringBuilderUtils.insertTabs;
 
 /**
@@ -312,46 +311,11 @@ public class ParameterType {
         this.jdbcType = value;
     }
 
-
-    //TODO переделать, вынести в отдельный класс генерацию поля для класса
-
-    @Override
-    public String toString() {
-        StringBuilder builder = new StringBuilder();
-
-        getJavaDocString( builder, new String[] { getCommentForJavaDoc() } );
-        insertTabs( builder, 1 ).append( "private " ).append( type.value() ).append( " " ).append( renameTo );
-
-        if(
-                defaultValue!=null  && ! defaultValue.isEmpty()
-        ){
-            builder.append( " = ").append( getDefaultValueForJavaCode() );
+    public String getCommentForJavaDoc() {
+        if ( comment == null || "".equals( comment ) || comment.toLowerCase().equals( "null" ) ) {
+            return renameTo;
         }
 
-        builder.append( ";\n\n" );
-        return builder.toString();
-    }
-
-    public void generateGetter( StringBuilder builder){
-        getJavaDocString( builder, new String[] { "Получить ", "\"" + getCommentForJavaDoc() + "\"" } );
-
-        insertTabs( builder, 1 ).append( "public " ).append( type.value() ).append( " get" );
-        builder.append( Utils.convertNameForGettersAndSetters( renameTo ) ).append( "(){\n" );
-        insertTabs( builder, 2 ).append( "return " ).append( renameTo ).append( ";\n");
-        insertTabs( builder, 1 ).append( "}\n\n" );
-    }
-
-
-    public void generateSetter( StringBuilder builder ){
-        getJavaDocString( builder, new String[] { "Установить ", "\"" + getCommentForJavaDoc() + "\"" } );
-        insertTabs( builder, 1 ).append( "public void set" ).append( Utils.convertNameForGettersAndSetters( renameTo ) );
-        builder.append( "( " ).append( type.value() ).append( " " ).append( renameTo ).append( " ){\n" );
-        insertTabs( builder, 2 ).append( "this." ).append( renameTo ).append( " = " ).append( renameTo ).append( ";\n" );
-        insertTabs( builder, 1 ).append( "}\n\n" );
-    }
-
-    private String getCommentForJavaDoc(){
-        if( comment == null || "".equals( comment ) || comment.toLowerCase().equals( "null" ) ) return renameTo;
         return comment;
     }
 

@@ -35,9 +35,4 @@ public class ControllerTest extends Controller{
         Assert.assertTrue( daoMethod != null );
     }
 
-    @Test
-    public void test(){
-        final DaoMethod daoMethod = TestHelper.getDaoMethodForTest();
-        System.out.println( Controller.getInOutClass( daoMethod, InOutType.IN ) );
-    }
 }

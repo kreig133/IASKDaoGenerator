@@ -2,6 +2,7 @@ package com.kreig133.daogenerator.common;
 
 import com.kreig133.daogenerator.DaoGenerator;
 import com.kreig133.daogenerator.enums.Type;
+import com.kreig133.daogenerator.files.InOutClassGenerator;
 import com.kreig133.daogenerator.jaxb.DaoMethod;
 import com.kreig133.daogenerator.jaxb.ParameterType;
 import com.kreig133.daogenerator.jaxb.ParametersType;
@@ -27,24 +28,24 @@ public class UtilsTest{
         daoMethod.setInputParametrs( new ParametersType() );
         daoMethod.getInputParametrs().getParameter().add( new ParameterType() );
         
-        Assert.assertFalse( Utils.checkToNeedOwnInClass( daoMethod ) );
+        Assert.assertFalse( InOutClassGenerator.checkToNeedOwnInClass( daoMethod ) );
 
         DaoGenerator.getCurrentOperationSettings().setType( Type.IASK );
 
-        Assert.assertFalse( Utils.checkToNeedOwnInClass( daoMethod ) );
+        Assert.assertFalse( InOutClassGenerator.checkToNeedOwnInClass( daoMethod ) );
 
         daoMethod.getInputParametrs().getParameter().add( new ParameterType() );
 
-        Assert.assertTrue( Utils.checkToNeedOwnInClass( daoMethod ) );
+        Assert.assertTrue( InOutClassGenerator.checkToNeedOwnInClass( daoMethod ) );
 
         DaoGenerator.getCurrentOperationSettings().setType( Type.DEPO );
 
-        Assert.assertFalse( Utils.checkToNeedOwnInClass( daoMethod ) );
+        Assert.assertFalse( InOutClassGenerator.checkToNeedOwnInClass( daoMethod ) );
 
         daoMethod.getInputParametrs().getParameter().add( new ParameterType() );
         daoMethod.getInputParametrs().getParameter().add( new ParameterType() );
 
-        Assert.assertTrue( Utils.checkToNeedOwnInClass( daoMethod ) );
+        Assert.assertTrue( InOutClassGenerator.checkToNeedOwnInClass( daoMethod ) );
     }
     
     
