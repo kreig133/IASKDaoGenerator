@@ -3,10 +3,10 @@
   <grid id="27dc6" binding="mainPanel" layout-manager="GridLayoutManager" row-count="6" column-count="4" same-size-horizontally="false" same-size-vertically="false" hgap="2" vgap="5">
     <margin top="3" left="3" bottom="3" right="3"/>
     <constraints>
-      <xy x="20" y="20" width="516" height="400"/>
+      <xy x="20" y="20" width="706" height="356"/>
     </constraints>
     <properties/>
-    <border type="none"/>
+    <border type="line" title="Generate Java Classes"/>
     <children>
       <component id="17090" class="javax.swing.JTextField" binding="sourceDirTextField">
         <constraints>
@@ -63,7 +63,7 @@
       <component id="dd3f0" class="javax.swing.JTextField" binding="entityPackageTextField">
         <constraints>
           <grid row="2" column="2" row-span="1" col-span="2" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
-            <preferred-size width="150" height="-1"/>
+            <preferred-size width="400" height="-1"/>
           </grid>
         </constraints>
         <properties>

@@ -53,8 +53,9 @@ public class FirstForm {
     private final JFileChooser fileChooserForXml = GuiUtils.getFileChooser();
     
     public FirstForm() {
-
-        developer.add( MainForm.getInstance() );
+        final JPanel instance = MainForm.getInstance();
+        instance.setSize( new Dimension( 800, 600 ) );
+        developer.add( instance );
 
         queryTextArea.setContentType( "text/sql" );
 
@@ -235,7 +236,7 @@ public class FirstForm {
                 } catch ( Exception e ) {
                     e.printStackTrace();
                 }
-                JFrame frame = new JFrame( "MainForm" );
+                JFrame frame = new JFrame( "DaoGenerator 2.3" );
                 frame.setContentPane( FirstForm.getInstance() );
                 frame.setDefaultCloseOperation( JFrame.EXIT_ON_CLOSE );
                 frame.setSize( 800, 600 );
