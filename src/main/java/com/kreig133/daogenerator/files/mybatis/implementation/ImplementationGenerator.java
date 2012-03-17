@@ -11,7 +11,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 
-import static com.kreig133.daogenerator.common.StringBuilderUtils.insertTabs;
+import static com.kreig133.daogenerator.common.Utils.insertTabs;
 
 /**
  * @author kreig133

@@ -10,7 +10,7 @@ import com.kreig133.daogenerator.jaxb.DaoMethod;
 import java.io.File;
 import java.io.IOException;
 
-import static com.kreig133.daogenerator.common.Utils.addTabsBeforeLine;
+import static com.kreig133.daogenerator.common.Utils.insertTabs;
 
 /**
  * @author kreig133
@@ -49,11 +49,8 @@ public class InterfaceGenerator extends DaoJavaClassGenerator {
 
     @Override
     public void generateBody( DaoMethod daoMethod ) throws IOException {
-        insertJavaDoc(
-                daoMethod.getCommon().getComment().split( "\n" )
-        ).append(
-            addTabsBeforeLine( generateMethodSignature( daoMethod, MethodType.DAO ) + ";\n", 1 )
-        );
+        insertJavaDoc( daoMethod.getCommon().getComment().split( "\n" ) );
+        insertTabs( builder, 1 ).append( generateMethodSignature( daoMethod, MethodType.DAO ) + ";\n" );
     }
 
     public static String interfaceFileName() {

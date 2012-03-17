@@ -11,7 +11,7 @@ import com.kreig133.daogenerator.sql.SqlQueryCreator;
 import java.io.IOException;
 import java.util.List;
 
-import static com.kreig133.daogenerator.common.StringBuilderUtils.insertTabs;
+import static com.kreig133.daogenerator.common.Utils.insertTabs;
 
 /**
  * @author kreig133
@@ -60,7 +60,7 @@ public class IaskMappingGenerator extends MappingGenerator{
         writeParameterType( outputParameterList, name, "resultType"   , "Out", package_, builder );
 
         builder.append( ">\n\n" );
-        builder.append( Utils.addTabsBeforeLine( SqlQueryCreator.createQueries( daoMethod, false ), 2 ) ).append( "\n" );
+        insertTabs( builder, 2 ).append( SqlQueryCreator.createQueries( daoMethod, false ) ).append( "\n" );
 
         insertTabs(builder, 1).append( "</" ).append( daoMethod.getSelectType().getAnnotation().toLowerCase() ).append( ">\n\n" );
 
@@ -80,7 +80,7 @@ public class IaskMappingGenerator extends MappingGenerator{
             insertTabs( builder, 2 ).append( type ).append( "=\"" );
             if ( outputParameterList.size() > 1 ) {
                 builder.append( package_ ).append( "." );
-                builder.append( Utils.convertNameForClassNaming( name ) ).append( suffix );
+                builder.append( convertNameForClassNaming( name ) ).append( suffix );
             } else {
                 builder.append( "java.lang." ).append( outputParameterList.get( 0 ).getType().value() );
             }

@@ -56,10 +56,5 @@ public class StringBuilderUtils {
 
 
 
-    public static StringBuilder insertTabs( StringBuilder builder, int tabsQuantity ){
-        for( int i = 0 ; i < tabsQuantity; i ++ ){
-            builder.append( "    " );
-        }
-        return builder;
-    }
+
 }

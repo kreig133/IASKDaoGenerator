@@ -33,7 +33,7 @@ public class Controller {
         public void appendStringToFile( File file, String string ) {
             FileOutputStream writer = null;
             try {
-                writer = new FileOutputStream( file, true );
+                writer = new FileOutputStream( file, false );
                 writer.write( string.getBytes() );
             } catch ( IOException e ) {
                 //TODO
@@ -111,8 +111,6 @@ public class Controller {
 
             appender.appendStringToFile( generator.getFile(), generator.getResult() );
         }
-
-
     }
 
     protected static void saveProperties() {
@@ -138,8 +136,4 @@ public class Controller {
         PropertiesFileController.saveCommonProperties( properties );
 
     }
-
-
-
-
 }

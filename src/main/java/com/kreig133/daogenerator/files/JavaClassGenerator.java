@@ -15,8 +15,8 @@ import java.io.File;
 import java.io.IOException;
 import java.util.List;
 
-import static com.kreig133.daogenerator.common.StringBuilderUtils.insertTabs;
 import static com.kreig133.daogenerator.common.StringBuilderUtils.iterateForParameterList;
+import static com.kreig133.daogenerator.common.Utils.stringNotEmpty;
 
 /**
  * @author kreig133
@@ -60,7 +60,7 @@ abstract public class JavaClassGenerator {
             if ( outputParameterList.size() == 1 ) {
                 builder.append( outputParameterList.get( 0 ).getType().value() );
             } else {
-                builder.append( Utils.convertNameForClassNaming( name ) ).append( "Out" );
+                builder.append( convertNameForClassNaming( name ) ).append( "Out" );
             }
             if ( daoMethod.getCommon().getConfiguration().isMultipleResult() ) {
                 builder.append( ">" );
@@ -72,7 +72,7 @@ abstract public class JavaClassGenerator {
         if ( ! inputParameterList.isEmpty() ) {
             builder.append( "\n" );
             if ( InOutClassGenerator.checkToNeedOwnInClass( daoMethod ) ) {
-                insertTabs( builder, 2 ).append( Utils.convertNameForClassNaming( name ) ).append( "In request\n" );
+                Utils.insertTabs( builder, 2 ).append( convertNameForClassNaming( name ) ).append( "In request\n" );
             } else {
                 iterateForParameterList( builder, inputParameterList, 2, new FunctionalObjectWithoutFilter() {
                     @Override
@@ -93,7 +93,7 @@ abstract public class JavaClassGenerator {
                     }
                 } );
             }
-            insertTabs( builder, 1 );
+            Utils.insertTabs( builder, 1 );
         }
         builder.append( ")" );
 
@@ -131,7 +131,7 @@ abstract public class JavaClassGenerator {
     }
 
     protected void writeEmptyConstructor( String className ) {
-        insertTabs( builder, 1 ).append( "public " ).append( className ).append( "(){\n    }\n\n" );
+        Utils.insertTabs( builder, 1 ).append( "public " ).append( className ).append( "(){\n    }\n\n" );
     }
 
     protected void insertClassDeclaration(
@@ -191,14 +191,14 @@ abstract public class JavaClassGenerator {
     ){
         generateGetterSignature( javaDoc, javaType, name );
 
-        insertTabs( builder, 2 ).append( "return " ).append( name ).append( ";\n");
-        insertTabs( builder, 1 ).append( "}\n\n" );
+        Utils.insertTabs( builder, 2 ).append( "return " ).append( name ).append( ";\n");
+        Utils.insertTabs( builder, 1 ).append( "}\n\n" );
     }
 
     private void generateGetterSignature( String javaDoc, JavaType javaType, String name ) {
         insertJavaDoc( new String[] { "Получить ", "\"" + javaDoc + "\"" } );
-        insertTabs( builder, 1 ).append( "public " ).append( javaType.value() ).append( " get" );
-        builder.append( Utils.convertNameForGettersAndSetters( name ) ).append( "(){\n" );
+        Utils.insertTabs( builder, 1 ).append( "public " ).append( javaType.value() ).append( " get" );
+        builder.append( convertNameForGettersAndSetters( name ) ).append( "(){\n" );
     }
 
 
@@ -208,13 +208,40 @@ abstract public class JavaClassGenerator {
             String name
     ){
         generateSetterSignature( javaDoc, javaType, name );
-        insertTabs( builder, 2 ).append( "this." ).append( name ).append( " = " ).append( name ).append( ";\n" );
-        insertTabs( builder, 1 ).append( "}\n\n" );
+        Utils.insertTabs( builder, 2 ).append( "this." ).append( name ).append( " = " ).append( name ).append( ";\n" );
+        Utils.insertTabs( builder, 1 ).append( "}\n\n" );
     }
 
     private void generateSetterSignature( String javaDoc, JavaType javaType, String name ) {
         insertJavaDoc( new String[] { "Установить ", "\"" + javaDoc + "\"" } );
-        insertTabs( builder, 1 ).append( "public void set" ).append( Utils.convertNameForGettersAndSetters( name ) );
+        Utils.insertTabs( builder, 1 ).append( "public void set" ).append( convertNameForGettersAndSetters( name ) );
         builder.append( "( " ).append( javaType.value() ).append( " " ).append( name ).append( " ){\n" );
+    }
+
+    /**
+     * Конвертирует имя для использования в геттерах и сеттерах
+     * @param name
+     * @return
+     */
+    protected static String convertNameForGettersAndSetters( String name ) {
+
+        if ( ! stringNotEmpty( name ) ) throw new IllegalArgumentException();
+
+        final char[] chars = name.toCharArray();
+
+        if ( Character.isLowerCase( chars[ 0 ] ) ) {
+            if ( chars.length == 1 || Character.isLowerCase( chars[ 1 ] ) ) {
+                chars[ 0 ] = Character.toUpperCase( chars[ 0 ] );
+                name = new String( chars );
+            }
+        }
+
+        return name;
+    }
+
+    public static String convertNameForClassNaming( String name ) {
+        final char[] chars = name.toCharArray();
+        chars[ 0 ] = Character.toUpperCase( chars[ 0 ] );
+        return new String( chars );
     }
 }

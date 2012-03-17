@@ -8,15 +8,7 @@
 
 package com.kreig133.daogenerator.jaxb;
 
-import com.kreig133.daogenerator.common.Utils;
-
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlAttribute;
-import javax.xml.bind.annotation.XmlType;
-import javax.xml.bind.annotation.XmlValue;
-
-import static com.kreig133.daogenerator.common.StringBuilderUtils.insertTabs;
+import javax.xml.bind.annotation.*;
 
 /**
  * <p>Java class for parameterType complex type.

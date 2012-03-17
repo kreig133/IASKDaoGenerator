@@ -11,7 +11,8 @@ import com.kreig133.daogenerator.sql.SqlQueryCreator;
 import java.io.IOException;
 import java.util.List;
 
-import static com.kreig133.daogenerator.common.StringBuilderUtils.insertTabs;
+import static com.kreig133.daogenerator.common.Utils.insertTabs;
+import static com.kreig133.daogenerator.common.Utils.stringNotEmpty;
 
 /**
  * @author kreig133
@@ -64,7 +65,7 @@ public class DepoMappingGenerator extends MappingGenerator{
 
         insertTabs(builder, 1).append( "@" ).append( selectType.getAnnotation() ).append( "(\n" );
 
-        builder.append( Utils.wrapWithQuotes(
+        builder.append( wrapWithQuotes(
                 SqlQueryCreator.createQueries( daoMethod, false ).replaceAll( "\"", "\\\\\"" )
         ) );
 
@@ -86,5 +87,53 @@ public class DepoMappingGenerator extends MappingGenerator{
         }
 
         return builder.toString();
+    }
+
+    /**
+     * Обрамляет каждую новую строку в кавычки и конкатенацию строк
+     * @param string
+     * @return
+     */
+    public static String wrapWithQuotes( String string ) {
+
+        String[] strings = string.split( "[\n\r]" );
+
+        strings = deleteEmptyStrings( strings );
+
+        StringBuilder builder = new StringBuilder();
+
+        for ( int i = 0; i < strings.length; i++ ) {
+            if ( i != 0 ) {
+                insertTabs(builder, 2).append( "+" );
+            } else {
+                insertTabs(builder, 2);
+            }
+            builder.append( "\"" ).append( strings[ i ] ).append( "\\n\"\n" );
+        }
+        return builder.toString();
+    }
+
+    /**
+     * Удаляет пустые строки из массива
+     * @param in
+     * @return
+     */
+    private static String[] deleteEmptyStrings( String[] in ) {
+        String[] temp = new String[ in.length ];
+
+        int length = 0;
+
+        for ( String s : in ) {
+            if ( stringNotEmpty( s ) ) {
+                temp[ length ] = s;
+                length++;
+            }
+        }
+
+        String[] result = new String[ length ];
+
+        System.arraycopy( temp, 0, result, 0, length );
+
+        return result;
     }
 }

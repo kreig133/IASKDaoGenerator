@@ -6,7 +6,7 @@ import com.kreig133.daogenerator.jaxb.ParameterType;
 
 import java.util.List;
 
-import static com.kreig133.daogenerator.common.StringBuilderUtils.insertTabs;
+import static com.kreig133.daogenerator.common.Utils.insertTabs;
 import static com.kreig133.daogenerator.common.StringBuilderUtils.iterateForParameterList;
 
 /**

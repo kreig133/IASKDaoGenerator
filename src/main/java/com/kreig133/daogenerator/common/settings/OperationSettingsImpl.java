@@ -59,11 +59,7 @@ public class OperationSettingsImpl implements OperationSettings{
 
     @Override
     public void setType( Type type ) {
-        if( TYPE == null ){
-            this.TYPE = type;
-        } else {
-            throw new RuntimeException( "TYPE уже установлен!" );
-        }
+        this.TYPE = type;
     }
 
     @Override
