@@ -7,7 +7,7 @@ import java.io.IOException;
 import java.sql.*;
 import java.util.Properties;
 
-import static com.kreig133.daogenerator.testing.settings.SettingName.*;
+import static com.kreig133.daogenerator.settings.SettingName.*;
 
 /**
  * @author eshangareev

@@ -9,6 +9,14 @@ import com.kreig133.daogenerator.jaxb.ParameterType;
  */
 public class TestValueByStringGenerator {
     
+    public static TestValueByStringGenerator newInstance( ParameterType p ){
+        if( p.getType() == JavaType.DATE || p.getType() == JavaType.STRING ){
+            return new QuotedTestValueByStringGenerator();
+        }
+        
+        return new TestValueByStringGenerator();
+    }
+    
     public String getTestValue ( ParameterType parameterType ){
         if ( parameterType.getTestValue() == null || "null".equals( parameterType.getTestValue() ) ) {
             return "NULL";

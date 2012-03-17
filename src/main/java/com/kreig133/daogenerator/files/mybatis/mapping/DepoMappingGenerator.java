@@ -1,12 +1,10 @@
 package com.kreig133.daogenerator.files.mybatis.mapping;
 
-import com.kreig133.daogenerator.common.Utils;
 import com.kreig133.daogenerator.enums.ClassType;
 import com.kreig133.daogenerator.enums.MethodType;
-import com.kreig133.daogenerator.files.Appender;
 import com.kreig133.daogenerator.jaxb.DaoMethod;
 import com.kreig133.daogenerator.jaxb.SelectType;
-import com.kreig133.daogenerator.sql.SqlQueryCreator;
+import com.kreig133.daogenerator.sql.creators.QueryCreator;
 
 import java.io.IOException;
 import java.util.List;
@@ -66,7 +64,7 @@ public class DepoMappingGenerator extends MappingGenerator{
         insertTabs(builder, 1).append( "@" ).append( selectType.getAnnotation() ).append( "(\n" );
 
         builder.append( wrapWithQuotes(
-                SqlQueryCreator.createQueries( daoMethod, false ).replaceAll( "\"", "\\\\\"" )
+                QueryCreator.newInstance( daoMethod ).generateExecuteQuery( daoMethod, false ).replaceAll( "\"", "\\\\\"" )
         ) );
 
         insertTabs( builder, 1 ).append( ")\n" );

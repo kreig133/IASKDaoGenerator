@@ -8,9 +8,6 @@
 
 package com.kreig133.daogenerator.jaxb;
 
-import com.kreig133.daogenerator.sql.test.QuotedTestValueByStringGenerator;
-import com.kreig133.daogenerator.sql.test.TestValueByStringGenerator;
-
 import javax.xml.bind.annotation.XmlEnum;
 import javax.xml.bind.annotation.XmlEnumValue;
 import javax.xml.bind.annotation.XmlType;
@@ -18,7 +15,7 @@ import java.util.*;
 
 /**
  * <p>Java class for javaType.
- * 
+ *
  * <p>The following schema fragment specifies the expected content contained within this class.
  * <p>
  * <pre>
@@ -32,38 +29,30 @@ import java.util.*;
  *   &lt;/restriction>
  * &lt;/simpleType>
  * </pre>
- * 
+ *
  */
 @XmlType(name = "javaType")
 @XmlEnum
 public enum JavaType {
 
     @XmlEnumValue("Long")
-    LONG("Long", new TestValueByStringGenerator() ),
+    LONG("Long"),
     @XmlEnumValue("String")
-    STRING("String", new QuotedTestValueByStringGenerator() ),
+    STRING("String"),
     @XmlEnumValue("Date")
-    DATE("Date", new QuotedTestValueByStringGenerator() ),
+    DATE("Date"),
     @XmlEnumValue("Double")
-    DOUBLE("Double", new TestValueByStringGenerator() ),
+    DOUBLE("Double"),
     @XmlEnumValue("Byte")
-    BYTE("Byte", new TestValueByStringGenerator() );
+    BYTE("Byte");
     private final String value;
 
-
-    private final TestValueByStringGenerator testValueByStringGenerator;
-
-    JavaType(String v, TestValueByStringGenerator testValueByStringGenerator) {
+    JavaType(String v) {
         value = v;
-        this.testValueByStringGenerator = testValueByStringGenerator;
     }
 
     public String value() {
         return value;
-    }
-
-    public TestValueByStringGenerator testValueGenerator() {
-        return testValueByStringGenerator;
     }
 
     public static JavaType fromValue(String v) {
@@ -97,8 +86,7 @@ public enum JavaType {
         }
 
         throw new RuntimeException( "Упс! Нашелся баг: я не шмогла преобразовать входной тип в java-тип ( "
-                +type
-                +" ). Ай-я-я-яй"
+                +type + " ). Ай-я-я-яй"
         );
     }
 

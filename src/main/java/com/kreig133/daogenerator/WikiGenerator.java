@@ -14,7 +14,7 @@ public class WikiGenerator {
         final JFileChooser fileChooser = GuiUtils.getFileChooser();
         if( fileChooser.showOpenDialog( null ) == JFileChooser.APPROVE_OPTION ){
             DaoGenerator.getCurrentOperationSettings().setSourcePath( fileChooser.getSelectedFile().getAbsolutePath() );
-            final String[] xmlFileNamesInDirectory = Controller.getXmlFileNamesInDirectory();
+            final String[] xmlFileNamesInDirectory = DaoGenerator.getXmlFileNamesInDirectory();
 
 
             for ( String s : xmlFileNamesInDirectory ) {

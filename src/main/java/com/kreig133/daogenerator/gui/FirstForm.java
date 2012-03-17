@@ -37,15 +37,11 @@ public class FirstForm {
     private JTabbedPane tabbedPane;
     private JTextField methodNameFieldSpTab;
     private JTextArea commentTextAreaSpTab;
-    private JRadioButton GENERATERadioButton;
-    private JRadioButton CALLRadioButton;
-    private JRadioButton GENEROUTRadioButton;
     private JCheckBox isMultipleResultCheckBoxSpTab;
     private JCheckBox isMultipleResultCheckBoxSelectTab;
     private JEditorPane queryTextArea;
     private JTextField methodNameFieldSelectTab;
     private JTextArea commentTextAreaSelectTab;
-    private ButtonGroup spTypeRadioGroup;
     private JFrame windowWithSPText;
     private static final int SP_TAB_INDEX = 0;
 
@@ -54,10 +50,6 @@ public class FirstForm {
     public FirstForm() {
 
         queryTextArea.setContentType( "text/sql" );
-        spTypeRadioGroup = new ButtonGroup();
-        spTypeRadioGroup.add( GENERATERadioButton );
-        spTypeRadioGroup.add( CALLRadioButton );
-        spTypeRadioGroup.add( GENEROUTRadioButton );
 
         getInParamsButton.addActionListener( new ActionListener() {
             @Override
@@ -164,7 +156,7 @@ public class FirstForm {
             result.getCommon().setSpName( storeProcedureField.getText() );
             result.getCommon().setMethodName( methodNameFieldSpTab.getText() );
             result.getCommon().setComment( commentTextAreaSpTab.getText() );
-            result.getCommon().getConfiguration().setType( getSpType() );
+            result.getCommon().getConfiguration().setType( SelectType.CALL );
             result.getCommon().getConfiguration().setMultipleResult( isMultipleResultCheckBoxSpTab.isSelected() );
         } else{
             result.getCommon().setMethodName( methodNameFieldSelectTab.getText() );
@@ -196,16 +188,6 @@ public class FirstForm {
         final String firstWord = queryTextArea.getText().trim().split( "\\s" )[0];
 
         return SelectType.getByName( firstWord );
-    }
-
-    private SelectType getSpType() {
-        for ( Enumeration e = spTypeRadioGroup.getElements(); e.hasMoreElements(); ) {
-            JRadioButton b = ( JRadioButton ) e.nextElement();
-            if ( b.getModel() == spTypeRadioGroup.getSelection() ) {
-                return SelectType.getByName( b.getText() );
-            }
-        }
-        return null;
     }
 
     private boolean checkSPName( ) {

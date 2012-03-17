@@ -1,7 +1,10 @@
 package com.kreig133.daogenerator.common;
 
-import java.io.File;
+import com.kreig133.daogenerator.common.strategy.FuctionalObject;
+import com.kreig133.daogenerator.jaxb.ParameterType;
 
+import java.io.File;
+import java.util.List;
 
 /**
  * @author eshangareev
@@ -47,4 +50,38 @@ public class Utils {
     public static File getFileFromDirectoryByName( String directoryPath, String fileName ) {
         return new File( new File( directoryPath ).getAbsolutePath() + "/" + fileName );
     }
+
+    public static void iterateForParameterList(
+            StringBuilder builder,
+            List<ParameterType> parameterList,
+            FuctionalObject functionalObject
+    ) {
+        iterateForParameterList( builder, parameterList, 1, functionalObject );
+    }
+
+    public static void iterateForParameterList(
+            StringBuilder builder,
+            List<ParameterType> parameterList,
+            int tabs,
+            FuctionalObject functionalObject
+
+    ) {
+        boolean first = true;
+
+        for ( ParameterType p : parameterList ) {
+            if ( functionalObject.filter( p ) ) {
+                for ( int i = 0; i < tabs; i++ ) {
+                    builder.append( "    " );
+                }
+                if ( ! first ) {
+                    builder.append( "," );
+                } else {
+                    first = false;
+                }
+                functionalObject.writeString( builder, p );
+                builder.append( "\n" );
+            }
+        }
+    }
+
 }

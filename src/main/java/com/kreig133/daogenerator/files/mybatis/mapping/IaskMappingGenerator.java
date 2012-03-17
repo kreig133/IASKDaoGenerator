@@ -1,12 +1,10 @@
 package com.kreig133.daogenerator.files.mybatis.mapping;
 
 import com.kreig133.daogenerator.DaoGenerator;
-import com.kreig133.daogenerator.common.Utils;
-import com.kreig133.daogenerator.files.Appender;
 import com.kreig133.daogenerator.files.mybatis.intrface.InterfaceGenerator;
 import com.kreig133.daogenerator.jaxb.DaoMethod;
 import com.kreig133.daogenerator.jaxb.ParameterType;
-import com.kreig133.daogenerator.sql.SqlQueryCreator;
+import com.kreig133.daogenerator.sql.creators.QueryCreator;
 
 import java.io.IOException;
 import java.util.List;
@@ -60,7 +58,9 @@ public class IaskMappingGenerator extends MappingGenerator{
         writeParameterType( outputParameterList, name, "resultType"   , "Out", package_, builder );
 
         builder.append( ">\n\n" );
-        insertTabs( builder, 2 ).append( SqlQueryCreator.createQueries( daoMethod, false ) ).append( "\n" );
+        insertTabs( builder, 2 ).append(
+                QueryCreator.newInstance( daoMethod ).generateExecuteQuery( daoMethod, false )
+        ).append( "\n" );
 
         insertTabs(builder, 1).append( "</" ).append( daoMethod.getSelectType().getAnnotation().toLowerCase() ).append( ">\n\n" );
 

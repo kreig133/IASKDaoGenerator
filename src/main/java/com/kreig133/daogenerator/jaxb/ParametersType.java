@@ -74,6 +74,15 @@ public class ParametersType {
         return this.parameter;
     }
 
+    public ParameterType getParameterByName( String name ){
+        for ( ParameterType type : getParameter() ) {
+            if ( type.getName().equals( name ) ) {
+                return type;
+            }
+        }
+        return null;
+    }
+    
     public List<Integer> getIndexOfUnnamedParameters() {
         final List<Integer> result = new LinkedList<Integer>();
 

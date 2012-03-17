@@ -11,7 +11,7 @@ import java.io.File;
  * @author kreig133
  * @version 1.0
  */
-public class ControllerTest extends Controller{
+public class ControllerTest {
 
     @BeforeClass
     public static void before(){
@@ -20,7 +20,7 @@ public class ControllerTest extends Controller{
 
     @Test
     public void getXmfFileNamesInDirectoryTest(){
-        final String[] xmlFileNamesInDirectory = Controller.getXmlFileNamesInDirectory();
+        final String[] xmlFileNamesInDirectory = DaoGenerator.getXmlFileNamesInDirectory();
         for ( String s : xmlFileNamesInDirectory ) {
             System.out.println( "s = " + s );
         }

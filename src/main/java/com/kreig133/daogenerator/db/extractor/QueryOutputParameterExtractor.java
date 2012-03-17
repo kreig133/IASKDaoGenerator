@@ -4,6 +4,7 @@ import com.kreig133.daogenerator.db.JDBCConnector;
 import com.kreig133.daogenerator.jaxb.DaoMethod;
 import com.kreig133.daogenerator.jaxb.ParameterType;
 import com.kreig133.daogenerator.sql.SqlQueryParser;
+import com.kreig133.daogenerator.sql.test.TestValueByStringGenerator;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -24,22 +25,15 @@ public class QueryOutputParameterExtractor extends OutputParameterExtractor{
         assert query != null;
 
         final PreparedStatement statement = JDBCConnector.connectToDB().prepareStatement( query );
-        final List<ParameterType> parameterTypes = daoMethod.getInputParametrs().getParameter();
 
         List<String> names = SqlQueryParser.getListOfParametrNames( daoMethod.getCommon().getQuery() );
 
         for ( int i = 0; i < names.size(); i++ ) {
-            ParameterType parameterType = null;
-            for ( ParameterType type : parameterTypes ) {
-                if ( type.getName().equals( names.get( i ) ) ) {
-                    parameterType = type;
-                    break;
-                }
-            }
+            ParameterType paramter = daoMethod.getInputParametrs().getParameterByName( names.get( i ) );
 
-            assert parameterType != null;
+            assert paramter != null;
 
-            statement.setString( i + 1, parameterType.getType().testValueGenerator().getTestValue( parameterType ) );
+            statement.setString( i + 1, TestValueByStringGenerator.newInstance( paramter ).getTestValue( paramter ) );
         }
 
         return statement.execute() ? statement.getResultSet() : null ;

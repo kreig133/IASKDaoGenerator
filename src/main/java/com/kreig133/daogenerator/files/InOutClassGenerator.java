@@ -14,7 +14,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.kreig133.daogenerator.common.StringBuilderUtils.iterateForParameterList;
 import static com.kreig133.daogenerator.common.Utils.*;
 
 /**

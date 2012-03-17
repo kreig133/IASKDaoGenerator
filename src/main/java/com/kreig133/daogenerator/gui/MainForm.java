@@ -1,6 +1,5 @@
 package com.kreig133.daogenerator.gui;
 
-import com.kreig133.daogenerator.Controller;
 import com.kreig133.daogenerator.DaoGenerator;
 import com.kreig133.daogenerator.common.settings.OperationSettings;
 import com.kreig133.daogenerator.enums.Type;
@@ -57,7 +56,7 @@ public class MainForm {
                 if( validate() ){
                     fillSettingsWithData();
                     mainPanel.setVisible( false );
-                    Controller.doAction();
+                    DaoGenerator.doAction();
                     System.exit( 0 );
                 }
             }
