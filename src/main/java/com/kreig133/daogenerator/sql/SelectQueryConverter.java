@@ -6,7 +6,6 @@ import com.kreig133.daogenerator.jaxb.ParameterType;
 import java.util.List;
 
 import static com.kreig133.daogenerator.common.StringBuilderUtils.*;
-import static com.kreig133.daogenerator.sql.SqlQueryParser.getQueryStringWithoutMetaData;
 
 /**
  * @author eshangareev
@@ -50,8 +49,7 @@ public class SelectQueryConverter {
                     insertEscapedParamName( builder,
                             parameterType, false );
                 } else {
-                    builder.append(
-                            SqlUtils.getTestValue( parameterType ) );
+                    builder.append( parameterType.getType().testValueGenerator().getTestValue( parameterType ) );
                 }
                 index++;
             }

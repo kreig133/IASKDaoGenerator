@@ -11,8 +11,6 @@ import java.util.Map;
  */
 public class OperationSettingsImpl implements OperationSettings{
     private Type TYPE;
-    private boolean SKIP_TESTING;
-
 
     private String OPERATION_NAME;
     private String ENTITY_PACKAGE;

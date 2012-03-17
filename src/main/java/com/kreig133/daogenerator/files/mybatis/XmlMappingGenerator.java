@@ -26,7 +26,7 @@ public class XmlMappingGenerator {
         final String package_                     = DaoGenerator.getCurrentOperationSettings().getEntityPackage();
 
         StringBuilder builder = new StringBuilder();
-        insertTabs( builder, 1 ).append( "<" ) .append( daoMethod.getCommon().getConfiguration().getType().getAnnotation()
+        insertTabs( builder, 1 ).append( "<" ) .append( daoMethod.getSelectType().getAnnotation()
                 .toLowerCase() )
                 .append( " id=\"" ).append( name ).append( "\" statementType=\"CALLABLE\"" );
 
@@ -36,8 +36,7 @@ public class XmlMappingGenerator {
         builder.append( ">\n\n" );
         builder.append( Utils.addTabsBeforeLine( SqlQueryCreator.createQueries( daoMethod, false ), 2 ) ).append( "\n" );
 
-        insertTabs(builder, 1).append( "</" ).append( daoMethod.getCommon().getConfiguration().getType()
-                .getAnnotation().toLowerCase() ).append( ">\n\n" );
+        insertTabs(builder, 1).append( "</" ).append( daoMethod.getSelectType().getAnnotation().toLowerCase() ).append( ">\n\n" );
 
         return builder.toString();
     }

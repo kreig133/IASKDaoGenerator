@@ -8,6 +8,9 @@
 
 package com.kreig133.daogenerator.jaxb;
 
+import com.kreig133.daogenerator.sql.test.QuotedTestValueByStringGenerator;
+import com.kreig133.daogenerator.sql.test.TestValueByStringGenerator;
+
 import javax.xml.bind.annotation.XmlEnum;
 import javax.xml.bind.annotation.XmlEnumValue;
 import javax.xml.bind.annotation.XmlType;
@@ -36,23 +39,31 @@ import java.util.*;
 public enum JavaType {
 
     @XmlEnumValue("Long")
-    LONG("Long"),
+    LONG("Long", new TestValueByStringGenerator() ),
     @XmlEnumValue("String")
-    STRING("String"),
+    STRING("String", new QuotedTestValueByStringGenerator() ),
     @XmlEnumValue("Date")
-    DATE("Date"),
+    DATE("Date", new QuotedTestValueByStringGenerator() ),
     @XmlEnumValue("Double")
-    DOUBLE("Double"),
+    DOUBLE("Double", new TestValueByStringGenerator() ),
     @XmlEnumValue("Byte")
-    BYTE("Byte");
+    BYTE("Byte", new TestValueByStringGenerator() );
     private final String value;
 
-    JavaType(String v) {
+
+    private final TestValueByStringGenerator testValueByStringGenerator;
+
+    JavaType(String v, TestValueByStringGenerator testValueByStringGenerator) {
         value = v;
+        this.testValueByStringGenerator = testValueByStringGenerator;
     }
 
     public String value() {
         return value;
+    }
+
+    public TestValueByStringGenerator testValueGenerator() {
+        return testValueByStringGenerator;
     }
 
     public static JavaType fromValue(String v) {

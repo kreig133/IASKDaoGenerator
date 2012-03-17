@@ -3,7 +3,6 @@ package com.kreig133.daogenerator.gui;
 import com.kreig133.daogenerator.DaoGenerator;
 import com.kreig133.daogenerator.JaxbHandler;
 import com.kreig133.daogenerator.common.Utils;
-import com.kreig133.daogenerator.db.GetOutputParametersFromResultSet;
 import com.kreig133.daogenerator.db.StoreProcedureInfoExtractor;
 import com.kreig133.daogenerator.enums.Type;
 import com.kreig133.daogenerator.jaxb.*;
@@ -80,7 +79,7 @@ public class FirstForm {
                         JOptionPane.showMessageDialog( getInParamsButton, "Введите текст запроса" );
                     }
 
-                    inputParametrs = SqlQueryParser.parseSqlQueryAndParameters( getCurrentDaoMethods() )
+                    inputParametrs = SqlQueryParser.parseSqlQueryAndParameters( getCurrentDaoMethod() )
                                         .getInputParametrs().getParameter();
 
                     final boolean isSelect = getQueryType() == SelectType.SELECT;
@@ -109,7 +108,8 @@ public class FirstForm {
         getOutParamsButton.addActionListener( new ActionListener() {
             @Override
             public void actionPerformed( ActionEvent e ) {
-                final DaoMethod daoMethod  = GetOutputParametersFromResultSet.getOutputParameters( getCurrentDaoMethods() );
+                final DaoMethod daoMethod  = getCurrentDaoMethod().getSelectType().
+                        getOutputParameterExtractor().getOutputParameters( getCurrentDaoMethod() );
 
                 updateOutputParameters( daoMethod.getOutputParametrs().getParameter() );
                 updateInputParameters( daoMethod.getInputParametrs().getParameter() );
@@ -123,7 +123,7 @@ public class FirstForm {
             public void actionPerformed( ActionEvent e ) {
                 if ( fileChooserForXml.showSaveDialog( mainPanel ) == JFileChooser.APPROVE_OPTION ) {
                     final File dirForSave = fileChooserForXml.getSelectedFile();
-                    final DaoMethod currentDaoMethods = getCurrentDaoMethods();
+                    final DaoMethod currentDaoMethods = getCurrentDaoMethod();
 
                     JaxbHandler.marshallInFile(
                             new File(
@@ -154,7 +154,7 @@ public class FirstForm {
         updateTable( inputParametrs, inputParametrsForSP );
     }
 
-    private DaoMethod getCurrentDaoMethods(){
+    private DaoMethod getCurrentDaoMethod(){
         final DaoMethod result = new DaoMethod();
 
         result.setCommon( new CommonType() );

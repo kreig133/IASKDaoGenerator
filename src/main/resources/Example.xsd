@@ -38,8 +38,6 @@
         <xs:restriction base="xs:string">
             <xs:enumeration value="CALL"/>
             <xs:enumeration value="SELECT"/>
-            <xs:enumeration value="GENERATE"/>
-            <xs:enumeration value="GENEROUT"/>
             <xs:enumeration value="INSERT"/>
             <xs:enumeration value="DELETE"/>
             <xs:enumeration value="UPDATE"/>

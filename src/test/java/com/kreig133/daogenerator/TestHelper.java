@@ -17,7 +17,7 @@ public class TestHelper {
         daoMethod.getCommon().setMethodName( "methodName" );
 
         daoMethod.getCommon().setConfiguration( new ConfigurationType () );
-        daoMethod.getCommon().getConfiguration().setType( SelectType.GENEROUT );
+        daoMethod.getCommon().getConfiguration().setType( SelectType.CALL );
 
 
         daoMethod.setInputParametrs( new ParametersType() );

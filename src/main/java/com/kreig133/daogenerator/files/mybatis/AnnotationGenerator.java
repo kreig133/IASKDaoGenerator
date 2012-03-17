@@ -18,7 +18,7 @@ public class AnnotationGenerator {
     public static String generateAnnotation(
         DaoMethod daoMethod
     ){
-        SelectType selectType               = daoMethod.getCommon().getConfiguration().getType();
+        SelectType selectType               = daoMethod.getSelectType();
 
         StringBuilder builder = new StringBuilder();
 
@@ -31,7 +31,7 @@ public class AnnotationGenerator {
         ) );
 
         insertTabs( builder, 1 ).append( ")\n" );
-        if( daoMethod.getCommon().getConfiguration().getType() == SelectType.CALL ) {
+        if( daoMethod.getSelectType() == SelectType.CALL ) {
             insertTabs( builder, 1 ).append( "@Options(statementType=StatementType.CALLABLE)\n" );
         }
 

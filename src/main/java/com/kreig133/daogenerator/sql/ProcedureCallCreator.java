@@ -8,7 +8,6 @@ import com.kreig133.daogenerator.jaxb.SelectType;
 
 import static com.kreig133.daogenerator.common.StringBuilderUtils.insertEscapedParamName;
 import static com.kreig133.daogenerator.common.StringBuilderUtils.iterateForParameterList;
-import static com.kreig133.daogenerator.sql.SqlUtils.getTestValue;
 
 /**
  * @author eshangareev
@@ -43,13 +42,13 @@ public class ProcedureCallCreator {
                     new FunctionalObjectWithoutFilter() {
                         @Override
                         public void writeString( StringBuilder builder, ParameterType p ) {
-                            insertParameterName( builder, p ).append( getTestValue( p ) );
+                            insertParameterName( builder, p ).append( p.getType().testValueGenerator().getTestValue( p ) );
                         }
                     }:
                     new FunctionalObjectWithoutFilter() {
                         @Override
                         public void writeString( StringBuilder builder, ParameterType p ) {
-                            final SelectType type = daoMethod.getCommon().getConfiguration().getType();
+                            final SelectType type = daoMethod.getSelectType();
                             insertEscapedParamName(
                                     insertParameterName( builder, p ),
                                     p,

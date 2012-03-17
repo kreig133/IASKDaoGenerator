@@ -10,7 +10,7 @@ import com.kreig133.daogenerator.sql.wrappers.GeneroutGenerator;
  */
 public class SqlQueryCreator {
     public static String createQueries( DaoMethod daoMethod, boolean forTest) {
-        switch ( daoMethod.getCommon().getConfiguration().getType() ){
+        switch ( daoMethod.getSelectType() ){
             case CALL:
                 return ProcedureCallCreator.generateProcedureCall( daoMethod, forTest );
 //            case GENERATE:

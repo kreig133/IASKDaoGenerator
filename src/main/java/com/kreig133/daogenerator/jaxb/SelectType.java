@@ -8,6 +8,10 @@
 
 package com.kreig133.daogenerator.jaxb;
 
+import com.kreig133.daogenerator.db.extractor.OutputParameterExtractor;
+import com.kreig133.daogenerator.db.extractor.QueryOutputParameterExtractor;
+import com.kreig133.daogenerator.db.extractor.SpOutputParameterExtractor;
+
 import javax.xml.bind.annotation.XmlEnum;
 import javax.xml.bind.annotation.XmlType;
 
@@ -36,22 +40,27 @@ import javax.xml.bind.annotation.XmlType;
 @XmlEnum
 public enum SelectType {
 
-    CALL    ("Select"),
-    SELECT  ("Select"),
-    GENERATE("Select"),
-    GENEROUT("Select"),
-    INSERT  ("Insert"),
-    DELETE  ("Delete"),
-    UPDATE  ("Update");
+    CALL    ("Select", new SpOutputParameterExtractor   () ),
+    SELECT  ("Select", new QueryOutputParameterExtractor() ),
+    INSERT  ("Insert", null ),
+    DELETE  ("Delete", null ),
+    UPDATE  ("Update", null );
 
     private final String annotation;
+
+    private final OutputParameterExtractor outputParameterExtractor;
 
     public String getAnnotation() {
         return annotation;
     }
 
-    SelectType( String annotation ) {
+    public OutputParameterExtractor getOutputParameterExtractor() {
+        return outputParameterExtractor;
+    }
+
+    SelectType( String annotation, OutputParameterExtractor extractor ) {
         this.annotation = annotation;
+        this.outputParameterExtractor = extractor;
     }
 
     public static SelectType getByName( String name ){
@@ -65,12 +74,12 @@ public enum SelectType {
         return null;
     }
 
-    public static boolean isQuery( SelectType selectType ){
+    public boolean isQuery(  ){
         return
-                selectType == SELECT ||
-                        selectType == INSERT ||
-                        selectType == DELETE ||
-                        selectType == UPDATE;
+                this == SELECT ||
+                this == INSERT ||
+                this == DELETE ||
+                this == UPDATE;
     }
 
 }

@@ -50,6 +50,11 @@ public class DaoMethod {
     protected ParametersType inputParametrs;
     protected ParametersType outputParametrs;
 
+
+    public SelectType getSelectType(){
+        return common.getConfiguration().getType();
+    }
+
     /**
      * Gets the value of the common property.
      * 
