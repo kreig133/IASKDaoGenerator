@@ -44,12 +44,17 @@ public class FirstForm {
     private JEditorPane queryTextArea;
     private JTextField methodNameFieldSelectTab;
     private JTextArea commentTextAreaSelectTab;
+    private JTabbedPane tabbedPane1;
+    private JPanel developer;
+    private JButton generateWikiButton;
     private JFrame windowWithSPText;
     private static final int SP_TAB_INDEX = 0;
 
     private final JFileChooser fileChooserForXml = GuiUtils.getFileChooser();
     
     public FirstForm() {
+
+        developer.add( MainForm.getInstance() );
 
         queryTextArea.setContentType( "text/sql" );
 
