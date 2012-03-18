@@ -22,7 +22,7 @@ public class UtilsTest{
     
     @Test
     public void testCheckToNeedOwnInClass(){
-        DaoGenerator.getCurrentOperationSettings().setType( Type.DEPO );
+        DaoGenerator.settings().setType( Type.DEPO );
 
         final DaoMethod daoMethod = new DaoMethod();
         daoMethod.setInputParametrs( new ParametersType() );
@@ -30,7 +30,7 @@ public class UtilsTest{
         
         Assert.assertFalse( InOutClassGenerator.checkToNeedOwnInClass( daoMethod ) );
 
-        DaoGenerator.getCurrentOperationSettings().setType( Type.IASK );
+        DaoGenerator.settings().setType( Type.IASK );
 
         Assert.assertFalse( InOutClassGenerator.checkToNeedOwnInClass( daoMethod ) );
 
@@ -38,7 +38,7 @@ public class UtilsTest{
 
         Assert.assertTrue( InOutClassGenerator.checkToNeedOwnInClass( daoMethod ) );
 
-        DaoGenerator.getCurrentOperationSettings().setType( Type.DEPO );
+        DaoGenerator.settings().setType( Type.DEPO );
 
         Assert.assertFalse( InOutClassGenerator.checkToNeedOwnInClass( daoMethod ) );
 

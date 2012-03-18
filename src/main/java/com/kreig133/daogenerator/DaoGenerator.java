@@ -17,7 +17,6 @@ import com.kreig133.daogenerator.settings.PropertiesFileController;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.List;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.FilenameFilter;
@@ -36,7 +35,7 @@ public class DaoGenerator {
 
     private static OperationSettings operationSettings = new OperationSettingsImpl();
 
-    public static OperationSettings getCurrentOperationSettings(){
+    public static OperationSettings settings(){
         return operationSettings;
     }
 
@@ -47,6 +46,7 @@ public class DaoGenerator {
         public void appendStringToFile( File file, String string ) {
             FileOutputStream writer = null;
             try {
+
                 writer = new FileOutputStream( file, false );
                 writer.write( string.getBytes() );
             } catch ( IOException e ) {
@@ -57,7 +57,7 @@ public class DaoGenerator {
                     try {
                         writer.close();
                     } catch ( IOException e ) {
-                        e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+                        e.printStackTrace();  //TODO
                     }
             }
         }
@@ -65,7 +65,7 @@ public class DaoGenerator {
 
     public static void doAction() {
 
-        final OperationSettings opSettings = DaoGenerator.getCurrentOperationSettings();
+        final OperationSettings opSettings = DaoGenerator.settings();
 
         saveProperties();
 
@@ -77,13 +77,15 @@ public class DaoGenerator {
 
         try {
             writeFiles();
+            MavenProjectGenerator.generate();
         } catch ( IOException e ) {
             throw new RuntimeException( e );
         }
+
     }
 
     public static String[] getXmlFileNamesInDirectory( ) {
-        return ( new File( DaoGenerator.getCurrentOperationSettings() .getSourcePath() ) )
+        return ( new File( DaoGenerator.settings() .getSourcePath() ) )
                 .list(
                         new FilenameFilter() {
                             public boolean accept( File dir, String name ) {
@@ -99,7 +101,7 @@ public class DaoGenerator {
 
         generators.add( MappingGenerator.instance() );
 
-        if ( DaoGenerator.getCurrentOperationSettings().getType() == Type.IASK ) {
+        if ( DaoGenerator.settings().getType() == Type.IASK ) {
             generators.add( InterfaceGenerator.instance() );
             generators.add( ImplementationGenerator.instance() );
         }
@@ -130,7 +132,7 @@ public class DaoGenerator {
     protected static void saveProperties() {
         Properties properties = new Properties();
 
-        final OperationSettings operationSettings = DaoGenerator.getCurrentOperationSettings();
+        final OperationSettings operationSettings = DaoGenerator.settings();
 
         properties.setProperty( IASK                , String.valueOf( operationSettings.getType() == Type.IASK ) );
         properties.setProperty( DEPO                , String.valueOf( operationSettings.getType() == Type.DEPO ) );

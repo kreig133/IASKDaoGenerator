@@ -29,10 +29,10 @@ public class JDBCConnector {
             e.printStackTrace();
         }
 
-        FileInputStream props = null;
+        FileInputStream props;
 
         try {
-            props = new FileInputStream( DaoGenerator.getCurrentOperationSettings().getType().pathToProperty() );
+            props = new FileInputStream( DaoGenerator.settings().getType().pathToProperty() );
             properties.load( props );
             props.close();
         } catch ( IOException e ) {

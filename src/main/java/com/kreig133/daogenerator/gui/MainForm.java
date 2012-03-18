@@ -110,7 +110,7 @@ public class MainForm {
     }
 
     private void fillSettingsWithData() {
-        OperationSettings operationSettings = DaoGenerator.getCurrentOperationSettings();
+        OperationSettings operationSettings = DaoGenerator.settings();
 
         operationSettings.setOutputPath     ( destDirTextField              .getText    () );
         operationSettings.setSourcePath     ( sourceDirTextField            .getText    () );

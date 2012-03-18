@@ -6,7 +6,6 @@ import com.kreig133.daogenerator.enums.ClassType;
 import com.kreig133.daogenerator.enums.Type;
 import com.kreig133.daogenerator.jaxb.DaoMethod;
 import com.kreig133.daogenerator.jaxb.InOutType;
-import com.kreig133.daogenerator.jaxb.JavaType;
 import com.kreig133.daogenerator.jaxb.ParameterType;
 
 import java.io.File;
@@ -37,9 +36,9 @@ public class InOutClassGenerator extends JavaClassGenerator{
     @Override
     public File getFile() throws IOException {
         File file = new File(
-                DaoGenerator.getCurrentOperationSettings().getOutputPath() +
+                DaoGenerator.settings().getPathForGeneratedSource() +
                         "/" +
-                        replacePointBySlash( DaoGenerator.getCurrentOperationSettings().getEntityPackage() ) +
+                        replacePointBySlash( DaoGenerator.settings().getEntityPackage() ) +
                         "/" +
                         convertNameForClassNaming( this.name ) + JAVA_EXTENSION);
 
@@ -51,7 +50,7 @@ public class InOutClassGenerator extends JavaClassGenerator{
     @Override
     public void generateHead() throws IOException {
 
-        insertPackageLine( DaoGenerator.getCurrentOperationSettings().getEntityPackage() );
+        insertPackageLine( DaoGenerator.settings().getEntityPackage() );
 
         insertImport( "java.io.Serializable" );
         insertImport( "java.util.*" );
@@ -176,7 +175,7 @@ public class InOutClassGenerator extends JavaClassGenerator{
     ) {
         final List<ParameterType> parameters = daoMethod.getInputParametrs().getParameter();
 
-        final Type type = DaoGenerator.getCurrentOperationSettings().getType();
+        final Type type = DaoGenerator.settings().getType();
 
         //TODO магические цифры, да и вообще вынести отсюда например, в тот же Parametrs
         return  ( parameters.size() > 3 && type == Type.DEPO ) ||

@@ -2,9 +2,6 @@ package com.kreig133.daogenerator.common.settings;
 
 import com.kreig133.daogenerator.enums.Type;
 
-import java.io.File;
-import java.util.Map;
-
 /**
  * @author eshangareev
  * @version 1.0
@@ -19,6 +16,8 @@ public interface OperationSettings {
     void setOperationName(String operationName );
 
     String getOutputPath();
+    
+    String getPathForGeneratedSource();
 
     void setOutputPath( String outputPath );
 
@@ -38,4 +37,7 @@ public interface OperationSettings {
 
     void setSourcePath( String path );
 
+    String getPathForGeneratedTests();
+
+    String getPathForTestResources();
 }

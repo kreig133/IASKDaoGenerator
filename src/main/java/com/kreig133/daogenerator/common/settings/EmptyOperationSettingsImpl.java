@@ -2,9 +2,6 @@ package com.kreig133.daogenerator.common.settings;
 
 import com.kreig133.daogenerator.enums.Type;
 
-import java.io.File;
-import java.util.Map;
-
 /**
  * @author eshangareev
  * @version 1.0
@@ -12,6 +9,11 @@ import java.util.Map;
 public class EmptyOperationSettingsImpl implements OperationSettings{
     @Override
     public Type getType() {
+        return null;
+    }
+
+    @Override
+    public String getPathForGeneratedSource() {
         return null;
     }
 
@@ -65,4 +67,14 @@ public class EmptyOperationSettingsImpl implements OperationSettings{
 
     @Override
     public void setSourcePath( String path ) {}
+
+    @Override
+    public String getPathForGeneratedTests() {
+        return null;
+    }
+
+    @Override
+    public String getPathForTestResources() {
+        return null;
+    }
 }

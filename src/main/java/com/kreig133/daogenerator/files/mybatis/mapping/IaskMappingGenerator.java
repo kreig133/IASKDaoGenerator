@@ -37,7 +37,7 @@ public class IaskMappingGenerator extends MappingGenerator{
         builder.append( "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" );
         builder.append( "<!DOCTYPE mapper PUBLIC \"-//mybatis.org//DTD Mapper 3.0//EN\" \"http://mybatis" +
                 ".org/dtd/mybatis-3-mapper.dtd\">\n" );
-        builder.append( "<mapper namespace=\"" ).append( DaoGenerator.getCurrentOperationSettings().getDaoPackage() )
+        builder.append( "<mapper namespace=\"" ).append( DaoGenerator.settings().getDaoPackage() )
                 .append( "." ).append( InterfaceGenerator.interfaceFileName() ).append( "\">\n" );
     }
 
@@ -47,7 +47,7 @@ public class IaskMappingGenerator extends MappingGenerator{
         final List<ParameterType> inputParameterList  = daoMethod.getInputParametrs ().getParameter();
         final List<ParameterType> outputParameterList = daoMethod.getOutputParametrs().getParameter();
         final String name                         = daoMethod.getCommon().getMethodName();
-        final String package_                     = DaoGenerator.getCurrentOperationSettings().getEntityPackage();
+        final String package_                     = DaoGenerator.settings().getEntityPackage();
 
         StringBuilder builder = new StringBuilder();
         insertTabs( builder, 1 ).append( "<" ) .append( daoMethod.getSelectType().getAnnotation()

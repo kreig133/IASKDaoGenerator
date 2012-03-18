@@ -4,7 +4,6 @@ import com.kreig133.daogenerator.DaoGenerator;
 import com.kreig133.daogenerator.enums.ClassType;
 import com.kreig133.daogenerator.enums.MethodType;
 import com.kreig133.daogenerator.files.DaoJavaClassGenerator;
-import com.kreig133.daogenerator.files.JavaClassGenerator;
 import com.kreig133.daogenerator.jaxb.DaoMethod;
 
 import java.io.File;
@@ -54,13 +53,13 @@ public class InterfaceGenerator extends DaoJavaClassGenerator {
     }
 
     public static String interfaceFileName() {
-        return DaoGenerator.getCurrentOperationSettings().getOperationName() + "Dao";
+        return DaoGenerator.settings().getOperationName() + "Dao";
     }
 
     protected static File daoFile( String fileName ) throws IOException {
         File file = new File(
-                DaoGenerator.getCurrentOperationSettings().getOutputPath() + "/" +
-                        replacePointBySlash( DaoGenerator.getCurrentOperationSettings().getDaoPackage() ) + "/" +
+                DaoGenerator.settings().getPathForGeneratedSource() + "/" +
+                        replacePointBySlash( DaoGenerator.settings().getDaoPackage() ) + "/" +
                         fileName + JAVA_EXTENSION );
 
         createDirsAndFile( file.getParentFile() );

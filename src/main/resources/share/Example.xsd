@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           targetNamespace="com.aplana.dao-generator"
+           xmlns:this="com.aplana.dao-generator"
+           elementFormDefault="qualified"
+           attributeFormDefault="unqualified">
+
+    <xs:element name="daoMethod" id="daoMethod">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element type="this:commonType"       name="common"/>
+                <xs:element type="this:parametersType"   name="inputParametrs"  minOccurs="0" maxOccurs="1"/>
+                <xs:element type="this:parametersType"   name="outputParametrs" minOccurs="0" maxOccurs="1"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:complexType name="commonType">
+        <xs:sequence>
+            <xs:element type="this:configurationType" name="configuration"/>
+            <xs:element type="xs:string"              name="methodName" minOccurs="0" maxOccurs="1"/>
+            <xs:element type="xs:string"              name="comment"    minOccurs="0" maxOccurs="1"/>
+            <xs:element type="xs:string"              name="query"      minOccurs="0" maxOccurs="1"/>
+            <xs:element type="xs:string"              name="spName"     minOccurs="0" maxOccurs="1"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="configurationType">
+        <xs:simpleContent>
+            <xs:extension base="xs:string">
+                <xs:attribute type="this:selectType"  name="type"            use="required"/>
+                <xs:attribute type="xs:boolean"       name="multipleResult"  use="optional" default="true"/>
+            </xs:extension>
+        </xs:simpleContent>
+    </xs:complexType>
+
+    <xs:simpleType name="selectType">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="CALL"/>
+            <xs:enumeration value="SELECT"/>
+            <xs:enumeration value="INSERT"/>
+            <xs:enumeration value="DELETE"/>
+            <xs:enumeration value="UPDATE"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:complexType name="parametersType">
+        <xs:sequence>
+            <xs:element type="this:parameterType" name="parameter" maxOccurs="unbounded" minOccurs="1"/>
+        </xs:sequence>
+    </xs:complexType>
+
+
+    <xs:complexType name="parameterType">
+        <xs:simpleContent>
+            <xs:extension base="xs:string">
+                <xs:attribute type="xs:string"      name="name"          use="required"/>
+                <xs:attribute type="this:javaType"  name="type"          use="required"/>
+                <xs:attribute type="this:inOutType" name="inOut"         use="optional"/>
+                <xs:attribute type="xs:string"      name="defaultValue"  use="optional"/>
+                <xs:attribute type="xs:string"      name="testValue"     use="optional"/>
+                <xs:attribute type="xs:string"      name="renameTo"      use="optional"/>
+                <xs:attribute type="xs:string"      name="sqlType"       use="optional"/>
+                <xs:attribute type="xs:string"      name="comment"       use="optional"/>
+                <xs:attribute type="xs:string"      name="jdbcType"      use="optional"/>
+            </xs:extension>
+        </xs:simpleContent>
+    </xs:complexType>
+
+    <xs:simpleType name="inOutType">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="IN"/>
+            <xs:enumeration value="OUT"/>
+            <xs:enumeration value="INOUT"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:simpleType name="javaType">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="Long"/>
+            <xs:enumeration value="String"/>
+            <xs:enumeration value="Date"/>
+            <xs:enumeration value="Double"/>
+            <xs:enumeration value="Byte"/>
+        </xs:restriction>
+    </xs:simpleType>
+</xs:schema>

@@ -2,9 +2,6 @@ package com.kreig133.daogenerator.common.settings;
 
 import com.kreig133.daogenerator.enums.Type;
 
-import java.io.File;
-import java.util.Map;
-
 /**
  * @author eshangareev
  * @version 1.0
@@ -27,6 +24,21 @@ public class OperationSettingsImpl implements OperationSettings{
     @Override
     public String getOutputPath() {
         return OUTPUT_PATH;
+    }
+
+    @Override
+    public String getPathForGeneratedSource() {
+        return OUTPUT_PATH + "\\src\\main\\java";
+    }
+
+    @Override
+    public String getPathForGeneratedTests() {
+        return OUTPUT_PATH + "\\src\\test\\java";
+    }
+
+    @Override
+    public String getPathForTestResources() {
+        return OUTPUT_PATH + "\\src\\test\\resources";
     }
 
     @Override

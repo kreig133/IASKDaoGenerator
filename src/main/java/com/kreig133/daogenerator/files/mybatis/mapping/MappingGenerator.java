@@ -2,10 +2,7 @@ package com.kreig133.daogenerator.files.mybatis.mapping;
 
 import com.kreig133.daogenerator.DaoGenerator;
 import com.kreig133.daogenerator.enums.Type;
-import com.kreig133.daogenerator.files.Appender;
 import com.kreig133.daogenerator.files.DaoJavaClassGenerator;
-import com.kreig133.daogenerator.files.JavaClassGenerator;
-import com.kreig133.daogenerator.jaxb.DaoMethod;
 
 import java.io.File;
 import java.io.IOException;
@@ -20,7 +17,7 @@ public abstract class MappingGenerator extends DaoJavaClassGenerator{
 
     public static MappingGenerator instance (){
         if ( INSTANCE == null ) {
-            INSTANCE = DaoGenerator.getCurrentOperationSettings().getType() == Type.IASK ?
+            INSTANCE = DaoGenerator.settings().getType() == Type.IASK ?
                     new IaskMappingGenerator() :  new DepoMappingGenerator();
         }
 
@@ -31,9 +28,9 @@ public abstract class MappingGenerator extends DaoJavaClassGenerator{
     public File getFile() throws IOException {
 
         File file = new File(
-                DaoGenerator.getCurrentOperationSettings().getOutputPath() + "/" +
-                        replacePointBySlash( DaoGenerator.getCurrentOperationSettings().getMapperPackage() ) + "/"
-                        + DaoGenerator.getCurrentOperationSettings().getOperationName() + getFileNameEnding()
+                DaoGenerator.settings().getPathForGeneratedSource() + "/" +
+                        replacePointBySlash( DaoGenerator.settings().getMapperPackage() ) + "/"
+                        + DaoGenerator.settings().getOperationName() + getFileNameEnding()
 
                  );
 

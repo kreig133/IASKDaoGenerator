@@ -19,7 +19,7 @@ import static com.kreig133.daogenerator.common.Utils.stringNotEmpty;
  */
 public class DepoMappingGenerator extends MappingGenerator{
 
-    public static final String MAPPER_PREFIX = "Mapper";
+    public static final String MAPPER_PREFIX = "Dao";
 
     @Override
     public void generateBody( DaoMethod daoMethod ) throws IOException{
@@ -41,7 +41,7 @@ public class DepoMappingGenerator extends MappingGenerator{
     @Override
     public void generateHead() throws IOException {
 
-        insertPackageLine( DaoGenerator.getCurrentOperationSettings().getMapperPackage() );
+        insertPackageLine( DaoGenerator.settings().getMapperPackage() );
         daoFilesImports();
 
         insertImport( "org.apache.ibatis.annotations.*" );
@@ -50,7 +50,7 @@ public class DepoMappingGenerator extends MappingGenerator{
         //TODO блок комментариев
         insertClassDeclaration(
                 ClassType.Interface,
-                DaoGenerator.getCurrentOperationSettings().getOperationName()+MAPPER_PREFIX,
+                DaoGenerator.settings().getOperationName()+MAPPER_PREFIX,
                 null,
                 null
         );

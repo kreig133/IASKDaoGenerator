@@ -15,7 +15,7 @@ public class ControllerTest {
 
     @BeforeClass
     public static void before(){
-        DaoGenerator.getCurrentOperationSettings().setSourcePath( "xml" );
+        DaoGenerator.settings().setSourcePath( "xml" );
     }
 
     @Test

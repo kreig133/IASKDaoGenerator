@@ -9,14 +9,14 @@ import com.kreig133.daogenerator.DaoGenerator;
 abstract public class DaoJavaClassGenerator extends JavaClassGenerator{
 
     protected void startingLinesOfDaoFiles() {
-        insertPackageLine( DaoGenerator.getCurrentOperationSettings().getDaoPackage() );
+        insertPackageLine( DaoGenerator.settings().getDaoPackage() );
         daoFilesImports();
     }
 
     protected void daoFilesImports() {
         builder.append( "\n" );
         insertImport( "java.util.*" );
-        insertImport( DaoGenerator.getCurrentOperationSettings().getEntityPackage() + ".*" );
+        insertImport( DaoGenerator.settings().getEntityPackage() + ".*" );
     }
 
 }

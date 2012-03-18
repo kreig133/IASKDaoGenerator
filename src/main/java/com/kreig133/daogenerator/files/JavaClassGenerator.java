@@ -82,7 +82,7 @@ abstract public class JavaClassGenerator {
                     @Override
                     public void writeString( StringBuilder builder, ParameterType p ) {
                         if (
-                                DaoGenerator.getCurrentOperationSettings().getType()
+                                DaoGenerator.settings().getType()
                                         ==
                                         Type.DEPO && methodType == MethodType.MAPPER
                                 ) {
@@ -90,7 +90,7 @@ abstract public class JavaClassGenerator {
                         }
                         builder.append( p.getType().value() ).append( " " )
                                 .append(
-                                        DaoGenerator.getCurrentOperationSettings().getType() == Type.DEPO ?
+                                        DaoGenerator.settings().getType() == Type.DEPO ?
                                                 p.getRenameTo()
                                                 : "request"
                                 );
