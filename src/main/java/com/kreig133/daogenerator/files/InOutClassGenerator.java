@@ -87,7 +87,6 @@ public class InOutClassGenerator extends JavaClassGenerator{
         }
 
         writeToString();
-        builder.append( "}" );
 
         generated = true;
     }

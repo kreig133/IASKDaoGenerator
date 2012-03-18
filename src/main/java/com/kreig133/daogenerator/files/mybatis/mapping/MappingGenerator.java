@@ -44,4 +44,5 @@ public abstract class MappingGenerator extends DaoJavaClassGenerator{
 
     abstract protected String getFileNameEnding();
 
+
 }

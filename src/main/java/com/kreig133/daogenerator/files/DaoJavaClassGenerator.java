@@ -10,6 +10,10 @@ abstract public class DaoJavaClassGenerator extends JavaClassGenerator{
 
     protected void startingLinesOfDaoFiles() {
         insertPackageLine( DaoGenerator.getCurrentOperationSettings().getDaoPackage() );
+        daoFilesImports();
+    }
+
+    protected void daoFilesImports() {
         builder.append( "\n" );
         insertImport( "java.util.*" );
         insertImport( DaoGenerator.getCurrentOperationSettings().getEntityPackage() + ".*" );

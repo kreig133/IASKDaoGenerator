@@ -40,6 +40,10 @@ abstract public class JavaClassGenerator {
         return builder.toString();
     }
 
+    protected void insertLine() {
+        builder.append( "\n" );
+    }
+
     public static String generateMethodSignature(
             final DaoMethod daoMethod,
             final MethodType methodType
@@ -176,7 +180,7 @@ abstract public class JavaClassGenerator {
         for ( String comment : commentsLine ) {
             builder.append( "\t * " );
             builder.append( comment );
-            builder.append( "\n" );
+            insertLine();
         }
         builder.append( "\t */\n" );
 
