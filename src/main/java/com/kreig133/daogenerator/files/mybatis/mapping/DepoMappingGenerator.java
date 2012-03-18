@@ -45,11 +45,12 @@ public class DepoMappingGenerator extends MappingGenerator{
         daoFilesImports();
 
         insertImport( "org.apache.ibatis.annotations.*" );
+        insertImport( "org.apache.ibatis.mapping.StatementType" );
         insertLine();
         //TODO блок комментариев
         insertClassDeclaration(
                 ClassType.Interface,
-                getFile().getName(),
+                DaoGenerator.getCurrentOperationSettings().getOperationName()+MAPPER_PREFIX,
                 null,
                 null
         );
