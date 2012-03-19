@@ -57,7 +57,7 @@ public class DaoGenerator {
                     try {
                         writer.close();
                     } catch ( IOException e ) {
-                        e.printStackTrace();  //TODO
+                        e.printStackTrace();
                     }
             }
         }

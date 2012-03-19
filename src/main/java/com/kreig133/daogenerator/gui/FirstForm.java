@@ -12,11 +12,15 @@ import jsyntaxpane.DefaultSyntaxKit;
 
 import javax.swing.*;
 import javax.swing.table.AbstractTableModel;
+import javax.swing.text.BadLocationException;
+import javax.swing.text.Document;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.IOException;
+import java.io.OutputStream;
+import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -46,12 +50,15 @@ public class FirstForm {
     private JTabbedPane tabbedPane1;
     private JPanel developer;
     private JButton generateWikiButton;
+    private JTextPane log;
     private JFrame windowWithSPText;
     private static final int SP_TAB_INDEX = 0;
 
     private final JFileChooser fileChooserForXml = GuiUtils.getFileChooser();
     
     public FirstForm() {
+        redirectOutAndErrOutputToGui();
+
         final JPanel instance = MainForm.getInstance();
         instance.setSize( new Dimension( 800, 600 ) );
         developer.add( instance );
@@ -147,6 +154,28 @@ public class FirstForm {
         } );
     }
 
+    private void redirectOutAndErrOutputToGui() {
+        OutputStream out = new OutputStream() {
+            @Override
+            public void write(final int b) throws IOException {
+                updateTextPane(String.valueOf((char) b));
+            }
+
+            @Override
+            public void write(byte[] b, int off, int len) throws IOException {
+                updateTextPane(new String(b, off, len));
+            }
+
+            @Override
+            public void write(byte[] b) throws IOException {
+                write(b, 0, b.length);
+            }
+        };
+
+        System.setOut(new PrintStream(out, true));
+        System.setErr(new PrintStream(out, true));
+    }
+
     private void updateOutputParameters( List<ParameterType> inputParametrsForSP ) {
         updateTable( outputParametrs, inputParametrsForSP );
     }
@@ -233,6 +262,20 @@ public class FirstForm {
     private void createUIComponents() {
         inputParametrs  = new JTable( new ParametrsModel() );
         outputParametrs = new JTable( new ParametrsModel() );
+    }
+
+    private void updateTextPane(final String text) {
+        SwingUtilities.invokeLater( new Runnable() {
+            public void run() {
+                Document doc = log.getDocument();
+                try {
+                    doc.insertString( doc.getLength(), text, null );
+                } catch ( BadLocationException e ) {
+                    throw new RuntimeException( e );
+                }
+                log.setCaretPosition( doc.getLength() - 1 );
+            }
+        } );
     }
 
     public static void main( String[] args ) {
@@ -357,4 +400,3 @@ class ParametrsModel extends AbstractTableModel {
         return true;
     }
 }
-
