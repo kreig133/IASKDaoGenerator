@@ -8,11 +8,16 @@ import java.io.File;
  * @version 1.0
  */
 public class GuiUtils {
-    public static JFileChooser getFileChooser(){
-        final JFileChooser jFileChooser = new JFileChooser();
+
+    private static final JFileChooser jFileChooser = new JFileChooser();
+
+    static {
         jFileChooser.setMultiSelectionEnabled( false );
         jFileChooser.setCurrentDirectory( new File( System.getProperty( "user.home" ) ) );
         jFileChooser.setFileSelectionMode( JFileChooser.DIRECTORIES_ONLY );
+    }
+
+    public static JFileChooser getFileChooser(){
         return jFileChooser;
     }
 }

@@ -2,6 +2,7 @@ package com.kreig133.daogenerator.gui;
 
 import com.kreig133.daogenerator.DaoGenerator;
 import com.kreig133.daogenerator.JaxbHandler;
+import com.kreig133.daogenerator.WikiGenerator;
 import com.kreig133.daogenerator.common.Utils;
 import com.kreig133.daogenerator.db.StoreProcedureInfoExtractor;
 import com.kreig133.daogenerator.enums.Type;
@@ -15,6 +16,7 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -129,6 +131,17 @@ public class FirstForm {
                             ),
                             currentDaoMethods
                     );
+                }
+            }
+        } );
+
+        generateWikiButton.addActionListener( new ActionListener() {
+            @Override
+            public void actionPerformed( ActionEvent e ) {
+                try {
+                    WikiGenerator.main( null );
+                } catch ( IOException e1 ) {
+                    e1.printStackTrace(); //TODO
                 }
             }
         } );
