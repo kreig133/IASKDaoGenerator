@@ -1,8 +1,8 @@
 package com.kreig133.daogenerator.files;
 
 import com.kreig133.daogenerator.DaoGenerator;
+import com.kreig133.daogenerator.common.FunctionalObjectWithoutFilter;
 import com.kreig133.daogenerator.common.Utils;
-import com.kreig133.daogenerator.common.strategy.FunctionalObjectWithoutFilter;
 import com.kreig133.daogenerator.enums.ClassType;
 import com.kreig133.daogenerator.enums.MethodType;
 import com.kreig133.daogenerator.enums.Type;

@@ -1,8 +1,8 @@
 package com.kreig133.daogenerator;
 
 import com.kreig133.daogenerator.common.Utils;
-import com.kreig133.daogenerator.common.settings.OperationSettings;
-import com.kreig133.daogenerator.common.settings.OperationSettingsImpl;
+import com.kreig133.daogenerator.settings.OperationSettings;
+import com.kreig133.daogenerator.settings.OperationSettingsImpl;
 import com.kreig133.daogenerator.enums.Type;
 import com.kreig133.daogenerator.files.Appender;
 import com.kreig133.daogenerator.files.InOutClassGenerator;
@@ -10,13 +10,16 @@ import com.kreig133.daogenerator.files.JavaClassGenerator;
 import com.kreig133.daogenerator.files.mybatis.implementation.ImplementationGenerator;
 import com.kreig133.daogenerator.files.mybatis.intrface.InterfaceGenerator;
 import com.kreig133.daogenerator.files.mybatis.mapping.MappingGenerator;
-import com.kreig133.daogenerator.gui.MainForm;
+import com.kreig133.daogenerator.gui.FirstForm;
 import com.kreig133.daogenerator.jaxb.DaoMethod;
 import com.kreig133.daogenerator.jaxb.InOutType;
 import com.kreig133.daogenerator.settings.PropertiesFileController;
+import jsyntaxpane.DefaultSyntaxKit;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.FilenameFilter;
@@ -137,8 +140,8 @@ public class DaoGenerator {
         properties.setProperty( IASK                , String.valueOf( operationSettings.getType() == Type.IASK ) );
         properties.setProperty( DEPO                , String.valueOf( operationSettings.getType() == Type.DEPO ) );
 
-        properties.setProperty( WIDTH               , String.valueOf( ( int ) MainForm.getInstance().getSize().getWidth () ) );
-        properties.setProperty( HEIGHT              , String.valueOf( ( int ) MainForm.getInstance().getSize().getHeight() ) );
+        properties.setProperty( WIDTH               , String.valueOf( ( int ) FirstForm.getInstance().getSize().getWidth () ) );
+        properties.setProperty( HEIGHT              , String.valueOf( ( int ) FirstForm.getInstance().getSize().getHeight() ) );
 
         properties.setProperty( DEST_DIR            , operationSettings.getOutputPath() );
         properties.setProperty( ENTITY_PACKAGE      , operationSettings.getEntityPackage() );
@@ -153,22 +156,30 @@ public class DaoGenerator {
 
     }
 
-    public static void main(String[] args) throws IOException {
-
-        try {
-            UIManager.setLookAndFeel("com.sun.java.swing.plaf.nimbus.NimbusLookAndFeel");
-        } catch ( Exception e ) {
-            e.printStackTrace();
-        }
-
+    public static void main( String[] args ) {
         EventQueue.invokeLater( new Runnable() {
             @Override
             public void run() {
-                JFrame frame = new JFrame( "MainForm" );
-                frame.setContentPane          ( MainForm.getInstance() );
-                frame.setDefaultCloseOperation( JFrame.EXIT_ON_CLOSE );
-                frame.setSize( MainForm.getInstance().getSize() );
-                frame.setVisible(true);
+                try {
+                    DefaultSyntaxKit.initKit();
+                    UIManager.setLookAndFeel("com.sun.java.swing.plaf.nimbus.NimbusLookAndFeel");
+                } catch ( Exception e ) {
+                    e.printStackTrace();
+                }
+                JFrame frame = new JFrame( "DaoGenerator 2.3" );
+                frame.setContentPane( FirstForm.getInstance() );
+                frame.addWindowListener( new WindowAdapter() {
+                    @Override
+                    public void windowClosing( WindowEvent e ) {
+                        try {
+                            saveProperties();
+                        } finally {
+                            System.exit( 0 );
+                        }
+                    }
+                } );
+                frame.pack();
+                frame.setVisible( true );
             }
         } );
     }

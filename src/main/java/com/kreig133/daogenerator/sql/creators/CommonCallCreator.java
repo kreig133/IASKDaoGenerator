@@ -1,9 +1,6 @@
 package com.kreig133.daogenerator.sql.creators;
 
-import com.kreig133.daogenerator.common.strategy.FuctionalObject;
 import com.kreig133.daogenerator.jaxb.ParameterType;
-
-import java.util.List;
 
 /**
  * @author kreig133

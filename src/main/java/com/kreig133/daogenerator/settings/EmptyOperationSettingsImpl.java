@@ -1,4 +1,4 @@
-package com.kreig133.daogenerator.common.settings;
+package com.kreig133.daogenerator.settings;
 
 import com.kreig133.daogenerator.enums.Type;
 

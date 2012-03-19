@@ -1,4 +1,4 @@
-package com.kreig133.daogenerator.common.strategy;
+package com.kreig133.daogenerator.common;
 
 import com.kreig133.daogenerator.jaxb.ParameterType;
 

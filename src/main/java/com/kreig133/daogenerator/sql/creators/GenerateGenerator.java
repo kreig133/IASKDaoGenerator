@@ -1,6 +1,6 @@
 package com.kreig133.daogenerator.sql.creators;
 
-import com.kreig133.daogenerator.common.strategy.FunctionalObjectWithoutFilter;
+import com.kreig133.daogenerator.common.FunctionalObjectWithoutFilter;
 import com.kreig133.daogenerator.jaxb.DaoMethod;
 import com.kreig133.daogenerator.jaxb.ParameterType;
 

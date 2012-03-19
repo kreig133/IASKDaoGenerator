@@ -1,4 +1,4 @@
-package com.kreig133.daogenerator.common.settings;
+package com.kreig133.daogenerator.settings;
 
 import com.kreig133.daogenerator.enums.Type;
 
@@ -76,56 +76,31 @@ public class OperationSettingsImpl implements OperationSettings{
 
     @Override
     public void setOperationName( String operationName ) {
-        if( OPERATION_NAME == null ){
-            OPERATION_NAME = operationName;
-        } else {
-            throw new RuntimeException( "OPERATION_NAME уже установлен!" );
-        }
+        OPERATION_NAME = operationName;
     }
 
     @Override
     public void setOutputPath( String outputPath ) {
-        if( OUTPUT_PATH == null ){
-            OUTPUT_PATH = outputPath;
-        } else {
-            throw new RuntimeException( "OUTPUT_PATH уже установлен!" );
-        }
+        OUTPUT_PATH = outputPath;
     }
 
     @Override
     public void setEntityPackage( String entityPackage ) {
-        if( ENTITY_PACKAGE == null ){
-            ENTITY_PACKAGE = entityPackage;
-        } else {
-            throw new RuntimeException( "ENTITY_PACKAGE уже установлен!" );
-        }
+        ENTITY_PACKAGE = entityPackage;
     }
 
     @Override
     public void setMapperPackage( String mapperPackage ) {
-        if( MAPPER_PACKAGE == null ){
-            MAPPER_PACKAGE = mapperPackage;
-        } else {
-            throw new RuntimeException( "MAPPER_PACKAGE уже установлен!" );
-        }
+        MAPPER_PACKAGE = mapperPackage;
     }
 
     @Override
     public void setDaoPackage( String daoPackage ) {
-        if( DAO_PACKAGE == null ){
-            DAO_PACKAGE = daoPackage;
-        } else {
-            throw new RuntimeException( "DAO_PACKAGE уже установлен!" );
-        }
+        DAO_PACKAGE = daoPackage;
     }
-
 
     @Override
     public void setSourcePath( String path ) {
-        if( SOURCE_PATH == null ){
-            SOURCE_PATH = path;
-        } else {
-            throw new RuntimeException( "SOURCE_PATH уже установле!" );
-        }
+        SOURCE_PATH = path;
     }
 }

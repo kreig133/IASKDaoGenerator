@@ -4,25 +4,32 @@ import com.kreig133.daogenerator.DaoGenerator;
 import com.kreig133.daogenerator.JaxbHandler;
 import com.kreig133.daogenerator.WikiGenerator;
 import com.kreig133.daogenerator.common.Utils;
+import com.kreig133.daogenerator.settings.OperationSettings;
 import com.kreig133.daogenerator.db.StoreProcedureInfoExtractor;
 import com.kreig133.daogenerator.enums.Type;
 import com.kreig133.daogenerator.jaxb.*;
 import com.kreig133.daogenerator.sql.SqlQueryParser;
-import jsyntaxpane.DefaultSyntaxKit;
 
 import javax.swing.*;
-import javax.swing.table.AbstractTableModel;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.Document;
-import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
 import java.io.File;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.PrintStream;
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Properties;
+import java.util.regex.Pattern;
+
+import static com.kreig133.daogenerator.settings.PropertiesFileController.getDefaultProperties;
+import static com.kreig133.daogenerator.settings.PropertiesFileController.getPropertiesFromSourceDir;
+import static com.kreig133.daogenerator.settings.SettingName.*;
+import static com.kreig133.daogenerator.settings.SettingName.HEIGHT;
+import static com.kreig133.daogenerator.settings.SettingName.SOURCE_DIR;
 
 /**
  * @author eshangareev
@@ -51,24 +58,42 @@ public class FirstForm {
     private JPanel developer;
     private JButton generateWikiButton;
     private JTextPane log;
+    private JTextField sourceDirTextField;
+    private JButton setSourceDirButton;
+    private JTextField destDirTextField;
+    private JButton setDestDirButton;
+    private JTextField entityPackageTextField;
+    private JTextField interfacePackageTextField;
+    private JTextField mappingPackageTextField;
+    private JButton startButton;
+    private JRadioButton IASKRadioButton;
+    private JRadioButton DEPORadioButton;
     private JFrame windowWithSPText;
     private static final int SP_TAB_INDEX = 0;
 
-    private final JFileChooser fileChooserForXml = GuiUtils.getFileChooser();
+    private boolean start = true;
+
+    private String tempOperationName;
+
+    private final JFileChooser fileChooser = GuiUtils.getFileChooser();
     
     public FirstForm() {
         redirectOutAndErrOutputToGui();
 
-        final JPanel instance = MainForm.getInstance();
-        instance.setSize( new Dimension( 800, 600 ) );
-        developer.add( instance );
+        initializingAnalyticTab();
+        initializingDeveloperTab();
 
+        loadSettingsFromProperties( getDefaultProperties() );
+    }
+
+    private void initializingAnalyticTab() {
         queryTextArea.setContentType( "text/sql" );
 
         getInParamsButton.addActionListener( new ActionListener() {
             @Override
             public void actionPerformed( ActionEvent e ) {
                 List<ParameterType> inputParametrs;
+
                 if ( tabbedPane.getSelectedIndex() == SP_TAB_INDEX ) {
                     if ( checkSPName() ) return;
 
@@ -99,7 +124,7 @@ public class FirstForm {
             }
 
         } );
-        
+
         SPTextButton.addActionListener( new ActionListener() {
             @Override
             public void actionPerformed( ActionEvent e ) {
@@ -127,8 +152,8 @@ public class FirstForm {
         generateXMLButton.addActionListener( new ActionListener() {
             @Override
             public void actionPerformed( ActionEvent e ) {
-                if ( fileChooserForXml.showSaveDialog( mainPanel ) == JFileChooser.APPROVE_OPTION ) {
-                    final File dirForSave = fileChooserForXml.getSelectedFile();
+                if ( fileChooser.showSaveDialog( mainPanel ) == JFileChooser.APPROVE_OPTION ) {
+                    final File dirForSave = fileChooser.getSelectedFile();
                     final DaoMethod currentDaoMethods = getCurrentDaoMethod();
 
                     JaxbHandler.marshallInFile(
@@ -148,8 +173,53 @@ public class FirstForm {
                 try {
                     WikiGenerator.main( null );
                 } catch ( IOException e1 ) {
-                    e1.printStackTrace(); //TODO
+                    e1.printStackTrace();
                 }
+            }
+        } );
+    }
+
+    private void initializingDeveloperTab() {
+
+        setSourceDirButton.addActionListener( new ActionListener() {
+            @Override
+            public void actionPerformed( ActionEvent e ) {
+                setSourcePath();
+            }
+        } );
+
+        setDestDirButton.addActionListener( new ActionListener() {
+            @Override
+            public void actionPerformed( ActionEvent e ) {
+                setOutputPath();
+            }
+        } );
+
+        startButton.addActionListener( new ActionListener() {
+            @Override
+            public void actionPerformed( ActionEvent e ) {
+                if( validateBeforeStartGenerateJavaClasses() ){
+                    fillSettingsWithData();
+                    mainPanel.setVisible( false );
+                    DaoGenerator.doAction();
+                }
+            }
+        } );
+
+        sourceDirTextField.addActionListener( new ActionListener() {
+            @Override
+            public void actionPerformed( ActionEvent e ) {
+                reloadProperties();
+            }
+        } );
+
+        sourceDirTextField.addFocusListener( new FocusListener() {
+            @Override
+            public void focusGained( FocusEvent e ) { /* do nothing */ }
+
+            @Override
+            public void focusLost( FocusEvent e ) {
+                reloadProperties();
             }
         } );
     }
@@ -173,7 +243,7 @@ public class FirstForm {
         };
 
         System.setOut(new PrintStream(out, true));
-        System.setErr(new PrintStream(out, true));
+        System.setErr( new PrintStream( out, true ) );
     }
 
     private void updateOutputParameters( List<ParameterType> inputParametrsForSP ) {
@@ -278,24 +348,92 @@ public class FirstForm {
         } );
     }
 
-    public static void main( String[] args ) {
-        DaoGenerator.settings().setType( Type.DEPO );
-        EventQueue.invokeLater( new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    DefaultSyntaxKit.initKit();
-                    UIManager.setLookAndFeel("com.sun.java.swing.plaf.nimbus.NimbusLookAndFeel");
-                } catch ( Exception e ) {
-                    e.printStackTrace();
-                }
-                JFrame frame = new JFrame( "DaoGenerator 2.3" );
-                frame.setContentPane( FirstForm.getInstance() );
-                frame.setDefaultCloseOperation( JFrame.EXIT_ON_CLOSE );
-                frame.setSize( 800, 600 );
-                frame.setVisible( true );
-            }
-        } );
+
+    private void reloadProperties() {
+        loadSettingsFromProperties( getPropertiesFromSourceDir( sourceDirTextField.getText() ) );
+    }
+
+    private void loadSettingsFromProperties( Properties settings ) {
+        if ( settings == null ) {
+            return;
+        }
+
+        IASKRadioButton             .setSelected( Boolean.parseBoolean( settings.getProperty( IASK,         "1" ) ) );
+        DEPORadioButton             .setSelected( Boolean.parseBoolean( settings.getProperty( DEPO,         "0" ) ) );
+
+        destDirTextField            .setText( settings.getProperty( DEST_DIR, "D:\\" ) );
+        entityPackageTextField      .setText( settings.getProperty( ENTITY_PACKAGE, "ru.sbrf.aplana.entity" ) );
+        interfacePackageTextField   .setText( settings.getProperty( INTERFACE_PACKAGE, "ru.sbrf.aplana.dao" ) );
+        mappingPackageTextField     .setText( settings.getProperty( MAPPING_PACKAGE, "ru.sbrf.aplana.data" ) );
+
+        if( start ){
+            mainPanel.setSize(
+                    Integer.parseInt( settings.getProperty( WIDTH, "1200" ) ) ,
+                    Integer.parseInt( settings.getProperty( HEIGHT, "800" ) )
+            );
+            sourceDirTextField          .setText( settings.getProperty( SOURCE_DIR          , "D:\\") );
+            start = false;
+        }
+    }
+
+    private void fillSettingsWithData() {
+        OperationSettings operationSettings = DaoGenerator.settings();
+
+        operationSettings.setOutputPath     ( destDirTextField              .getText    () );
+        operationSettings.setSourcePath     ( sourceDirTextField            .getText    () );
+        operationSettings.setDaoPackage     ( interfacePackageTextField     .getText    () );
+        operationSettings.setEntityPackage  ( entityPackageTextField        .getText    () );
+        operationSettings.setMapperPackage  ( mappingPackageTextField       .getText    () );
+        operationSettings.setOperationName  ( tempOperationName == null ?
+                new File( sourceDirTextField.getText()).getName() : tempOperationName );
+
+        operationSettings.setType( IASKRadioButton.isSelected() ? Type.IASK : Type.DEPO );
+    }
+
+    private boolean validateBeforeStartGenerateJavaClasses() {
+        if (
+                (   IASKRadioButton.isSelected() &&   DEPORadioButton.isSelected() )  ||
+                ( ! IASKRadioButton.isSelected() && ! DEPORadioButton.isSelected() )
+        ){
+            JOptionPane.showMessageDialog( mainPanel, "Выберите один (!) тип проекта." );
+            return false;
+        }
+
+        if(
+                ( ! isPackageName( interfacePackageTextField.getText() ) ) ||
+                ( ! isPackageName( entityPackageTextField   .getText() ) ) ||
+                ( ! isPackageName( mappingPackageTextField  .getText() ) )
+        ){
+            JOptionPane.showMessageDialog( mainPanel, "Одно или несколкьо имен пакетов не прошло валидацию." );
+            return false;
+        }
+
+        //TODO надо бы проверить пути
+
+        return true;
+    }
+
+    private boolean isPackageName( String packageName ){
+        return Pattern.compile( "[\\w\\d]+(\\.[\\w\\d]+)+" ).matcher( packageName ).matches();
+    }
+
+    private void setOutputPath() {
+        int returnVal = fileChooser.showSaveDialog( null );
+
+        if (returnVal == JFileChooser.APPROVE_OPTION) {
+            File file = fileChooser.getSelectedFile();
+            destDirTextField.setText( file.getAbsolutePath() );
+        }
+    }
+
+
+    private void setSourcePath() {
+        if ( fileChooser.showOpenDialog( mainPanel ) == JFileChooser.APPROVE_OPTION ) {
+            File file           = fileChooser.getSelectedFile();
+            tempOperationName   = file.getName();
+            sourceDirTextField.setText( file.getAbsolutePath() );
+            reloadProperties();
+        }
     }
 
     public static JPanel getInstance(){
@@ -304,99 +442,5 @@ public class FirstForm {
         }
 
         return INSTANCE.mainPanel;
-    }
-}
-
-class ParametrsModel extends AbstractTableModel {
-
-    static String[] columnsName = {
-            "№", "Название", "Тип", "SQL-тип", "IN/OUT", "По умолчанию",
-             "Для теста", "Переименовать в", "JDBC-тип", "Комментарий"
-    };
-
-    List<ParameterType> parameterTypes = new ArrayList<ParameterType>();
-
-    public List<ParameterType> getParameterTypes() {
-        return parameterTypes;
-    }
-
-    @Override
-    public int getRowCount() {
-        return parameterTypes.size();
-    }
-
-    @Override
-    public int getColumnCount() {
-        return columnsName.length;
-    }
-
-    @Override
-    public String getColumnName( int column ) {
-        return columnsName[ column ];
-    }
-
-    @Override
-    public Object getValueAt( int rowIndex, int columnIndex ) {
-        switch ( columnIndex ) {
-            case 0:
-                return rowIndex + 1;
-            case 1:
-                return parameterTypes.get( rowIndex ).getName();
-            case 2:
-                return parameterTypes.get( rowIndex ).getType().value();
-            case 3:
-                return parameterTypes.get( rowIndex ).getSqlType();
-            case 4:
-                return parameterTypes.get( rowIndex ).getInOut();
-            case 5:
-                return parameterTypes.get( rowIndex ).getDefaultValue();
-            case 6:
-                return parameterTypes.get( rowIndex ).getTestValue();
-            case 7:
-                return parameterTypes.get( rowIndex ).getRenameTo();
-            case 8:
-                return parameterTypes.get( rowIndex ).getJdbcType();
-            case 9:
-                return parameterTypes.get( rowIndex ).getComment();
-            default:
-                throw new RuntimeException( "Ошибка при работе с таблицей" );
-        }
-    }
-
-    @Override
-    public void setValueAt( Object aValue, int rowIndex, int columnIndex ) {
-        switch ( columnIndex ) {
-            case 1:
-                parameterTypes.get( rowIndex ).setName( ( String ) aValue );
-                break;
-            case 2:
-//                parameterTypes.get( rowIndex ).setType();
-                break;
-            case 3:
-                parameterTypes.get( rowIndex ).setSqlType( ( String ) aValue );
-                break;
-            case 4:
-//                parameterTypes.get( rowIndex ).getInOut();
-                break;
-            case 5:
-                parameterTypes.get( rowIndex ).setDefaultValue( ( String ) aValue );
-                break;
-            case 6:
-                parameterTypes.get( rowIndex ).setTestValue( ( String ) aValue );
-                break;
-            case 7:
-                parameterTypes.get( rowIndex ).setRenameTo( ( String ) aValue );
-                break;
-            case 8:
-                break;
-            case 9:
-                parameterTypes.get( rowIndex ).setComment( ( String ) aValue );
-                break;
-        }
-    }
-
-    @Override
-    public boolean isCellEditable( int rowIndex, int columnIndex ) {
-        return true;
     }
 }
