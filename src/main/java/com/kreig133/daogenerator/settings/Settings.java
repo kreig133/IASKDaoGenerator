@@ -72,8 +72,8 @@ public class Settings {
         );
 
         settings().setDaoPackage   ( properties.getProperty( INTERFACE_PACKAGE, settings().getDaoPackage   () ) );
-        settings().setEntityPackage( properties.getProperty( ENTITY_PACKAGE, settings().getEntityPackage() ) );
-        settings().setMapperPackage( properties.getProperty( MAPPING_PACKAGE, settings().getMapperPackage() ) );
+        settings().setEntityPackage( properties.getProperty( ENTITY_PACKAGE,    settings().getEntityPackage() ) );
+        settings().setMapperPackage( properties.getProperty( MAPPING_PACKAGE,   settings().getMapperPackage() ) );
         settings().setOutputPathForJavaClasses(
                 properties.getProperty( DEST_DIR, settings().getOutputPathForJavaClasses() )
         );

@@ -1,12 +1,23 @@
 package com.kreig133.daogenerator.settings;
 
+import com.kreig133.daogenerator.common.SourcePathChangeListener;
+import com.kreig133.daogenerator.common.TypeChangeListener;
 import com.kreig133.daogenerator.enums.Type;
+
+import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Properties;
 
 /**
  * @author eshangareev
  * @version 1.0
  */
 public class OperationSettingsImpl implements OperationSettings{
+
+    private List<TypeChangeListener> typeChangelisteners = new ArrayList<TypeChangeListener>();
+    private List<SourcePathChangeListener> sourcePathChangeListeners = new ArrayList<SourcePathChangeListener>();
+
     private Type TYPE;
 
     private String OPERATION_NAME = "defaultOperationName";
@@ -44,6 +55,11 @@ public class OperationSettingsImpl implements OperationSettings{
     }
 
     @Override
+    public void addTypeChangeListener( TypeChangeListener listener ) {
+        typeChangelisteners.add( listener );
+    }
+
+    @Override
     public String getOperationName() {
         return OPERATION_NAME;
     }
@@ -73,7 +89,13 @@ public class OperationSettingsImpl implements OperationSettings{
 
     @Override
     public void setType( Type type ) {
-        this.TYPE = type;
+        if( TYPE != type ){
+            this.TYPE = type;
+
+            for ( TypeChangeListener listener : typeChangelisteners ) {
+                listener.typeChanged();
+            }
+        }
     }
 
     @Override
@@ -123,6 +145,25 @@ public class OperationSettingsImpl implements OperationSettings{
 
     @Override
     public void setSourcePath( String path ) {
-        SOURCE_PATH = path;
+        if ( ! SOURCE_PATH.equals( path ) ) {
+
+            SOURCE_PATH = path;
+
+            final Properties propertiesFromSourceDir =
+                    PropertiesFileController.getPropertiesFromSourceDir( SOURCE_PATH );
+
+            if ( propertiesFromSourceDir != null ) {
+                Settings.loadSettingsFromProperties( propertiesFromSourceDir );
+            }
+
+            for ( SourcePathChangeListener sourcePathChangeListener : sourcePathChangeListeners ) {
+                sourcePathChangeListener.sourcePathChanged();
+            }
+        }
+    }
+
+    @Override
+    public void addSourcePathChangeListener( SourcePathChangeListener listener ) {
+        sourcePathChangeListeners.add( listener );
     }
 }

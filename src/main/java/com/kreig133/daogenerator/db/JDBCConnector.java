@@ -1,6 +1,7 @@
 package com.kreig133.daogenerator.db;
 
 import com.kreig133.daogenerator.DaoGenerator;
+import com.kreig133.daogenerator.common.TypeChangeListener;
 import com.kreig133.daogenerator.settings.Settings;
 
 import java.io.FileInputStream;
@@ -14,13 +15,13 @@ import static com.kreig133.daogenerator.settings.Settings.*;
  * @author eshangareev
  * @version 1.0
  */
-public class JDBCConnector {
+public class JDBCConnector implements TypeChangeListener{
 
-    private static final Properties properties = new Properties();
+    private final Properties properties = new Properties();
 
-    private static Connection connection = null;
+    private Connection connection = null;
 
-    public static Connection connectToDB() {
+    public Connection connectToDB() {
 
         try {
             if ( connection != null && !connection.isClosed() ) {
@@ -53,5 +54,20 @@ public class JDBCConnector {
         }
 
         return connection;
+    }
+
+    private static JDBCConnector INSTANCE;
+
+    public static JDBCConnector instance(){
+        if ( INSTANCE == null ) {
+            INSTANCE = new JDBCConnector();
+            Settings.settings().addTypeChangeListener( INSTANCE );
+        }
+        return INSTANCE;
+    }
+
+    @Override
+    public void typeChanged() {
+        connection = null;
     }
 }

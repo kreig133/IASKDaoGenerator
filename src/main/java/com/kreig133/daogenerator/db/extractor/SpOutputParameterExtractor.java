@@ -20,7 +20,7 @@ public class SpOutputParameterExtractor extends OutputParameterExtractor{
 
         assert query != null;
 
-        final Connection connection = JDBCConnector.connectToDB();
+        final Connection connection = JDBCConnector.instance().connectToDB();
         final CallableStatement callableStatement = connection.prepareCall( query );
         connection.createStatement().execute( "SET NOCOUNT ON;" );
         ResultSet resultSet = null;

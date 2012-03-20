@@ -1,5 +1,7 @@
 package com.kreig133.daogenerator.settings;
 
+import com.kreig133.daogenerator.common.SourcePathChangeListener;
+import com.kreig133.daogenerator.common.TypeChangeListener;
 import com.kreig133.daogenerator.enums.Type;
 
 /**
@@ -48,4 +50,8 @@ public interface OperationSettings {
     String getPathForGeneratedTests();
 
     String getPathForTestResources();
+
+    void addTypeChangeListener( TypeChangeListener listener );
+
+    void addSourcePathChangeListener( SourcePathChangeListener listener );
 }

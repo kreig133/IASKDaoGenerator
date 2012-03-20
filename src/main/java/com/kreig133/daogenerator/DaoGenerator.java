@@ -1,8 +1,8 @@
 package com.kreig133.daogenerator;
 
 import com.kreig133.daogenerator.common.Utils;
+import com.kreig133.daogenerator.gui.Form;
 import com.kreig133.daogenerator.settings.OperationSettings;
-import com.kreig133.daogenerator.settings.OperationSettingsImpl;
 import com.kreig133.daogenerator.enums.Type;
 import com.kreig133.daogenerator.files.Appender;
 import com.kreig133.daogenerator.files.InOutClassGenerator;
@@ -10,7 +10,6 @@ import com.kreig133.daogenerator.files.JavaClassGenerator;
 import com.kreig133.daogenerator.files.mybatis.implementation.ImplementationGenerator;
 import com.kreig133.daogenerator.files.mybatis.intrface.InterfaceGenerator;
 import com.kreig133.daogenerator.files.mybatis.mapping.MappingGenerator;
-import com.kreig133.daogenerator.gui.FirstForm;
 import com.kreig133.daogenerator.jaxb.DaoMethod;
 import com.kreig133.daogenerator.jaxb.InOutType;
 import com.kreig133.daogenerator.settings.PropertiesFileController;
@@ -30,7 +29,6 @@ import java.io.IOException;
 import java.util.*;
 
 import static com.kreig133.daogenerator.settings.Settings.*;
-import static com.kreig133.daogenerator.settings.Settings.MAPPING_PACKAGE;
 import static com.kreig133.daogenerator.settings.Settings.SOURCE_DIR;
 
 /**
@@ -131,11 +129,18 @@ public class DaoGenerator {
 
     public static void main( String[] args ) {
         final Properties defaultProperties = PropertiesFileController.getDefaultProperties();
-        final String property = defaultProperties.getProperty( SOURCE_DIR, "" );
-        if( "".equals( property ) ){
 
-        }
         Settings.loadSettingsFromProperties( defaultProperties );
+
+        final String property = defaultProperties.getProperty( SOURCE_DIR, "" );
+
+        if( ! "".equals( property ) ){
+            Settings.settings().setSourcePath( property );
+            final Properties propertiesFromSourceDir = PropertiesFileController.getPropertiesFromSourceDir( property );
+            if( propertiesFromSourceDir != null ){
+                Settings.loadSettingsFromProperties( propertiesFromSourceDir );
+            }
+        }
 
         EventQueue.invokeLater( new Runnable() {
             @Override
@@ -149,7 +154,7 @@ public class DaoGenerator {
                 final JFrame frame = new JFrame( "DaoGenerator 2.3" );
 
 
-                frame.setContentPane( FirstForm.getInstance() );
+                frame.setContentPane( Form.getInstance() );
                 frame.setSize( settings().getFrameWidth(), settings().getFrameHeight() );
 
                 frame.addComponentListener( new ComponentAdapter() {

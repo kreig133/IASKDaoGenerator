@@ -24,7 +24,7 @@ public class QueryOutputParameterExtractor extends OutputParameterExtractor{
 
         assert query != null;
 
-        final PreparedStatement statement = JDBCConnector.connectToDB().prepareStatement( query );
+        final PreparedStatement statement = JDBCConnector.instance().connectToDB().prepareStatement( query );
 
         List<String> names = SqlQueryParser.getListOfParametrNames( daoMethod.getCommon().getQuery() );
 

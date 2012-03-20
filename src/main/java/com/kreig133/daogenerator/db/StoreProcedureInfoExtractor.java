@@ -33,7 +33,7 @@ public class StoreProcedureInfoExtractor {
         final List<ParameterType> result = new ArrayList<ParameterType>();
 
         try {
-            final Connection connection = JDBCConnector.connectToDB();
+            final Connection connection = JDBCConnector.instance().connectToDB();
             final PreparedStatement preparedStatement = connection.prepareStatement( GET_INPUT_PARAMETRS_QUERY );
 
             preparedStatement.setString( 1, spName );
@@ -104,7 +104,7 @@ public class StoreProcedureInfoExtractor {
 
 
     protected static void getSPText( String spName ){
-        final Connection connection = JDBCConnector.connectToDB();
+        final Connection connection = JDBCConnector.instance().connectToDB();
 
         try {
             final CallableStatement callableStatement = connection.prepareCall( GET_SP_TEXT );

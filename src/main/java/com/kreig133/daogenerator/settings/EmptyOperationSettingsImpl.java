@@ -1,5 +1,7 @@
 package com.kreig133.daogenerator.settings;
 
+import com.kreig133.daogenerator.common.SourcePathChangeListener;
+import com.kreig133.daogenerator.common.TypeChangeListener;
 import com.kreig133.daogenerator.enums.Type;
 
 /**
@@ -93,4 +95,10 @@ public class EmptyOperationSettingsImpl implements OperationSettings{
     public String getPathForTestResources() {
         return null;
     }
+
+    @Override
+    public void addTypeChangeListener( TypeChangeListener listener ) { }
+
+    @Override
+    public void addSourcePathChangeListener( SourcePathChangeListener listener ) { }
 }
