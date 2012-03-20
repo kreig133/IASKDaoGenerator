@@ -1,5 +1,7 @@
 package com.kreig133.daogenerator;
 
+import com.kreig133.daogenerator.settings.Settings;
+
 import java.io.*;
 
 /**
@@ -19,14 +21,14 @@ public class MavenProjectGenerator {
     private static void copyAppContextConfigToMavenProject() throws IOException {
         copyFile(
                 MavenProjectGenerator.class.getClassLoader().getResourceAsStream( "testApplicationContext.xml" ),
-                new File( DaoGenerator.settings().getPathForTestResources() + "/testApplicationContext.xml" )
+                new File( Settings.settings().getPathForTestResources() + "/testApplicationContext.xml" )
         );
     }
 
     private static void copyPomFileToMavenProject() throws IOException {
         copyFile(
                 MavenProjectGenerator.class.getClassLoader().getResourceAsStream( "pom.xml" ),
-                new File( DaoGenerator.settings().getOutputPathForJavaClasses() + "/pom.xml" )
+                new File( Settings.settings().getOutputPathForJavaClasses() + "/pom.xml" )
         );
     }
 
@@ -34,7 +36,7 @@ public class MavenProjectGenerator {
         final InputStream resourceAsStream = MavenProjectGenerator.class.getClassLoader().
                 getResourceAsStream( "depo/application.properties" );// TODO
 
-        final File propertiesOut = new File( DaoGenerator.settings().getPathForTestResources() + "/application.properties" );
+        final File propertiesOut = new File( Settings.settings().getPathForTestResources() + "/application.properties" );
         copyFile( resourceAsStream, propertiesOut );
     }
 

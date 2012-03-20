@@ -16,7 +16,7 @@ import java.util.Properties;
 public class PropertiesFileController {
 
     private static final String COMMENTS = "Settings for DaoGenerator";
-    private static final String CREATE_FILE_MESSAGE = "Создать файл" + SettingName.PROPERTIES_FILE_NAME + "в папке \"%s\"?";
+    private static final String CREATE_FILE_MESSAGE = "Создать файл" + Settings.PROPERTIES_FILE_NAME + "в папке \"%s\"?";
 
     public static Properties getDefaultProperties() {
         try{
@@ -27,13 +27,13 @@ public class PropertiesFileController {
 
             settings.load( in );
 
-            final String sourceDir = settings.getProperty( SettingName.SOURCE_DIR );
+            final String sourceDir = settings.getProperty( Settings.SOURCE_DIR );
             //Пытаемся считать настройки из папки SOURCE_DIR
             if( sourceDir != null && !"".equals( sourceDir ) ){
                 final Properties propertiesFromSourceDir = getPropertiesFromSourceDir( sourceDir );
                 if( propertiesFromSourceDir != null ){
                     settings = propertiesFromSourceDir;
-                    settings.setProperty( SettingName.SOURCE_DIR, sourceDir );
+                    settings.setProperty( Settings.SOURCE_DIR, sourceDir );
                 }
             }
 
@@ -44,7 +44,7 @@ public class PropertiesFileController {
     }
 
     private static File getDefaultPropertiesFile() {
-        return new File( "properties/" + SettingName.PROPERTIES_FILE_NAME );
+        return new File( "properties/" + Settings.PROPERTIES_FILE_NAME );
     }
 
     public static Properties getPropertiesFromSourceDir( String sourceDirPath ) {
@@ -70,7 +70,7 @@ public class PropertiesFileController {
     private static File getSpecificPropertiesFile( String sourceDirPath, boolean createIfNotExist ) {
 
         final File fileFromDirectoryByName =
-                Utils.getFileFromDirectoryByName( sourceDirPath, SettingName.PROPERTIES_FILE_NAME );
+                Utils.getFileFromDirectoryByName( sourceDirPath, Settings.PROPERTIES_FILE_NAME );
         if ( ! fileFromDirectoryByName.exists() ) {
             if ( createIfNotExist ) {
                 try {

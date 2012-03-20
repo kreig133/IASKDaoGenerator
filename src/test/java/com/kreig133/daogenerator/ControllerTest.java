@@ -1,6 +1,7 @@
 package com.kreig133.daogenerator;
 
 import com.kreig133.daogenerator.jaxb.*;
+import com.kreig133.daogenerator.settings.Settings;
 import junit.framework.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -15,7 +16,7 @@ public class ControllerTest {
 
     @BeforeClass
     public static void before(){
-        DaoGenerator.settings().setSourcePath( "xml" );
+        Settings.settings().setSourcePath( "xml" );
     }
 
     @Test

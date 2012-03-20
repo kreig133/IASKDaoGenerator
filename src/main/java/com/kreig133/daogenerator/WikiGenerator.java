@@ -1,6 +1,7 @@
 package com.kreig133.daogenerator;
 
 import com.kreig133.daogenerator.gui.GuiUtils;
+import com.kreig133.daogenerator.settings.Settings;
 
 import javax.swing.*;
 import java.io.IOException;
@@ -13,16 +14,16 @@ public class WikiGenerator {
     public static void main( String[] args ) throws IOException {
         final JFileChooser fileChooser = GuiUtils.getFileChooser();
         if( fileChooser.showOpenDialog( null ) == JFileChooser.APPROVE_OPTION ){
-            DaoGenerator.settings().setSourcePath( fileChooser.getSelectedFile().getAbsolutePath() );
+            Settings.settings().setSourcePath( fileChooser.getSelectedFile().getAbsolutePath() );
             final String[] xmlFileNamesInDirectory = DaoGenerator.getXmlFileNamesInDirectory();
 
 
             for ( String s : xmlFileNamesInDirectory ) {
                 final String[] cmdarray = { "cmd", "/C",
                         "java  -classpath DaoGenerator-2.3.jar org.apache.xalan.xslt.Process " +
-                                "-IN " + DaoGenerator.settings().getSourcePath()+ "\\" + s +
+                                "-IN " + Settings.settings().getSourcePath()+ "\\" + s +
                                 " -XSL XmlToWiki.xsl " +
-                                "-OUT "+DaoGenerator.settings().getSourcePath()+ "\\" + s + ".txt"  };
+                                "-OUT "+ Settings.settings().getSourcePath()+ "\\" + s + ".txt"  };
                 for ( String s1 : cmdarray ) {
                     System.out.println( s1 );
                 }

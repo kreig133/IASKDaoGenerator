@@ -1,9 +1,9 @@
 package com.kreig133.daogenerator.files.mybatis.mapping;
 
-import com.kreig133.daogenerator.DaoGenerator;
 import com.kreig133.daogenerator.files.mybatis.intrface.InterfaceGenerator;
 import com.kreig133.daogenerator.jaxb.DaoMethod;
 import com.kreig133.daogenerator.jaxb.ParameterType;
+import com.kreig133.daogenerator.settings.Settings;
 import com.kreig133.daogenerator.sql.creators.QueryCreator;
 
 import java.io.IOException;
@@ -37,7 +37,7 @@ public class IaskMappingGenerator extends MappingGenerator{
         builder.append( "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" );
         builder.append( "<!DOCTYPE mapper PUBLIC \"-//mybatis.org//DTD Mapper 3.0//EN\" \"http://mybatis" +
                 ".org/dtd/mybatis-3-mapper.dtd\">\n" );
-        builder.append( "<mapper namespace=\"" ).append( DaoGenerator.settings().getDaoPackage() )
+        builder.append( "<mapper namespace=\"" ).append( Settings.settings().getDaoPackage() )
                 .append( "." ).append( InterfaceGenerator.interfaceFileName() ).append( "\">\n" );
     }
 
@@ -47,7 +47,7 @@ public class IaskMappingGenerator extends MappingGenerator{
         final List<ParameterType> inputParameterList  = daoMethod.getInputParametrs ().getParameter();
         final List<ParameterType> outputParameterList = daoMethod.getOutputParametrs().getParameter();
         final String name                         = daoMethod.getCommon().getMethodName();
-        final String package_                     = DaoGenerator.settings().getEntityPackage();
+        final String package_                     = Settings.settings().getEntityPackage();
 
         StringBuilder builder = new StringBuilder();
         insertTabs( builder, 1 ).append( "<" ) .append( daoMethod.getSelectType().getAnnotation()

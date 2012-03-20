@@ -1,10 +1,10 @@
 package com.kreig133.daogenerator.files.mybatis.mapping;
 
-import com.kreig133.daogenerator.DaoGenerator;
 import com.kreig133.daogenerator.enums.ClassType;
 import com.kreig133.daogenerator.enums.MethodType;
 import com.kreig133.daogenerator.jaxb.DaoMethod;
 import com.kreig133.daogenerator.jaxb.SelectType;
+import com.kreig133.daogenerator.settings.Settings;
 import com.kreig133.daogenerator.sql.creators.QueryCreator;
 
 import java.io.IOException;
@@ -41,7 +41,7 @@ public class DepoMappingGenerator extends MappingGenerator{
     @Override
     public void generateHead() throws IOException {
 
-        insertPackageLine( DaoGenerator.settings().getMapperPackage() );
+        insertPackageLine( Settings.settings().getMapperPackage() );
         daoFilesImports();
 
         insertImport( "org.apache.ibatis.annotations.*" );
@@ -50,7 +50,7 @@ public class DepoMappingGenerator extends MappingGenerator{
         //TODO блок комментариев
         insertClassDeclaration(
                 ClassType.Interface,
-                DaoGenerator.settings().getOperationName()+MAPPER_PREFIX,
+                Settings.settings().getOperationName()+MAPPER_PREFIX,
                 null,
                 null
         );

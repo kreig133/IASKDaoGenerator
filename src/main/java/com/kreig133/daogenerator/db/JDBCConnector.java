@@ -1,13 +1,14 @@
 package com.kreig133.daogenerator.db;
 
 import com.kreig133.daogenerator.DaoGenerator;
+import com.kreig133.daogenerator.settings.Settings;
 
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.sql.*;
 import java.util.Properties;
 
-import static com.kreig133.daogenerator.settings.SettingName.*;
+import static com.kreig133.daogenerator.settings.Settings.*;
 
 /**
  * @author eshangareev
@@ -32,7 +33,7 @@ public class JDBCConnector {
         FileInputStream props;
 
         try {
-            props = new FileInputStream( DaoGenerator.settings().getType().pathToProperty() );
+            props = new FileInputStream( Settings.settings().getType().pathToProperty() );
             properties.load( props );
             props.close();
         } catch ( IOException e ) {

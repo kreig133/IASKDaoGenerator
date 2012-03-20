@@ -1,19 +1,20 @@
 package com.kreig133.daogenerator.files;
 
-import com.kreig133.daogenerator.DaoGenerator;
 import com.kreig133.daogenerator.common.FunctionalObjectWithoutFilter;
 import com.kreig133.daogenerator.enums.ClassType;
 import com.kreig133.daogenerator.enums.Type;
 import com.kreig133.daogenerator.jaxb.DaoMethod;
 import com.kreig133.daogenerator.jaxb.InOutType;
 import com.kreig133.daogenerator.jaxb.ParameterType;
+import com.kreig133.daogenerator.settings.Settings;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.kreig133.daogenerator.common.Utils.*;
+import static com.kreig133.daogenerator.common.Utils.insertTabs;
+import static com.kreig133.daogenerator.common.Utils.iterateForParameterList;
 
 /**
  * @author eshangareev
@@ -36,9 +37,9 @@ public class InOutClassGenerator extends JavaClassGenerator{
     @Override
     public File getFile() throws IOException {
         File file = new File(
-                DaoGenerator.settings().getPathForGeneratedSource() +
+                Settings.settings().getPathForGeneratedSource() +
                         "/" +
-                        replacePointBySlash( DaoGenerator.settings().getEntityPackage() ) +
+                        replacePointBySlash( Settings.settings().getEntityPackage() ) +
                         "/" +
                         convertNameForClassNaming( this.name ) + JAVA_EXTENSION);
 
@@ -50,7 +51,7 @@ public class InOutClassGenerator extends JavaClassGenerator{
     @Override
     public void generateHead() throws IOException {
 
-        insertPackageLine( DaoGenerator.settings().getEntityPackage() );
+        insertPackageLine( Settings.settings().getEntityPackage() );
 
         insertImport( "java.io.Serializable" );
         insertImport( "java.util.*" );
@@ -175,7 +176,7 @@ public class InOutClassGenerator extends JavaClassGenerator{
     ) {
         final List<ParameterType> parameters = daoMethod.getInputParametrs().getParameter();
 
-        final Type type = DaoGenerator.settings().getType();
+        final Type type = Settings.settings().getType();
 
         //TODO магические цифры, да и вообще вынести отсюда например, в тот же Parametrs
         return  ( parameters.size() > 3 && type == Type.DEPO ) ||

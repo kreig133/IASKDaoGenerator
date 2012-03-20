@@ -9,6 +9,7 @@ import com.kreig133.daogenerator.enums.Type;
 import com.kreig133.daogenerator.jaxb.DaoMethod;
 import com.kreig133.daogenerator.jaxb.JavaType;
 import com.kreig133.daogenerator.jaxb.ParameterType;
+import com.kreig133.daogenerator.settings.Settings;
 import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
@@ -82,7 +83,7 @@ abstract public class JavaClassGenerator {
                     @Override
                     public void writeString( StringBuilder builder, ParameterType p ) {
                         if (
-                                DaoGenerator.settings().getType()
+                                Settings.settings().getType()
                                         ==
                                         Type.DEPO && methodType == MethodType.MAPPER
                                 ) {
@@ -90,7 +91,7 @@ abstract public class JavaClassGenerator {
                         }
                         builder.append( p.getType().value() ).append( " " )
                                 .append(
-                                        DaoGenerator.settings().getType() == Type.DEPO ?
+                                        Settings.settings().getType() == Type.DEPO ?
                                                 p.getRenameTo()
                                                 : "request"
                                 );

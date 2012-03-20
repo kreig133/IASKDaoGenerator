@@ -1,6 +1,6 @@
 package com.kreig133.daogenerator.files;
 
-import com.kreig133.daogenerator.DaoGenerator;
+import com.kreig133.daogenerator.settings.Settings;
 
 /**
  * @author kreig133
@@ -9,14 +9,14 @@ import com.kreig133.daogenerator.DaoGenerator;
 abstract public class DaoJavaClassGenerator extends JavaClassGenerator{
 
     protected void startingLinesOfDaoFiles() {
-        insertPackageLine( DaoGenerator.settings().getDaoPackage() );
+        insertPackageLine( Settings.settings().getDaoPackage() );
         daoFilesImports();
     }
 
     protected void daoFilesImports() {
         builder.append( "\n" );
         insertImport( "java.util.*" );
-        insertImport( DaoGenerator.settings().getEntityPackage() + ".*" );
+        insertImport( Settings.settings().getEntityPackage() + ".*" );
     }
 
 }

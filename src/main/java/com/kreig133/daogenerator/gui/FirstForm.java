@@ -8,6 +8,7 @@ import com.kreig133.daogenerator.settings.OperationSettings;
 import com.kreig133.daogenerator.db.StoreProcedureInfoExtractor;
 import com.kreig133.daogenerator.enums.Type;
 import com.kreig133.daogenerator.jaxb.*;
+import com.kreig133.daogenerator.settings.Settings;
 import com.kreig133.daogenerator.sql.SqlQueryParser;
 
 import javax.swing.*;
@@ -22,14 +23,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.io.PrintStream;
 import java.util.List;
-import java.util.Properties;
 import java.util.regex.Pattern;
-
-import static com.kreig133.daogenerator.settings.PropertiesFileController.getDefaultProperties;
-import static com.kreig133.daogenerator.settings.PropertiesFileController.getPropertiesFromSourceDir;
-import static com.kreig133.daogenerator.settings.SettingName.*;
-import static com.kreig133.daogenerator.settings.SettingName.HEIGHT;
-import static com.kreig133.daogenerator.settings.SettingName.SOURCE_DIR;
 
 /**
  * @author eshangareev
@@ -354,22 +348,22 @@ public class FirstForm {
     }
 
     private void loadSettings() {
-        IASKRadioButton.setSelected( DaoGenerator.settings().getType() == Type.IASK );
-        DEPORadioButton.setSelected( DaoGenerator.settings().getType() == Type.DEPO );
+        IASKRadioButton.setSelected( Settings.settings().getType() == Type.IASK );
+        DEPORadioButton.setSelected( Settings.settings().getType() == Type.DEPO );
 
-        destDirTextField.setText( DaoGenerator.settings().getSourcePath() );
-        entityPackageTextField.setText( DaoGenerator.settings().getEntityPackage() );
-        interfacePackageTextField.setText( DaoGenerator.settings().getDaoPackage() );
-        mappingPackageTextField.setText( DaoGenerator.settings().getMapperPackage() );
+        destDirTextField.setText( Settings.settings().getSourcePath() );
+        entityPackageTextField.setText( Settings.settings().getEntityPackage() );
+        interfacePackageTextField.setText( Settings.settings().getDaoPackage() );
+        mappingPackageTextField.setText( Settings.settings().getMapperPackage() );
 
         if ( start ) {
-            sourceDirTextField.setText( DaoGenerator.settings().getSourcePath() );
+            sourceDirTextField.setText( Settings.settings().getSourcePath() );
             start = false;
         }
     }
 
     private void saveSettings() {
-        OperationSettings operationSettings = DaoGenerator.settings();
+        OperationSettings operationSettings = Settings.settings();
 
         operationSettings.setOutputPathForJavaClasses( destDirTextField.getText() );
         operationSettings.setSourcePath     ( sourceDirTextField            .getText    () );

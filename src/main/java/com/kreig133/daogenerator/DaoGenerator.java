@@ -14,6 +14,7 @@ import com.kreig133.daogenerator.gui.FirstForm;
 import com.kreig133.daogenerator.jaxb.DaoMethod;
 import com.kreig133.daogenerator.jaxb.InOutType;
 import com.kreig133.daogenerator.settings.PropertiesFileController;
+import com.kreig133.daogenerator.settings.Settings;
 import jsyntaxpane.DefaultSyntaxKit;
 
 import javax.swing.*;
@@ -28,21 +29,15 @@ import java.io.FilenameFilter;
 import java.io.IOException;
 import java.util.*;
 
-import static com.kreig133.daogenerator.settings.SettingName.*;
-import static com.kreig133.daogenerator.settings.SettingName.MAPPING_PACKAGE;
-import static com.kreig133.daogenerator.settings.SettingName.SOURCE_DIR;
+import static com.kreig133.daogenerator.settings.Settings.*;
+import static com.kreig133.daogenerator.settings.Settings.MAPPING_PACKAGE;
+import static com.kreig133.daogenerator.settings.Settings.SOURCE_DIR;
 
 /**
  * @author eshangareev
  * @version 1.0
  */
 public class DaoGenerator {
-
-    private static OperationSettings operationSettings = new OperationSettingsImpl();
-
-    public static OperationSettings settings(){
-        return operationSettings;
-    }
 
     private static final java.util.List<DaoMethod> daoMethods = new ArrayList<DaoMethod>();
 
@@ -70,9 +65,9 @@ public class DaoGenerator {
 
     public static void doAction() {
 
-        final OperationSettings opSettings = DaoGenerator.settings();
+        final OperationSettings opSettings = Settings.settings();
 
-        saveProperties();
+        Settings.saveProperties();
 
         for( String s : getXmlFileNamesInDirectory() ) {
             daoMethods.add( JaxbHandler.unmarshallFile(
@@ -90,7 +85,7 @@ public class DaoGenerator {
     }
 
     public static String[] getXmlFileNamesInDirectory( ) {
-        return ( new File( DaoGenerator.settings() .getSourcePath() ) )
+        return ( new File( Settings.settings() .getSourcePath() ) )
                 .list(
                         new FilenameFilter() {
                             public boolean accept( File dir, String name ) {
@@ -106,7 +101,7 @@ public class DaoGenerator {
 
         generators.add( MappingGenerator.instance() );
 
-        if ( DaoGenerator.settings().getType() == Type.IASK ) {
+        if ( Settings.settings().getType() == Type.IASK ) {
             generators.add( InterfaceGenerator.instance() );
             generators.add( ImplementationGenerator.instance() );
         }
@@ -134,59 +129,13 @@ public class DaoGenerator {
         }
     }
 
-    protected static void saveProperties() {
-        Properties properties = new Properties();
-
-        final OperationSettings operationSettings = DaoGenerator.settings();
-
-        properties.setProperty( IASK                , String.valueOf( operationSettings.getType() == Type.IASK ) );
-        properties.setProperty( DEPO                , String.valueOf( operationSettings.getType() == Type.DEPO ) );
-
-        properties.setProperty( WIDTH               , String.valueOf( settings().getFrameWidth () ) );
-        properties.setProperty( HEIGHT              , String.valueOf( settings().getFrameHeight() ) );
-
-        properties.setProperty( DEST_DIR            , operationSettings.getOutputPathForJavaClasses() );
-        properties.setProperty( ENTITY_PACKAGE      , operationSettings.getEntityPackage() );
-        properties.setProperty( INTERFACE_PACKAGE   , operationSettings.getDaoPackage() );
-        properties.setProperty( MAPPING_PACKAGE     , operationSettings.getMapperPackage() );
-
-        if ( new File(  settings().getSourcePath()  ).exists() ) {
-            PropertiesFileController.saveSpecificProperties( operationSettings.getSourcePath(), properties );
-        }
-
-        properties.setProperty( SOURCE_DIR          , operationSettings.getSourcePath() );
-
-        PropertiesFileController.saveCommonProperties( properties );
-
-    }
-
-    protected static void loadSettingsFromProperties( Properties properties ){
-
-        settings().setType(
-                Boolean.parseBoolean( properties.getProperty( IASK, "1" ) ) ? Type.IASK : Type.DEPO
-        );
-
-        settings().setDaoPackage   ( properties.getProperty( INTERFACE_PACKAGE, settings().getDaoPackage   () ) );
-        settings().setEntityPackage( properties.getProperty( ENTITY_PACKAGE, settings().getEntityPackage() ) );
-        settings().setMapperPackage( properties.getProperty( MAPPING_PACKAGE, settings().getMapperPackage() ) );
-        settings().setOutputPathForJavaClasses(
-                properties.getProperty( DEST_DIR, settings().getOutputPathForJavaClasses() )
-        );
-        settings().setFrameHeight( 
-                Integer.valueOf( properties.getProperty( HEIGHT, String.valueOf( settings().getFrameHeight() ) ) )
-        );
-        settings().setFrameWidth(
-                Integer.valueOf( properties.getProperty( WIDTH, String.valueOf( settings().getFrameWidth() ) ) )
-        );
-    }
-
     public static void main( String[] args ) {
         final Properties defaultProperties = PropertiesFileController.getDefaultProperties();
         final String property = defaultProperties.getProperty( SOURCE_DIR, "" );
         if( "".equals( property ) ){
 
         }
-        loadSettingsFromProperties( defaultProperties );
+        Settings.loadSettingsFromProperties( defaultProperties );
 
         EventQueue.invokeLater( new Runnable() {
             @Override
@@ -215,7 +164,7 @@ public class DaoGenerator {
                     @Override
                     public void windowClosing( WindowEvent e ) {
                         try {
-                            saveProperties();
+                            Settings.saveProperties();
                         } finally {
                             System.exit( 0 );
                         }

@@ -1,10 +1,10 @@
 package com.kreig133.daogenerator.files.mybatis.implementation;
 
-import com.kreig133.daogenerator.DaoGenerator;
 import com.kreig133.daogenerator.enums.ClassType;
 import com.kreig133.daogenerator.enums.MethodType;
 import com.kreig133.daogenerator.files.mybatis.intrface.InterfaceGenerator;
 import com.kreig133.daogenerator.jaxb.DaoMethod;
+import com.kreig133.daogenerator.settings.Settings;
 
 import java.io.File;
 import java.io.IOException;
@@ -28,7 +28,7 @@ public class ImplementationGenerator extends InterfaceGenerator{
     }
 
     protected String implementationFileName() {
-        return DaoGenerator.settings().getOperationName() + "DaoImpl";
+        return Settings.settings().getOperationName() + "DaoImpl";
     }
 
     @Override
@@ -91,7 +91,7 @@ public class ImplementationGenerator extends InterfaceGenerator{
             builder.append( "One" );
         }
 
-        builder.append( "(\"" ).append( DaoGenerator.settings().getDaoPackage() ).append( "." )
+        builder.append( "(\"" ).append( Settings.settings().getDaoPackage() ).append( "." )
                 .append( interfaceFileName() ).append( "." )
                 .append( daoMethod.getCommon().getMethodName() ).append( "\" ").append( "," );
         if( ! daoMethod.getInputParametrs().getParameter().isEmpty() ){
