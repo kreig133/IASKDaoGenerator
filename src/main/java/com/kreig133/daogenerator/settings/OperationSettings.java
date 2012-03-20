@@ -15,11 +15,19 @@ public interface OperationSettings {
 
     void setOperationName(String operationName );
 
-    String getOutputPath();
+    String getOutputPathForJavaClasses();
     
     String getPathForGeneratedSource();
 
-    void setOutputPath( String outputPath );
+    void setOutputPathForJavaClasses( String outputPath );
+    
+    int getFrameWidth();
+
+    void setFrameWidth( int frameWidth );
+
+    int getFrameHeight();
+
+    void setFrameHeight( int frameHeight );
 
     String getEntityPackage();
 

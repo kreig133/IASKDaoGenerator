@@ -18,6 +18,8 @@ import jsyntaxpane.DefaultSyntaxKit;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.File;
@@ -140,15 +142,17 @@ public class DaoGenerator {
         properties.setProperty( IASK                , String.valueOf( operationSettings.getType() == Type.IASK ) );
         properties.setProperty( DEPO                , String.valueOf( operationSettings.getType() == Type.DEPO ) );
 
-        properties.setProperty( WIDTH               , String.valueOf( ( int ) FirstForm.getInstance().getSize().getWidth () ) );
-        properties.setProperty( HEIGHT              , String.valueOf( ( int ) FirstForm.getInstance().getSize().getHeight() ) );
+        properties.setProperty( WIDTH               , String.valueOf( settings().getFrameWidth () ) );
+        properties.setProperty( HEIGHT              , String.valueOf( settings().getFrameHeight() ) );
 
-        properties.setProperty( DEST_DIR            , operationSettings.getOutputPath() );
+        properties.setProperty( DEST_DIR            , operationSettings.getOutputPathForJavaClasses() );
         properties.setProperty( ENTITY_PACKAGE      , operationSettings.getEntityPackage() );
         properties.setProperty( INTERFACE_PACKAGE   , operationSettings.getDaoPackage() );
         properties.setProperty( MAPPING_PACKAGE     , operationSettings.getMapperPackage() );
 
-        PropertiesFileController.saveSpecificProperties( operationSettings.getSourcePath(), properties );
+        if ( new File(  settings().getSourcePath()  ).exists() ) {
+            PropertiesFileController.saveSpecificProperties( operationSettings.getSourcePath(), properties );
+        }
 
         properties.setProperty( SOURCE_DIR          , operationSettings.getSourcePath() );
 
@@ -156,7 +160,34 @@ public class DaoGenerator {
 
     }
 
+    protected static void loadSettingsFromProperties( Properties properties ){
+
+        settings().setType(
+                Boolean.parseBoolean( properties.getProperty( IASK, "1" ) ) ? Type.IASK : Type.DEPO
+        );
+
+        settings().setDaoPackage   ( properties.getProperty( INTERFACE_PACKAGE, settings().getDaoPackage   () ) );
+        settings().setEntityPackage( properties.getProperty( ENTITY_PACKAGE, settings().getEntityPackage() ) );
+        settings().setMapperPackage( properties.getProperty( MAPPING_PACKAGE, settings().getMapperPackage() ) );
+        settings().setOutputPathForJavaClasses(
+                properties.getProperty( DEST_DIR, settings().getOutputPathForJavaClasses() )
+        );
+        settings().setFrameHeight( 
+                Integer.valueOf( properties.getProperty( HEIGHT, String.valueOf( settings().getFrameHeight() ) ) )
+        );
+        settings().setFrameWidth(
+                Integer.valueOf( properties.getProperty( WIDTH, String.valueOf( settings().getFrameWidth() ) ) )
+        );
+    }
+
     public static void main( String[] args ) {
+        final Properties defaultProperties = PropertiesFileController.getDefaultProperties();
+        final String property = defaultProperties.getProperty( SOURCE_DIR, "" );
+        if( "".equals( property ) ){
+
+        }
+        loadSettingsFromProperties( defaultProperties );
+
         EventQueue.invokeLater( new Runnable() {
             @Override
             public void run() {
@@ -166,8 +197,20 @@ public class DaoGenerator {
                 } catch ( Exception e ) {
                     e.printStackTrace();
                 }
-                JFrame frame = new JFrame( "DaoGenerator 2.3" );
+                final JFrame frame = new JFrame( "DaoGenerator 2.3" );
+
+
                 frame.setContentPane( FirstForm.getInstance() );
+                frame.setSize( settings().getFrameWidth(), settings().getFrameHeight() );
+
+                frame.addComponentListener( new ComponentAdapter() {
+                    @Override
+                    public void componentResized( ComponentEvent e ) {
+                        settings().setFrameWidth( frame.getWidth() );
+                        settings().setFrameHeight( frame.getHeight() );
+                    }
+                } );
+
                 frame.addWindowListener( new WindowAdapter() {
                     @Override
                     public void windowClosing( WindowEvent e ) {
@@ -178,7 +221,7 @@ public class DaoGenerator {
                         }
                     }
                 } );
-                frame.pack();
+
                 frame.setVisible( true );
             }
         } );

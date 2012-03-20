@@ -26,7 +26,7 @@ public class MavenProjectGenerator {
     private static void copyPomFileToMavenProject() throws IOException {
         copyFile(
                 MavenProjectGenerator.class.getClassLoader().getResourceAsStream( "pom.xml" ),
-                new File( DaoGenerator.settings().getOutputPath() + "/pom.xml" )
+                new File( DaoGenerator.settings().getOutputPathForJavaClasses() + "/pom.xml" )
         );
     }
 

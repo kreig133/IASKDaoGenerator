@@ -29,12 +29,28 @@ public class EmptyOperationSettingsImpl implements OperationSettings{
     public void setOperationName( String operationName ) { }
 
     @Override
-    public String getOutputPath() {
+    public String getOutputPathForJavaClasses() {
         return null;
     }
 
     @Override
-    public void setOutputPath( String outputPath ) { }
+    public void setOutputPathForJavaClasses( String outputPath ) { }
+
+    @Override
+    public int getFrameWidth() {
+        return 0;
+    }
+
+    @Override
+    public void setFrameWidth( int frameWidthd ) { }
+
+    @Override
+    public int getFrameHeight() {
+        return 0;
+    }
+
+    @Override
+    public void setFrameHeight( int frameHeight ) { }
 
     @Override
     public String getEntityPackage() {

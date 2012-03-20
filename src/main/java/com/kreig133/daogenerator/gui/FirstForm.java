@@ -83,7 +83,7 @@ public class FirstForm {
         initializingAnalyticTab();
         initializingDeveloperTab();
 
-        loadSettingsFromProperties( getDefaultProperties() );
+        loadSettings();
     }
 
     private void initializingAnalyticTab() {
@@ -199,7 +199,7 @@ public class FirstForm {
             @Override
             public void actionPerformed( ActionEvent e ) {
                 if( validateBeforeStartGenerateJavaClasses() ){
-                    fillSettingsWithData();
+                    saveSettings();
                     mainPanel.setVisible( false );
                     DaoGenerator.doAction();
                 }
@@ -350,36 +350,28 @@ public class FirstForm {
 
 
     private void reloadProperties() {
-        loadSettingsFromProperties( getPropertiesFromSourceDir( sourceDirTextField.getText() ) );
+        loadSettings();
     }
 
-    private void loadSettingsFromProperties( Properties settings ) {
-        if ( settings == null ) {
-            return;
-        }
+    private void loadSettings() {
+        IASKRadioButton.setSelected( DaoGenerator.settings().getType() == Type.IASK );
+        DEPORadioButton.setSelected( DaoGenerator.settings().getType() == Type.DEPO );
 
-        IASKRadioButton             .setSelected( Boolean.parseBoolean( settings.getProperty( IASK,         "1" ) ) );
-        DEPORadioButton             .setSelected( Boolean.parseBoolean( settings.getProperty( DEPO,         "0" ) ) );
+        destDirTextField.setText( DaoGenerator.settings().getSourcePath() );
+        entityPackageTextField.setText( DaoGenerator.settings().getEntityPackage() );
+        interfacePackageTextField.setText( DaoGenerator.settings().getDaoPackage() );
+        mappingPackageTextField.setText( DaoGenerator.settings().getMapperPackage() );
 
-        destDirTextField            .setText( settings.getProperty( DEST_DIR, "D:\\" ) );
-        entityPackageTextField      .setText( settings.getProperty( ENTITY_PACKAGE, "ru.sbrf.aplana.entity" ) );
-        interfacePackageTextField   .setText( settings.getProperty( INTERFACE_PACKAGE, "ru.sbrf.aplana.dao" ) );
-        mappingPackageTextField     .setText( settings.getProperty( MAPPING_PACKAGE, "ru.sbrf.aplana.data" ) );
-
-        if( start ){
-            mainPanel.setSize(
-                    Integer.parseInt( settings.getProperty( WIDTH, "1200" ) ) ,
-                    Integer.parseInt( settings.getProperty( HEIGHT, "800" ) )
-            );
-            sourceDirTextField          .setText( settings.getProperty( SOURCE_DIR          , "D:\\") );
+        if ( start ) {
+            sourceDirTextField.setText( DaoGenerator.settings().getSourcePath() );
             start = false;
         }
     }
 
-    private void fillSettingsWithData() {
+    private void saveSettings() {
         OperationSettings operationSettings = DaoGenerator.settings();
 
-        operationSettings.setOutputPath     ( destDirTextField              .getText    () );
+        operationSettings.setOutputPathForJavaClasses( destDirTextField.getText() );
         operationSettings.setSourcePath     ( sourceDirTextField            .getText    () );
         operationSettings.setDaoPackage     ( interfacePackageTextField     .getText    () );
         operationSettings.setEntityPackage  ( entityPackageTextField        .getText    () );
