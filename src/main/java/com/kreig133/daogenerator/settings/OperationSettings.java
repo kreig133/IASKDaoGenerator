@@ -54,4 +54,8 @@ public interface OperationSettings {
     void addTypeChangeListener( TypeChangeListener listener );
 
     void addSourcePathChangeListener( SourcePathChangeListener listener );
+    
+    String getModelPackage();
+
+    void setModelPackage( String modelPackage );
 }

@@ -372,6 +372,7 @@ public class Form  implements TypeChangeListener, SourcePathChangeListener{
         entityPackageTextField.setText( Settings.settings().getEntityPackage() );
         daoPackageTextField.setText( Settings.settings().getDaoPackage() );
         mappingPackageTextField.setText( Settings.settings().getMapperPackage() );
+        modelPackageTextField   .setText( Settings.settings().getModelPackage() );
 
         if ( start ) {
             sourceDirTextField.setText( Settings.settings().getSourcePath() );
@@ -380,14 +381,14 @@ public class Form  implements TypeChangeListener, SourcePathChangeListener{
     }
 
     private void saveSettings() {
-        OperationSettings operationSettings = Settings.settings();
 
-        operationSettings.setOutputPathForJavaClasses   ( destDirTextField              .getText    () );
-        operationSettings.setSourcePath                 ( sourceDirTextField            .getText    () );
-        operationSettings.setDaoPackage                 ( daoPackageTextField           .getText    () );
-        operationSettings.setEntityPackage              ( entityPackageTextField        .getText    () );
-        operationSettings.setMapperPackage              ( mappingPackageTextField       .getText    () );
-        operationSettings.setOperationName              ( tempOperationName == null ?
+        Settings.settings().setOutputPathForJavaClasses   ( destDirTextField              .getText    () );
+        Settings.settings().setSourcePath                 ( sourceDirTextField            .getText    () );
+        Settings.settings().setDaoPackage                 ( daoPackageTextField           .getText    () );
+        Settings.settings().setEntityPackage              ( entityPackageTextField        .getText    () );
+        Settings.settings().setMapperPackage              ( mappingPackageTextField       .getText    () );
+        Settings.settings().setModelPackage               ( modelPackageTextField         .getText    () );
+        Settings.settings().setOperationName              ( tempOperationName == null ?
                 new File( sourceDirTextField.getText()).getName() : tempOperationName );
     }
 

@@ -25,6 +25,7 @@ public class OperationSettingsImpl implements OperationSettings{
     private String DAO_PACKAGE = "ru.sbrf.aplana.dao";
     private String MAPPER_PACKAGE = "ru.sbrf.aplana.data";
     private String OUTPUT_PATH_FOR_JAVA_CLASSES = "D:\\GeneratedDao";
+    private String MODEL_PACKAGE = "ru.sbrf.aplana.model";
     private String SOURCE_PATH = "";
     private int    FRAME_WIDHT = 1200;
     private int    FRAME_HEIGHT = 800;
@@ -165,5 +166,15 @@ public class OperationSettingsImpl implements OperationSettings{
     @Override
     public void addSourcePathChangeListener( SourcePathChangeListener listener ) {
         sourcePathChangeListeners.add( listener );
+    }
+
+    @Override
+    public String getModelPackage() {
+        return MODEL_PACKAGE;
+    }
+
+    @Override
+    public void setModelPackage( String modelPackage ) {
+        MODEL_PACKAGE = modelPackage;
     }
 }
