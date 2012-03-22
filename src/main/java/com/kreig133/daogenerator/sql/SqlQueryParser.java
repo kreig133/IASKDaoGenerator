@@ -118,7 +118,7 @@ public class SqlQueryParser {
     }
     
     private static Pattern getPatternForExtractTestValue( String parameterName ) {
-        return Pattern.compile( String.format( "(?isu)@%s\\s+[^@]*?=\\s*null\\b", parameterName) );
+        return Pattern.compile( String.format( "(?isu)@%s\\s*[^@]*?=\\s*null\\b", parameterName) );
     }
     
     Pattern storeNamePattern = Pattern.compile( "(?iu)execute\\s+(\\w+)" );
@@ -158,15 +158,15 @@ public class SqlQueryParser {
     }
 
     private Pattern getStringPatternForParameter( String name ) {
-        return Pattern.compile( String.format( "(?isu)@%s\\s+[^@]*?=\\s*['\"](.*?)['\"]", name ) );
+        return Pattern.compile( String.format( "(?isu)@%s\\s*[^@]*?=\\s*['\"](.*?)['\"]", name ) );
     }
 
     private Pattern getNullPatternForParameter( String parameterName ) {
-        return Pattern.compile( String.format( "(?isu)@%s\\s+[^@]*?=\\s*null\\b", parameterName) );
+        return Pattern.compile( String.format( "(?isu)@%s\\s*[^@]*?=\\s*null\\b", parameterName) );
     }
 
     private Pattern getNumberPatternForParameter( String parameterName ) {
-        return Pattern.compile( String.format( "(?isu)@%s\\s+[^@]*?=\\s*([-\\d\\.]+)\\b", parameterName ) );
+        return Pattern.compile( String.format( "(?isu)@%s\\s*[^@]*?=\\s*([-\\d\\.]+)\\b", parameterName ) );
     }
 
     public String getParameterValueFromQuery( ParameterType type, String query ) {

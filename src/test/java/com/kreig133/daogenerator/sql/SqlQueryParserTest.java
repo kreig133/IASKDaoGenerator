@@ -59,8 +59,9 @@ public class SqlQueryParserTest {
         inputParametrs.add( getParameterType( "d_realdate", JavaType.STRING ) );
         inputParametrs.add( getParameterType( "d2_realdate", JavaType.DATE ) );
         inputParametrs.add( getParameterType( "id_mode", JavaType.DOUBLE ) );
-        inputParametrs.add( getParameterType( "b_resident", JavaType.LONG ) );
-        inputParametrs.add( getParameterType( "id_user", JavaType.BYTE ) );
+        inputParametrs.add( getParameterType( "b_resident", JavaType.BYTE ) );
+        inputParametrs.add( getParameterType( "id_user", JavaType.STRING ) );
+        inputParametrs.add( getParameterType( "iexternal", JavaType.LONG ) );
 
         SqlQueryParser.instance().fillTestValuesByInsertedQuery( inputParametrs, query1 );
 
@@ -69,6 +70,7 @@ public class SqlQueryParserTest {
         Assert.assertEquals( inputParametrs.get( 2 ).getTestValue(), "2" );
         Assert.assertEquals( inputParametrs.get( 3 ).getTestValue(), "-1" );
         Assert.assertEquals( inputParametrs.get( 4 ).getTestValue(), "null" );
+        Assert.assertEquals( inputParametrs.get( 5 ).getTestValue(), "-1" );
     }
 
     private ParameterType getParameterType( String name, JavaType type ) {
