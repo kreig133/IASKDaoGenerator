@@ -2,6 +2,7 @@ package com.kreig133.daogenerator.files.mybatis.implementation;
 
 import com.kreig133.daogenerator.enums.ClassType;
 import com.kreig133.daogenerator.enums.MethodType;
+import com.kreig133.daogenerator.enums.Scope;
 import com.kreig133.daogenerator.files.mybatis.intrface.InterfaceGenerator;
 import com.kreig133.daogenerator.jaxb.DaoMethod;
 import com.kreig133.daogenerator.settings.Settings;
@@ -44,7 +45,8 @@ public class ImplementationGenerator extends InterfaceGenerator{
         insertImport( "org.springframework.stereotype.Repository" );
 
         //TODO блок комментариев
-        builder.append( "@Repository\n" );
+        builder.append( "@Repository" );
+        insertLine();
 
         insertClassDeclaration(
                 ClassType.Class,
@@ -52,7 +54,7 @@ public class ImplementationGenerator extends InterfaceGenerator{
                 "AbstractDao",
                 new ArrayList<String>() {
                     {
-                        add( interfaceFileName() );
+                        add( getFileName() );
                     }
                 }
         );
@@ -60,24 +62,26 @@ public class ImplementationGenerator extends InterfaceGenerator{
 
     @Override
     public void generateBody( DaoMethod daoMethod ) throws IOException {
-        insertTabs( builder, 1 ).append( "@Override\n    public " );
+        insertTabs( 1 ).append( "@Override" );
+        insertLine();
+        insertTabs( 1 ).append( Scope.PUBLIC.value() ).append( " " );
 
-        builder.append( generateMethodSignature(
-                daoMethod,
-                MethodType.DAO ) );
-        builder.append( "{\n" );
-        insertTabs( builder, 2 );
+        generateMethodSignature( daoMethod, MethodType.DAO );
+        builder.append( " {" );
+        insertLine();
+        insertTabs( 2 );
 
         if( ! daoMethod.getOutputParametrs().getParameter().isEmpty() ){
             builder.append( "return " );
         }
 
-
         generateIaskStyleMethodCall( daoMethod, builder );
 
-
-        builder.append( ");\n" );
-        insertTabs(builder, 1 ).append( "}\n\n" );
+        builder.append( ");" );
+        insertLine();
+        insertTabs(1 ).append( "}" );
+        insertLine();
+        insertLine();
     }
 
     private static void generateIaskStyleMethodCall(
@@ -92,7 +96,7 @@ public class ImplementationGenerator extends InterfaceGenerator{
         }
 
         builder.append( "(\"" ).append( Settings.settings().getDaoPackage() ).append( "." )
-                .append( interfaceFileName() ).append( "." )
+                .append( InterfaceGenerator.instance().getFileName() ).append( "." )
                 .append( daoMethod.getCommon().getMethodName() ).append( "\" ").append( "," );
         if( ! daoMethod.getInputParametrs().getParameter().isEmpty() ){
             builder.append( "request" );

@@ -31,7 +31,7 @@ public class InterfaceGenerator extends DaoJavaClassGenerator {
 
     @Override
     public File getFile() throws IOException {
-        return daoFile( interfaceFileName() );
+        return daoFile( getFileName() );
     }
 
     @Override
@@ -41,7 +41,7 @@ public class InterfaceGenerator extends DaoJavaClassGenerator {
         //TODO блок комментариев
         insertClassDeclaration(
                 ClassType.Interface,
-                interfaceFileName(),
+                getFileName(),
                 null,
                 null
         );
@@ -50,12 +50,16 @@ public class InterfaceGenerator extends DaoJavaClassGenerator {
     @Override
     public void generateBody( DaoMethod daoMethod ) throws IOException {
         insertJavaDoc( daoMethod.getCommon().getComment().split( "\n" ) );
-        insertTabs( builder, 1 ).append( generateMethodSignature( daoMethod, MethodType.DAO ) + ";\n" );
+        insertTabs( 1 );
+        generateMethodSignature( daoMethod, MethodType.DAO );
+        builder.append( ";\n" );
     }
 
-    public static String interfaceFileName() {
+    @Override
+    public String getFileName() {
         return Settings.settings().getOperationName() + "Dao";
     }
+
 
     protected static File daoFile( String fileName ) throws IOException {
         File file = new File(

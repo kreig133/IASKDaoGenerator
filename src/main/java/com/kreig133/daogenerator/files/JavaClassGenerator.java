@@ -5,17 +5,22 @@ import com.kreig133.daogenerator.common.FunctionalObjectWithoutFilter;
 import com.kreig133.daogenerator.common.Utils;
 import com.kreig133.daogenerator.enums.ClassType;
 import com.kreig133.daogenerator.enums.MethodType;
+import com.kreig133.daogenerator.enums.Scope;
 import com.kreig133.daogenerator.enums.Type;
 import com.kreig133.daogenerator.jaxb.DaoMethod;
 import com.kreig133.daogenerator.jaxb.JavaType;
 import com.kreig133.daogenerator.jaxb.ParameterType;
 import com.kreig133.daogenerator.settings.Settings;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
+import static com.kreig133.daogenerator.common.Utils.insertTabs;
 import static com.kreig133.daogenerator.common.Utils.iterateForParameterList;
 import static com.kreig133.daogenerator.common.Utils.stringNotEmpty;
 
@@ -32,6 +37,7 @@ abstract public class JavaClassGenerator {
     abstract public File getFile() throws IOException ;
     abstract public void generateHead() throws IOException;
     abstract public void generateBody( DaoMethod daoMethod ) throws IOException;
+    abstract public String getFileName();
 
 
     public void generateFoot() throws IOException {
@@ -41,72 +47,106 @@ abstract public class JavaClassGenerator {
         return builder.toString();
     }
 
-    protected void insertLine() {
+    protected StringBuilder insertLine() {
         builder.append( "\n" );
+
+        return builder;
     }
 
-    public static String generateMethodSignature(
+    protected StringBuilder insertTabs( int tabsCount ) {
+        Utils.insertTabs( builder, tabsCount );
+
+        return builder;
+    }
+
+    protected void generateMethodSignature(
             final DaoMethod daoMethod,
             final MethodType methodType
     ) {
 
         final List<ParameterType>  inputParameterList = daoMethod.getInputParametrs().getParameter();
         final List<ParameterType> outputParameterList = daoMethod.getOutputParametrs().getParameter();
-        final String     name       = daoMethod.getCommon().getMethodName();
+        final String methodName = daoMethod.getCommon().getMethodName();
 
-        StringBuilder builder = new StringBuilder();
+        StringBuilder outputClass = new StringBuilder();
 
-        if ( outputParameterList.isEmpty() ) {
-            builder.append( "void " );
-        } else {
+        if ( ! outputParameterList.isEmpty() ) {
             if ( daoMethod.getCommon().getConfiguration().isMultipleResult() ) {
-                builder.append( "List<" );
+                outputClass.append( "List<" );
             }
             if ( outputParameterList.size() == 1 ) {
-                builder.append( outputParameterList.get( 0 ).getType().value() );
+                outputClass.append( outputParameterList.get( 0 ).getType().value() );
             } else {
-                builder.append( convertNameForClassNaming( name ) ).append( "Out" );
+                outputClass.append( convertNameForClassNaming( methodName ) ).append( "Out" );
             }
             if ( daoMethod.getCommon().getConfiguration().isMultipleResult() ) {
-                builder.append( ">" );
+                outputClass.append( ">" );
             }
-            builder.append( " " );
         }
 
-        builder.append( name ).append( "(" );
+        List<String> inputParams = new ArrayList<String>( inputParameterList.size() );
         if ( ! inputParameterList.isEmpty() ) {
-            builder.append( "\n" );
             if ( InOutClassGenerator.checkToNeedOwnInClass( daoMethod ) ) {
-                Utils.insertTabs( builder, 2 ).append( convertNameForClassNaming( name ) ).append( "In request\n" );
+                inputParams.add( convertNameForClassNaming( methodName ) + "In request\n" );
             } else {
-                iterateForParameterList( builder, inputParameterList, 2, new FunctionalObjectWithoutFilter() {
-                    @Override
-                    public void writeString( StringBuilder builder, ParameterType p ) {
-                        if (
-                                Settings.settings().getType()
-                                        ==
-                                        Type.DEPO && methodType == MethodType.MAPPER
-                                ) {
-                            builder.append( "@Param(\"" ).append( p.getRenameTo() ).append( "\") " );
-                        }
-                        builder.append( p.getType().value() ).append( " " )
-                                .append(
-                                        Settings.settings().getType() == Type.DEPO ?
-                                                p.getRenameTo()
-                                                : "request"
-                                );
+                for ( ParameterType p : inputParameterList ) {
+                    StringBuilder inputParam = new StringBuilder();
+                    if (
+                            Settings.settings().getType() == Type.DEPO && methodType == MethodType.MAPPER
+                    ) {
+                        inputParam.append( "@Param(\"" ).append( p.getRenameTo() ).append( "\") " );
                     }
-                } );
+                    inputParam.append( p.getType().value() ).append( " " )
+                            .append( Settings.settings().getType() == Type.DEPO ? p.getRenameTo() : "request" );
+                }
+
             }
-            Utils.insertTabs( builder, 1 );
+        }
+        
+        generateMethodSignature( Scope.PUBLIC, outputClass.toString(), methodName, inputParams, null, true );
+    }
+
+    protected void generateMethodSignature(
+            @NotNull Scope scope, 
+            @Nullable String outputClass,
+            @NotNull String methodName,
+            @Nullable List<String> inputParams,
+            @Nullable List<String> throwsing,
+            boolean signatureOnly
+    ){
+        insertTabs( 1 ).append( scope.value() ).append( " " )
+                .append( stringNotEmpty( outputClass ) ? outputClass : "void" ).append( " " ).append( methodName )
+                .append( "(" );
+        
+        if ( inputParams != null && ! inputParams.isEmpty() ) {
+            boolean  first = true;
+            for ( String inputParam : inputParams ) {
+                if ( ! first ) {
+                    builder.append( "," );
+                }
+                first = false;
+                insertLine();
+                Utils.insertTabs( builder, 2 ).append( inputParam );
+            }
+            insertLine();
+            insertTabs( 1 );
         }
         builder.append( ")" );
 
-        return builder.toString();
+        if ( throwsing != null && ! throwsing.isEmpty() ) {
+            builder.append( " throws " );
+            boolean  first = true;
+            for ( String th : throwsing ) {
+                if ( ! first ) {
+                    builder.append( "," );
+                }
+                first = false;
+                builder.append( th );
+            }
+        }
+        
+        builder.append( signatureOnly ? "" : " {" );
     }
-
-
-
 
     protected void insertPackageLine( String packageName ) {
         builder.append( "package " ).append( packageName ).append( ";\n\n" );
@@ -130,22 +170,27 @@ abstract public class JavaClassGenerator {
         builder.append( "import " ).append( path ).append( ";\n" );
     }
 
-    protected void writeSerialVersionUID() {
-        builder.append( "\n    private static final long serialVersionUID = " );
-        builder.append( (long)( Math.random() * Long.MAX_VALUE ) ).append( "L;\n\n" );
+    protected void insertSerialVersionUID() {
+        insertLine();
+        insertTabs( 1 ).append( Scope.PRIVATE.value() ).append( " static final long serialVersionUID = " );
+        builder.append( (long)( Math.random() * Long.MAX_VALUE ) ).append( "L;" );
+        insertLine();
+        insertLine();
     }
 
     protected void writeEmptyConstructor( String className ) {
-        Utils.insertTabs( builder, 1 ).append( "public " ).append( className ).append( "(){\n    }\n\n" );
+        Utils.insertTabs( builder, 1 ).append( Scope.PUBLIC.value() ).
+                append( " " ).append( className ).append( "(){\n    }\n\n" );
     }
+
 
     protected void insertClassDeclaration(
             ClassType classType,
             String name,
             @Nullable String parentClassName,
-            @Nullable List< String > interfaces
+            @Nullable List<String> interfaces
     ){
-        builder.append( "public " ).append( classType ).append( " " ).append( name );
+        builder.append( Scope.PUBLIC.value() ).append( " " ).append( classType ).append( " " ).append( name );
 
         if( ! ( parentClassName == null || "".equals( parentClassName.trim() ) ) ){
             builder.append( " extends " ).append( parentClassName );
@@ -162,7 +207,9 @@ abstract public class JavaClassGenerator {
             }
         }
 
-        builder.append( "{\n\n" );
+        builder.append( "{" );
+        insertLine();
+        insertLine();
     }
     
     protected StringBuilder insertJavaDoc( String[] commentsLine ) {
@@ -202,8 +249,16 @@ abstract public class JavaClassGenerator {
 
     private void generateGetterSignature( String javaDoc, JavaType javaType, String name ) {
         insertJavaDoc( new String[] { "Получить ", "\"" + javaDoc + "\"" } );
-        Utils.insertTabs( builder, 1 ).append( "public " ).append( javaType.value() ).append( " get" );
-        builder.append( convertNameForGettersAndSetters( name ) ).append( "(){\n" );
+
+        generateMethodSignature(
+                Scope.PUBLIC,
+                javaType.value(),
+                "get" + convertNameForGettersAndSetters( name ),
+                null,
+                null,
+                false
+        );
+        insertLine();
     }
 
 
@@ -219,8 +274,15 @@ abstract public class JavaClassGenerator {
 
     private void generateSetterSignature( String javaDoc, JavaType javaType, String name ) {
         insertJavaDoc( new String[] { "Установить ", "\"" + javaDoc + "\"" } );
-        Utils.insertTabs( builder, 1 ).append( "public void set" ).append( convertNameForGettersAndSetters( name ) );
-        builder.append( "( " ).append( javaType.value() ).append( " " ).append( name ).append( " ){\n" );
+        generateMethodSignature(
+                Scope.PUBLIC,
+                null,
+                "set" +convertNameForGettersAndSetters( name ),
+                Arrays.asList( javaType.value() + " " + name ),
+                null,
+                false
+        );
+        insertLine();
     }
 
     /**
@@ -244,9 +306,15 @@ abstract public class JavaClassGenerator {
         return name;
     }
 
-    public static String convertNameForClassNaming( String name ) {
+    protected static String convertNameForClassNaming( String name ) {
         final char[] chars = name.toCharArray();
         chars[ 0 ] = Character.toUpperCase( chars[ 0 ] );
+        return new String( chars );
+    }
+
+    protected static String convertNameForNonClassNaming( String name ) {
+        final char[] chars = name.toCharArray();
+        chars[ 0 ] = Character.toLowerCase( chars[ 0 ] );
         return new String( chars );
     }
 }

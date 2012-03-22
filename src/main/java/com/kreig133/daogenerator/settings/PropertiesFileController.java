@@ -22,10 +22,9 @@ public class PropertiesFileController {
         try{
             Properties settings = new Properties();
 
-            File file = getDefaultPropertiesFile();
-            FileInputStream in = new FileInputStream( file );
-
-            settings.load( in );
+            settings.load(
+                    PropertiesFileController.class.getClassLoader().getResourceAsStream( getDefaultPropertiesFileName() )
+            );
 
             final String sourceDir = settings.getProperty( Settings.SOURCE_DIR );
             //Пытаемся считать настройки из папки SOURCE_DIR
@@ -43,8 +42,8 @@ public class PropertiesFileController {
         }
     }
 
-    private static File getDefaultPropertiesFile() {
-        return new File( "properties/" + Settings.PROPERTIES_FILE_NAME );
+    private static String getDefaultPropertiesFileName() {
+        return "properties/" + Settings.PROPERTIES_FILE_NAME ;
     }
 
     public static Properties getPropertiesFromSourceDir( String sourceDirPath ) {
@@ -94,7 +93,7 @@ public class PropertiesFileController {
 
     public static void saveCommonProperties( Properties properties ) {
         try {
-            properties.store( new FileOutputStream( getDefaultPropertiesFile() ), COMMENTS );
+            properties.store( new FileOutputStream( getDefaultPropertiesFileName() ), COMMENTS );
         } catch ( IOException e ) {
             e.printStackTrace();
         }

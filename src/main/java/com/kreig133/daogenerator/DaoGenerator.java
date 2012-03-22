@@ -1,6 +1,7 @@
 package com.kreig133.daogenerator;
 
 import com.kreig133.daogenerator.common.Utils;
+import com.kreig133.daogenerator.files.mybatis.TesterClassGenerator;
 import com.kreig133.daogenerator.gui.Form;
 import com.kreig133.daogenerator.settings.OperationSettings;
 import com.kreig133.daogenerator.enums.Type;
@@ -102,6 +103,8 @@ public class DaoGenerator {
         if ( Settings.settings().getType() == Type.IASK ) {
             generators.add( InterfaceGenerator.instance() );
             generators.add( ImplementationGenerator.instance() );
+        } else {
+            generators.add( new TesterClassGenerator() );
         }
 
         for ( DaoMethod daoMethod: daoMethods ) {

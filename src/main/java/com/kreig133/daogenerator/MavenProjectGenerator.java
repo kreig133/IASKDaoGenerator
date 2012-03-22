@@ -1,5 +1,6 @@
 package com.kreig133.daogenerator;
 
+import com.kreig133.daogenerator.files.mybatis.mapping.MappingGenerator;
 import com.kreig133.daogenerator.settings.Settings;
 
 import java.io.*;
@@ -15,7 +16,16 @@ public class MavenProjectGenerator {
         copyPropertiesFileToMavenProject();
         copyPomFileToMavenProject();
         copyAppContextConfigToMavenProject();
+        copyAbstractTester();
 
+    }
+
+    private static void copyAbstractTester() throws IOException {
+        copyFile(
+                MavenProjectGenerator.class.getClassLoader().getResourceAsStream( "AbstractDepoDaoExecuteTester.java" ),
+                new File( Settings.settings().getPathForGeneratedTests()
+                        + "/com/aplana/sbrf/AbstractDepoDaoExecuteTester.java" )
+        );
     }
 
     private static void copyAppContextConfigToMavenProject() throws IOException {
@@ -63,5 +73,9 @@ public class MavenProjectGenerator {
             fileOutputStream.close();
             bufferedInputStream.close();
         }
+    }
+    
+    public static String getConfigName(){
+        return MappingGenerator.instance().getFileName() + "Config";
     }
 }

@@ -23,6 +23,11 @@ public class IaskMappingGenerator extends MappingGenerator{
     }
 
     @Override
+    public String getFileName() {
+        return Settings.settings().getOperationName();
+    }
+
+    @Override
     public void generateFoot() throws IOException {
         builder.append( "</mapper>" );
     }
@@ -38,7 +43,7 @@ public class IaskMappingGenerator extends MappingGenerator{
         builder.append( "<!DOCTYPE mapper PUBLIC \"-//mybatis.org//DTD Mapper 3.0//EN\" \"http://mybatis" +
                 ".org/dtd/mybatis-3-mapper.dtd\">\n" );
         builder.append( "<mapper namespace=\"" ).append( Settings.settings().getDaoPackage() )
-                .append( "." ).append( InterfaceGenerator.interfaceFileName() ).append( "\">\n" );
+                .append( "." ).append( InterfaceGenerator.instance().getFileName() ).append( "\">\n" );
     }
 
     private String generateXmlMapping(
@@ -50,7 +55,7 @@ public class IaskMappingGenerator extends MappingGenerator{
         final String package_                     = Settings.settings().getEntityPackage();
 
         StringBuilder builder = new StringBuilder();
-        insertTabs( builder, 1 ).append( "<" ) .append( daoMethod.getSelectType().getAnnotation()
+        insertTabs( 1 ).append( "<" ) .append( daoMethod.getSelectType().getAnnotation()
                 .toLowerCase() )
                 .append( " id=\"" ).append( name ).append( "\" statementType=\"CALLABLE\"" );
 
@@ -58,11 +63,15 @@ public class IaskMappingGenerator extends MappingGenerator{
         writeParameterType( outputParameterList, name, "resultType"   , "Out", package_, builder );
 
         builder.append( ">\n\n" );
-        insertTabs( builder, 2 ).append(
+        insertTabs( 2 ).append(
                 QueryCreator.newInstance( daoMethod ).generateExecuteQuery( daoMethod, false )
-        ).append( "\n" );
+        );
+        insertLine();
 
-        insertTabs(builder, 1).append( "</" ).append( daoMethod.getSelectType().getAnnotation().toLowerCase() ).append( ">\n\n" );
+        insertTabs( 1 ).append( "</" ).append( daoMethod.getSelectType().getAnnotation().toLowerCase() ).append( ">" );
+        insertLine();
+        insertLine();
+
 
         return builder.toString();
     }
@@ -76,8 +85,8 @@ public class IaskMappingGenerator extends MappingGenerator{
             StringBuilder builder
     ) {
         if ( ! outputParameterList.isEmpty() ) {
-            builder.append( "\n" );
-            insertTabs( builder, 2 ).append( type ).append( "=\"" );
+            insertLine();
+            insertTabs( 2 ).append( type ).append( "=\"" );
             if ( outputParameterList.size() > 1 ) {
                 builder.append( package_ ).append( "." );
                 builder.append( convertNameForClassNaming( name ) ).append( suffix );

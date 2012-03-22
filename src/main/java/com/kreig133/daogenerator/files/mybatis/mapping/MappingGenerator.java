@@ -30,8 +30,7 @@ public abstract class MappingGenerator extends DaoJavaClassGenerator{
         File file = new File(
                 Settings.settings().getPathForGeneratedSource() + "/" +
                         replacePointBySlash( Settings.settings().getMapperPackage() ) + "/"
-                        + Settings.settings().getOperationName() + getFileNameEnding()
-
+                        + getFileName() + getFileNameEnding()
                  );
 
         createDirsAndFile( file.getParentFile() );
@@ -40,6 +39,4 @@ public abstract class MappingGenerator extends DaoJavaClassGenerator{
     }
 
     abstract protected String getFileNameEnding();
-
-
 }

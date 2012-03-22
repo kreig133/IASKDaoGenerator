@@ -1,5 +1,6 @@
 package com.kreig133.daogenerator.files.mybatis.mapping;
 
+import com.kreig133.daogenerator.common.Utils;
 import com.kreig133.daogenerator.enums.ClassType;
 import com.kreig133.daogenerator.enums.MethodType;
 import com.kreig133.daogenerator.jaxb.DaoMethod;
@@ -23,19 +24,19 @@ public class DepoMappingGenerator extends MappingGenerator{
 
     @Override
     public void generateBody( DaoMethod daoMethod ) throws IOException{
-        builder.append(
-                generateAnnotation( daoMethod )
-                        +"    public "
-                        + generateMethodSignature(
-                        daoMethod,
-                        MethodType.MAPPER )
-                        + ";\n"
-        );
+        generateAnnotation( daoMethod );
+        generateMethodSignature( daoMethod, MethodType.MAPPER );
+        builder.append( ";\n" );
+    }
+
+    @Override
+    public String getFileName() {
+        return Settings.settings().getOperationName() + MAPPER_PREFIX;
     }
 
     @Override
     protected String getFileNameEnding() {
-        return MAPPER_PREFIX + JAVA_EXTENSION;
+        return  JAVA_EXTENSION;
     }
 
     @Override
@@ -56,31 +57,34 @@ public class DepoMappingGenerator extends MappingGenerator{
         );
     }
 
-    private String generateAnnotation(
+    private void generateAnnotation(
             DaoMethod daoMethod
     ){
-        SelectType selectType               = daoMethod.getSelectType();
+        SelectType selectType = daoMethod.getSelectType();
 
-        StringBuilder builder = new StringBuilder();
 
         assert selectType != null ;
 
-        insertTabs(builder, 1).append( "@" ).append( selectType.getAnnotation() ).append( "(\n" );
+        insertTabs(1).append( "@" ).append( selectType.getAnnotation() ).append( "(" );
+        insertLine();
 
         builder.append( wrapWithQuotes(
-                QueryCreator.newInstance( daoMethod ).generateExecuteQuery( daoMethod, false ).replaceAll( "\"", "\\\\\"" )
+                QueryCreator.newInstance( daoMethod ).generateExecuteQuery( daoMethod, false ).replaceAll( "\"",
+                        "\\\\\"" )
         ) );
 
-        insertTabs( builder, 1 ).append( ")\n" );
+        insertTabs( 1 ).append( ")" );
+        insertLine();
         if( daoMethod.getSelectType() == SelectType.CALL ) {
-            insertTabs( builder, 1 ).append( "@Options(statementType=StatementType.CALLABLE)\n" );
+            insertTabs( 1 ).append( "@Options(statementType=StatementType.CALLABLE)" );
+            insertLine();
         }
 
         final List<Integer> indexOfUnnamedParameters = daoMethod.getOutputParametrs().getIndexOfUnnamedParameters();
 
         if( ! indexOfUnnamedParameters.isEmpty() ) {
             if ( indexOfUnnamedParameters.size() == 1 ) {
-                insertTabs( builder, 1 ).append( "@Results(value = {@Result(property=\"" ).append(
+                insertTabs( 1 ).append( "@Results(value = {@Result(property=\"" ).append(
                         daoMethod.getOutputParametrs().getParameter().get( indexOfUnnamedParameters.get( 1 ) ).getRenameTo()
                 ).append( "\", column=\"\")})" );
             } else {
@@ -88,7 +92,6 @@ public class DepoMappingGenerator extends MappingGenerator{
             }
         }
 
-        return builder.toString();
     }
 
     /**
@@ -106,9 +109,9 @@ public class DepoMappingGenerator extends MappingGenerator{
 
         for ( int i = 0; i < strings.length; i++ ) {
             if ( i != 0 ) {
-                insertTabs(builder, 2).append( "+" );
+                Utils.insertTabs( builder, 2 ).append( "+" );
             } else {
-                insertTabs(builder, 2);
+                Utils.insertTabs( builder, 2 );
             }
             builder.append( "\"" ).append( strings[ i ] ).append( "\\n\"\n" );
         }

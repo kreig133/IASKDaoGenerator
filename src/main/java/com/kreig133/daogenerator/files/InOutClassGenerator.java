@@ -2,6 +2,7 @@ package com.kreig133.daogenerator.files;
 
 import com.kreig133.daogenerator.common.FunctionalObjectWithoutFilter;
 import com.kreig133.daogenerator.enums.ClassType;
+import com.kreig133.daogenerator.enums.Scope;
 import com.kreig133.daogenerator.enums.Type;
 import com.kreig133.daogenerator.jaxb.DaoMethod;
 import com.kreig133.daogenerator.jaxb.InOutType;
@@ -13,7 +14,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.kreig133.daogenerator.common.Utils.insertTabs;
 import static com.kreig133.daogenerator.common.Utils.iterateForParameterList;
 
 /**
@@ -66,7 +66,7 @@ public class InOutClassGenerator extends JavaClassGenerator{
                 new ArrayList<String>(){{add( "Serializable" );}}
         );
 
-        writeSerialVersionUID();
+        insertSerialVersionUID();
         writeEmptyConstructor( convertNameForClassNaming( this.name ) );
     }
 
@@ -91,6 +91,11 @@ public class InOutClassGenerator extends JavaClassGenerator{
         generated = true;
     }
 
+    @Override
+    public String getFileName() {
+        return convertNameForClassNaming( this.name );
+    }
+
     private static final String COMMENT_TO_CLASS = "/**\n" +
                                            " * @author DaoGenerator 2.3\n" +
                                            " * @version 1.0\n" +
@@ -105,7 +110,9 @@ public class InOutClassGenerator extends JavaClassGenerator{
     }
 
     private void writeFullConstructor() {
-        insertTabs( builder, 1 ).append( "public " ).append( convertNameForClassNaming( this.name ) ).append( "(\n" );
+        insertTabs( 1 ).append( Scope.PUBLIC.value() )
+                .append( " " ).append( convertNameForClassNaming( this.name ) ).append( "(" );
+        insertLine();
         iterateForParameterList( builder, parameters, 2, new FunctionalObjectWithoutFilter() {
             @Override
             public void writeString( StringBuilder builder, ParameterType p ) {
@@ -113,34 +120,38 @@ public class InOutClassGenerator extends JavaClassGenerator{
             }
         } );
 
-        insertTabs( builder, 1 ).append( "){\n" );
+        insertTabs( 1 ).append( ") {" );
+        insertLine();
         for( ParameterType p: parameters ){
-            insertTabs( builder, 2 ).append( "this." ).append( p.getRenameTo() ).append( " = " ).append( p.getRenameTo() )
-                    .append( ";\n" );
+            insertTabs( 2 ).append( "this." ).append( p.getRenameTo() ).append( " = " ).append( p.getRenameTo() )
+                    .append( ";" );
+            insertLine();
         }
-        builder.append( "    }\n\n" );
+        insertTabs( 1 ).append( "}" );
+        insertLine();
+        insertLine();
     }
 
     private void writeToString(){
-        insertTabs( builder, 1 ).append( "@Override\n" );
-        insertTabs( builder, 1 ).append( "public String toString(){\n" );
-        insertTabs( builder, 2 ).append( "return \"" ).append( name ).append( "[\"\n" );
+        insertTabs( 1 ).append( "@Override\n" );
+        insertTabs( 1 ).append( "public String toString(){\n" );
+        insertTabs( 2 ).append( "return \"" ).append( name ).append( "[\"\n" );
 
         for( int i =  0; i < parameters.size(); i ++ ){
             ParameterType parameter = parameters.get( i );
-            insertTabs( builder,3 ).append( "+\"" ).append( i != 0 ? ", " : ""  )
+            insertTabs( 3 ).append( "+\"" ).append( i != 0 ? ", " : ""  )
                     .append( parameter.getRenameTo() ).append( " = \"+" )
                     .append( parameter.getRenameTo() ).append( "\n" );
         }
 
-        insertTabs( builder, 2 ).append( "+\"]\";\n" );
-        insertTabs( builder, 1 ).append( "}" );
+        insertTabs( 2 ).append( "+\"]\";\n" );
+        insertTabs( 1 ).append( "}" );
     }
 
     public void insertFieldDeclaration( ParameterType p ) {
 
         insertJavaDoc( new String[] { p.getCommentForJavaDoc() } );
-        insertTabs( builder, 1 ).append( "private " ).append( p.getType().value() ).append( " " ).append( p.getRenameTo() );
+        insertTabs( 1 ).append( "private " ).append( p.getType().value() ).append( " " ).append( p.getRenameTo() );
 
         String defaultValue = p.getDefaultValue();
         if( defaultValue != null  && ! defaultValue.isEmpty() ) {
