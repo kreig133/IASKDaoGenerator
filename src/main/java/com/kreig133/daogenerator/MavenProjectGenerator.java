@@ -22,7 +22,7 @@ public class MavenProjectGenerator {
 
     private static void copyAbstractTester() throws IOException {
         copyFile(
-                MavenProjectGenerator.class.getClassLoader().getResourceAsStream( "AbstractDepoDaoExecuteTester.java" ),
+                MavenProjectGenerator.class.getClassLoader().getResourceAsStream( "AbstractDepoDaoExecuteTester.txt" ),
                 new File( Settings.settings().getPathForGeneratedTests()
                         + "/com/aplana/sbrf/AbstractDepoDaoExecuteTester.java" )
         );
