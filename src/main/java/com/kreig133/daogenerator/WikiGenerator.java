@@ -11,19 +11,16 @@ import java.io.IOException;
  * @version 1.0
  */
 public class WikiGenerator {
-    public static void main( String[] args ) throws IOException {
-        final JFileChooser fileChooser = GuiUtils.getFileChooser();
-        if( fileChooser.showOpenDialog( null ) == JFileChooser.APPROVE_OPTION ){
-            Settings.settings().setSourcePath( fileChooser.getSelectedFile().getAbsolutePath() );
-            final String[] xmlFileNamesInDirectory = DaoGenerator.getXmlFileNamesInDirectory();
+    public static void generateWiki( String sourcePath ) throws IOException {
 
+            final String[] xmlFileNamesInDirectory = DaoGenerator.getXmlFileNamesInDirectory();
 
             for ( String s : xmlFileNamesInDirectory ) {
                 final String[] cmdarray = { "cmd", "/C",
                         "java  -classpath DaoGenerator-2.3.jar org.apache.xalan.xslt.Process " +
-                                "-IN " + Settings.settings().getSourcePath()+ "\\" + s +
+                                "-IN " + sourcePath+ "\\" + s +
                                 " -XSL XmlToWiki.xsl " +
-                                "-OUT "+ Settings.settings().getSourcePath()+ "\\" + s + ".txt"  };
+                                "-OUT "+ sourcePath+ "\\" + s + ".txt"  };
                 for ( String s1 : cmdarray ) {
                     System.out.println( s1 );
                 }
@@ -31,6 +28,5 @@ public class WikiGenerator {
                 System.out.println(" END ");
                 Runtime.getRuntime().exec( cmdarray );
             }
-        }
     }
 }

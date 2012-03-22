@@ -6,8 +6,8 @@ import com.kreig133.daogenerator.WikiGenerator;
 import com.kreig133.daogenerator.common.SourcePathChangeListener;
 import com.kreig133.daogenerator.common.TypeChangeListener;
 import com.kreig133.daogenerator.common.Utils;
-import com.kreig133.daogenerator.settings.OperationSettings;
 import com.kreig133.daogenerator.db.StoreProcedureInfoExtractor;
+import com.kreig133.daogenerator.db.extractor.OutputParameterExtractor;
 import com.kreig133.daogenerator.enums.Type;
 import com.kreig133.daogenerator.jaxb.*;
 import com.kreig133.daogenerator.settings.Settings;
@@ -36,7 +36,6 @@ import java.util.regex.Pattern;
 public class Form  implements TypeChangeListener, SourcePathChangeListener{
     private static Form INSTANCE;
 
-    private JTextField storeProcedureField;
     private JPanel mainPanel;
     private JTable inputParametrs;
     private JTable outputParametrs;
@@ -44,14 +43,10 @@ public class Form  implements TypeChangeListener, SourcePathChangeListener{
     private JButton SPTextButton;
     private JButton generateXMLButton;
     private JButton getOutParamsButton;
-    private JTabbedPane tabbedPane;
-    private JTextField methodNameFieldSpTab;
-    private JTextArea commentTextAreaSpTab;
-    private JCheckBox isMultipleResultCheckBoxSpTab;
-    private JCheckBox isMultipleResultCheckBoxSelectTab;
+    private JCheckBox isMultipleResultCheckBox;
     private JEditorPane queryTextArea;
-    private JTextField methodNameFieldSelectTab;
-    private JTextArea commentTextAreaSelectTab;
+    private JTextField methodNameField;
+    private JTextArea commentTextArea;
     private JTabbedPane tabbedPane1;
     private JPanel developer;
     private JButton generateWikiButton;
@@ -70,14 +65,12 @@ public class Form  implements TypeChangeListener, SourcePathChangeListener{
     private JLabel modelPackageLabel;
     private JLabel daoPackageLabel;
     private JFrame windowWithSPText;
-    private static final int SP_TAB_INDEX = 0;
 
     private boolean start = true;
 
-    private String tempOperationName;
-
     private final JFileChooser fileChooser = GuiUtils.getFileChooser();
-    
+    private final SqlQueryParser parser;
+
     public Form() {
         redirectOutAndErrOutputToGui();
 
@@ -88,6 +81,7 @@ public class Form  implements TypeChangeListener, SourcePathChangeListener{
 
         Settings.settings().addTypeChangeListener( this );
         Settings.settings().addSourcePathChangeListener( this );
+        parser = SqlQueryParser.instance();
     }
 
     private void initializingAnalyticTab() {
@@ -96,28 +90,38 @@ public class Form  implements TypeChangeListener, SourcePathChangeListener{
         getInParamsButton.addActionListener( new ActionListener() {
             @Override
             public void actionPerformed( ActionEvent e ) {
+
+                if ( queryTextArea.getText() == null || queryTextArea.getText().equals( "" ) ) {
+                    JOptionPane.showMessageDialog( getInParamsButton,
+                            "Введите текст запроса или название хранимой процедуры" );
+                    return;
+                }
+
                 List<ParameterType> inputParametrs;
 
-                if ( tabbedPane.getSelectedIndex() == SP_TAB_INDEX ) {
-                    if ( checkSPName() ) return;
+                if ( parser.determineQueryType( queryTextArea.getText() ) == SelectType.CALL ) {
+                    if ( ! parser.checkSPName( queryTextArea.getText() ) ){
+                        JOptionPane.showMessageDialog( null, "Введите название хранимой процедуры" );
+                        return;
+                    }
 
-                    methodNameFieldSpTab.setText( Utils.convertPBNameToName( storeProcedureField.getText() ) );
+                    methodNameField.setText( Utils.convertPBNameToName( parser.getStoreProcedureName(
+                            queryTextArea.getText() ) ) );
 
                     inputParametrs =
-                            StoreProcedureInfoExtractor.getInputParametrsForSP( storeProcedureField.getText() );
+                            StoreProcedureInfoExtractor.getInputParametrsForSP( parser.getStoreProcedureName(
+                                    queryTextArea.getText() ) );
+
+                    parser.fillTestValuesByInsertedQuery( inputParametrs, queryTextArea.getText() );
 
                     SPTextButton.setEnabled( true );
                     getOutParamsButton.setEnabled( true );
 
                 } else {
-                    if ( queryTextArea.getText() == null || queryTextArea.getText().equals( "" ) ){
-                        JOptionPane.showMessageDialog( getInParamsButton, "Введите текст запроса" );
-                    }
+                    inputParametrs = parser.parseSqlQueryForParameters( getCurrentDaoMethod() )
+                            .getInputParametrs().getParameter();
 
-                    inputParametrs = SqlQueryParser.parseSqlQueryAndParameters( getCurrentDaoMethod() )
-                                        .getInputParametrs().getParameter();
-
-                    final boolean isSelect = getQueryType() == SelectType.SELECT;
+                    final boolean isSelect = parser.determineQueryType( queryTextArea.getText() ) == SelectType.SELECT;
 
                     getOutParamsButton.setEnabled( isSelect );
                     generateXMLButton.setEnabled( ! isSelect );
@@ -132,7 +136,10 @@ public class Form  implements TypeChangeListener, SourcePathChangeListener{
         SPTextButton.addActionListener( new ActionListener() {
             @Override
             public void actionPerformed( ActionEvent e ) {
-                if( checkSPName() ) return;
+                if( ! parser.checkSPName( queryTextArea.getText() ) ){
+                    JOptionPane.showMessageDialog( null, "Введите название хранимой процедуры" );
+                    return;
+                }
 
                 SPTextView.setText( StoreProcedureInfoExtractor.getSPText() );
 
@@ -143,8 +150,9 @@ public class Form  implements TypeChangeListener, SourcePathChangeListener{
         getOutParamsButton.addActionListener( new ActionListener() {
             @Override
             public void actionPerformed( ActionEvent e ) {
-                final DaoMethod daoMethod  = getCurrentDaoMethod().getSelectType().
-                        getOutputParameterExtractor().getOutputParameters( getCurrentDaoMethod() );
+                final DaoMethod daoMethod  = OutputParameterExtractor.newInstance(
+                        getCurrentDaoMethod().getSelectType()
+                ).getOutputParameters( getCurrentDaoMethod() );
 
                 updateOutputParameters( daoMethod.getOutputParametrs().getParameter() );
                 updateInputParameters( daoMethod.getInputParametrs().getParameter() );
@@ -167,6 +175,8 @@ public class Form  implements TypeChangeListener, SourcePathChangeListener{
                             ),
                             currentDaoMethods
                     );
+
+                    generateWiki( dirForSave.getAbsolutePath() );
                 }
             }
         } );
@@ -174,14 +184,21 @@ public class Form  implements TypeChangeListener, SourcePathChangeListener{
         generateWikiButton.addActionListener( new ActionListener() {
             @Override
             public void actionPerformed( ActionEvent e ) {
-                try {
-                    WikiGenerator.main( null );
-                } catch ( IOException e1 ) {
-                    e1.printStackTrace();
+                if( fileChooser.showOpenDialog( generateWikiButton ) == JFileChooser.APPROVE_OPTION ){    
+                    generateWiki( fileChooser.getSelectedFile().getAbsolutePath() );
                 }
             }
         } );
     }
+
+    private void generateWiki( String sourcePath ) {
+        try {
+            WikiGenerator.generateWiki( sourcePath );
+        } catch ( IOException e ) {
+            e.printStackTrace();
+        }
+    }
+
 
     private void initializingDeveloperTab() {
 
@@ -211,7 +228,7 @@ public class Form  implements TypeChangeListener, SourcePathChangeListener{
             public void actionPerformed( ActionEvent e ) {
                 if( validateBeforeStartGenerateJavaClasses() ){
                     saveSettings();
-                    DaoGenerator.doAction();
+                    DaoGenerator.generateJavaCode();
                 }
             }
         } );
@@ -237,22 +254,22 @@ public class Form  implements TypeChangeListener, SourcePathChangeListener{
     private void redirectOutAndErrOutputToGui() {
         OutputStream out = new OutputStream() {
             @Override
-            public void write(final int b) throws IOException {
-                updateTextPane(String.valueOf((char) b));
+            public void write( final int b ) throws IOException {
+                updateTextPane( String.valueOf( ( char ) b ) );
             }
 
             @Override
-            public void write(byte[] b, int off, int len) throws IOException {
-                updateTextPane(new String(b, off, len));
+            public void write( byte[] b, int off, int len ) throws IOException {
+                updateTextPane( new String( b, off, len ) );
             }
 
             @Override
-            public void write(byte[] b) throws IOException {
-                write(b, 0, b.length);
+            public void write( byte[] b ) throws IOException {
+                write( b, 0, b.length );
             }
         };
 
-        System.setOut(new PrintStream(out, true));
+        System.setOut( new PrintStream( out, true ) );
         System.setErr( new PrintStream( out, true ) );
     }
 
@@ -279,22 +296,21 @@ public class Form  implements TypeChangeListener, SourcePathChangeListener{
         result.setCommon( new CommonType() );
         result.getCommon().setConfiguration( new ConfigurationType() );
 
-        if( tabbedPane.getSelectedIndex() == SP_TAB_INDEX ){
-            result.getCommon().setSpName( storeProcedureField.getText() );
-            result.getCommon().setMethodName( methodNameFieldSpTab.getText() );
-            result.getCommon().setComment( commentTextAreaSpTab.getText() );
-            result.getCommon().getConfiguration().setType( SelectType.CALL );
-            result.getCommon().getConfiguration().setMultipleResult( isMultipleResultCheckBoxSpTab.isSelected() );
+        result.getCommon().getConfiguration().setType( parser.determineQueryType( queryTextArea.getText() ) );
+        result.getCommon().getConfiguration().setMultipleResult( isMultipleResultCheckBox.isSelected() );
+
+        if( parser.determineQueryType( queryTextArea.getText() ) == SelectType.CALL ){
+            result.getCommon().setSpName( parser.getStoreProcedureName( queryTextArea.getText() ) );
         } else{
-            result.getCommon().setMethodName( methodNameFieldSelectTab.getText() );
-            result.getCommon().setComment( commentTextAreaSelectTab.getText() );
             result.getCommon().setQuery( queryTextArea.getText() );
-            result.getCommon().getConfiguration().setType( getQueryType() );
-            result.getCommon().getConfiguration().setMultipleResult( isMultipleResultCheckBoxSelectTab.isSelected() );
         }
 
+        result.getCommon().setMethodName ( methodNameField.getText() );
+        result.getCommon().setComment    ( commentTextArea.getText() );
+        result.getCommon().setMethodName( methodNameField.getText() );
+
+
         result.setInputParametrs( new ParametersType() );
-        result.getInputParametrs().getParameter().clear();
         result.getInputParametrs().getParameter().addAll(
                 ( (ParametrsModel) ( inputParametrs.getModel() ) ).getParameterTypes()
         );
@@ -305,27 +321,6 @@ public class Form  implements TypeChangeListener, SourcePathChangeListener{
         );
 
         return result;
-    }
-
-    private SelectType getQueryType() {
-        if ( tabbedPane.getSelectedIndex() == SP_TAB_INDEX ) {
-            return SelectType.CALL;
-        }
-
-        final String firstWord = queryTextArea.getText().trim().split( "\\s" )[0];
-
-        return SelectType.getByName( firstWord );
-    }
-
-    private boolean checkSPName( ) {
-        String text = storeProcedureField.getText();
-        
-        if( text == null || "".equals( text )  ){
-            JOptionPane.showMessageDialog( getInParamsButton, "Введите название хранимой процедуры" );
-            return true;
-        }
-        
-        return false;
     }
 
     public JFrame getWindowWithSPText() {
@@ -344,7 +339,7 @@ public class Form  implements TypeChangeListener, SourcePathChangeListener{
         outputParametrs = new JTable( new ParametrsModel() );
     }
 
-    private void updateTextPane(final String text) {
+    private void updateTextPane( final String text ) {
         SwingUtilities.invokeLater( new Runnable() {
             public void run() {
                 Document doc = log.getDocument();
@@ -388,25 +383,16 @@ public class Form  implements TypeChangeListener, SourcePathChangeListener{
         Settings.settings().setEntityPackage              ( entityPackageTextField        .getText    () );
         Settings.settings().setMapperPackage              ( mappingPackageTextField       .getText    () );
         Settings.settings().setModelPackage               ( modelPackageTextField         .getText    () );
-        Settings.settings().setOperationName              ( tempOperationName == null ?
-                new File( sourceDirTextField.getText()).getName() : tempOperationName );
     }
 
     private boolean validateBeforeStartGenerateJavaClasses() {
-        if (
-                (   IASKRadioButton.isSelected() &&   DEPORadioButton.isSelected() )  ||
-                ( ! IASKRadioButton.isSelected() && ! DEPORadioButton.isSelected() )
-        ){
-            JOptionPane.showMessageDialog( mainPanel, "Выберите один (!) тип проекта." );
-            return false;
-        }
-
         if(
-                ( ! isPackageName( daoPackageTextField.getText() ) ) ||
+                ( ! isPackageName( daoPackageTextField      .getText() ) ) ||
+                ( ! isPackageName( modelPackageLabel        .getText() ) ) ||
                 ( ! isPackageName( entityPackageTextField   .getText() ) ) ||
                 ( ! isPackageName( mappingPackageTextField  .getText() ) )
         ){
-            JOptionPane.showMessageDialog( mainPanel, "Одно или несколкьо имен пакетов не прошло валидацию." );
+            JOptionPane.showMessageDialog( mainPanel, "Одно или несколько имен пакетов не прошло валидацию." );
             return false;
         }
 
@@ -420,9 +406,7 @@ public class Form  implements TypeChangeListener, SourcePathChangeListener{
     }
 
     private void setOutputPath() {
-        int returnVal = fileChooser.showSaveDialog( null );
-
-        if (returnVal == JFileChooser.APPROVE_OPTION) {
+        if ( fileChooser.showSaveDialog( null ) == JFileChooser.APPROVE_OPTION ) {
             File file = fileChooser.getSelectedFile();
             destDirTextField.setText( file.getAbsolutePath() );
         }
@@ -432,7 +416,6 @@ public class Form  implements TypeChangeListener, SourcePathChangeListener{
     private void setSourcePath() {
         if ( fileChooser.showOpenDialog( mainPanel ) == JFileChooser.APPROVE_OPTION ) {
             File file           = fileChooser.getSelectedFile();
-            tempOperationName   = file.getName();
             sourceDirTextField.setText( file.getAbsolutePath() );
             updateSourcePath();
         }

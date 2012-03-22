@@ -40,27 +40,22 @@ import javax.xml.bind.annotation.XmlType;
 @XmlEnum
 public enum SelectType {
 
-    CALL    ("Select", new SpOutputParameterExtractor   () ),
-    SELECT  ("Select", new QueryOutputParameterExtractor() ),
-    INSERT  ("Insert", null ),
-    DELETE  ("Delete", null ),
-    UPDATE  ("Update", null );
+    CALL    ("Select" ),
+    SELECT  ("Select" ),
+    INSERT  ("Insert" ),
+    DELETE  ("Delete" ),
+    UPDATE  ("Update" );
 
     private final String annotation;
 
-    private final OutputParameterExtractor outputParameterExtractor;
 
     public String getAnnotation() {
         return annotation;
     }
 
-    public OutputParameterExtractor getOutputParameterExtractor() {
-        return outputParameterExtractor;
-    }
 
-    SelectType( String annotation, OutputParameterExtractor extractor ) {
+    SelectType( String annotation ) {
         this.annotation = annotation;
-        this.outputParameterExtractor = extractor;
     }
 
     public static SelectType getByName( String name ){
@@ -71,7 +66,7 @@ public enum SelectType {
             }
         }
 
-        return null;
+        return name.equals( "execute" )  ? CALL : null;
     }
 
     public boolean isQuery(  ){

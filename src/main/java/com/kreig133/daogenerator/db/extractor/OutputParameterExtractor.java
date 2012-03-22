@@ -12,6 +12,17 @@ import java.util.List;
  * @version 1.0
  */
 public abstract class OutputParameterExtractor {
+    
+    public static OutputParameterExtractor newInstance( SelectType type ){
+        switch ( type ){
+            case CALL:
+                return new SpOutputParameterExtractor();
+            case SELECT:
+                return new QueryOutputParameterExtractor();
+            default:
+                throw new IllegalArgumentException();
+        }
+    }
 
     protected void fillJdbcTypeForInputParameters( ParameterMetaData parameterMetaData, DaoMethod daoMethod )
             throws SQLException {

@@ -4,6 +4,7 @@ import com.kreig133.daogenerator.common.Utils;
 import com.kreig133.daogenerator.jaxb.InOutType;
 import com.kreig133.daogenerator.jaxb.JavaType;
 import com.kreig133.daogenerator.jaxb.ParameterType;
+import com.kreig133.daogenerator.sql.SqlQueryParser;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -52,11 +53,12 @@ public class StoreProcedureInfoExtractor {
 
         String storeProcedureDefinition = getDefinitionFormSpText( spText );
         for ( ParameterType parameterType : result ) {
-            fillDefaultValues( parameterType, storeProcedureDefinition );
+            parameterType.setDefaultValue( SqlQueryParser.instance().
+                    getParameterValueFromQuery( parameterType, storeProcedureDefinition ) );
             fillComments( parameterType, storeProcedureDefinition );
             parameterType.setTestValue(
                     parameterType.getDefaultValue() == null || "".equals( parameterType.getDefaultValue() ) ?
-                            ParameterType.getDefaultTestValue( parameterType ):
+                            ParameterType.getDefaultTestValue( parameterType ) :
                             parameterType.getDefaultValue()
             );
         }
@@ -124,20 +126,7 @@ public class StoreProcedureInfoExtractor {
         }
     }
 
-    public static void fillDefaultValues( ParameterType type, String storeProcedureDefinition ) {
-        switch ( type.getType() ){
-            case LONG:
-            case BYTE:
-            case DOUBLE:
-                type.setDefaultValue( getDefaultValueForNumberFromSpDefinition( type, storeProcedureDefinition ) );
-                break;
-            case STRING:
-                type.setDefaultValue( getDefaultValueForStringFromSpDefinition( type, storeProcedureDefinition ) );
-                break;
-            default:
-                System.err.println( type.getName() + "type is " + type.getType().value() );
-        }
-    }
+
 
     private static void fillComments( ParameterType type, String storeProcedureDefinition ) {
         final Matcher matcher = getCommentPattern( type.getName() ).matcher( storeProcedureDefinition );
@@ -146,38 +135,6 @@ public class StoreProcedureInfoExtractor {
         }
     }
 
-    private static String getDefaultValueForStringFromSpDefinition( ParameterType type, String storeProcedureDefinition ) {
-        return getDefaultValue( type, storeProcedureDefinition,
-                getStringPatternForParameter( type.getName() ).matcher( storeProcedureDefinition ) );
-    }
-
-    private static String getDefaultValueForNumberFromSpDefinition( ParameterType type, String storeProcedureDefinition ) {
-        return getDefaultValue( type, storeProcedureDefinition,
-                getNumberPatternForParameter( type.getName() ).matcher( storeProcedureDefinition ) );
-    }
-    
-    private static String getDefaultValue( ParameterType type, String storeProcedureDefinition, Matcher matcher  ){
-        if ( getNullPatternForParameter( type.getName() ).matcher( storeProcedureDefinition ).find() ){
-            return NULL;
-        }
-        if( matcher.find() ){
-            return matcher.group( 1 );
-        } else {
-            return "";
-        }
-    }
-
-    private static Pattern getStringPatternForParameter( String name ) {
-        return Pattern.compile( String.format( "(?isu)@%s\\s+[^@]+?=\\s*['\"](.*?)['\"]", name ) );
-    }
-
-    private static Pattern getNullPatternForParameter( String parameterName ) {
-        return Pattern.compile( String.format( "(?isu)@%s\\s+[^@]+?=\\s*null\\b", parameterName) );
-    }
-
-    private static Pattern getNumberPatternForParameter( String parameterName ) {
-        return Pattern.compile( String.format( "(?isu)@%s\\s+[^@]+?=\\s*([\\d\\.]+)\\b", parameterName ) );
-    }
 
     private static Pattern getCommentPattern( String parameterName ) {
         return Pattern.compile( String.format( "(?isu)@%s\\s+[^@]+?--([^@]+)", parameterName ) );
@@ -195,5 +152,5 @@ public class StoreProcedureInfoExtractor {
         }
     }
 
-    public static final String NULL = "null";
+
 }

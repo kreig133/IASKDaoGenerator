@@ -62,7 +62,7 @@ public class DaoGenerator {
         }
     };
 
-    public static void doAction() {
+    public static void generateJavaCode() {
 
         final OperationSettings opSettings = Settings.settings();
 

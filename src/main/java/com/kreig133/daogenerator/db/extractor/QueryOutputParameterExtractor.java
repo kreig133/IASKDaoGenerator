@@ -20,13 +20,13 @@ public class QueryOutputParameterExtractor extends OutputParameterExtractor{
     @Override
     protected ResultSet getResultSet( DaoMethod daoMethod ) throws SQLException {
         final String query =
-                SqlQueryParser.getQueryStringWithoutMetaData( daoMethod.getCommon().getQuery() );
+                SqlQueryParser.instance().getQueryStringWithoutMetaData( daoMethod.getCommon().getQuery() );
 
         assert query != null;
 
         final PreparedStatement statement = JDBCConnector.instance().connectToDB().prepareStatement( query );
 
-        List<String> names = SqlQueryParser.getListOfParametrNames( daoMethod.getCommon().getQuery() );
+        List<String> names = SqlQueryParser.instance().getListOfParametrNames( daoMethod.getCommon().getQuery() );
 
         for ( int i = 0; i < names.size(); i++ ) {
             ParameterType paramter = daoMethod.getInputParametrs().getParameterByName( names.get( i ) );

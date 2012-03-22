@@ -26,7 +26,7 @@ public class SelectQueryCreator extends QueryCreator{
             builder = new StringBuilder();
 
             final List<String> listOfParametrNames =
-                    SqlQueryParser.getListOfParametrNames( daoMethod.getCommon().getQuery() );
+                    SqlQueryParser.instance().getListOfParametrNames( daoMethod.getCommon().getQuery() );
 
             for( int i = 0; i < splitted.length - 1; i++ ){
                 builder.append( splitted[i] );

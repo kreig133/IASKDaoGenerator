@@ -1,9 +1,6 @@
 package com.kreig133.daogenerator.sql;
 
-import com.kreig133.daogenerator.jaxb.DaoMethod;
-import com.kreig133.daogenerator.jaxb.InOutType;
-import com.kreig133.daogenerator.jaxb.JavaType;
-import com.kreig133.daogenerator.jaxb.ParameterType;
+import com.kreig133.daogenerator.jaxb.*;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -18,9 +15,20 @@ import java.util.regex.Pattern;
  */
 public class SqlQueryParser {
 
-    private static final Pattern pattern = Pattern.compile( "\\$\\{(.+?)\\}");
+    private static SqlQueryParser INSTANCE;
 
-    public static DaoMethod parseSqlQueryAndParameters( DaoMethod daoMethod ) {
+    public static SqlQueryParser instance(){
+        if ( INSTANCE == null ) {
+            INSTANCE = new SqlQueryParser();
+        }
+        return INSTANCE;
+    }
+
+    public static final String NULL = "null";
+
+    private final Pattern pattern = Pattern.compile( "\\$\\{(.+?)\\}");
+
+    public DaoMethod parseSqlQueryForParameters( DaoMethod daoMethod ) {
         final String query = daoMethod.getCommon().getQuery();
 
         Matcher matcher = getMatcher( query );
@@ -60,15 +68,15 @@ public class SqlQueryParser {
         return daoMethod;
     }
 
-    private static Matcher getMatcher( String query ) {
+    private Matcher getMatcher( String query ) {
         return pattern.matcher( query );
     }
     
-    public static String getQueryStringWithoutMetaData( String query ){
+    public String getQueryStringWithoutMetaData( String query ){
         return query.replaceAll( pattern.pattern(), "?" ) ;
     }
 
-    public static List<String> getListOfParametrNames( String query ) {
+    public List<String> getListOfParametrNames( String query ) {
         final ArrayList<String> names = new ArrayList<String>();
 
         Matcher matcher = getMatcher( query );
@@ -78,5 +86,99 @@ public class SqlQueryParser {
         }
 
         return names;
+    }
+
+    public SelectType determineQueryType( String query ) {
+        if ( ! stringContainsMoreThanOneWord( query ) ) {
+            return SelectType.CALL;
+        }
+
+        final String firstWord = query.trim().split( "\\s" )[0];
+
+        return SelectType.getByName( firstWord );
+    }
+
+    private boolean stringContainsMoreThanOneWord( String query ) {
+        return ( query.split( "\\s+" ).length > 1 );
+    }
+
+    public boolean checkSPName( String query ) {
+        if( determineQueryType( query ) != SelectType.CALL ) {
+            throw new IllegalArgumentException();
+        }
+
+        return ! ( getStoreProcedureName( query ) == null || "".equals( getStoreProcedureName( query ) ) );
+    }
+
+
+    public void fillTestValuesByInsertedQuery( List<ParameterType> inputParametrs, String query ) {
+        for ( ParameterType inputParametr : inputParametrs ) {
+            inputParametr.setTestValue( getParameterValueFromQuery( inputParametr, query ) );
+        }
+    }
+    
+    private static Pattern getPatternForExtractTestValue( String parameterName ) {
+        return Pattern.compile( String.format( "(?isu)@%s\\s+[^@]*?=\\s*null\\b", parameterName) );
+    }
+    
+    Pattern storeNamePattern = Pattern.compile( "(?iu)execute\\s+(\\w+)" );
+    
+    public String getStoreProcedureName( String query ) {
+        final String s = query.replaceAll( "dbo\\.", "" ).trim();
+        
+        if( stringContainsMoreThanOneWord( s ) ){
+            final Matcher matcher = storeNamePattern.matcher( s );
+            return matcher.find() ? matcher.group( 1 ) : null;
+        }
+        
+        return s;
+    }
+
+
+
+    private String getDefaultValueForQuotedFromSpDefinition( ParameterType type, String query ) {
+        return getDefaultValue( type, query,
+                getStringPatternForParameter( type.getName() ).matcher( query ) );
+    }
+
+    private String getDefaultValueForNumberFromSpDefinition( ParameterType type, String query ) {
+        return getDefaultValue( type, query,
+                getNumberPatternForParameter( type.getName() ).matcher( query ) );
+    }
+
+    private String getDefaultValue( ParameterType type, String query, Matcher matcher  ){
+        if ( getNullPatternForParameter( type.getName() ).matcher( query ).find() ){
+            return NULL;
+        }
+        if( matcher.find() ){
+            return matcher.group( 1 );
+        } else {
+            return "";
+        }
+    }
+
+    private Pattern getStringPatternForParameter( String name ) {
+        return Pattern.compile( String.format( "(?isu)@%s\\s+[^@]*?=\\s*['\"](.*?)['\"]", name ) );
+    }
+
+    private Pattern getNullPatternForParameter( String parameterName ) {
+        return Pattern.compile( String.format( "(?isu)@%s\\s+[^@]*?=\\s*null\\b", parameterName) );
+    }
+
+    private Pattern getNumberPatternForParameter( String parameterName ) {
+        return Pattern.compile( String.format( "(?isu)@%s\\s+[^@]*?=\\s*([-\\d\\.]+)\\b", parameterName ) );
+    }
+
+    public String getParameterValueFromQuery( ParameterType type, String query ) {
+        switch ( type.getType() ){
+            case LONG:
+            case BYTE:
+            case DOUBLE:
+                return getDefaultValueForNumberFromSpDefinition( type, query );
+            default:
+                return getDefaultValueForQuotedFromSpDefinition( type, query );
+        }
+
+
     }
 }
