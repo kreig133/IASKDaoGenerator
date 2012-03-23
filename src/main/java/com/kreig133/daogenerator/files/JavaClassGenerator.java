@@ -1,7 +1,5 @@
 package com.kreig133.daogenerator.files;
 
-import com.kreig133.daogenerator.DaoGenerator;
-import com.kreig133.daogenerator.common.FunctionalObjectWithoutFilter;
 import com.kreig133.daogenerator.common.Utils;
 import com.kreig133.daogenerator.enums.ClassType;
 import com.kreig133.daogenerator.enums.MethodType;
@@ -20,8 +18,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import static com.kreig133.daogenerator.common.Utils.insertTabs;
-import static com.kreig133.daogenerator.common.Utils.iterateForParameterList;
 import static com.kreig133.daogenerator.common.Utils.stringNotEmpty;
 
 /**
@@ -158,7 +154,7 @@ abstract public class JavaClassGenerator {
         }
     }
 
-    protected String replacePointBySlash( String string ){
+    public static String replacePointBySlash( String string ){
         if( string != null ){
             return string.replace( '.', '/' );
         }
@@ -312,7 +308,7 @@ abstract public class JavaClassGenerator {
         return new String( chars );
     }
 
-    protected static String convertNameForNonClassNaming( String name ) {
+    public static String convertNameForNonClassNaming( String name ) {
         final char[] chars = name.toCharArray();
         chars[ 0 ] = Character.toLowerCase( chars[ 0 ] );
         return new String( chars );

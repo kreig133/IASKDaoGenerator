@@ -36,10 +36,10 @@ public class Settings {
     public static final String DEPO = "depo";
 
 
-    public static final String URL = "url";
-    public static final String USERNAME = "username";
-    public static final String PASSWORD = "password";
-    public static final String DRIVER = "driver";
+    public static final String URL = "jdbc.url";
+    public static final String USERNAME = "jdbc.username";
+    public static final String PASSWORD = "jdbc.password";
+    public static final String DRIVER = "jdbc.driverClass";
 
 
     public static void saveProperties() {

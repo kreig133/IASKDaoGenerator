@@ -5,7 +5,7 @@ import java.text.SimpleDateFormat;
  * @author eshangareev
  * @version 1.0
  */
-public class Test {
+public class DataFormatTest {
     SimpleDateFormat format = new SimpleDateFormat( "M-d-yyyy H:m:s.SSS" );
 
 

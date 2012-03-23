@@ -1,9 +1,11 @@
 package com.kreig133.daogenerator;
 
+import com.kreig133.daogenerator.files.JavaClassGenerator;
 import com.kreig133.daogenerator.files.mybatis.mapping.MappingGenerator;
 import com.kreig133.daogenerator.settings.Settings;
 
 import java.io.*;
+import java.util.Scanner;
 
 /**
  * @author kreig133
@@ -17,10 +19,43 @@ public class MavenProjectGenerator {
         copyPomFileToMavenProject();
         copyAppContextConfigToMavenProject();
         copyAbstractTester();
+        generateSpringConfig();
+    }
+
+    protected static void generateSpringConfig() throws IOException {
+
+
+        InputStream stream = new ByteArrayInputStream( fillContextTemplateByData( streamToString(
+                MavenProjectGenerator.class.getClassLoader().getResourceAsStream( "mapperBeanContextTemplate.xml" )
+        ) ).getBytes() );
+
+        copyFile(
+                stream,
+                new File(
+                        Settings.settings().getPathForTestResources() + "/" +
+                        JavaClassGenerator.replacePointBySlash( Settings.settings().getMapperPackage() ) + "/" +
+                        getConfigName() + ".xml"
+                )
+        );
 
     }
 
-    private static void copyAbstractTester() throws IOException {
+    protected static String streamToString( InputStream stream ) {
+
+        return new Scanner( stream ).useDelimiter( "\\A" ).next();
+    }
+
+    protected static String fillContextTemplateByData( String string ) {
+        return string
+                .replaceFirst( "\\$\\{beanClass\\}",
+                        Settings.settings().getMapperPackage() + "." +
+                                MappingGenerator.instance().getFileName() )
+                .replaceFirst( "\\$\\{beanName\\}",
+                        JavaClassGenerator.convertNameForNonClassNaming(
+                                MappingGenerator.instance().getFileName() ) );
+    }
+
+    protected static void copyAbstractTester() throws IOException {
         copyFile(
                 MavenProjectGenerator.class.getClassLoader().getResourceAsStream( "AbstractDepoDaoExecuteTester.txt" ),
                 new File( Settings.settings().getPathForGeneratedTests()
@@ -28,21 +63,21 @@ public class MavenProjectGenerator {
         );
     }
 
-    private static void copyAppContextConfigToMavenProject() throws IOException {
+    protected static void copyAppContextConfigToMavenProject() throws IOException {
         copyFile(
                 MavenProjectGenerator.class.getClassLoader().getResourceAsStream( "testApplicationContext.xml" ),
                 new File( Settings.settings().getPathForTestResources() + "/testApplicationContext.xml" )
         );
     }
 
-    private static void copyPomFileToMavenProject() throws IOException {
+    protected static void copyPomFileToMavenProject() throws IOException {
         copyFile(
                 MavenProjectGenerator.class.getClassLoader().getResourceAsStream( "pom.xml" ),
                 new File( Settings.settings().getOutputPathForJavaClasses() + "/pom.xml" )
         );
     }
 
-    private static void copyPropertiesFileToMavenProject() throws IOException {
+    protected static void copyPropertiesFileToMavenProject() throws IOException {
         final InputStream resourceAsStream = MavenProjectGenerator.class.getClassLoader().
                 getResourceAsStream( "depo/application.properties" );// TODO
 
@@ -76,6 +111,6 @@ public class MavenProjectGenerator {
     }
     
     public static String getConfigName(){
-        return MappingGenerator.instance().getFileName() + "Config";
+        return MappingGenerator.instance().getFileName() + "TestConfig";
     }
 }
