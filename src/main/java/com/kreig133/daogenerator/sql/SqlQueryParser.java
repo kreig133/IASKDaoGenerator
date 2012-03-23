@@ -112,6 +112,8 @@ public class SqlQueryParser {
 
 
     public void fillTestValuesByInsertedQuery( List<ParameterType> inputParametrs, String query ) {
+        if( ! stringContainsMoreThanOneWord( query ) ) return;
+
         for ( ParameterType inputParametr : inputParametrs ) {
             inputParametr.setTestValue( getParameterValueFromQuery( inputParametr, query ) );
         }
