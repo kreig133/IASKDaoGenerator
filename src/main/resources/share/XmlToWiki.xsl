@@ -74,7 +74,8 @@
         </xsl:for-each>
         <xsl:text>----&#xA;&#xA;</xsl:text>
 
-        <xsl:text>h5. Пример выполнения: {code:language=sql}</xsl:text>
+        <xsl:text>h5. Пример выполнения: &#xA;</xsl:text>
+        <xsl:text>{code:language=sql}</xsl:text>
         <xsl:choose>
             <xsl:when test="//apl:configuration/@type = 'CALL'">
                 <xsl:text>execute dbo.</xsl:text>

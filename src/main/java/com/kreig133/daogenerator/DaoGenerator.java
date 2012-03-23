@@ -68,7 +68,7 @@ public class DaoGenerator {
 
         Settings.saveProperties();
 
-        for( String s : getXmlFileNamesInDirectory() ) {
+        for ( String s : getXmlFileNamesInDirectory( Settings.settings().getSourcePath() ) ) {
             daoMethods.add( JaxbHandler.unmarshallFile(
                     Utils.getFileFromDirectoryByName( opSettings.getSourcePath(), s )
             ) );
@@ -83,8 +83,8 @@ public class DaoGenerator {
 
     }
 
-    public static String[] getXmlFileNamesInDirectory( ) {
-        return ( new File( Settings.settings() .getSourcePath() ) )
+    public static String[] getXmlFileNamesInDirectory( String path ) {
+        return ( new File( path ) )
                 .list(
                         new FilenameFilter() {
                             public boolean accept( File dir, String name ) {

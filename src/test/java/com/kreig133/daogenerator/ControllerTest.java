@@ -21,7 +21,8 @@ public class ControllerTest {
 
     @Test
     public void getXmfFileNamesInDirectoryTest(){
-        final String[] xmlFileNamesInDirectory = DaoGenerator.getXmlFileNamesInDirectory();
+        final String[] xmlFileNamesInDirectory = DaoGenerator.getXmlFileNamesInDirectory(
+                Settings.settings().getSourcePath() );
         for ( String s : xmlFileNamesInDirectory ) {
             System.out.println( "s = " + s );
         }
