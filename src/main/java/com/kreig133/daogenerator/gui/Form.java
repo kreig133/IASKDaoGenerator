@@ -387,8 +387,10 @@ public class Form  implements TypeChangeListener, SourcePathChangeListener{
 
     private boolean validateBeforeStartGenerateJavaClasses() {
         if(
-                ( ! isPackageName( daoPackageTextField      .getText() ) ) ||
-                ( ! isPackageName( modelPackageLabel        .getText() ) ) ||
+                ( ! isPackageName( daoPackageTextField      .getText() )
+                           && Settings.settings().getType() == Type.IASK ) ||
+                ( ! isPackageName( modelPackageTextField    .getText() )
+                           && Settings.settings().getType() == Type.DEPO ) ||
                 ( ! isPackageName( entityPackageTextField   .getText() ) ) ||
                 ( ! isPackageName( mappingPackageTextField  .getText() ) )
         ){
