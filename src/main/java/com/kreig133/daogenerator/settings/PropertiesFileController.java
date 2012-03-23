@@ -22,9 +22,7 @@ public class PropertiesFileController {
         try{
             Properties settings = new Properties();
 
-            settings.load(
-                    PropertiesFileController.class.getClassLoader().getResourceAsStream( getDefaultPropertiesFileName() )
-            );
+            settings.load( new FileInputStream( getDefaultPropertiesFileName() ) );
 
             final String sourceDir = settings.getProperty( Settings.SOURCE_DIR );
             //Пытаемся считать настройки из папки SOURCE_DIR
@@ -43,7 +41,7 @@ public class PropertiesFileController {
     }
 
     private static String getDefaultPropertiesFileName() {
-        return "properties/" + Settings.PROPERTIES_FILE_NAME ;
+        return Settings.PROPERTIES_FILE_NAME ;
     }
 
     public static Properties getPropertiesFromSourceDir( String sourceDirPath ) {
