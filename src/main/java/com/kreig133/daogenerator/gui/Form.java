@@ -2,6 +2,7 @@ package com.kreig133.daogenerator.gui;
 
 import com.kreig133.daogenerator.DaoGenerator;
 import com.kreig133.daogenerator.JaxbHandler;
+import com.kreig133.daogenerator.MavenProjectGenerator;
 import com.kreig133.daogenerator.WikiGenerator;
 import com.kreig133.daogenerator.common.SourcePathChangeListener;
 import com.kreig133.daogenerator.common.TypeChangeListener;
@@ -225,7 +226,18 @@ public class Form  implements TypeChangeListener, SourcePathChangeListener{
             public void actionPerformed( ActionEvent e ) {
                 if( validateBeforeStartGenerateJavaClasses() ){
                     saveSettings();
-                    DaoGenerator.generateJavaCode();
+                    tabbedPane1.setSelectedIndex( 3 );
+                    //TODO
+                    new Thread(
+                        new Runnable(){
+                            @Override
+                            public void run() {
+                                DaoGenerator.generateJavaCode();
+                                MavenProjectGenerator.installProject();
+                            }
+                        }
+                    ).start();
+
                 }
             }
         } );

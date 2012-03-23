@@ -63,6 +63,7 @@ public class DaoGenerator {
     };
 
     public static void generateJavaCode() {
+        System.out.println("Generating new maven project started...");
 
         final OperationSettings opSettings = Settings.settings();
 
@@ -80,7 +81,7 @@ public class DaoGenerator {
         } catch ( IOException e ) {
             throw new RuntimeException( e );
         }
-
+        System.out.println("..generating new maven project finished.");
     }
 
     public static String[] getXmlFileNamesInDirectory( String path ) {

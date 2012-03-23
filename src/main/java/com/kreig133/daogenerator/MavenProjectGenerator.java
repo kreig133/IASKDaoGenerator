@@ -15,7 +15,6 @@ import java.util.Scanner;
 public class MavenProjectGenerator {
 
     public static void generate() throws IOException {
-
         copyPropertiesFileToMavenProject();
         copyPomFileToMavenProject();
         copyAppContextConfigToMavenProject();
@@ -110,5 +109,25 @@ public class MavenProjectGenerator {
     
     public static String getConfigName(){
         return MappingGenerator.instance().getFileName() + "TestConfig";
+    }
+
+    public static void installProject() {
+        final String[] cmdarray = { "cmd", "/C", "mvn -f "+ Settings.settings().getOutputPathForJavaClasses() +
+                "\\pom.xml clean install"};
+
+        for ( String s1 : cmdarray ) {
+            System.out.println( s1 );
+        }
+
+            Runtime runtime = Runtime.getRuntime();
+        try {
+            Communicator.communicate(
+                    runtime.exec( cmdarray ),
+                    new OutputStreamWriter( System.out, "Cp866" ),
+                    new OutputStreamWriter( System.err, "Cp866" )
+            );
+        } catch ( IOException e ) {
+            e.printStackTrace();
+        }
     }
 }
