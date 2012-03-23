@@ -20,7 +20,6 @@ public class OperationSettingsImpl implements OperationSettings{
 
     private Type TYPE;
 
-    private String OPERATION_NAME = "defaultOperationName";
     private String ENTITY_PACKAGE = "ru.sbrf.aplana.entity";
     private String DAO_PACKAGE = "ru.sbrf.aplana.dao";
     private String MAPPER_PACKAGE = "ru.sbrf.aplana.data";
@@ -62,7 +61,7 @@ public class OperationSettingsImpl implements OperationSettings{
 
     @Override
     public String getOperationName() {
-        return OPERATION_NAME;
+        return new File( SOURCE_PATH ).getName();
     }
 
     @Override
@@ -97,11 +96,6 @@ public class OperationSettingsImpl implements OperationSettings{
                 listener.typeChanged();
             }
         }
-    }
-
-    @Override
-    public void setOperationName( String operationName ) {
-        OPERATION_NAME = operationName;
     }
 
     @Override

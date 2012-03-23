@@ -28,9 +28,6 @@ public class EmptyOperationSettingsImpl implements OperationSettings{
     }
 
     @Override
-    public void setOperationName( String operationName ) { }
-
-    @Override
     public String getOutputPathForJavaClasses() {
         return null;
     }

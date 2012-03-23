@@ -15,8 +15,6 @@ public interface OperationSettings {
 
     String getOperationName();
 
-    void setOperationName(String operationName );
-
     String getOutputPathForJavaClasses();
     
     String getPathForGeneratedSource();
