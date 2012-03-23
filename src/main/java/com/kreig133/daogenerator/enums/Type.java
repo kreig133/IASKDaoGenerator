@@ -8,7 +8,7 @@ public enum Type  {
     IASK, DEPO;
 
     public String pathToProperty(){
-        return "properties/db/" + this.toString().toLowerCase() + "/application.properties";
+        return "db/" + this.toString().toLowerCase() + "/application.properties";
     }
     
     public static Type getByName( String name ){
