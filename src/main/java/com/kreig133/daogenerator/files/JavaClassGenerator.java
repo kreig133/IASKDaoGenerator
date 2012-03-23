@@ -158,16 +158,16 @@ abstract public class JavaClassGenerator {
         }
     }
 
-    protected static String replacePointBySlash( String string ){
+    protected String replacePointBySlash( String string ){
         if( string != null ){
             return string.replace( '.', '/' );
         }
-
         return null;
     }
 
     protected void insertImport( String path ){
-        builder.append( "import " ).append( path ).append( ";\n" );
+        builder.append( "import " ).append( path ).append( ";" );
+        insertLine();
     }
 
     protected void insertSerialVersionUID() {

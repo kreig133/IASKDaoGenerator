@@ -61,7 +61,7 @@ public class InterfaceGenerator extends DaoJavaClassGenerator {
     }
 
 
-    protected static File daoFile( String fileName ) throws IOException {
+    protected File daoFile( String fileName ) throws IOException {
         File file = new File(
                 Settings.settings().getPathForGeneratedSource() + "/" +
                         replacePointBySlash( Settings.settings().getDaoPackage() ) + "/" +
