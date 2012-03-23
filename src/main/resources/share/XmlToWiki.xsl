@@ -4,7 +4,7 @@
         extension-element-prefixes="apl"
         >
 
-    <xsl:output method="text" encoding="windows-1251" />
+    <xsl:output method="text" encoding="UTF-8" />
 
     <xsl:template match="/">
 
@@ -38,7 +38,7 @@
         <xsl:text>----&#10;</xsl:text>
 
         <xsl:text>h5. Входные параметры&#10;</xsl:text>
-        <xsl:text> || № пп || Название || Rename || SQL-тип || IN / OUT || Default || Комментарии ||&#10; </xsl:text>
+        <xsl:text>|| № пп || Название || Rename || SQL-тип || IN / OUT || Default || Комментарии ||&#10;</xsl:text>
         <xsl:for-each select="//apl:inputParametrs/apl:parameter">
             <xsl:text>| </xsl:text>
             <xsl:value-of select="position()" />
@@ -60,7 +60,7 @@
         <xsl:text>----&#xA;&#xA;</xsl:text>
 
         <xsl:text>h5. Выходные данные&#10;</xsl:text>
-        <xsl:text> || № пп || Название || SQL-тип || Комментарии || &#xA;</xsl:text>
+        <xsl:text>|| № пп || Название || SQL-тип || Комментарии || &#xA;</xsl:text>
         <xsl:for-each select="//apl:outputParametrs/apl:parameter">
             <xsl:text>| </xsl:text>
             <xsl:value-of select="position()" />
@@ -75,7 +75,7 @@
         <xsl:text>----&#xA;&#xA;</xsl:text>
 
         <xsl:text>h5. Пример выполнения: &#xA;</xsl:text>
-        <xsl:text>{code:language=sql}</xsl:text>
+        <xsl:text>{code:language=sql}&#xA;</xsl:text>
         <xsl:choose>
             <xsl:when test="//apl:configuration/@type = 'CALL'">
                 <xsl:text>execute dbo.</xsl:text>

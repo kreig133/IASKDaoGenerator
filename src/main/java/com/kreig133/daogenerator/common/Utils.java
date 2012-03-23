@@ -3,13 +3,20 @@ package com.kreig133.daogenerator.common;
 import com.kreig133.daogenerator.jaxb.ParameterType;
 
 import java.io.File;
+import java.io.InputStream;
+import java.io.UnsupportedEncodingException;
 import java.util.List;
+import java.util.Scanner;
 
 /**
  * @author eshangareev
  * @version 1.0
  */
 public class Utils {
+
+    public static String streamToString( InputStream stream ) {
+        return  new Scanner( stream ).useDelimiter( "\\A" ).next();
+    }
 
     public static StringBuilder insertTabs( StringBuilder builder, int tabsQuantity ){
         for( int i = 0 ; i < tabsQuantity; i ++ ){

@@ -1,5 +1,6 @@
 package com.kreig133.daogenerator;
 
+import com.kreig133.daogenerator.common.Utils;
 import com.kreig133.daogenerator.files.JavaClassGenerator;
 import com.kreig133.daogenerator.files.mybatis.mapping.MappingGenerator;
 import com.kreig133.daogenerator.settings.Settings;
@@ -25,7 +26,7 @@ public class MavenProjectGenerator {
     protected static void generateSpringConfig() throws IOException {
 
 
-        InputStream stream = new ByteArrayInputStream( fillContextTemplateByData( streamToString(
+        InputStream stream = new ByteArrayInputStream( fillContextTemplateByData( Utils.streamToString(
                 MavenProjectGenerator.class.getClassLoader().getResourceAsStream( "mapperBeanContextTemplate.xml" )
         ) ).getBytes() );
 
@@ -40,10 +41,7 @@ public class MavenProjectGenerator {
 
     }
 
-    protected static String streamToString( InputStream stream ) {
 
-        return new Scanner( stream ).useDelimiter( "\\A" ).next();
-    }
 
     protected static String fillContextTemplateByData( String string ) {
         return string

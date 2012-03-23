@@ -22,10 +22,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
-import java.io.File;
-import java.io.IOException;
-import java.io.OutputStream;
-import java.io.PrintStream;
+import java.io.*;
 import java.util.List;
 import java.util.regex.Pattern;
 
@@ -64,7 +61,7 @@ public class Form  implements TypeChangeListener, SourcePathChangeListener{
     private JTextField modelPackageTextField;
     private JLabel modelPackageLabel;
     private JLabel daoPackageLabel;
-    private JFrame windowWithSPText;
+    private JFrame windowWithText;
 
     private boolean start = true;
 
@@ -141,9 +138,9 @@ public class Form  implements TypeChangeListener, SourcePathChangeListener{
                     return;
                 }
 
-                SPTextView.setText( StoreProcedureInfoExtractor.getSPText() );
+                TextView.setText( StoreProcedureInfoExtractor.getSPText() );
 
-                getWindowWithSPText().setVisible( true );
+                getWindowWithText().setVisible( true );
             }
         } );
 
@@ -168,15 +165,20 @@ public class Form  implements TypeChangeListener, SourcePathChangeListener{
                     final File dirForSave = fileChooser.getSelectedFile();
                     final DaoMethod currentDaoMethods = getCurrentDaoMethod();
 
-                    JaxbHandler.marshallInFile(
-                            new File(
-                                    dirForSave.getAbsolutePath() + "/" +
-                                            currentDaoMethods.getCommon().getMethodName() + ".xml"
-                            ),
-                            currentDaoMethods
-                    );
+                    String xmlFilePath = dirForSave.getAbsolutePath() + "/" +
+                            currentDaoMethods.getCommon().getMethodName() + ".xml";
 
-                    generateWiki( dirForSave.getAbsolutePath() );
+                    JaxbHandler.marshallInFile( new File( xmlFilePath ), currentDaoMethods );
+
+                    try {
+                        WikiGenerator.generateWikiForXmlFile( xmlFilePath );
+
+                        TextView.setText( Utils.streamToString( new FileInputStream( xmlFilePath + ".txt" ) ) );
+
+                        getWindowWithText().setVisible( true );
+                    } catch ( IOException ex ) {
+                        ex.printStackTrace();
+                    }
                 }
             }
         } );
@@ -184,21 +186,16 @@ public class Form  implements TypeChangeListener, SourcePathChangeListener{
         generateWikiButton.addActionListener( new ActionListener() {
             @Override
             public void actionPerformed( ActionEvent e ) {
-                if( fileChooser.showOpenDialog( generateWikiButton ) == JFileChooser.APPROVE_OPTION ){    
-                    generateWiki( fileChooser.getSelectedFile().getAbsolutePath() );
+                if( fileChooser.showOpenDialog( generateWikiButton ) == JFileChooser.APPROVE_OPTION ){
+                    try {
+                        WikiGenerator.generateWiki( fileChooser.getSelectedFile().getAbsolutePath() );
+                    } catch ( IOException ex ) {
+                        ex.printStackTrace();
+                    }
                 }
             }
         } );
     }
-
-    private void generateWiki( String sourcePath ) {
-        try {
-            WikiGenerator.generateWiki( sourcePath );
-        } catch ( IOException e ) {
-            e.printStackTrace();
-        }
-    }
-
 
     private void initializingDeveloperTab() {
 
@@ -323,15 +320,15 @@ public class Form  implements TypeChangeListener, SourcePathChangeListener{
         return result;
     }
 
-    public JFrame getWindowWithSPText() {
-        if ( windowWithSPText == null ) {
-            windowWithSPText = new JFrame();
-            windowWithSPText.setSize( 400, 700 );
-            windowWithSPText.setDefaultCloseOperation( WindowConstants.HIDE_ON_CLOSE );
-            windowWithSPText.add( SPTextView.getInstance() );
+    public JFrame getWindowWithText() {
+        if ( windowWithText == null ) {
+            windowWithText = new JFrame();
+            windowWithText.setSize( 1024, 700 );
+            windowWithText.setDefaultCloseOperation( WindowConstants.HIDE_ON_CLOSE );
+            windowWithText.add( TextView.getInstance() );
         }
 
-        return windowWithSPText;
+        return windowWithText;
     }
 
     private void createUIComponents() {

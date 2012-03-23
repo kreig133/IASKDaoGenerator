@@ -1,4 +1,5 @@
 import com.kreig133.daogenerator.MavenProjectGenerator;
+import com.kreig133.daogenerator.common.Utils;
 import com.kreig133.daogenerator.settings.Settings;
 import org.junit.Assert;
 import org.junit.Test;
@@ -11,7 +12,7 @@ public class MavenProjectGeneratorTests extends MavenProjectGenerator{
 
     @Test
     public void streamToStringTest(){
-        String s = MavenProjectGenerator.streamToString(
+        String s = Utils.streamToString(
                 MavenProjectGeneratorTests.class.getClassLoader().getResourceAsStream( "xml/Example.xsd.xml" )
         );
         
