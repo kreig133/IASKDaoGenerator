@@ -5,9 +5,13 @@ package com.kreig133.daogenerator.enums;
  * @version 1.0
  */
 public enum Type  {
-    IASK, DEPO;
+    IASK, DEPO, TEST;
 
-    public String pathToProperty(){
+    public String pathToProperty() {
+        if ( this == TEST ) {
+            return "target/db/depo/application.properties";
+        }
+
         return "db/" + this.toString().toLowerCase() + "/application.properties";
     }
     

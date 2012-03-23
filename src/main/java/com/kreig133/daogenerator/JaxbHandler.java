@@ -8,6 +8,7 @@ import javax.xml.bind.Marshaller;
 import javax.xml.bind.Unmarshaller;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 
 /**
  * @author kreig133
@@ -24,6 +25,16 @@ public class JaxbHandler {
         try {
             return ( DaoMethod ) getUnmarshaller().unmarshal( fileWithData );
         } catch ( Throwable e ) {
+            throw new RuntimeException( e );
+        }
+    }
+
+    public static DaoMethod unmarshallStream(
+            InputStream stream
+    ) {
+        try {
+            return ( DaoMethod ) getUnmarshaller().unmarshal( stream );
+        } catch ( JAXBException e ) {
             throw new RuntimeException( e );
         }
     }

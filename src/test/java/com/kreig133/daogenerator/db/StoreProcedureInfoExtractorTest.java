@@ -1,9 +1,13 @@
 package com.kreig133.daogenerator.db;
 
 import com.kreig133.daogenerator.TestHelper;
+import com.kreig133.daogenerator.enums.Type;
 import com.kreig133.daogenerator.jaxb.DaoMethod;
 import com.kreig133.daogenerator.jaxb.JavaType;
 import com.kreig133.daogenerator.jaxb.ParameterType;
+import com.kreig133.daogenerator.settings.Settings;
+import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.mockito.Mockito;
 
@@ -19,8 +23,15 @@ import java.util.List;
  */
 public class StoreProcedureInfoExtractorTest extends StoreProcedureInfoExtractor{
 
+    @Before
+    public void before(){
+        Settings.settings().setType( Type.TEST );
+    }
+
     @Test
     public void test(){
+
+
         final List<ParameterType> sp_bilPg_getBillMakerList =
                 StoreProcedureInfoExtractor.getInputParametrsForSP( "sp_bilPg_GetBillMakerList" );
 
@@ -33,6 +44,7 @@ public class StoreProcedureInfoExtractorTest extends StoreProcedureInfoExtractor
 
         Mockito.when( rs.getString( StoreProcedureInfoExtractor.DATA_TYPE_COLUMN ) ).thenReturn( "int" );
         Mockito.when( rs.getString( StoreProcedureInfoExtractor.PARAMETER_NAME_COLUMN ) ).thenReturn( "id" );
+        Mockito.when( rs.getString( StoreProcedureInfoExtractor.PARAMETER_MODE ) ).thenReturn( "IN" );
 
         final ParameterType parameterType = StoreProcedureInfoExtractor.extractDataFromResultSetRow( rs );
 

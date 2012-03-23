@@ -4,9 +4,11 @@ import com.kreig133.daogenerator.jaxb.*;
 import com.kreig133.daogenerator.settings.Settings;
 import junit.framework.Assert;
 import org.junit.BeforeClass;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import java.io.File;
+import java.io.InputStream;
 
 /**
  * @author kreig133
@@ -16,7 +18,7 @@ public class ControllerTest {
 
     @BeforeClass
     public static void before(){
-        Settings.settings().setSourcePath( "xml" );
+        Settings.settings().setSourcePath( "target\\test-classes\\xml" );
     }
 
     @Test
@@ -31,9 +33,10 @@ public class ControllerTest {
 
     @Test
     public void testUnmarshallFile() {
-        File xml = new File( "xml/Example.xsd.xml" );
-        Assert.assertTrue( xml.isFile() && xml.exists() );
-        final DaoMethod daoMethod = JaxbHandler.unmarshallFile( xml );
+        InputStream resourceAsStream =
+                ControllerTest.class.getClassLoader().getResourceAsStream( "xml/Example.xsd.xml" );
+        Assert.assertTrue( resourceAsStream != null  );
+        final DaoMethod daoMethod = JaxbHandler.unmarshallStream( resourceAsStream );
         Assert.assertTrue( daoMethod != null );
     }
 
