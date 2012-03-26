@@ -1,7 +1,6 @@
-package com.kreig133.daogenerator.files.mybatis;
+package com.kreig133.daogenerator.files.mybatis.test;
 
 import com.kreig133.daogenerator.MavenProjectGenerator;
-import com.kreig133.daogenerator.common.Utils;
 import com.kreig133.daogenerator.enums.ClassType;
 import com.kreig133.daogenerator.enums.Scope;
 import com.kreig133.daogenerator.files.JavaClassGenerator;
@@ -12,7 +11,6 @@ import com.kreig133.daogenerator.settings.Settings;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.Arrays;
 
 /**
  * @author eshangareev
@@ -35,7 +33,7 @@ public class TesterClassGenerator extends JavaClassGenerator{
     public void generateHead() throws IOException {
         insertPackageLine( Settings.settings().getMapperPackage() );
         insertLine();
-        insertImport( "com.aplana.sbrf.AbstractDepoDaoExecuteTester" );
+        insertImport( "com.aplana.sbrf.deposit.AbstractDepoDaoExecuteTester" );
         insertImport( "org.junit.Test" );
         insertImport( "org.junit.runner.RunWith" );
         insertImport( "org.springframework.beans.factory.annotation.Autowired" );
@@ -91,8 +89,7 @@ public class TesterClassGenerator extends JavaClassGenerator{
         insertTabs( 2 ).append( "org.junit.Assert.assertNotNull( invoke );" );
         insertLine();
         insertLine();
-        insertTabs( 1 ).append( "}" );
-        insertLine();
+        closeMethodOrInnerClassDefinition();
     }
 
     @Override

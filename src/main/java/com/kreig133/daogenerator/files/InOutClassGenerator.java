@@ -143,9 +143,7 @@ public class InOutClassGenerator extends JavaClassGenerator{
                     getParameterByName( ParametersType.WithPagingType.I_ROW_COUNT, parameters ).getRenameTo()
             ).append( " = 0L;" );
             insertLine();
-            insertTabs( 1 ).append( "}" );
-            insertLine();
-            insertLine();
+            closeMethodOrInnerClassDefinition();
         }
     }
 
@@ -187,9 +185,7 @@ public class InOutClassGenerator extends JavaClassGenerator{
                     .append( ";" );
             insertLine();
         }
-        insertTabs( 1 ).append( "}" );
-        insertLine();
-        insertLine();
+        closeMethodOrInnerClassDefinition();
     }
 
     private void writeToString(){
@@ -205,7 +201,7 @@ public class InOutClassGenerator extends JavaClassGenerator{
         }
 
         insertTabs( 2 ).append( "+\"]\";\n" );
-        insertTabs( 1 ).append( "}" );
+        closeMethodOrInnerClassDefinition();
     }
 
     public void insertFieldDeclaration( ParameterType p ) {

@@ -198,9 +198,7 @@ abstract public class JavaClassGenerator {
         Utils.insertTabs( builder, 1 ).append( Scope.PUBLIC.value() ).
                 append( " " ).append( className ).append( "(){");
         insertLine();
-        insertTabs( 1 ).append( "}" );
-        insertLine();
-        insertLine();
+        closeMethodOrInnerClassDefinition();
     }
 
 
@@ -265,13 +263,11 @@ abstract public class JavaClassGenerator {
 
         insertTabs( 2 ).append( "return " ).append( name ).append( ";");
         insertLine();
-        insertTabs( 1 ).append( "}" );
-        insertLine();
-        insertLine();
+        closeMethodOrInnerClassDefinition();
     }
 
-    private void generateGetterSignature( String javaDoc, JavaType javaType, String name ) {
-        insertJavaDoc( new String[] { "Получить ", "\"" + javaDoc + "\"" } );
+    protected void generateGetterSignature( String javaDoc, JavaType javaType, String name ) {
+        insertJavaDoc( wrapCommentForGetter( javaDoc ) );
 
         generateMethodSignature(
                 Scope.PUBLIC,
@@ -284,6 +280,9 @@ abstract public class JavaClassGenerator {
         insertLine();
     }
 
+    protected String[] wrapCommentForGetter( String javaDoc ) {
+        return new String[] { "Получить ", "\"" + javaDoc + "\"" };
+    }
 
     public void generateSetter(
             String javaDoc,
@@ -293,13 +292,11 @@ abstract public class JavaClassGenerator {
         generateSetterSignature( javaDoc, javaType, name );
         insertTabs( 2 ).append( "this." ).append( name ).append( " = " ).append( name ).append( ";" );
         insertLine();
-        insertTabs( 1 ).append( "}" );
-        insertLine();
-        insertLine();
+        closeMethodOrInnerClassDefinition();
     }
 
-    private void generateSetterSignature( String javaDoc, JavaType javaType, String name ) {
-        insertJavaDoc( new String[] { "Установить ", "\"" + javaDoc + "\"" } );
+    protected void generateSetterSignature( String javaDoc, JavaType javaType, String name ) {
+        insertJavaDoc( wrapCommentForSetter( javaDoc ) );
         generateMethodSignature(
                 Scope.PUBLIC,
                 null,
@@ -309,6 +306,10 @@ abstract public class JavaClassGenerator {
                 false
         );
         insertLine();
+    }
+
+    protected String[] wrapCommentForSetter( String javaDoc ) {
+        return new String[] { "Установить ", "\"" + javaDoc + "\"" };
     }
 
     /**
@@ -347,5 +348,20 @@ abstract public class JavaClassGenerator {
     public void reset(){
         imports.clear();
         builder = new StringBuilder();
+    }
+
+    protected void closeMethodOrInnerClassDefinition() {
+        closeMethodOrInnerClassDefinition( 1 );
+    }
+
+    protected void closeMethodOrInnerClassDefinition( int tabs ) {
+        insertTabs( tabs ).append( "}" );
+        insertLine();
+        insertLine();
+    }
+
+    protected void closeStatement() {
+        builder.append( ");" );
+        insertLine();
     }
 }

@@ -11,8 +11,6 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 
-import static com.kreig133.daogenerator.common.Utils.insertTabs;
-
 /**
  * @author kreig133
  * @version 1.0
@@ -77,11 +75,8 @@ public class ImplementationGenerator extends InterfaceGenerator{
 
         generateIaskStyleMethodCall( daoMethod, builder );
 
-        builder.append( ");" );
-        insertLine();
-        insertTabs(1 ).append( "}" );
-        insertLine();
-        insertLine();
+        closeStatement();
+        closeMethodOrInnerClassDefinition();
     }
 
     private static void generateIaskStyleMethodCall(
