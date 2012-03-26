@@ -27,6 +27,8 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
+ *         &lt;element name="parent" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
+ *         &lt;element name="javaClassName" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="parameter" type="{com.aplana.dao-generator}parameterType" maxOccurs="unbounded"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
@@ -38,12 +40,66 @@ import javax.xml.bind.annotation.XmlType;
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "parametersType", propOrder = {
+    "parent",
+    "javaClassName",
     "parameter"
 })
 public class ParametersType {
 
-    @XmlElement(required = true)
+    @XmlElement( defaultValue = "java.lang.Object" )
+    protected String parent;
+    @XmlElement( defaultValue = "Default" )
+    protected String javaClassName;
+    @XmlElement( required = true )
     protected List<ParameterType> parameter;
+
+    /**
+     * Gets the value of the parent property.
+     *
+     * @return
+     *     possible object is
+     *     {@link String }
+     *
+     */
+    public String getParent() {
+        return parent;
+    }
+
+    /**
+     * Sets the value of the parent property.
+     *
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *
+     */
+    public void setParent(String value) {
+        this.parent = value;
+    }
+
+    /**
+     * Gets the value of the javaClassName property.
+     *
+     * @return
+     *     possible object is
+     *     {@link String }
+     *
+     */
+    public String getJavaClassName() {
+        return javaClassName;
+    }
+
+    /**
+     * Sets the value of the javaClassName property.
+     *
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *
+     */
+    public void setJavaClassName(String value) {
+        this.javaClassName = value;
+    }
 
     /**
      * Gets the value of the parameter property.

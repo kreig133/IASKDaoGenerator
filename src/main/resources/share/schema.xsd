@@ -46,6 +46,8 @@
 
     <xs:complexType name="parametersType">
         <xs:sequence>
+            <xs:element type="xs:string" name="parent" default="java.lang.Object" minOccurs="0" maxOccurs="1"/>
+            <xs:element type="xs:string" name="javaClassName" default="Default" minOccurs="0" maxOccurs="1"/>
             <xs:element type="this:parameterType" name="parameter" maxOccurs="unbounded" minOccurs="1"/>
         </xs:sequence>
     </xs:complexType>
