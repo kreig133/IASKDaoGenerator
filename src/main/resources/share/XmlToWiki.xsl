@@ -8,13 +8,25 @@
 
     <xsl:template match="/">
 
-        <xsl:text>h3. Описание </xsl:text>
+	   	 <xsl:text>h5. Назначение:&#10;</xsl:text>
+        <xsl:value-of select="//apl:common/apl:comment/text()"/>
+        <xsl:text>----&#10;</xsl:text>
+
+		<xsl:text>|TYPE|</xsl:text>
+        <xsl:value-of select="//apl:configuration/@type" />
+        <xsl:text>|&#10;</xsl:text>
+        <xsl:text>|MULTIPLE|</xsl:text>
+        <xsl:value-of select="//apl:configuration/@multipleResult" />
+        <xsl:text>|&#10;----&#10;</xsl:text>
+
+
         <xsl:choose>
             <xsl:when test="//apl:configuration/@type = 'CALL'">
-                <xsl:text>хранимой процедуры </xsl:text>
+                <xsl:text>h5. Описание хранимой процедуры </xsl:text>
                 <xsl:value-of select="//apl:spName"/>
             </xsl:when>
             <xsl:otherwise>
+				<xsl:text>h5. Текст </xsl:text>
                 <xsl:value-of select="//apl:configuration/@type"/>
                 <xsl:text>-запроса </xsl:text>
                 <xsl:value-of select="//apl:methodName"/>
@@ -24,18 +36,7 @@
             </xsl:otherwise>
         </xsl:choose>
         <xsl:text>&#10;</xsl:text>
-
-        <xsl:text>|TYPE|</xsl:text>
-        <xsl:value-of select="//apl:configuration/@type" />
-        <xsl:text>|&#10;</xsl:text>
-        <xsl:text>|MULTIPLE|</xsl:text>
-        <xsl:value-of select="//apl:configuration/@multipleResult" />
         <xsl:text>|&#10;----&#10;</xsl:text>
-
-
-        <xsl:text>h5. Назначение:&#10;</xsl:text>
-        <xsl:value-of select="//apl:common/apl:comment/text()"/>
-        <xsl:text>----&#10;</xsl:text>
 
         <xsl:text>h5. Входные параметры&#10;</xsl:text>
         <xsl:text>|| № пп || Название || Rename || SQL-тип || IN / OUT || Default || Комментарии ||&#10;</xsl:text>
@@ -72,10 +73,9 @@
             <xsl:value-of select="@comment" />
             <xsl:text>|&#xA;</xsl:text>
         </xsl:for-each>
-        <xsl:text>----&#xA;&#xA;</xsl:text>
-
-        <xsl:text>h5. Пример выполнения: &#xA;</xsl:text>
-        <xsl:text>{code:language=sql}&#xA;</xsl:text>
+        <xsl:text>----&#xA;</xsl:text>
+		<xsl:text> {expand:title=Пример выполнения}</xsl:text>
+        <xsl:text> {code:language=sql}</xsl:text>
         <xsl:choose>
             <xsl:when test="//apl:configuration/@type = 'CALL'">
                 <xsl:text>execute dbo.</xsl:text>
@@ -107,6 +107,10 @@
         </xsl:choose>
 
         <xsl:text>&#xA;{code}</xsl:text>
+		<xsl:text>&#xA;{expand}</xsl:text>
+		<xsl:text>&#xA;----&#xA;</xsl:text>
+		<xsl:text>h3. XML-файл для маппинга во вложении </xsl:text>
+
 
     </xsl:template>
 
