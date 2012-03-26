@@ -62,6 +62,8 @@ public class Form  implements TypeChangeListener, SourcePathChangeListener{
     private JTextField modelPackageTextField;
     private JLabel modelPackageLabel;
     private JLabel daoPackageLabel;
+    private JTextField textField1;
+    private JButton button1;
     private JFrame windowWithText;
 
     private boolean start = true;
