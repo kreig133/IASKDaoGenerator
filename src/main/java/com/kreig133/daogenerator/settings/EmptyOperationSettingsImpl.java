@@ -106,4 +106,12 @@ public class EmptyOperationSettingsImpl implements OperationSettings{
 
     @Override
     public void setModelPackage( String modelPackage ) { }
+
+    @Override
+    public String getProjectFolder() {
+        return null;
+    }
+
+    @Override
+    public void setProjectFolder( String projectFolder ) { }
 }

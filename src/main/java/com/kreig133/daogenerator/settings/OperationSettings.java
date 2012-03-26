@@ -56,4 +56,8 @@ public interface OperationSettings {
     String getModelPackage();
 
     void setModelPackage( String modelPackage );
+    
+    String getProjectFolder();
+
+    void setProjectFolder( String projectFolder );
 }

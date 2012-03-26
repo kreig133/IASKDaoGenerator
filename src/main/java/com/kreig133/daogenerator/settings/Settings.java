@@ -34,6 +34,7 @@ public class Settings {
     public static final String MODEL_PACKAGE  = "modelPackge";
     public static final String IASK = "iask";
     public static final String DEPO = "depo";
+    public static final String PROJECT_FOLDER = "home";
 
 
     public static final String URL = "jdbc.url";
@@ -57,11 +58,12 @@ public class Settings {
         properties.setProperty( MAPPING_PACKAGE     , operationSettings.getMapperPackage            () );
         properties.setProperty( MODEL_PACKAGE       , operationSettings.getModelPackage             () );
 
-        if ( new File(  settings().getSourcePath()  ).exists() ) {
+        if ( new File( settings().getSourcePath()  ).exists() ) {
             PropertiesFileController.saveSpecificProperties( operationSettings.getSourcePath(), properties );
         }
 
         properties.setProperty( SOURCE_DIR          , operationSettings.getSourcePath() );
+        properties.setProperty( PROJECT_FOLDER      , operationSettings.getProjectFolder() );
 
         PropertiesFileController.saveCommonProperties( properties );
 
@@ -77,6 +79,7 @@ public class Settings {
         settings().setEntityPackage( properties.getProperty( ENTITY_PACKAGE,    settings().getEntityPackage() ) );
         settings().setMapperPackage( properties.getProperty( MAPPING_PACKAGE,   settings().getMapperPackage() ) );
         settings().setModelPackage ( properties.getProperty( MODEL_PACKAGE,     settings().getModelPackage () ) );
+        settings().setProjectFolder( properties.getProperty( PROJECT_FOLDER,    settings().getProjectFolder() ) );
         settings().setOutputPathForJavaClasses(
                 properties.getProperty( DEST_DIR, settings().getOutputPathForJavaClasses() )
         );
