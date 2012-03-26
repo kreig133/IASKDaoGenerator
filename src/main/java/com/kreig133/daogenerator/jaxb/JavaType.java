@@ -76,7 +76,7 @@ public enum JavaType {
     }
 
     public static JavaType getBySqlType( String type ) {
-
+        type = type.toLowerCase();
         for( JavaType javaType: JavaType.values() ){
             for( java.lang.String typeAllias : map.get( javaType ) ){
                 if( type.startsWith( typeAllias ) ){
