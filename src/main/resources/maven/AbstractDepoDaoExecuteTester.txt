@@ -1,8 +1,8 @@
-package com.aplana.sbrf;
+package com.aplana.sbrf.deposit;
 
 import org.apache.ibatis.annotations.Param;
 
-import java.beans.Introspector;
+    import java.beans.Introspector;
 import java.beans.PropertyDescriptor;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;

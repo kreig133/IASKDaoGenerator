@@ -78,6 +78,11 @@
             <artifactId>gxt</artifactId>
             <version>${gxt.version}</version>
         </dependency>
+        <!--<dependency>-->
+            <!--<groupId>com.aplana.sbrf.deposit</groupId>-->
+            <!--<artifactId>sbrf-deposit-web</artifactId>-->
+            <!--<version>0.2.2</version>-->
+        <!--</dependency>-->
     </dependencies>
 
     <build>

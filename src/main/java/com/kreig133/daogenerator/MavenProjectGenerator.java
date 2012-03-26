@@ -18,7 +18,16 @@ public class MavenProjectGenerator {
         copyPomFileToMavenProject();
         copyAppContextConfigToMavenProject();
         copyAbstractTester();
+        copyBaseModel();
         generateSpringConfig();
+    }
+
+    private static void copyBaseModel() throws IOException {
+        copyFile(
+                MavenProjectGenerator.class.getClassLoader().getResourceAsStream( "DepoModelData.txt" ),
+                new File( Settings.settings().getPathForGeneratedSource()
+                        + "/com/aplana/sbrf/deposit/web/common/client/operation/data/DepoModelData.java" )
+        );
     }
 
     protected static void generateSpringConfig() throws IOException {
@@ -50,7 +59,7 @@ public class MavenProjectGenerator {
         copyFile(
                 MavenProjectGenerator.class.getClassLoader().getResourceAsStream( "AbstractDepoDaoExecuteTester.txt" ),
                 new File( Settings.settings().getPathForGeneratedTests()
-                        + "/com/aplana/sbrf/AbstractDepoDaoExecuteTester.java" )
+                        + "/com/aplana/sbrf/deposit/AbstractDepoDaoExecuteTester.java" )
         );
     }
 
