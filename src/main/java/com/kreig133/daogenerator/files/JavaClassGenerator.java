@@ -14,9 +14,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 
 import static com.kreig133.daogenerator.common.Utils.stringNotEmpty;
 
@@ -27,6 +25,9 @@ import static com.kreig133.daogenerator.common.Utils.stringNotEmpty;
 abstract public class JavaClassGenerator {
 
     public static final String JAVA_EXTENSION = ".java";
+    protected static final String DATE_IMPORT = "java.util.Date";
+
+    protected Set<String> imports = new HashSet<String>();
 
     protected StringBuilder builder = new StringBuilder();
 
@@ -37,16 +38,15 @@ abstract public class JavaClassGenerator {
 
 
     public void generateFoot() throws IOException {
-        builder.append( "\n}" );
+        insertLine().append( "}" );
     }
+
     public String getResult(){
         return builder.toString();
     }
 
     protected StringBuilder insertLine() {
-        builder.append( "\n" );
-
-        return builder;
+        return builder.append( "\n" );
     }
 
     protected StringBuilder insertTabs( int tabsCount ) {
@@ -72,6 +72,9 @@ abstract public class JavaClassGenerator {
             }
             if ( outputParameterList.size() == 1 ) {
                 outputClass.append( outputParameterList.get( 0 ).getType().value() );
+                if( outputParameterList.get( 0 ).getType() == JavaType.DATE ) {
+                    addImport( DATE_IMPORT );
+                }
             } else {
                 outputClass.append( convertNameForClassNaming( methodName ) ).append( "Out" );
             }
@@ -83,9 +86,13 @@ abstract public class JavaClassGenerator {
         List<String> inputParams = new ArrayList<String>( inputParameterList.size() );
         if ( ! inputParameterList.isEmpty() ) {
             if ( InOutClassGenerator.checkToNeedOwnInClass( daoMethod ) ) {
-                inputParams.add( convertNameForClassNaming( methodName ) + "In request\n" );
+                inputParams.add( convertNameForClassNaming( methodName ) + "In request" );
             } else {
                 for ( ParameterType p : inputParameterList ) {
+                    if( p.getType() == JavaType.DATE ) {
+                        addImport( DATE_IMPORT );
+                    }
+
                     StringBuilder inputParam = new StringBuilder();
                     if (
                             Settings.settings().getType() == Type.DEPO && methodType == MethodType.MAPPER
@@ -94,12 +101,23 @@ abstract public class JavaClassGenerator {
                     }
                     inputParam.append( p.getType().value() ).append( " " )
                             .append( Settings.settings().getType() == Type.DEPO ? p.getRenameTo() : "request" );
+                    inputParams.add( inputParam.toString() );
                 }
 
             }
         }
         
         generateMethodSignature( Scope.PUBLIC, outputClass.toString(), methodName, inputParams, null, true );
+    }
+
+    protected void addImport( String clazz ) {
+        imports.add( clazz );
+
+        System.out.println( this.getClass().getName() );
+
+        for ( String anImport : imports ) {
+            System.out.println( anImport );
+        }
     }
 
     protected void generateMethodSignature(
@@ -145,7 +163,9 @@ abstract public class JavaClassGenerator {
     }
 
     protected void insertPackageLine( String packageName ) {
-        builder.append( "package " ).append( packageName ).append( ";\n\n" );
+        builder.append( "package " ).append( packageName ).append( ";" );
+        insertLine();
+        insertLine();
     }
 
     protected static void createDirsAndFile( File file ) {
@@ -176,7 +196,11 @@ abstract public class JavaClassGenerator {
 
     protected void writeEmptyConstructor( String className ) {
         Utils.insertTabs( builder, 1 ).append( Scope.PUBLIC.value() ).
-                append( " " ).append( className ).append( "(){\n    }\n\n" );
+                append( " " ).append( className ).append( "(){");
+        insertLine();
+        insertTabs( 1 ).append( "}" );
+        insertLine();
+        insertLine();
     }
 
 
@@ -239,8 +263,11 @@ abstract public class JavaClassGenerator {
     ){
         generateGetterSignature( javaDoc, javaType, name );
 
-        Utils.insertTabs( builder, 2 ).append( "return " ).append( name ).append( ";\n");
-        Utils.insertTabs( builder, 1 ).append( "}\n\n" );
+        insertTabs( 2 ).append( "return " ).append( name ).append( ";");
+        insertLine();
+        insertTabs( 1 ).append( "}" );
+        insertLine();
+        insertLine();
     }
 
     private void generateGetterSignature( String javaDoc, JavaType javaType, String name ) {
@@ -264,8 +291,11 @@ abstract public class JavaClassGenerator {
             String name
     ){
         generateSetterSignature( javaDoc, javaType, name );
-        Utils.insertTabs( builder, 2 ).append( "this." ).append( name ).append( " = " ).append( name ).append( ";\n" );
-        Utils.insertTabs( builder, 1 ).append( "}\n\n" );
+        insertTabs( 2 ).append( "this." ).append( name ).append( " = " ).append( name ).append( ";" );
+        insertLine();
+        insertTabs( 1 ).append( "}" );
+        insertLine();
+        insertLine();
     }
 
     private void generateSetterSignature( String javaDoc, JavaType javaType, String name ) {

@@ -1,2 +1,2 @@
-java -jar DaoGenerator-2.3.jar
+java -jar DaoGenerator-2.5.jar
 pause

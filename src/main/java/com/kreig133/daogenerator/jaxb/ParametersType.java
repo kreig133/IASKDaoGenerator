@@ -93,4 +93,13 @@ public class ParametersType {
         }
         return result;
     }
+
+    public boolean containsDates(){
+        for ( ParameterType parameterType : parameter ) {
+            if ( parameterType.getType() == JavaType.DATE ) {
+                return true;
+            }
+        }
+        return false;
+    }
 }

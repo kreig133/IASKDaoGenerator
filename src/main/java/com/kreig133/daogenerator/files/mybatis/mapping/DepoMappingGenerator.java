@@ -24,9 +24,12 @@ public class DepoMappingGenerator extends MappingGenerator{
 
     @Override
     public void generateBody( DaoMethod daoMethod ) throws IOException{
+        insertLine();
         generateAnnotation( daoMethod );
         generateMethodSignature( daoMethod, MethodType.MAPPER );
-        builder.append( ";\n" );
+        builder.append( ";" );
+        insertLine();
+
     }
 
     @Override
@@ -40,10 +43,22 @@ public class DepoMappingGenerator extends MappingGenerator{
     }
 
     @Override
-    public void generateHead() throws IOException {
-
+    public String getResult() {
+        String s = builder.toString();
+        builder = new StringBuilder();
+        
         insertPackageLine( Settings.settings().getMapperPackage() );
         daoFilesImports();
+        for ( String anImport : imports ) {
+            insertImport( anImport );
+        }
+        insertLine();
+
+        return builder.toString() + s;
+    }
+
+    @Override
+    public void generateHead() throws IOException {
 
         insertImport( "org.apache.ibatis.annotations.*" );
         insertImport( "org.apache.ibatis.mapping.StatementType" );
@@ -60,8 +75,12 @@ public class DepoMappingGenerator extends MappingGenerator{
     private void generateAnnotation(
             DaoMethod daoMethod
     ){
-        SelectType selectType = daoMethod.getSelectType();
 
+        if( daoMethod.getCommon().getConfiguration().isMultipleResult() ) {
+            addImport( "java.util.List" );
+        }
+        
+        SelectType selectType = daoMethod.getSelectType();
 
         assert selectType != null ;
 

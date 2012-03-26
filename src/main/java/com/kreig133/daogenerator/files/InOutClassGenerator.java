@@ -6,6 +6,7 @@ import com.kreig133.daogenerator.enums.Scope;
 import com.kreig133.daogenerator.enums.Type;
 import com.kreig133.daogenerator.jaxb.DaoMethod;
 import com.kreig133.daogenerator.jaxb.InOutType;
+import com.kreig133.daogenerator.jaxb.JavaType;
 import com.kreig133.daogenerator.jaxb.ParameterType;
 import com.kreig133.daogenerator.settings.Settings;
 
@@ -23,13 +24,36 @@ import static com.kreig133.daogenerator.common.Utils.iterateForParameterList;
 public class InOutClassGenerator extends JavaClassGenerator{
 
     public static InOutClassGenerator newInstance( DaoMethod daoMethod, InOutType type ){
-        return new InOutClassGenerator(
+        InOutClassGenerator inOutClassGenerator = new InOutClassGenerator(
                 type == InOutType.IN ?
-                        daoMethod.getInputParametrs().getParameter():
+                        daoMethod.getInputParametrs().getParameter() :
                         daoMethod.getOutputParametrs().getParameter(),
                 daoMethod.getCommon().getMethodName() +
-                        ( type == InOutType.IN ? "In" : "Out")
+                        ( type == InOutType.IN ? "In" : "Out" )
         );
+
+        if ( type == InOutType.IN?
+                daoMethod.getInputParametrs().containsDates()
+                :daoMethod.getOutputParametrs().containsDates()
+        ) {
+            inOutClassGenerator.addImport( DATE_IMPORT );
+        }
+
+        return inOutClassGenerator;
+    }
+
+    @Override
+    public String getResult(){
+        String s = builder.toString();
+        builder = new StringBuilder();
+        insertPackageLine( Settings.settings().getEntityPackage() );
+
+        for ( String anImport : imports ) {
+            insertImport( anImport );
+        }
+
+        insertLine();
+        return builder.toString() + s;
     }
 
     private boolean generated;
@@ -51,11 +75,8 @@ public class InOutClassGenerator extends JavaClassGenerator{
     @Override
     public void generateHead() throws IOException {
 
-        insertPackageLine( Settings.settings().getEntityPackage() );
-
         insertImport( "java.io.Serializable" );
-        insertImport( "java.util.*" );
-        builder.append( "\n" );
+        insertLine();
 
         builder.append( COMMENT_TO_CLASS );
 
@@ -75,6 +96,7 @@ public class InOutClassGenerator extends JavaClassGenerator{
         if ( generated ) {
             return;
         }
+        writeConstructorForPagination();
         writeFullConstructor();
 
         for ( ParameterType p : parameters ) {
@@ -89,6 +111,10 @@ public class InOutClassGenerator extends JavaClassGenerator{
         writeToString();
 
         generated = true;
+    }
+
+    private void writeConstructorForPagination() {
+        //To change body of created methods use File | Settings | File Templates.
     }
 
     @Override
@@ -110,6 +136,8 @@ public class InOutClassGenerator extends JavaClassGenerator{
     }
 
     private void writeFullConstructor() {
+        if( parameters.size() > 5 ) return;
+
         insertTabs( 1 ).append( Scope.PUBLIC.value() )
                 .append( " " ).append( convertNameForClassNaming( this.name ) ).append( "(" );
         insertLine();

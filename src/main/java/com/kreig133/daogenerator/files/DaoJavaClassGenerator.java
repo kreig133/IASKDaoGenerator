@@ -14,9 +14,7 @@ abstract public class DaoJavaClassGenerator extends JavaClassGenerator{
     }
 
     protected void daoFilesImports() {
-        builder.append( "\n" );
-        insertImport( "java.util.*" );
+        insertLine();
         insertImport( Settings.settings().getEntityPackage() + ".*" );
     }
-
 }
