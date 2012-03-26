@@ -343,4 +343,9 @@ abstract public class JavaClassGenerator {
         chars[ 0 ] = Character.toLowerCase( chars[ 0 ] );
         return new String( chars );
     }
+
+    public void reset(){
+        imports.clear();
+        builder = new StringBuilder();
+    }
 }

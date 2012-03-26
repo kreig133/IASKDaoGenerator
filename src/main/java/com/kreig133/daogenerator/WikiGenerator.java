@@ -1,15 +1,14 @@
 package com.kreig133.daogenerator;
 
-import com.kreig133.daogenerator.settings.Settings;
-
 import java.io.IOException;
+import java.io.OutputStreamWriter;
 
 /**
  * @author eshangareev
  * @version 1.0
  */
 public class WikiGenerator {
-    public static void generateWiki( String path ) throws IOException {
+    public static void generateWiki( String path ) throws IOException, InterruptedException {
 
         final String[] xmlFileNamesInDirectory = DaoGenerator.getXmlFileNamesInDirectory( path );
 
@@ -18,9 +17,9 @@ public class WikiGenerator {
         }
     }
 
-    public static void generateWikiForXmlFile( String xmlFileName ) throws IOException {
+    public static void generateWikiForXmlFile( String xmlFileName ) throws IOException, InterruptedException {
         final String[] cmdarray = { "cmd", "/C",
-                "java  -classpath DaoGenerator-2.3.jar org.apache.xalan.xslt.Process " +
+                "java  -classpath DaoGenerator-2.5.jar org.apache.xalan.xslt.Process " +
                         "-IN " + xmlFileName +
                         " -XSL XmlToWiki.xsl " +
                         "-OUT " + xmlFileName + ".txt" };
@@ -28,8 +27,13 @@ public class WikiGenerator {
         for ( String s1 : cmdarray ) {
             System.out.println( s1 );
         }
+        Process exec = Runtime.getRuntime().exec( cmdarray );
+        Communicator.communicate( exec,
+                new OutputStreamWriter( System.out, "Cp866" ),
+                new OutputStreamWriter( System.err, "Cp866" )
+        );
+        exec.waitFor();
 
-        Runtime.getRuntime().exec( cmdarray );
         System.out.println( " END " );
     }
 }

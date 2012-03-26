@@ -13,6 +13,7 @@
         <spring.version>3.0.6.RELEASE</spring.version>
         <mybatis-spring.version>1.0.2</mybatis-spring.version>
         <sqljdbc.version>3.0</sqljdbc.version>
+        <gxt.version>2.2.1</gxt.version>
     </properties>
 
 
@@ -71,6 +72,11 @@
                     <groupId>org.springframework</groupId>
                 </exclusion>
             </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>com.extjs</groupId>
+            <artifactId>gxt</artifactId>
+            <version>${gxt.version}</version>
         </dependency>
     </dependencies>
 

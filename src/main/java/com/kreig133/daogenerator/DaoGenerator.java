@@ -28,6 +28,7 @@ import java.io.FileOutputStream;
 import java.io.FilenameFilter;
 import java.io.IOException;
 import java.util.*;
+import java.util.List;
 
 import static com.kreig133.daogenerator.settings.Settings.*;
 import static com.kreig133.daogenerator.settings.Settings.SOURCE_DIR;
@@ -97,7 +98,7 @@ public class DaoGenerator {
 
     protected static void writeFiles() throws IOException {
 
-        java.util.List<JavaClassGenerator> generators = new ArrayList<JavaClassGenerator>();
+        List<JavaClassGenerator> generators = new ArrayList<JavaClassGenerator>();
 
         generators.add( MappingGenerator.instance() );
 
@@ -128,6 +129,7 @@ public class DaoGenerator {
             generator.generateFoot();
 
             appender.appendStringToFile( generator.getFile(), generator.getResult() );
+            generator.reset();
         }
 
         daoMethods.clear();

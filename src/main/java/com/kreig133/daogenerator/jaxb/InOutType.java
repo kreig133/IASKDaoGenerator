@@ -52,5 +52,4 @@ public enum InOutType {
         }
         throw  new IllegalArgumentException();
     }
-
 }

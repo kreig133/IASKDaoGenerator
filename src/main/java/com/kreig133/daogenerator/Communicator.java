@@ -1,6 +1,9 @@
 package com.kreig133.daogenerator;
 
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.Writer;
 
 /**
  * @author eshangareev
@@ -22,7 +25,6 @@ public class Communicator {
         // Final versions of the the params, to be used within the threads
         final BufferedReader stdOut = new BufferedReader(new InputStreamReader(process.getInputStream()));
         final BufferedReader stdErr = new BufferedReader(new InputStreamReader(process.getErrorStream()));
-        final BufferedWriter stdIn = new BufferedWriter(new OutputStreamWriter(process.getOutputStream()));
 
         // Thread that reads std out and feeds the writer given in input
         new Thread() {
@@ -36,7 +38,6 @@ public class Communicator {
                 } catch (Exception e) {throw new Error(e);}
                 try {
                     out.flush();
-                    out.close();
                 } catch (IOException e) { /* Who cares ?*/ }
             }
         }.start(); // Starts now
@@ -53,7 +54,6 @@ public class Communicator {
                 } catch (Exception e) {throw new Error(e);}
                 try {
                     err.flush();
-                    err.close();
                 } catch (IOException e) { /* Who cares ?*/ }
             }
         }.start(); // Starts now

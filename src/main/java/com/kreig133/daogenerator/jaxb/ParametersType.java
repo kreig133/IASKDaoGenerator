@@ -64,8 +64,7 @@ public class ParametersType {
      * <p>
      * Objects of the following type(s) are allowed in the list
      * {@link ParameterType }
-     * 
-     * 
+     * @return
      */
     public List<ParameterType> getParameter() {
         if (parameter == null) {
@@ -74,8 +73,12 @@ public class ParametersType {
         return this.parameter;
     }
 
-    public ParameterType getParameterByName( String name ){
-        for ( ParameterType type : getParameter() ) {
+    public ParameterType getParameterByName( String name ) {
+        return getParameterByName( name, getParameter() );
+    }
+    
+    public static ParameterType getParameterByName( String name, List<ParameterType> parameters ){
+        for ( ParameterType type : parameters ) {
             if ( type.getName().equals( name ) ) {
                 return type;
             }
@@ -86,20 +89,64 @@ public class ParametersType {
     public List<Integer> getIndexOfUnnamedParameters() {
         final List<Integer> result = new LinkedList<Integer>();
 
-        for ( ParameterType parameterType : parameter ) {
+        for ( ParameterType parameterType : getParameter() ) {
             if ( "".equals( parameterType.getName().trim() ) ) {
-                result.add( parameter.indexOf( parameterType ) );
+                result.add( getParameter().indexOf( parameterType ) );
             }
         }
         return result;
     }
 
     public boolean containsDates(){
-        for ( ParameterType parameterType : parameter ) {
+        for ( ParameterType parameterType : getParameter() ) {
             if ( parameterType.getType() == JavaType.DATE ) {
                 return true;
             }
         }
         return false;
+    }
+    
+    public boolean isWithPaging() {
+        return isWithPaging( getParameter() );
+    }
+
+    public static boolean isWithPaging( List<ParameterType> parameterTypes ) {
+        boolean id_SessionDS = false;
+        boolean i_start = false;
+        boolean i_pageLimit = false;
+        boolean i_end = false;
+        boolean s_sort = false;
+        boolean i_rowCount = false;
+        for ( ParameterType parameter : parameterTypes ) {
+            if ( parameter.getName().equals( WithPagingType.ID_SESSION_DS ) ) {
+                id_SessionDS = true;
+            }
+            if ( parameter.getName().equals( WithPagingType.I_START ) ) {
+                i_start = true;
+            }
+            if ( parameter.getName().equals( WithPagingType.I_PAGE_LIMIT ) ) {
+                i_pageLimit = true;
+            }
+            if ( parameter.getName().equals( WithPagingType.I_END ) ) {
+                i_end = true;
+            }
+            if ( parameter.getName().equals( WithPagingType.S_SORT ) ) {
+                s_sort = true;
+            }
+            if ( parameter.getName().equals( WithPagingType.I_ROW_COUNT ) ) {
+                i_rowCount = true;
+            }
+        }
+        return id_SessionDS && i_start && i_pageLimit && i_end && s_sort && i_rowCount;
+    }
+        
+    public static class WithPagingType{
+        public static final String ID_SESSION_DS = "id_sessionDS";
+        public static final String I_START = "i_start";
+        public static final String I_PAGE_LIMIT = "i_pageLimit";
+        public static final String I_END = "i_end";
+        public static final String S_SORT = "s_sort";
+        public static final String I_ROW_COUNT = "i_rowCount";
+        public static final String[] FIELDS = { ID_SESSION_DS, I_START, I_PAGE_LIMIT, I_END, S_SORT, I_ROW_COUNT};
     }
 }

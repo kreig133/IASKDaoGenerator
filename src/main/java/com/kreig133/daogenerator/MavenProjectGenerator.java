@@ -6,7 +6,6 @@ import com.kreig133.daogenerator.files.mybatis.mapping.MappingGenerator;
 import com.kreig133.daogenerator.settings.Settings;
 
 import java.io.*;
-import java.util.Scanner;
 
 /**
  * @author kreig133
@@ -23,8 +22,6 @@ public class MavenProjectGenerator {
     }
 
     protected static void generateSpringConfig() throws IOException {
-
-
         InputStream stream = new ByteArrayInputStream( fillContextTemplateByData( Utils.streamToString(
                 MavenProjectGenerator.class.getClassLoader().getResourceAsStream( "mapperBeanContextTemplate.xml" )
         ) ).getBytes() );
@@ -37,10 +34,7 @@ public class MavenProjectGenerator {
                         getConfigName() + ".xml"
                 )
         );
-
     }
-
-
 
     protected static String fillContextTemplateByData( String string ) {
         return string
@@ -111,7 +105,7 @@ public class MavenProjectGenerator {
         return MappingGenerator.instance().getFileName() + "TestConfig";
     }
 
-    public static void installProject() {
+    public static int installProject() {
         final String[] cmdarray = { "cmd", "/C", "mvn -f "+ Settings.settings().getOutputPathForJavaClasses() +
                 "\\pom.xml clean install"};
 
@@ -119,15 +113,20 @@ public class MavenProjectGenerator {
             System.out.println( s1 );
         }
 
-            Runtime runtime = Runtime.getRuntime();
         try {
+            Process exec = Runtime.getRuntime().exec( cmdarray );
             Communicator.communicate(
-                    runtime.exec( cmdarray ),
+                    exec,
                     new OutputStreamWriter( System.out, "Cp866" ),
                     new OutputStreamWriter( System.err, "Cp866" )
             );
+            return exec.waitFor();
         } catch ( IOException e ) {
             e.printStackTrace();
+            return -1;
+        } catch ( InterruptedException e ) {
+            e.printStackTrace();
+            return -1;
         }
     }
 }

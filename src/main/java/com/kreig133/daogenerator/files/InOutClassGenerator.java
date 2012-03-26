@@ -4,10 +4,7 @@ import com.kreig133.daogenerator.common.FunctionalObjectWithoutFilter;
 import com.kreig133.daogenerator.enums.ClassType;
 import com.kreig133.daogenerator.enums.Scope;
 import com.kreig133.daogenerator.enums.Type;
-import com.kreig133.daogenerator.jaxb.DaoMethod;
-import com.kreig133.daogenerator.jaxb.InOutType;
-import com.kreig133.daogenerator.jaxb.JavaType;
-import com.kreig133.daogenerator.jaxb.ParameterType;
+import com.kreig133.daogenerator.jaxb.*;
 import com.kreig133.daogenerator.settings.Settings;
 
 import java.io.File;
@@ -16,6 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static com.kreig133.daogenerator.common.Utils.iterateForParameterList;
+import static com.kreig133.daogenerator.jaxb.ParametersType.getParameterByName;
 
 /**
  * @author eshangareev
@@ -114,7 +112,41 @@ public class InOutClassGenerator extends JavaClassGenerator{
     }
 
     private void writeConstructorForPagination() {
-        //To change body of created methods use File | Settings | File Templates.
+        if( ParametersType.isWithPaging( parameters ) ){
+            addImport( "com.extjs.gxt.ui.client.data.PagingLoadConfig" );
+
+            insertTabs( 1 ).append( Scope.PUBLIC.value() ).append( " " )
+                    .append( convertNameForClassNaming( this.name ) )
+                    .append( "(Long session, PagingLoadConfig loadConfig) {" );
+            insertLine();
+            insertTabs( 2 ).append( "this." ).append(
+                    getParameterByName( ParametersType.WithPagingType.ID_SESSION_DS, parameters ).getRenameTo()
+            ).append( " = session;" );
+            insertLine();
+            insertTabs( 2 ).append( "this." ).append(
+                    getParameterByName( ParametersType.WithPagingType.I_START, parameters ).getRenameTo()
+            ).append( " = loadConfig == null ? 0L : loadConfig.getOffset();" );
+            insertLine();
+            insertTabs( 2 ).append( "this." ).append(
+                    getParameterByName( ParametersType.WithPagingType.I_PAGE_LIMIT, parameters ).getRenameTo()
+            ).append( " = loadConfig == null ? 0L : loadConfig.getLimit();" );
+            insertLine();
+            insertTabs( 2 ).append( "this." ).append(
+                    getParameterByName( ParametersType.WithPagingType.I_END, parameters ).getRenameTo()
+            ).append( " = 0L;" );
+            insertLine();
+            insertTabs( 2 ).append( "this." ).append(
+                    getParameterByName( ParametersType.WithPagingType.S_SORT, parameters ).getRenameTo()
+            ).append( " = \"\";" );
+            insertLine();
+            insertTabs( 2 ).append( "this." ).append(
+                    getParameterByName( ParametersType.WithPagingType.I_ROW_COUNT, parameters ).getRenameTo()
+            ).append( " = 0L;" );
+            insertLine();
+            insertTabs( 1 ).append( "}" );
+            insertLine();
+            insertLine();
+        }
     }
 
     @Override
@@ -179,14 +211,17 @@ public class InOutClassGenerator extends JavaClassGenerator{
     public void insertFieldDeclaration( ParameterType p ) {
 
         insertJavaDoc( new String[] { p.getCommentForJavaDoc() } );
-        insertTabs( 1 ).append( "private " ).append( p.getType().value() ).append( " " ).append( p.getRenameTo() );
+        insertTabs( 1 ).append( Scope.PRIVATE.value() ).append( " " ).append( p.getType().value() )
+                .append( " " ).append( p.getRenameTo() );
 
         String defaultValue = p.getDefaultValue();
         if( defaultValue != null  && ! defaultValue.isEmpty() ) {
             builder.append( " = ").append( p.getDefaultValueForJavaCode() );
         }
 
-        builder.append( ";\n\n" );
+        builder.append( ";" );
+        insertLine();
+        insertLine();
     }
 
     private void generateGetter( ParameterType parameterType ){

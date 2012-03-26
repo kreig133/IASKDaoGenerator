@@ -166,20 +166,30 @@ public class Form  implements TypeChangeListener, SourcePathChangeListener{
                     final File dirForSave = fileChooser.getSelectedFile();
                     final DaoMethod currentDaoMethods = getCurrentDaoMethod();
 
-                    String xmlFilePath = dirForSave.getAbsolutePath() + "/" +
+                    final String xmlFilePath = dirForSave.getAbsolutePath() + "/" +
                             currentDaoMethods.getCommon().getMethodName() + ".xml";
 
                     JaxbHandler.marshallInFile( new File( xmlFilePath ), currentDaoMethods );
 
-                    try {
-                        WikiGenerator.generateWikiForXmlFile( xmlFilePath );
+                    new Thread(
+                            new Runnable() {
+                                @Override
+                                public void run() {
+                                    try {
+                                        WikiGenerator.generateWikiForXmlFile( xmlFilePath );
 
-                        TextView.setText( Utils.streamToString( new FileInputStream( xmlFilePath + ".txt" ) ) );
+                                        TextView.setText(
+                                                Utils.streamToString( new FileInputStream( xmlFilePath + ".txt" ) ) );
 
-                        getWindowWithText().setVisible( true );
-                    } catch ( IOException ex ) {
-                        ex.printStackTrace();
-                    }
+                                        getWindowWithText().setVisible( true );
+                                    } catch ( IOException ex ) {
+                                        ex.printStackTrace();
+                                    } catch ( InterruptedException ex ) {
+                                        ex.printStackTrace();
+                                    }
+                                }
+                            }
+                    ).start();
                 }
             }
         } );
@@ -187,12 +197,23 @@ public class Form  implements TypeChangeListener, SourcePathChangeListener{
         generateWikiButton.addActionListener( new ActionListener() {
             @Override
             public void actionPerformed( ActionEvent e ) {
-                if( fileChooser.showOpenDialog( generateWikiButton ) == JFileChooser.APPROVE_OPTION ){
-                    try {
-                        WikiGenerator.generateWiki( fileChooser.getSelectedFile().getAbsolutePath() );
-                    } catch ( IOException ex ) {
-                        ex.printStackTrace();
-                    }
+                if ( fileChooser.showOpenDialog( generateWikiButton ) == JFileChooser.APPROVE_OPTION ) {
+
+                    new Thread(
+                            new Runnable() {
+                                @Override
+                                public void run() {
+                                    try {
+                                        WikiGenerator.generateWiki( fileChooser.getSelectedFile().getAbsolutePath() );
+                                    } catch ( IOException ex ) {
+                                        ex.printStackTrace();
+                                    } catch ( InterruptedException ex ) {
+                                        ex.printStackTrace();
+                                    }
+                                }
+
+                            }
+                        ).start();
                 }
             }
         } );
@@ -232,12 +253,35 @@ public class Form  implements TypeChangeListener, SourcePathChangeListener{
                         new Runnable(){
                             @Override
                             public void run() {
-                                DaoGenerator.generateJavaCode();
-                                MavenProjectGenerator.installProject();
+                                try{
+                                    tabbedPane1.setEnabled( false );
+                                    DaoGenerator.generateJavaCode();
+                                    int status = MavenProjectGenerator.installProject();
+                                    if( status == 0 ) {
+                                        if (
+                                                JOptionPane.showConfirmDialog(
+                                                        mainPanel,
+                                                        "Тестирование успешно завершено.\nСкопировать файлы в проект?"
+                                                ) == JOptionPane.OK_OPTION
+                                        ) {
+                                            JOptionPane.showMessageDialog(
+                                                    mainPanel,
+                                                    "Функциональность еще не реализована"
+                                            );
+                                        }
+                                    } else {
+                                        JOptionPane.showMessageDialog(
+                                                mainPanel,
+                                                "Тестирование провалилось.\nИзмените входные данные или сообщите " +
+                                                        "разработчику этой фигни, что он, возможно, где-то накосячил"
+                                                );
+                                    }
+                                } finally {
+                                    tabbedPane1.setEnabled( true );
+                                }
                             }
                         }
                     ).start();
-
                 }
             }
         } );
