@@ -11,7 +11,6 @@ import com.kreig133.daogenerator.sql.creators.QueryCreator;
 import java.io.IOException;
 import java.util.List;
 
-import static com.kreig133.daogenerator.common.Utils.insertTabs;
 import static com.kreig133.daogenerator.common.Utils.stringNotEmpty;
 
 /**
@@ -43,22 +42,10 @@ public class DepoMappingGenerator extends MappingGenerator{
     }
 
     @Override
-    public String getResult() {
-        String s = builder.toString();
-        builder = new StringBuilder();
-        
-        insertPackageLine( Settings.settings().getMapperPackage() );
-        daoFilesImports();
-        for ( String anImport : imports ) {
-            insertImport( anImport );
-        }
-        insertLine();
-
-        return builder.toString() + s;
-    }
-
-    @Override
     public void generateHead() throws IOException {
+
+        setPackage( Settings.settings().getMapperPackage() );
+        addDaoFilesImports();
 
         insertImport( "org.apache.ibatis.annotations.*" );
         insertImport( "org.apache.ibatis.mapping.StatementType" );

@@ -27,6 +27,7 @@ abstract public class JavaClassGenerator {
     public static final String JAVA_EXTENSION = ".java";
     protected static final String DATE_IMPORT = "java.util.Date";
 
+    protected String _package;
     protected Set<String> imports = new HashSet<String>();
 
     protected StringBuilder builder = new StringBuilder();
@@ -41,8 +42,23 @@ abstract public class JavaClassGenerator {
         insertLine().append( "}" );
     }
 
-    public String getResult(){
-        return builder.toString();
+    protected void setPackage( String packageString ){
+        this._package = packageString;
+    }
+    
+    final public String getResult(){
+        String s = builder.toString();
+
+        builder = new StringBuilder();
+
+        insertPackageLine( _package );
+
+        for ( String anImport : imports ) {
+            insertImport( anImport );
+        }
+        insertLine();
+
+        return builder.toString() + s;
     }
 
     protected StringBuilder insertLine() {
@@ -162,7 +178,7 @@ abstract public class JavaClassGenerator {
         builder.append( signatureOnly ? "" : " {" );
     }
 
-    protected void insertPackageLine( String packageName ) {
+    private void insertPackageLine( String packageName ) {
         builder.append( "package " ).append( packageName ).append( ";" );
         insertLine();
         insertLine();

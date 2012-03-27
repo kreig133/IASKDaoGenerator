@@ -9,12 +9,11 @@ import com.kreig133.daogenerator.settings.Settings;
 abstract public class DaoJavaClassGenerator extends JavaClassGenerator{
 
     protected void startingLinesOfDaoFiles() {
-        insertPackageLine( Settings.settings().getDaoPackage() );
-        daoFilesImports();
+        setPackage( Settings.settings().getDaoPackage() );
+        addDaoFilesImports();
     }
 
-    protected void daoFilesImports() {
-        insertLine();
-        insertImport( Settings.settings().getEntityPackage() + ".*" );
+    protected void addDaoFilesImports() {
+        addImport( Settings.settings().getEntityPackage() + ".*" );
     }
 }

@@ -40,20 +40,6 @@ public class InOutClassGenerator extends JavaClassGenerator{
         return inOutClassGenerator;
     }
 
-    @Override
-    public String getResult(){
-        String s = builder.toString();
-        builder = new StringBuilder();
-        insertPackageLine( Settings.settings().getEntityPackage() );
-
-        for ( String anImport : imports ) {
-            insertImport( anImport );
-        }
-
-        insertLine();
-        return builder.toString() + s;
-    }
-
     private boolean generated;
     
     @Override
@@ -72,6 +58,7 @@ public class InOutClassGenerator extends JavaClassGenerator{
 
     @Override
     public void generateHead() throws IOException {
+        setPackage( Settings.settings().getEntityPackage() );
 
         insertImport( "java.io.Serializable" );
         insertLine();
