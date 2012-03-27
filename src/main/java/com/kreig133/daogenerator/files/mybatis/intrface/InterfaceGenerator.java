@@ -38,7 +38,7 @@ public class InterfaceGenerator extends DaoJavaClassGenerator {
 
         //TODO блок комментариев
         insertClassDeclaration(
-                ClassType.Interface,
+                ClassType.INTERFACE,
                 getFileName(),
                 null,
                 null

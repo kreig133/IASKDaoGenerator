@@ -53,7 +53,7 @@ public class DepoMappingGenerator extends MappingGenerator{
         insertLine();
         //TODO блок комментариев
         insertClassDeclaration(
-                ClassType.Interface,
+                ClassType.INTERFACE,
                 Settings.settings().getOperationName()+MAPPER_PREFIX,
                 null,
                 null

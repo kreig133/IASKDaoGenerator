@@ -129,8 +129,6 @@ public class DaoGenerator {
                 generator.generateBody( daoMethod );
             }
 
-            generator.generateFoot();
-
             appender.appendStringToFile( generator.getFile(), generator.getResult() );
             generator.reset();
         }

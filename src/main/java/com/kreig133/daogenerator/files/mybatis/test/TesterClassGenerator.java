@@ -50,7 +50,7 @@ public class TesterClassGenerator extends JavaClassGenerator{
         builder.append( "@ContextConfiguration(locations = \"").append( MavenProjectGenerator.getConfigName() )
                 .append( ".xml\" )" );
         insertLine();
-        insertClassDeclaration( ClassType.Class, getFileName(), "AbstractDepoDaoExecuteTester", null );
+        insertClassDeclaration( ClassType.CLASS, getFileName(), "AbstractDepoDaoExecuteTester", null );
         insertTabs().append( "@Autowired" );
         insertLine();
         insertTabs().append( MappingGenerator.instance().getFileName() ).append( " " )

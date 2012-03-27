@@ -66,7 +66,7 @@ public class InOutClassGenerator extends JavaClassGenerator{
         builder.append( COMMENT_TO_CLASS );
 
         insertClassDeclaration(
-                ClassType.Class,
+                ClassType.CLASS,
                 NamingUtils.convertNameForClassNaming( this.name ),
                 null,
                 new ArrayList<String>(){{add( "Serializable" );}}

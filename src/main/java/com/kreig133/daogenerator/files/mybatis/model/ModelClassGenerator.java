@@ -3,6 +3,7 @@ package com.kreig133.daogenerator.files.mybatis.model;
 import com.kreig133.daogenerator.common.Utils;
 import com.kreig133.daogenerator.enums.ClassType;
 import com.kreig133.daogenerator.files.JavaClassGenerator;
+import com.kreig133.daogenerator.files.NamingUtils;
 import com.kreig133.daogenerator.files.PackageAndFileUtils;
 import com.kreig133.daogenerator.jaxb.DaoMethod;
 import com.kreig133.daogenerator.jaxb.ParameterType;
@@ -46,16 +47,13 @@ public class ModelClassGenerator extends JavaClassGenerator {
     public void generateHead() throws IOException {
         setPackage( PackageAndFileUtils.getPackage( parametersType.getJavaClassName() ) );
         addImport( "com.aplana.sbrf.deposit.web.common.client.operation.data.DepoModelData" );
-        insertLine();
         insertClassDeclaration(
-                ClassType.Class,
+                ClassType.CLASS,
                 PackageAndFileUtils.getShortName( parametersType.getJavaClassName() ),
                 "DepoModelData",
                 null
         );
     }
-
-
 
     @Override
     public void generateBody( DaoMethod daoMethod ) throws IOException {
@@ -74,14 +72,15 @@ public class ModelClassGenerator extends JavaClassGenerator {
                     getJavaDocString( parameterType ), parameterType.getType(), parameterType.getRenameTo()
             );
             insertTabs().append( "return get(Fields." )
-                    .append( convertForEnum( parameterType.getRenameTo() ) ).append( ".name()" );
+                    .append( NamingUtils.convertNameForEnum( parameterType.getRenameTo() ) ).append( ".name()" );
             closeStatement();
             closeMethodOrInnerClassDefinition();
 
             generateSetterSignature(
-                getJavaDocString(parameterType), parameterType.getType(), parameterType.getRenameTo()
+                getJavaDocString(parameterType), parameterType.getType(), parameterType.getRenameTo(), true
             );
-            insertTabs().append( "set(Fields." ).append( convertForEnum( parameterType.getRenameTo() ) )
+            insertTabs().append( "return set(Fields." )
+                    .append( NamingUtils.convertNameForEnum( parameterType.getRenameTo() ) )
                     .append( ".name(), " ).append( parameterType.getRenameTo() );
             closeStatement();
             closeMethodOrInnerClassDefinition();
@@ -90,20 +89,19 @@ public class ModelClassGenerator extends JavaClassGenerator {
     
     private String getJavaDocString( ParameterType parameterType ) {
         return processComment( parameterType, true ) + " ({@link Fields#"
-                + convertForEnum( parameterType.getRenameTo() ) +"})";
+                + NamingUtils.convertNameForEnum( parameterType.getRenameTo() ) +"})";
     }
 
     private String processComment( ParameterType parameterType, boolean forJavaDoc ) {
-        return Utils.stringNotEmpty( parameterType.getComment() ) ? parameterType.getComment() :
-                ( forJavaDoc ? parameterType.getRenameTo() : "" );
+        return Utils.stringNotEmpty( parameterType.getComment() ) ? "\"" + parameterType.getComment() + "\"":
+                ( forJavaDoc ? "значение" : "" );
     }
 
     private void generateEnum( List<ParameterType> parameter ) {
-        insertTabs().append( "public enum Fields{" );
-        increaseNestingLevel();
-        insertLine();
+        insertClassDeclaration( ClassType.ENUM, "Fields", null, null );
+
         for ( int i = 0 ; i < parameter.size(); i ++ ) {
-            insertTabs().append( convertForEnum( parameter.get( i ).getRenameTo() ) ).append( "(\"" )
+            insertTabs().append( NamingUtils.convertNameForEnum( parameter.get( i ).getRenameTo() ) ).append( "(\"" )
                     .append( processComment( parameter.get( i ), false ) ).append( "\"" );
             if ( i < parameter.size() - 1 ) {
                 builder.append( ")," );
@@ -119,31 +117,17 @@ public class ModelClassGenerator extends JavaClassGenerator {
 
     @Override
     public String getFileName() {
-        return null;  //To change body of implemented methods use File | Settings | File Templates.
+        return null;  //TODO
     }
     
-    public static String convertForEnum( String name ) {
-        StringBuilder builder = new StringBuilder();
-        char[] chars = name.toCharArray();
-        for(  int i = 0 ; i< chars.length; i ++ ) {
-            if ( Character.isUpperCase( chars[ i ] ) ) {
-                if ( i > 0 && !Character.isUpperCase( chars[ i - 1 ] ) ) {
-                    builder.append( "_" );
-                }
-            }
-            builder.append( chars[ i ] );
-        }
-        return builder.toString().toUpperCase();
-    }
-    
-    private String enumBody = 
+    private String enumBody =
                     "         /** Описание атрибута */\n" +
                     "        private final String description;\n" +
                     "\n" +
                     "        /** \n" +
                     "         * Конструктор по умолчанию \n" +
                     "         * @param description описание атрибута\n" +
-                    "        */\n" +
+                    "         */\n" +
                     "        private Fields( String description ) {\n" +
                     "            this.description = description;        \n" +
                     "        }\n" +

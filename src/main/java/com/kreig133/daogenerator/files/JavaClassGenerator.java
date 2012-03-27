@@ -48,11 +48,12 @@ abstract public class JavaClassGenerator extends Generator {
 //        javaDocForFile = null;
     }
 
-    public void generateFoot() throws IOException {
+    private void generateFoot() {
         insertLine().append( "}" );
     }
 
     final public String getResult(){
+        generateFoot();
         String s = builder.toString();
 
         updateBuilder();
@@ -226,7 +227,7 @@ abstract public class JavaClassGenerator extends Generator {
             @Nullable String parentClassName,
             @Nullable List<String> interfaces
     ){
-        builder.append( Scope.PUBLIC.value() ).append( " " ).append( classType ).append( " " ).append( name );
+        insertTabs().append( Scope.PUBLIC.value() ).append( " " ).append( classType ).append( " " ).append( name );
 
         if( ! ( parentClassName == null || "".equals( parentClassName.trim() ) ) ){
             builder.append( " extends " ).append( parentClassName );
@@ -267,7 +268,7 @@ abstract public class JavaClassGenerator extends Generator {
             addImport( DATE_IMPORT );
         }
 
-        jDoc.insertJavaDoc( jDoc.wrapCommentForGetter( javaDoc ) );
+        jDoc.insertJavaDoc( true, jDoc.wrapCommentForGetter( javaDoc ) );
 
         generateMethodSignature(
                 Scope.PUBLIC,
@@ -292,10 +293,14 @@ abstract public class JavaClassGenerator extends Generator {
     }
 
     protected void generateSetterSignature( String javaDoc, JavaType javaType, String name ) {
-        jDoc.insertJavaDoc( jDoc.wrapCommentForSetter( javaDoc ) );
+        generateSetterSignature( javaDoc, javaType, name, false );
+    }
+
+    protected void generateSetterSignature( String javaDoc, JavaType javaType, String name, boolean forModel ) {
+        jDoc.insertJavaDoc( forModel, jDoc.wrapCommentForSetter( javaDoc ) );
         generateMethodSignature(
                 Scope.PUBLIC,
-                null,
+                forModel ? javaType.value() : null,
                 "set" +NamingUtils.convertNameForGettersAndSetters( name ),
                 Arrays.asList( javaType.value() + " " + name ),
                 null,

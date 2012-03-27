@@ -5,7 +5,7 @@ package com.kreig133.daogenerator.enums;
  * @version 1.0
  */
 public enum ClassType {
-    Class("class"), Interface("interface");
+    CLASS("class"), INTERFACE("interface"), ENUM( "enum" );
 
     private String inJava;
 

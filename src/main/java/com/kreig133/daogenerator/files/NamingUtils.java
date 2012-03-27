@@ -39,4 +39,18 @@ public class NamingUtils {
 
         return name;
     }
+
+    public static String convertNameForEnum( String name ) {
+        StringBuilder builder = new StringBuilder();
+        char[] chars = name.toCharArray();
+        for(  int i = 0 ; i< chars.length; i ++ ) {
+            if ( Character.isUpperCase( chars[ i ] ) ) {
+                if ( i > 0 && !Character.isUpperCase( chars[ i - 1 ] ) ) {
+                    builder.append( "_" );
+                }
+            }
+            builder.append( chars[ i ] );
+        }
+        return builder.toString().toUpperCase();
+    }
 }

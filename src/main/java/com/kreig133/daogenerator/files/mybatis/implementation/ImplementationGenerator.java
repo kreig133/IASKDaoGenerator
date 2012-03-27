@@ -47,7 +47,7 @@ public class ImplementationGenerator extends InterfaceGenerator{
         insertLine();
 
         insertClassDeclaration(
-                ClassType.Class,
+                ClassType.CLASS,
                 implementationFileName(),
                 "AbstractDao",
                 new ArrayList<String>() {

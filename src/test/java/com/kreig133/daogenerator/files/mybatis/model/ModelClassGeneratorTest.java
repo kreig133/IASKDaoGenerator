@@ -1,5 +1,6 @@
 package com.kreig133.daogenerator.files.mybatis.model;
 
+import com.kreig133.daogenerator.files.NamingUtils;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -18,10 +19,10 @@ public class ModelClassGeneratorTest extends ModelClassGenerator{
 
     @Test
     public void testConvertForEnum() throws Exception {
-        Assert.assertEquals( convertForEnum( "userGroupId" ), "USER_GROUP_ID" );
-        Assert.assertEquals( convertForEnum( "GroupId" ), "GROUP_ID" );
-        Assert.assertEquals( convertForEnum( "UGroupId" ), "UGROUP_ID" );
-        Assert.assertEquals( convertForEnum( "UGroupIdS" ), "UGROUP_ID_S" );
+        Assert.assertEquals( NamingUtils.convertNameForEnum( "userGroupId" ), "USER_GROUP_ID" );
+        Assert.assertEquals( NamingUtils.convertNameForEnum( "GroupId" ), "GROUP_ID" );
+        Assert.assertEquals( NamingUtils.convertNameForEnum( "UGroupId" ), "UGROUP_ID" );
+        Assert.assertEquals( NamingUtils.convertNameForEnum( "UGroupIdS" ), "UGROUP_ID_S" );
     }
 
 
