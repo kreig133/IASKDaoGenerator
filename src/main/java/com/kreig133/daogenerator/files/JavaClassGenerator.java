@@ -14,6 +14,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 import static com.kreig133.daogenerator.common.Utils.stringNotEmpty;
@@ -27,6 +28,7 @@ abstract public class JavaClassGenerator {
     public static final String JAVA_EXTENSION = ".java";
     protected static final String DATE_IMPORT = "java.util.Date";
 
+    protected String javaDocForFile;
     protected String _package;
     protected Set<String> imports = new HashSet<String>();
 
@@ -51,6 +53,9 @@ abstract public class JavaClassGenerator {
 
         builder = new StringBuilder();
 
+        if( javaDocForFile != null ) {
+            insertJavaDoc( javaDocForFile );
+        }
         insertPackageLine( _package );
 
         for ( String anImport : imports ) {
@@ -245,27 +250,46 @@ abstract public class JavaClassGenerator {
         insertLine();
     }
     
-    protected StringBuilder insertJavaDoc( String[] commentsLine ) {
+    protected StringBuilder insertJavaDoc( String ... commentsLine ) {
+        return insertJavaDoc( false, commentsLine );
+    }
+    
+    protected StringBuilder insertJavaDoc( boolean  withReturn, String ... commentsLine ) {
+        return insertJavaDoc( withReturn, false, commentsLine );
+    }
+    protected StringBuilder insertJavaDoc(
+            boolean  withReturn,
+            boolean  withSince, 
+            String ... commentsLine 
+    ){
 
-        boolean commentsNotEmpty = false;
-        for ( String string : commentsLine ) {
-            if ( string != null && ! ( "".equals( string ) ) ) {
-                commentsNotEmpty = true;
-                break;
+        insertTabs( 1 ).append( "/**" );
+
+        for ( String comment : commentsLine ) {
+            if ( Utils.stringNotEmpty( comment ) ) {
+                insertNewJavaDocLine();
+                builder.append( comment );
             }
         }
 
-        if ( ! commentsNotEmpty ) return builder;
-
-        builder.append( "\t/**\n" );
-        for ( String comment : commentsLine ) {
-            builder.append( "\t * " );
-            builder.append( comment );
-            insertLine();
+        if( withReturn ) {
+            insertNewJavaDocLine().append( "@return" );
         }
-        builder.append( "\t */\n" );
+        
+        if( withSince ) {
+            insertNewJavaDocLine().append( "@since " )
+                    .append( new SimpleDateFormat( "dd.MM.yyyy HH:mm" ).format( new Date() ) );
+        }
+        insertLine();
+        insertTabs( 1 ).append( " */" );
+        insertLine();
 
         return builder;
+    }
+
+    private StringBuilder insertNewJavaDocLine() {
+        insertLine();
+        return insertTabs( 1 ).append( " * " );
     }
 
     protected void generateGetter(
@@ -368,6 +392,7 @@ abstract public class JavaClassGenerator {
         imports.clear();
         builder = new StringBuilder();
         _package = null;
+        javaDocForFile = null;
     }
 
     protected void closeMethodOrInnerClassDefinition() {
