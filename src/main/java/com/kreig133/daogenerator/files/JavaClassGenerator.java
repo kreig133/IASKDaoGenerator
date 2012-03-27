@@ -151,18 +151,14 @@ abstract public class JavaClassGenerator extends Generator {
                 .append( stringNotEmpty( outputClass ) ? outputClass : "void" ).append( " " ).append( methodName )
                 .append( "(" );
         if ( inputParams != null && ! inputParams.isEmpty() ) {
-            increaseNestingLevel();
             boolean  first = true;
             for ( String inputParam : inputParams ) {
                 if ( ! first ) {
                     builder.append( "," );
                 }
                 first = false;
-                insertLine();
                 insertTabs().append( inputParam );
             }
-            insertLine();
-            decreaseNestingLevel();
             insertTabs();
         }
         builder.append( ")" );

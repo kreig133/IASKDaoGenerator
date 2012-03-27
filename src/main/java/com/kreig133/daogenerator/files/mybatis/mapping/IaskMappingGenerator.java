@@ -26,10 +26,10 @@ public class IaskMappingGenerator extends MappingGenerator{
         return Settings.settings().getOperationName();
     }
 
-    @Override
-    public void generateFoot() throws IOException {
-        builder.append( "</mapper>" );
-    }
+//    @Override
+//    public void generateFoot() throws IOException {
+//        builder.append( "</mapper>" );
+//    }
 
     @Override
     protected String getFileNameEnding() {
