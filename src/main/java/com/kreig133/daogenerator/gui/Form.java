@@ -59,8 +59,6 @@ public class Form  implements TypeChangeListener, SourcePathChangeListener{
     private JButton startButton;
     private JRadioButton IASKRadioButton;
     private JRadioButton DEPORadioButton;
-    private JTextField modelPackageTextField;
-    private JLabel modelPackageLabel;
     private JLabel daoPackageLabel;
     private JTextField textField1;
     private JButton button1;
@@ -413,8 +411,6 @@ public class Form  implements TypeChangeListener, SourcePathChangeListener{
         IASKRadioButton.setSelected(    iask );
         DEPORadioButton.setSelected( !  iask );
 
-        modelPackageTextField.setVisible( ! iask );
-        modelPackageLabel    .setVisible( ! iask );
         daoPackageLabel      .setVisible(   iask );
         daoPackageTextField  .setVisible(   iask );
 
@@ -422,7 +418,6 @@ public class Form  implements TypeChangeListener, SourcePathChangeListener{
         entityPackageTextField.setText( Settings.settings().getEntityPackage() );
         daoPackageTextField.setText( Settings.settings().getDaoPackage() );
         mappingPackageTextField.setText( Settings.settings().getMapperPackage() );
-        modelPackageTextField   .setText( Settings.settings().getModelPackage() );
 
         if ( start ) {
             sourceDirTextField.setText( Settings.settings().getSourcePath() );
@@ -437,15 +432,12 @@ public class Form  implements TypeChangeListener, SourcePathChangeListener{
         Settings.settings().setDaoPackage                 ( daoPackageTextField           .getText    () );
         Settings.settings().setEntityPackage              ( entityPackageTextField        .getText    () );
         Settings.settings().setMapperPackage              ( mappingPackageTextField       .getText    () );
-        Settings.settings().setModelPackage               ( modelPackageTextField         .getText    () );
     }
 
     private boolean validateBeforeStartGenerateJavaClasses() {
         if(
                 ( ! isPackageName( daoPackageTextField      .getText() )
                            && Settings.settings().getType() == Type.IASK ) ||
-                ( ! isPackageName( modelPackageTextField    .getText() )
-                           && Settings.settings().getType() == Type.DEPO ) ||
                 ( ! isPackageName( entityPackageTextField   .getText() ) ) ||
                 ( ! isPackageName( mappingPackageTextField  .getText() ) )
         ){

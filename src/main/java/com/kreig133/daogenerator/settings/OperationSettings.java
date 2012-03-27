@@ -53,10 +53,6 @@ public interface OperationSettings {
 
     void addSourcePathChangeListener( SourcePathChangeListener listener );
     
-    String getModelPackage();
-
-    void setModelPackage( String modelPackage );
-    
     String getProjectFolder();
 
     void setProjectFolder( String projectFolder );

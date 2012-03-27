@@ -100,14 +100,6 @@ public class EmptyOperationSettingsImpl implements OperationSettings{
     public void addSourcePathChangeListener( SourcePathChangeListener listener ) { }
 
     @Override
-    public String getModelPackage() {
-        return null;
-    }
-
-    @Override
-    public void setModelPackage( String modelPackage ) { }
-
-    @Override
     public String getProjectFolder() {
         return null;
     }
