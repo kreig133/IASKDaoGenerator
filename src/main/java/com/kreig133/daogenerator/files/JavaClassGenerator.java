@@ -54,7 +54,7 @@ abstract public class JavaClassGenerator extends Generator {
 
     final public String getResult(){
         generateFoot();
-        String s = builder.toString();
+        String s = builder.toString().replaceAll( "\\n{2,}", "\n\n" );
 
         updateBuilder();
 
@@ -140,7 +140,7 @@ abstract public class JavaClassGenerator extends Generator {
     }
 
     protected void generateMethodSignature(
-            @NotNull Scope scope, 
+            @NotNull Scope scope,
             @Nullable String outputClass,
             @NotNull String methodName,
             @Nullable List<String> inputParams,
@@ -150,15 +150,27 @@ abstract public class JavaClassGenerator extends Generator {
         insertTabs().append( scope.value() ).append( " " )
                 .append( stringNotEmpty( outputClass ) ? outputClass : "void" ).append( " " ).append( methodName )
                 .append( "(" );
+
+        boolean needNewLineForParam = inputParams != null && inputParams.size() > 2;
+
+        if ( needNewLineForParam ) {
+            insertLine();
+            increaseNestingLevel();
+            insertTabs();
+        }
         if ( inputParams != null && ! inputParams.isEmpty() ) {
             boolean  first = true;
             for ( String inputParam : inputParams ) {
                 if ( ! first ) {
-                    builder.append( "," );
+                    builder.append( ", " );
                 }
                 first = false;
-                insertTabs().append( inputParam );
+                builder.append( inputParam );
             }
+        }
+        if(  needNewLineForParam ){
+            insertLine();
+            decreaseNestingLevel();
             insertTabs();
         }
         builder.append( ")" );
