@@ -92,7 +92,12 @@ abstract public class JavaClassGenerator {
                     addImport( DATE_IMPORT );
                 }
             } else {
-                outputClass.append( convertNameForClassNaming( methodName ) ).append( "Out" );
+                if ( Settings.settings().getType() == Type.IASK ) {
+                    outputClass.append( convertNameForClassNaming( methodName ) ).append( "Out" );
+                } else {
+                    outputClass.append( getShortName( daoMethod.getOutputParametrs().getJavaClassName() ) );
+                    addImport( daoMethod.getOutputParametrs().getJavaClassName() );
+                }
             }
             if ( daoMethod.getCommon().getConfiguration().isMultipleResult() ) {
                 outputClass.append( ">" );
@@ -128,12 +133,6 @@ abstract public class JavaClassGenerator {
 
     protected void addImport( String clazz ) {
         imports.add( clazz );
-
-        System.out.println( this.getClass().getName() );
-
-        for ( String anImport : imports ) {
-            System.out.println( anImport );
-        }
     }
 
     protected void generateMethodSignature(
@@ -283,6 +282,10 @@ abstract public class JavaClassGenerator {
     }
 
     protected void generateGetterSignature( String javaDoc, JavaType javaType, String name ) {
+        if ( javaType == JavaType.DATE ) {
+            addImport( DATE_IMPORT );
+        }
+
         insertJavaDoc( wrapCommentForGetter( javaDoc ) );
 
         generateMethodSignature(
@@ -364,6 +367,7 @@ abstract public class JavaClassGenerator {
     public void reset(){
         imports.clear();
         builder = new StringBuilder();
+        _package = null;
     }
 
     protected void closeMethodOrInnerClassDefinition() {
@@ -379,5 +383,13 @@ abstract public class JavaClassGenerator {
     protected void closeStatement() {
         builder.append( ");" );
         insertLine();
+    }
+
+    protected static String getShortName( String fullJavaClassName ) {
+        return fullJavaClassName.substring( fullJavaClassName.lastIndexOf( '.' ) + 1 );
+    }
+
+    protected static String getPackage( String fullJavaClassName ) {
+        return fullJavaClassName.substring( 0, fullJavaClassName.lastIndexOf( '.' ) );
     }
 }

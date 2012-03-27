@@ -1,7 +1,8 @@
 package com.kreig133.daogenerator;
 
 import com.kreig133.daogenerator.common.Utils;
-import com.kreig133.daogenerator.files.mybatis.TesterClassGenerator;
+import com.kreig133.daogenerator.files.mybatis.model.ModelClassGenerator;
+import com.kreig133.daogenerator.files.mybatis.test.TesterClassGenerator;
 import com.kreig133.daogenerator.gui.Form;
 import com.kreig133.daogenerator.settings.OperationSettings;
 import com.kreig133.daogenerator.enums.Type;
@@ -46,7 +47,6 @@ public class DaoGenerator {
         public void appendStringToFile( File file, String string ) {
             FileOutputStream writer = null;
             try {
-
                 writer = new FileOutputStream( file, false );
                 writer.write( string.getBytes( "UTF-8") );
             } catch ( IOException e ) {
@@ -113,9 +113,12 @@ public class DaoGenerator {
             if ( InOutClassGenerator.checkToNeedOwnInClass( daoMethod ) ) {
                 generators.add( InOutClassGenerator.newInstance( daoMethod, InOutType.IN ) );
             }
-
-            if ( daoMethod.getOutputParametrs().getParameter().size() > 1 ) {
-                generators.add( InOutClassGenerator.newInstance( daoMethod, InOutType.OUT ) );
+            if( Settings.settings().getType() == Type.IASK ){
+                if ( daoMethod.getOutputParametrs().getParameter().size() > 1 ) {
+                    generators.add( InOutClassGenerator.newInstance( daoMethod, InOutType.OUT ) );
+                }
+            } else {
+                generators.add( ModelClassGenerator.newInstance( daoMethod ) );
             }
         }
 
@@ -159,7 +162,7 @@ public class DaoGenerator {
                 } catch ( Exception e ) {
                     e.printStackTrace();
                 }
-                final JFrame frame = new JFrame( "DaoGenerator 2.3" );
+                final JFrame frame = new JFrame( "DaoGenerator 2.5" );
 
 
                 frame.setContentPane( Form.getInstance() );

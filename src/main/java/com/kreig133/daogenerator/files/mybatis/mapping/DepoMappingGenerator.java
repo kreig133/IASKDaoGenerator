@@ -28,7 +28,6 @@ public class DepoMappingGenerator extends MappingGenerator{
         generateMethodSignature( daoMethod, MethodType.MAPPER );
         builder.append( ";" );
         insertLine();
-
     }
 
     @Override
