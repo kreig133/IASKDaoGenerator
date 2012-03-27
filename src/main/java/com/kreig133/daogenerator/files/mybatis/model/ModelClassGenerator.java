@@ -2,8 +2,8 @@ package com.kreig133.daogenerator.files.mybatis.model;
 
 import com.kreig133.daogenerator.common.Utils;
 import com.kreig133.daogenerator.enums.ClassType;
-import com.kreig133.daogenerator.enums.Scope;
 import com.kreig133.daogenerator.files.JavaClassGenerator;
+import com.kreig133.daogenerator.files.PackageAndFileUtils;
 import com.kreig133.daogenerator.jaxb.DaoMethod;
 import com.kreig133.daogenerator.jaxb.ParameterType;
 import com.kreig133.daogenerator.jaxb.ParametersType;
@@ -35,21 +35,21 @@ public class ModelClassGenerator extends JavaClassGenerator {
         File file = new File(
                 Settings.settings().getPathForGeneratedSource() +
                         "/" +
-                        replacePointBySlash( parametersType.getJavaClassName() ) +
+                        PackageAndFileUtils.replacePointBySlash( parametersType.getJavaClassName() ) +
                         JAVA_EXTENSION
         );
-        createDirsAndFile( file.getParentFile() );
+        PackageAndFileUtils.createDirsAndFile( file.getParentFile() );
         return file;
     }
 
     @Override
     public void generateHead() throws IOException {
-        setPackage( getPackage( parametersType.getJavaClassName() ) );
+        setPackage( PackageAndFileUtils.getPackage( parametersType.getJavaClassName() ) );
         addImport( "com.aplana.sbrf.deposit.web.common.client.operation.data.DepoModelData" );
         insertLine();
         insertClassDeclaration(
                 ClassType.Class,
-                getShortName( parametersType.getJavaClassName() ),
+                PackageAndFileUtils.getShortName( parametersType.getJavaClassName() ),
                 "DepoModelData",
                 null
         );

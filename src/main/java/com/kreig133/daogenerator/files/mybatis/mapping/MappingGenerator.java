@@ -2,6 +2,7 @@ package com.kreig133.daogenerator.files.mybatis.mapping;
 
 import com.kreig133.daogenerator.enums.Type;
 import com.kreig133.daogenerator.files.DaoJavaClassGenerator;
+import com.kreig133.daogenerator.files.PackageAndFileUtils;
 import com.kreig133.daogenerator.settings.Settings;
 
 import java.io.File;
@@ -29,11 +30,11 @@ public abstract class MappingGenerator extends DaoJavaClassGenerator{
 
         File file = new File(
                 Settings.settings().getPathForGeneratedSource() + "/" +
-                        replacePointBySlash( Settings.settings().getMapperPackage() ) + "/"
+                        PackageAndFileUtils.replacePointBySlash( Settings.settings().getMapperPackage() ) + "/"
                         + getFileName() + getFileNameEnding()
                  );
 
-        createDirsAndFile( file.getParentFile() );
+        PackageAndFileUtils.createDirsAndFile( file.getParentFile() );
 
         return file;
     }

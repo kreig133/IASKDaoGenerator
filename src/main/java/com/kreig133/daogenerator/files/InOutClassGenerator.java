@@ -47,11 +47,11 @@ public class InOutClassGenerator extends JavaClassGenerator{
         File file = new File(
                 Settings.settings().getPathForGeneratedSource() +
                         "/" +
-                        replacePointBySlash( Settings.settings().getEntityPackage() ) +
+                        PackageAndFileUtils.replacePointBySlash( Settings.settings().getEntityPackage() ) +
                         "/" +
-                        convertNameForClassNaming( this.name ) + JAVA_EXTENSION);
+                        NamingUtils.convertNameForClassNaming( this.name ) + JAVA_EXTENSION);
 
-        createDirsAndFile( file.getParentFile() );
+        PackageAndFileUtils.createDirsAndFile( file.getParentFile() );
 
         return file;
     }
@@ -60,20 +60,20 @@ public class InOutClassGenerator extends JavaClassGenerator{
     public void generateHead() throws IOException {
         setPackage( Settings.settings().getEntityPackage() );
 
-        insertImport( "java.io.Serializable" );
+        addImport( "java.io.Serializable" );
         insertLine();
 
         builder.append( COMMENT_TO_CLASS );
 
         insertClassDeclaration(
                 ClassType.Class,
-                convertNameForClassNaming( this.name ),
+                NamingUtils.convertNameForClassNaming( this.name ),
                 null,
                 new ArrayList<String>(){{add( "Serializable" );}}
         );
 
         insertSerialVersionUID();
-        writeEmptyConstructor( convertNameForClassNaming( this.name ) );
+        writeEmptyConstructor( NamingUtils.convertNameForClassNaming( this.name ) );
     }
 
     @Override
@@ -103,7 +103,7 @@ public class InOutClassGenerator extends JavaClassGenerator{
             addImport( "com.extjs.gxt.ui.client.data.PagingLoadConfig" );
 
             insertTabs( 1 ).append( Scope.PUBLIC.value() ).append( " " )
-                    .append( convertNameForClassNaming( this.name ) )
+                    .append( NamingUtils.convertNameForClassNaming( this.name ) )
                     .append( "(Long session, PagingLoadConfig loadConfig) {" );
             insertLine();
             insertTabs( 2 ).append( "this." ).append(
@@ -136,7 +136,7 @@ public class InOutClassGenerator extends JavaClassGenerator{
 
     @Override
     public String getFileName() {
-        return convertNameForClassNaming( this.name );
+        return NamingUtils.convertNameForClassNaming( this.name );
     }
 
     private static final String COMMENT_TO_CLASS = "/**\n" +
@@ -156,7 +156,7 @@ public class InOutClassGenerator extends JavaClassGenerator{
         if( parameters.size() > 5 ) return;
 
         insertTabs( 1 ).append( Scope.PUBLIC.value() )
-                .append( " " ).append( convertNameForClassNaming( this.name ) ).append( "(" );
+                .append( " " ).append( NamingUtils.convertNameForClassNaming( this.name ) ).append( "(" );
         insertLine();
         iterateForParameterList( builder, parameters, 2, new FunctionalObjectWithoutFilter() {
             @Override
@@ -193,7 +193,7 @@ public class InOutClassGenerator extends JavaClassGenerator{
 
     public void insertFieldDeclaration( ParameterType p ) {
 
-        insertJavaDoc( new String[] { p.getCommentForJavaDoc() } );
+        jDoc.insertJavaDoc( new String[] { p.getCommentForJavaDoc() } );
         insertTabs( 1 ).append( Scope.PRIVATE.value() ).append( " " ).append( p.getType().value() )
                 .append( " " ).append( p.getRenameTo() );
 

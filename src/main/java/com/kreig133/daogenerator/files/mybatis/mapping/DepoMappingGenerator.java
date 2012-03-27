@@ -47,8 +47,8 @@ public class DepoMappingGenerator extends MappingGenerator{
         setPackage( Settings.settings().getMapperPackage() );
         addDaoFilesImports();
 
-        insertImport( "org.apache.ibatis.annotations.*" );
-        insertImport( "org.apache.ibatis.mapping.StatementType" );
+        addImport( "org.apache.ibatis.annotations.*" );
+        addImport( "org.apache.ibatis.mapping.StatementType" );
         insertLine();
         //TODO блок комментариев
         insertClassDeclaration(

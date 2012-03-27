@@ -1,16 +1,14 @@
 package com.kreig133.daogenerator.files.mybatis.intrface;
 
-import com.kreig133.daogenerator.DaoGenerator;
 import com.kreig133.daogenerator.enums.ClassType;
 import com.kreig133.daogenerator.enums.MethodType;
 import com.kreig133.daogenerator.files.DaoJavaClassGenerator;
+import com.kreig133.daogenerator.files.PackageAndFileUtils;
 import com.kreig133.daogenerator.jaxb.DaoMethod;
 import com.kreig133.daogenerator.settings.Settings;
 
 import java.io.File;
 import java.io.IOException;
-
-import static com.kreig133.daogenerator.common.Utils.insertTabs;
 
 /**
  * @author kreig133
@@ -49,7 +47,7 @@ public class InterfaceGenerator extends DaoJavaClassGenerator {
 
     @Override
     public void generateBody( DaoMethod daoMethod ) throws IOException {
-        insertJavaDoc( daoMethod.getCommon().getComment().split( "\n" ) );
+        jDoc.insertJavaDoc( daoMethod.getCommon().getComment().split( "\n" ) );
         insertTabs( 1 );
         generateMethodSignature( daoMethod, MethodType.DAO );
         builder.append( ";\n" );
@@ -64,10 +62,10 @@ public class InterfaceGenerator extends DaoJavaClassGenerator {
     protected File daoFile( String fileName ) throws IOException {
         File file = new File(
                 Settings.settings().getPathForGeneratedSource() + "/" +
-                        replacePointBySlash( Settings.settings().getDaoPackage() ) + "/" +
+                        PackageAndFileUtils.replacePointBySlash( Settings.settings().getDaoPackage() ) + "/" +
                         fileName + JAVA_EXTENSION );
 
-        createDirsAndFile( file.getParentFile() );
+        PackageAndFileUtils.createDirsAndFile( file.getParentFile() );
 
         return file;
     }

@@ -4,6 +4,7 @@ import com.kreig133.daogenerator.MavenProjectGenerator;
 import com.kreig133.daogenerator.enums.ClassType;
 import com.kreig133.daogenerator.enums.Scope;
 import com.kreig133.daogenerator.files.JavaClassGenerator;
+import com.kreig133.daogenerator.files.PackageAndFileUtils;
 import com.kreig133.daogenerator.files.mybatis.mapping.MappingGenerator;
 import com.kreig133.daogenerator.jaxb.DaoMethod;
 import com.kreig133.daogenerator.jaxb.ParameterType;
@@ -22,10 +23,11 @@ public class TesterClassGenerator extends JavaClassGenerator{
     public File getFile() throws IOException {
         final File file = new File(
                 Settings.settings().getPathForGeneratedTests() + "/"
-                        + replacePointBySlash( Settings.settings().getMapperPackage() )+ "/" + getFileName()
+                        + PackageAndFileUtils.replacePointBySlash( Settings.settings().getMapperPackage() )+ "/"
+                        + getFileName()
                         + JAVA_EXTENSION
         );
-        createDirsAndFile( file.getParentFile() );
+        PackageAndFileUtils.createDirsAndFile( file.getParentFile() );
         return file;
     }
 
@@ -33,16 +35,15 @@ public class TesterClassGenerator extends JavaClassGenerator{
     public void generateHead() throws IOException {
         setPackage( Settings.settings().getMapperPackage() );
         insertLine();
-        insertImport( "com.aplana.sbrf.deposit.AbstractDepoDaoExecuteTester" );
-        insertImport( "org.junit.Test" );
-        insertImport( "org.junit.runner.RunWith" );
-        insertImport( "org.springframework.beans.factory.annotation.Autowired" );
-        insertImport( "org.springframework.test.context.ContextConfiguration" );
-        insertImport( "org.springframework.test.context.junit4.SpringJUnit4ClassRunner" );
-        insertImport( Settings.settings().getMapperPackage() + "." + MappingGenerator.instance().getFileName() );
-        insertLine();
-        insertImport( "java.util.HashMap" );
-        insertImport( "java.util.Map" );
+        addImport( "com.aplana.sbrf.deposit.AbstractDepoDaoExecuteTester" );
+        addImport( "org.junit.Test" );
+        addImport( "org.junit.runner.RunWith" );
+        addImport( "org.springframework.beans.factory.annotation.Autowired" );
+        addImport( "org.springframework.test.context.ContextConfiguration" );
+        addImport( "org.springframework.test.context.junit4.SpringJUnit4ClassRunner" );
+        addImport( Settings.settings().getMapperPackage() + "." + MappingGenerator.instance().getFileName() );
+        addImport( "java.util.HashMap" );
+        addImport( "java.util.Map" );
         insertLine();
         builder.append( "@RunWith(SpringJUnit4ClassRunner.class)" );
         insertLine();

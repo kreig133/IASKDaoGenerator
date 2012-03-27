@@ -14,13 +14,13 @@ public class JavaClassGeneratorTest{
 
     @Test
     public void testGetPackageName() throws Exception {
-        Assert.assertEquals( JavaClassGenerator.getPackage( javaClassName ), "com.kreig133.daogenerator.files" );
-        Assert.assertEquals( JavaClassGenerator.getPackage( javaClassName2 ), "com.aplana.deposit.ledom" );
+        Assert.assertEquals( PackageAndFileUtils.getPackage( javaClassName ), "com.kreig133.daogenerator.files" );
+        Assert.assertEquals( PackageAndFileUtils.getPackage( javaClassName2 ), "com.aplana.deposit.ledom" );
     }
 
     @Test
     public void testGetShortName() throws Exception {
-        Assert.assertEquals( JavaClassGenerator.getShortName( javaClassName ), "JavaClassGenerator" );
-        Assert.assertEquals( JavaClassGenerator.getShortName( javaClassName2 ), "WhatTheModel" );
+        Assert.assertEquals( PackageAndFileUtils.getShortName( javaClassName ), "JavaClassGenerator" );
+        Assert.assertEquals( PackageAndFileUtils.getShortName( javaClassName2 ), "WhatTheModel" );
     }
 }

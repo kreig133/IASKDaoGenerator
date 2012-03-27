@@ -1,5 +1,6 @@
 package com.kreig133.daogenerator.files.mybatis.mapping;
 
+import com.kreig133.daogenerator.files.NamingUtils;
 import com.kreig133.daogenerator.files.mybatis.intrface.InterfaceGenerator;
 import com.kreig133.daogenerator.jaxb.DaoMethod;
 import com.kreig133.daogenerator.jaxb.ParameterType;
@@ -8,8 +9,6 @@ import com.kreig133.daogenerator.sql.creators.QueryCreator;
 
 import java.io.IOException;
 import java.util.List;
-
-import static com.kreig133.daogenerator.common.Utils.insertTabs;
 
 /**
  * @author kreig133
@@ -89,7 +88,7 @@ public class IaskMappingGenerator extends MappingGenerator{
             insertTabs( 2 ).append( type ).append( "=\"" );
             if ( outputParameterList.size() > 1 ) {
                 builder.append( package_ ).append( "." );
-                builder.append( convertNameForClassNaming( name ) ).append( suffix );
+                builder.append( NamingUtils.convertNameForClassNaming( name ) ).append( suffix );
             } else {
                 builder.append( "java.lang." ).append( outputParameterList.get( 0 ).getType().value() );
             }

@@ -39,8 +39,8 @@ public class ImplementationGenerator extends InterfaceGenerator{
     public void generateHead() throws IOException {
         startingLinesOfDaoFiles();
 
-        insertImport( "com.luxoft.sbrf.iask.persistence.common.dao.AbstractDao" );
-        insertImport( "org.springframework.stereotype.Repository" );
+        addImport( "com.luxoft.sbrf.iask.persistence.common.dao.AbstractDao" );
+        addImport( "org.springframework.stereotype.Repository" );
 
         //TODO блок комментариев
         builder.append( "@Repository" );
