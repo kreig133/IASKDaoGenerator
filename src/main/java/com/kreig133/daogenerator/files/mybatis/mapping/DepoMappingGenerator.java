@@ -4,6 +4,7 @@ import com.kreig133.daogenerator.common.Utils;
 import com.kreig133.daogenerator.enums.ClassType;
 import com.kreig133.daogenerator.enums.MethodType;
 import com.kreig133.daogenerator.jaxb.DaoMethod;
+import com.kreig133.daogenerator.jaxb.ParameterType;
 import com.kreig133.daogenerator.jaxb.SelectType;
 import com.kreig133.daogenerator.settings.Settings;
 import com.kreig133.daogenerator.sql.creators.QueryCreator;
@@ -85,18 +86,35 @@ public class DepoMappingGenerator extends MappingGenerator{
             insertLine();
         }
 
+        generateNameMapping( daoMethod );
+
         final List<Integer> indexOfUnnamedParameters = daoMethod.getOutputParametrs().getIndexOfUnnamedParameters();
 
         if( ! indexOfUnnamedParameters.isEmpty() ) {
-            if ( indexOfUnnamedParameters.size() == 1 ) {
-                insertTabs( 1 ).append( "@Results(value = {@Result(property=\"" ).append(
-                        daoMethod.getOutputParametrs().getParameter().get( indexOfUnnamedParameters.get( 1 ) ).getRenameTo()
-                ).append( "\", column=\"\")})" );
-            } else {
+            if ( indexOfUnnamedParameters.size() > 1 ) {
                 throw new RuntimeException( "Не реализованная функциональность!" );
             }
         }
+    }
 
+    private void generateNameMapping( DaoMethod daoMethod ) {
+        insertTabs( 1 ).append( "@Results({");
+        insertLine();
+        boolean first = true;
+        for ( ParameterType parameterType : daoMethod.getOutputParametrs().getParameter() ) {
+            if ( ! first ) {
+                builder.append( "," );
+                insertLine();
+            } else {
+                first = false;
+            }
+            insertTabs( 2 ).append( "@Result(property = \"" ).append( parameterType.getRenameTo() )
+                    .append( "\", column = \"" ).append( parameterType.getName() ).append( "\")" );
+
+        }
+        insertLine();
+        insertTabs( 1 ).append( "})" );
+        insertLine();
     }
 
     /**
