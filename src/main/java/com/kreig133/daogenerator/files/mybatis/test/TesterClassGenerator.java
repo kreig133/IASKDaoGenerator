@@ -37,15 +37,12 @@ public class TesterClassGenerator extends JavaClassGenerator{
         insertLine();
         addImport( "com.aplana.sbrf.deposit.AbstractDepoDaoExecuteTester" );
         addImport( "org.junit.Test" );
-        addImport( "org.junit.runner.RunWith" );
         addImport( "org.springframework.beans.factory.annotation.Autowired" );
         addImport( "org.springframework.test.context.ContextConfiguration" );
         addImport( "org.springframework.test.context.junit4.SpringJUnit4ClassRunner" );
         addImport( Settings.settings().getMapperPackage() + "." + MappingGenerator.instance().getFileName() );
         addImport( "java.util.HashMap" );
         addImport( "java.util.Map" );
-        insertLine();
-        builder.append( "@RunWith(SpringJUnit4ClassRunner.class)" );
         insertLine();
         builder.append( "@ContextConfiguration(locations = \"").append( MavenProjectGenerator.getConfigName() )
                 .append( ".xml\" )" );

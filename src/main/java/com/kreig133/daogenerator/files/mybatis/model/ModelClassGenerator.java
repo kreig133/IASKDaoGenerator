@@ -128,7 +128,7 @@ public class ModelClassGenerator extends JavaClassGenerator {
                     "         * Конструктор по умолчанию \n" +
                     "         * @param description описание атрибута\n" +
                     "         */\n" +
-                    "        private Fields( String description ) {\n" +
+                    "        private Fields(String description) {\n" +
                     "            this.description = description;        \n" +
                     "        }\n" +
                     "        \n" +

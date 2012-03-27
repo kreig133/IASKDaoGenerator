@@ -14,6 +14,8 @@
         <mybatis-spring.version>1.0.2</mybatis-spring.version>
         <sqljdbc.version>3.0</sqljdbc.version>
         <gxt.version>2.2.1</gxt.version>
+        <aspectj.version>1.6.12</aspectj.version>
+        <c3p0.version>0.9.1.2</c3p0.version>
     </properties>
 
 
@@ -38,6 +40,11 @@
             <groupId>org.springframework</groupId>
             <version>${spring.version}</version>
             <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.aspectj</groupId>
+            <artifactId>aspectjweaver</artifactId>
+            <version>${aspectj.version}</version>
         </dependency>
         <dependency>
             <groupId>junit</groupId>
@@ -78,10 +85,15 @@
             <artifactId>gxt</artifactId>
             <version>${gxt.version}</version>
         </dependency>
+        <dependency>
+            <groupId>cglib</groupId>
+            <artifactId>cglib</artifactId>
+            <version>2.2</version>
+        </dependency>
         <!--<dependency>-->
-            <!--<groupId>com.aplana.sbrf.deposit</groupId>-->
-            <!--<artifactId>sbrf-deposit-web</artifactId>-->
-            <!--<version>0.2.2</version>-->
+        <!--<groupId>com.aplana.sbrf.deposit</groupId>-->
+        <!--<artifactId>sbrf-deposit-web</artifactId>-->
+        <!--<version>0.2.2</version>-->
         <!--</dependency>-->
     </dependencies>
 
