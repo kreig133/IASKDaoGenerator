@@ -102,31 +102,32 @@ public class InOutClassGenerator extends JavaClassGenerator{
         if( ParametersType.isWithPaging( parameters ) ){
             addImport( "com.extjs.gxt.ui.client.data.PagingLoadConfig" );
 
-            insertTabs( 1 ).append( Scope.PUBLIC.value() ).append( " " )
+            insertTabs().append( Scope.PUBLIC.value() ).append( " " )
                     .append( NamingUtils.convertNameForClassNaming( this.name ) )
                     .append( "(Long session, PagingLoadConfig loadConfig) {" );
+            increaseNestingLevel();
             insertLine();
-            insertTabs( 2 ).append( "this." ).append(
+            insertTabs().append( "this." ).append(
                     getParameterByName( ParametersType.WithPagingType.ID_SESSION_DS, parameters ).getRenameTo()
             ).append( " = session;" );
             insertLine();
-            insertTabs( 2 ).append( "this." ).append(
+            insertTabs().append( "this." ).append(
                     getParameterByName( ParametersType.WithPagingType.I_START, parameters ).getRenameTo()
             ).append( " = loadConfig == null ? 0L : loadConfig.getOffset();" );
             insertLine();
-            insertTabs( 2 ).append( "this." ).append(
+            insertTabs().append( "this." ).append(
                     getParameterByName( ParametersType.WithPagingType.I_PAGE_LIMIT, parameters ).getRenameTo()
             ).append( " = loadConfig == null ? 0L : loadConfig.getLimit();" );
             insertLine();
-            insertTabs( 2 ).append( "this." ).append(
+            insertTabs().append( "this." ).append(
                     getParameterByName( ParametersType.WithPagingType.I_END, parameters ).getRenameTo()
             ).append( " = 0L;" );
             insertLine();
-            insertTabs( 2 ).append( "this." ).append(
+            insertTabs().append( "this." ).append(
                     getParameterByName( ParametersType.WithPagingType.S_SORT, parameters ).getRenameTo()
             ).append( " = \"\";" );
             insertLine();
-            insertTabs( 2 ).append( "this." ).append(
+            insertTabs().append( "this." ).append(
                     getParameterByName( ParametersType.WithPagingType.I_ROW_COUNT, parameters ).getRenameTo()
             ).append( " = 0L;" );
             insertLine();
@@ -155,9 +156,10 @@ public class InOutClassGenerator extends JavaClassGenerator{
     private void writeFullConstructor() {
         if( parameters.size() > 5 ) return;
 
-        insertTabs( 1 ).append( Scope.PUBLIC.value() )
+        insertTabs().append( Scope.PUBLIC.value() )
                 .append( " " ).append( NamingUtils.convertNameForClassNaming( this.name ) ).append( "(" );
         insertLine();
+        increaseNestingLevel();
         iterateForParameterList( builder, parameters, 2, new FunctionalObjectWithoutFilter() {
             @Override
             public void writeString( StringBuilder builder, ParameterType p ) {
@@ -165,10 +167,10 @@ public class InOutClassGenerator extends JavaClassGenerator{
             }
         } );
 
-        insertTabs( 1 ).append( ") {" );
+        insertTabs().append( ") {" );
         insertLine();
         for( ParameterType p: parameters ){
-            insertTabs( 2 ).append( "this." ).append( p.getRenameTo() ).append( " = " ).append( p.getRenameTo() )
+            insertTabs().append( "this." ).append( p.getRenameTo() ).append( " = " ).append( p.getRenameTo() )
                     .append( ";" );
             insertLine();
         }
@@ -176,25 +178,27 @@ public class InOutClassGenerator extends JavaClassGenerator{
     }
 
     private void writeToString(){
-        insertTabs( 1 ).append( "@Override\n" );
-        insertTabs( 1 ).append( "public String toString(){\n" );
-        insertTabs( 2 ).append( "return \"" ).append( name ).append( "[\"\n" );
-
+        insertTabs().append( "@Override\n" );
+        insertTabs().append( "public String toString(){\n" );
+        increaseNestingLevel();
+        insertTabs().append( "return \"" ).append( name ).append( "[\"\n" );
+        increaseNestingLevel();
         for( int i =  0; i < parameters.size(); i ++ ){
             ParameterType parameter = parameters.get( i );
-            insertTabs( 3 ).append( "+\"" ).append( i != 0 ? ", " : ""  )
+            insertTabs().append( "+\"" ).append( i != 0 ? ", " : ""  )
                     .append( parameter.getRenameTo() ).append( " = \"+" )
                     .append( parameter.getRenameTo() ).append( "\n" );
         }
-
-        insertTabs( 2 ).append( "+\"]\";\n" );
+        decreaseNestingLevel();
+        insertTabs().append( "+\"]\";" );
+        insertLine();
         closeMethodOrInnerClassDefinition();
     }
 
     public void insertFieldDeclaration( ParameterType p ) {
 
         jDoc.insertJavaDoc( new String[] { p.getCommentForJavaDoc() } );
-        insertTabs( 1 ).append( Scope.PRIVATE.value() ).append( " " ).append( p.getType().value() )
+        insertTabs().append( Scope.PRIVATE.value() ).append( " " ).append( p.getType().value() )
                 .append( " " ).append( p.getRenameTo() );
 
         String defaultValue = p.getDefaultValue();

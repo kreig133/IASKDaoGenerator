@@ -8,6 +8,19 @@ import com.kreig133.daogenerator.common.Utils;
  */
 public class Generator {
     protected StringBuilder builder;
+    protected Integer nestingLevel;
+
+    public void setNestingLevel( Integer nestingLevel ) {
+        this.nestingLevel = nestingLevel;
+    }
+
+    protected void increaseNestingLevel() {
+        ++ nestingLevel;
+    }
+
+    protected void decreaseNestingLevel() {
+        -- nestingLevel;
+    }
 
     public void setBuilder( StringBuilder builder ) {
         this.builder = builder;
@@ -17,8 +30,8 @@ public class Generator {
         return builder.append( "\n" );
     }
 
-    protected StringBuilder insertTabs( int tabsCount ) {
-        Utils.insertTabs( builder, tabsCount );
+    protected StringBuilder insertTabs() {
+        Utils.insertTabs( builder, nestingLevel );
         return builder;
     }
 }

@@ -1,7 +1,7 @@
 package com.kreig133.daogenerator.files.mybatis.mapping;
 
 import com.kreig133.daogenerator.enums.Type;
-import com.kreig133.daogenerator.files.DaoJavaClassGenerator;
+import com.kreig133.daogenerator.files.mybatis.DaoJavaClassGenerator;
 import com.kreig133.daogenerator.files.PackageAndFileUtils;
 import com.kreig133.daogenerator.settings.Settings;
 
@@ -12,7 +12,7 @@ import java.io.IOException;
  * @author kreig133
  * @version 1.0
  */
-public abstract class MappingGenerator extends DaoJavaClassGenerator{
+public abstract class MappingGenerator extends DaoJavaClassGenerator {
 
     private static MappingGenerator INSTANCE;
 

@@ -53,7 +53,6 @@ public class ModelClassGenerator extends JavaClassGenerator {
                 "DepoModelData",
                 null
         );
-        insertLine();
     }
 
 
@@ -74,7 +73,7 @@ public class ModelClassGenerator extends JavaClassGenerator {
             generateGetterSignature(
                     getJavaDocString( parameterType ), parameterType.getType(), parameterType.getRenameTo()
             );
-            insertTabs( 2 ).append( "return get(Fields." )
+            insertTabs().append( "return get(Fields." )
                     .append( convertForEnum( parameterType.getRenameTo() ) ).append( ".name()" );
             closeStatement();
             closeMethodOrInnerClassDefinition();
@@ -82,7 +81,7 @@ public class ModelClassGenerator extends JavaClassGenerator {
             generateSetterSignature(
                 getJavaDocString(parameterType), parameterType.getType(), parameterType.getRenameTo()
             );
-            insertTabs( 2 ).append( "set(Fields." ).append( convertForEnum( parameterType.getRenameTo() ) )
+            insertTabs().append( "set(Fields." ).append( convertForEnum( parameterType.getRenameTo() ) )
                     .append( ".name(), " ).append( parameterType.getRenameTo() );
             closeStatement();
             closeMethodOrInnerClassDefinition();
@@ -100,10 +99,11 @@ public class ModelClassGenerator extends JavaClassGenerator {
     }
 
     private void generateEnum( List<ParameterType> parameter ) {
-        insertTabs( 1 ).append( "public enum Fields{" );
+        insertTabs().append( "public enum Fields{" );
+        increaseNestingLevel();
         insertLine();
         for ( int i = 0 ; i < parameter.size(); i ++ ) {
-            insertTabs( 2 ).append( convertForEnum( parameter.get( i ).getRenameTo() ) ).append( "(\"" )
+            insertTabs().append( convertForEnum( parameter.get( i ).getRenameTo() ) ).append( "(\"" )
                     .append( processComment( parameter.get( i ), false ) ).append( "\"" );
             if ( i < parameter.size() - 1 ) {
                 builder.append( ")," );
@@ -113,19 +113,7 @@ public class ModelClassGenerator extends JavaClassGenerator {
             }
         }
         insertLine();
-        String description = "description";
-        insertTabs( 2 ).append( "private final String " + description + ";" );
-        insertLine();
-        insertLine();
-        insertTabs( 2 ).append( "private Fields( String " + description + " ) {" );
-        insertLine();
-        insertTabs( 3 ).append( "this." + description + " = " + description + ";" );
-        closeMethodOrInnerClassDefinition( 2 );
-        insertTabs( 2 ).append( "public String getDescription(){" );
-        insertLine();
-        insertTabs( 3 ).append( "return " + description + ";" );
-        insertLine();
-        closeMethodOrInnerClassDefinition( 2 );
+        builder.append( enumBody );
         closeMethodOrInnerClassDefinition();
     }
 
@@ -147,4 +135,24 @@ public class ModelClassGenerator extends JavaClassGenerator {
         }
         return builder.toString().toUpperCase();
     }
+    
+    private String enumBody = 
+                    "         /** Описание атрибута */\n" +
+                    "        private final String description;\n" +
+                    "\n" +
+                    "        /** \n" +
+                    "         * Конструктор по умолчанию \n" +
+                    "         * @param description описание атрибута\n" +
+                    "        */\n" +
+                    "        private Fields( String description ) {\n" +
+                    "            this.description = description;        \n" +
+                    "        }\n" +
+                    "        \n" +
+                    "        /**\n" +
+                    "         * Вернуть описание атрибута\n" +
+                    "         * @return String\n" +
+                    "         */\n" +
+                    "        public String getDescription(){\n" +
+                    "            return description;\n" +
+                    "        }\n";
 }

@@ -60,14 +60,14 @@ public class ImplementationGenerator extends InterfaceGenerator{
 
     @Override
     public void generateBody( DaoMethod daoMethod ) throws IOException {
-        insertTabs( 1 ).append( "@Override" );
+        insertTabs().append( "@Override" );
         insertLine();
-        insertTabs( 1 ).append( Scope.PUBLIC.value() ).append( " " );
+        insertTabs().append( Scope.PUBLIC.value() ).append( " " );
 
         generateMethodSignature( daoMethod, MethodType.DAO );
         builder.append( " {" );
         insertLine();
-        insertTabs( 2 );
+        insertTabs();
 
         if( ! daoMethod.getOutputParametrs().getParameter().isEmpty() ){
             builder.append( "return " );

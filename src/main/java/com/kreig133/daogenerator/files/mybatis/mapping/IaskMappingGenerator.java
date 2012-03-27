@@ -54,7 +54,7 @@ public class IaskMappingGenerator extends MappingGenerator{
         final String package_                     = Settings.settings().getEntityPackage();
 
         StringBuilder builder = new StringBuilder();
-        insertTabs( 1 ).append( "<" ) .append( daoMethod.getSelectType().getAnnotation()
+        insertTabs().append( "<" ) .append( daoMethod.getSelectType().getAnnotation()
                 .toLowerCase() )
                 .append( " id=\"" ).append( name ).append( "\" statementType=\"CALLABLE\"" );
 
@@ -62,12 +62,14 @@ public class IaskMappingGenerator extends MappingGenerator{
         writeParameterType( outputParameterList, name, "resultType"   , "Out", package_, builder );
 
         builder.append( ">\n\n" );
-        insertTabs( 2 ).append(
+        increaseNestingLevel();
+        insertTabs().append(
                 QueryCreator.newInstance( daoMethod ).generateExecuteQuery( daoMethod, false )
         );
         insertLine();
+        decreaseNestingLevel();
 
-        insertTabs( 1 ).append( "</" ).append( daoMethod.getSelectType().getAnnotation().toLowerCase() ).append( ">" );
+        insertTabs().append( "</" ).append( daoMethod.getSelectType().getAnnotation().toLowerCase() ).append( ">" );
         insertLine();
         insertLine();
 
@@ -85,7 +87,8 @@ public class IaskMappingGenerator extends MappingGenerator{
     ) {
         if ( ! outputParameterList.isEmpty() ) {
             insertLine();
-            insertTabs( 2 ).append( type ).append( "=\"" );
+            increaseNestingLevel();
+            insertTabs().append( type ).append( "=\"" );
             if ( outputParameterList.size() > 1 ) {
                 builder.append( package_ ).append( "." );
                 builder.append( NamingUtils.convertNameForClassNaming( name ) ).append( suffix );
@@ -93,6 +96,7 @@ public class IaskMappingGenerator extends MappingGenerator{
                 builder.append( "java.lang." ).append( outputParameterList.get( 0 ).getType().value() );
             }
             builder.append( "\"" );
+            decreaseNestingLevel();
         }
     }
 }

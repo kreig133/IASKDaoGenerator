@@ -2,7 +2,7 @@ package com.kreig133.daogenerator.files.mybatis.intrface;
 
 import com.kreig133.daogenerator.enums.ClassType;
 import com.kreig133.daogenerator.enums.MethodType;
-import com.kreig133.daogenerator.files.DaoJavaClassGenerator;
+import com.kreig133.daogenerator.files.mybatis.DaoJavaClassGenerator;
 import com.kreig133.daogenerator.files.PackageAndFileUtils;
 import com.kreig133.daogenerator.jaxb.DaoMethod;
 import com.kreig133.daogenerator.settings.Settings;
@@ -48,9 +48,10 @@ public class InterfaceGenerator extends DaoJavaClassGenerator {
     @Override
     public void generateBody( DaoMethod daoMethod ) throws IOException {
         jDoc.insertJavaDoc( daoMethod.getCommon().getComment().split( "\n" ) );
-        insertTabs( 1 );
+        insertTabs();
         generateMethodSignature( daoMethod, MethodType.DAO );
-        builder.append( ";\n" );
+        builder.append( ";" );
+        insertLine();
     }
 
     @Override

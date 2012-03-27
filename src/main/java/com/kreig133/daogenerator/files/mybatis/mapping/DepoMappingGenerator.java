@@ -28,6 +28,7 @@ public class DepoMappingGenerator extends MappingGenerator{
         generateAnnotation( daoMethod );
         generateMethodSignature( daoMethod, MethodType.MAPPER );
         builder.append( ";" );
+        decreaseNestingLevel();
         insertLine();
     }
 
@@ -71,7 +72,7 @@ public class DepoMappingGenerator extends MappingGenerator{
 
         assert selectType != null ;
 
-        insertTabs(1).append( "@" ).append( selectType.getAnnotation() ).append( "(" );
+        insertTabs().append( "@" ).append( selectType.getAnnotation() ).append( "(" );
         insertLine();
 
         builder.append( wrapWithQuotes(
@@ -79,10 +80,10 @@ public class DepoMappingGenerator extends MappingGenerator{
                         "\\\\\"" )
         ) );
 
-        insertTabs( 1 ).append( ")" );
+        insertTabs().append( ")" );
         insertLine();
         if( daoMethod.getSelectType() == SelectType.CALL ) {
-            insertTabs( 1 ).append( "@Options(statementType=StatementType.CALLABLE)" );
+            insertTabs().append( "@Options(statementType=StatementType.CALLABLE)" );
             insertLine();
         }
 
@@ -98,9 +99,10 @@ public class DepoMappingGenerator extends MappingGenerator{
     }
 
     private void generateNameMapping( DaoMethod daoMethod ) {
-        insertTabs( 1 ).append( "@Results({");
+        insertTabs().append( "@Results({");
         insertLine();
         boolean first = true;
+        increaseNestingLevel();
         for ( ParameterType parameterType : daoMethod.getOutputParametrs().getParameter() ) {
             if ( ! first ) {
                 builder.append( "," );
@@ -108,12 +110,13 @@ public class DepoMappingGenerator extends MappingGenerator{
             } else {
                 first = false;
             }
-            insertTabs( 2 ).append( "@Result(property = \"" ).append( parameterType.getRenameTo() )
+            insertTabs().append( "@Result(property = \"" ).append( parameterType.getRenameTo() )
                     .append( "\", column = \"" ).append( parameterType.getName() ).append( "\")" );
 
         }
+        decreaseNestingLevel();
         insertLine();
-        insertTabs( 1 ).append( "})" );
+        insertTabs().append( "})" );
         insertLine();
     }
 

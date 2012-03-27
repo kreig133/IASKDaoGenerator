@@ -38,8 +38,7 @@ abstract public class JavaClassGenerator extends Generator {
     abstract public String getFileName();
 
     protected JavaClassGenerator() {
-        builder = new StringBuilder();
-        jDoc.setBuilder( builder );
+        updateBuilder();
     }
 
     public void reset(){
@@ -56,7 +55,7 @@ abstract public class JavaClassGenerator extends Generator {
     final public String getResult(){
         String s = builder.toString();
 
-        builder = new StringBuilder();
+        updateBuilder();
 
         if( javaDocForFile != null ) {
             jDoc.insertJavaDoc( javaDocForFile );
@@ -67,6 +66,8 @@ abstract public class JavaClassGenerator extends Generator {
             insertImport( anImport );
         }
         insertLine();
+
+        jDoc.insertJavaDoc( false, true, "" );
 
         return builder.toString() + s;
     }
@@ -145,11 +146,11 @@ abstract public class JavaClassGenerator extends Generator {
             @Nullable List<String> throwsing,
             boolean signatureOnly
     ){
-        insertTabs( 1 ).append( scope.value() ).append( " " )
+        insertTabs().append( scope.value() ).append( " " )
                 .append( stringNotEmpty( outputClass ) ? outputClass : "void" ).append( " " ).append( methodName )
                 .append( "(" );
-        
         if ( inputParams != null && ! inputParams.isEmpty() ) {
+            increaseNestingLevel();
             boolean  first = true;
             for ( String inputParam : inputParams ) {
                 if ( ! first ) {
@@ -157,10 +158,11 @@ abstract public class JavaClassGenerator extends Generator {
                 }
                 first = false;
                 insertLine();
-                Utils.insertTabs( builder, 2 ).append( inputParam );
+                insertTabs().append( inputParam );
             }
             insertLine();
-            insertTabs( 1 );
+            decreaseNestingLevel();
+            insertTabs();
         }
         builder.append( ")" );
 
@@ -177,6 +179,7 @@ abstract public class JavaClassGenerator extends Generator {
         }
 
         builder.append( signatureOnly ? "" : " {" );
+        increaseNestingLevel();
     }
 
     private void insertPackageLine( String packageName ) {
@@ -202,7 +205,7 @@ abstract public class JavaClassGenerator extends Generator {
 
     protected void insertSerialVersionUID() {
         insertLine();
-        insertTabs( 1 ).append( Scope.PRIVATE.value() ).append( " static final long serialVersionUID = " );
+        insertTabs().append( Scope.PRIVATE.value() ).append( " static final long serialVersionUID = " );
         builder.append( ( long ) ( Math.random() * Long.MAX_VALUE ) ).append( "L;" );
         insertLine();
         insertLine();
@@ -212,6 +215,7 @@ abstract public class JavaClassGenerator extends Generator {
         Utils.insertTabs( builder, 1 ).append( Scope.PUBLIC.value() ).
                 append( " " ).append( className ).append( "(){");
         insertLine();
+        increaseNestingLevel();
         closeMethodOrInnerClassDefinition();
     }
 
@@ -242,6 +246,7 @@ abstract public class JavaClassGenerator extends Generator {
         builder.append( "{" );
         insertLine();
         insertLine();
+        increaseNestingLevel();
     }
 
     protected void generateGetter(
@@ -252,7 +257,7 @@ abstract public class JavaClassGenerator extends Generator {
     ){
         generateGetterSignature( javaDoc, javaType, name );
 
-        insertTabs( 2 ).append( "return " ).append( name ).append( ";");
+        insertTabs().append( "return " ).append( name ).append( ";");
         insertLine();
         closeMethodOrInnerClassDefinition();
     }
@@ -281,7 +286,7 @@ abstract public class JavaClassGenerator extends Generator {
             String name
     ){
         generateSetterSignature( javaDoc, javaType, name );
-        insertTabs( 2 ).append( "this." ).append( name ).append( " = " ).append( name ).append( ";" );
+        insertTabs().append( "this." ).append( name ).append( " = " ).append( name ).append( ";" );
         insertLine();
         closeMethodOrInnerClassDefinition();
     }
@@ -300,11 +305,8 @@ abstract public class JavaClassGenerator extends Generator {
     }
 
     protected void closeMethodOrInnerClassDefinition() {
-        closeMethodOrInnerClassDefinition( 1 );
-    }
-
-    protected void closeMethodOrInnerClassDefinition( int tabs ) {
-        insertTabs( tabs ).append( "}" );
+        decreaseNestingLevel();
+        insertTabs().append( "}" );
         insertLine();
         insertLine();
     }
@@ -312,5 +314,24 @@ abstract public class JavaClassGenerator extends Generator {
     protected void closeStatement() {
         builder.append( ");" );
         insertLine();
+    }
+
+    private void updateBuilder() {
+        setNestingLevel( 0 );
+        jDoc.setNestingLevel( 0 );
+        builder = new StringBuilder();
+        jDoc.setBuilder( builder );
+    }
+
+    @Override
+    protected void increaseNestingLevel() {
+        super.increaseNestingLevel();
+        jDoc.setNestingLevel( nestingLevel );
+    }
+
+    @Override
+    protected void decreaseNestingLevel() {
+        super.decreaseNestingLevel();
+        jDoc.setNestingLevel( nestingLevel );
     }
 }

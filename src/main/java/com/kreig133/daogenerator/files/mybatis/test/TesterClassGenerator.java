@@ -51,9 +51,9 @@ public class TesterClassGenerator extends JavaClassGenerator{
                 .append( ".xml\" )" );
         insertLine();
         insertClassDeclaration( ClassType.Class, getFileName(), "AbstractDepoDaoExecuteTester", null );
-        insertTabs( 1 ).append( "@Autowired" );
+        insertTabs().append( "@Autowired" );
         insertLine();
-        insertTabs( 1 ).append( MappingGenerator.instance().getFileName() ).append( " " )
+        insertTabs().append( MappingGenerator.instance().getFileName() ).append( " " )
                 .append( "dao" ).append( ";" );
         insertLine();
     }
@@ -61,7 +61,7 @@ public class TesterClassGenerator extends JavaClassGenerator{
     @Override
     public void generateBody( DaoMethod daoMethod ) throws IOException {
         insertLine();
-        insertTabs( 1 ).append( "@Test" );
+        insertTabs().append( "@Test" );
         insertLine();
         generateMethodSignature(
                 Scope.PUBLIC,
@@ -72,22 +72,22 @@ public class TesterClassGenerator extends JavaClassGenerator{
                 false
         );
         insertLine();
-        insertTabs( 2 ).append( "final Map<String, String> values = new HashMap<String, String>();" );
+        insertTabs().append( "final Map<String, String> values = new HashMap<String, String>();" );
         insertLine();
         for ( ParameterType parameterType : daoMethod.getInputParametrs().getParameter() ) {
-            insertTabs( 2 ).append( "values.put( \"" ).append( parameterType.getRenameTo() ).append( "\", \"" )
+            insertTabs().append( "values.put( \"" ).append( parameterType.getRenameTo() ).append( "\", \"" )
                     .append( parameterType.getTestValue() ).append( "\" );" );
             insertLine();
         }
         insertLine();
-        insertTabs( 2 ).append( "final String methodName = \"" ).append( daoMethod.getCommon().getMethodName() )
+        insertTabs().append( "final String methodName = \"" ).append( daoMethod.getCommon().getMethodName() )
                 .append( "\";" );
         insertLine();
         insertLine();
-        insertTabs( 2 ).append( "Object invoke = invoke( dao, values, methodName );" );
+        insertTabs().append( "Object invoke = invoke( dao, values, methodName );" );
         insertLine();
         insertLine();
-        insertTabs( 2 ).append( "org.junit.Assert.assertNotNull( invoke );" );
+        insertTabs().append( "org.junit.Assert.assertNotNull( invoke );" );
         insertLine();
         insertLine();
         closeMethodOrInnerClassDefinition();

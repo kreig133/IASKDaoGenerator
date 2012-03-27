@@ -24,7 +24,7 @@ public class JavaDocGenerator extends Generator{
             String ... commentsLine
     ){
 
-        insertTabs( 1 ).append( "/**" );
+        insertTabs().append( "/**" );
 
         for ( String comment : commentsLine ) {
             if ( Utils.stringNotEmpty( comment ) ) {
@@ -42,7 +42,7 @@ public class JavaDocGenerator extends Generator{
                     .append( new SimpleDateFormat( "dd.MM.yyyy HH:mm" ).format( new Date() ) );
         }
         insertLine();
-        insertTabs( 1 ).append( " */" );
+        insertTabs().append( " */" );
         insertLine();
 
         return builder;
@@ -50,7 +50,7 @@ public class JavaDocGenerator extends Generator{
 
     private StringBuilder insertNewJavaDocLine() {
         insertLine();
-        return insertTabs( 1 ).append( " * " );
+        return insertTabs().append( " * " );
     }
 
     public String wrapCommentForSetter( String javaDoc ) {
