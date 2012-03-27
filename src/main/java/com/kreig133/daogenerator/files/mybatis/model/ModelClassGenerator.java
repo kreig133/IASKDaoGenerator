@@ -1,5 +1,6 @@
 package com.kreig133.daogenerator.files.mybatis.model;
 
+import com.kreig133.daogenerator.common.Utils;
 import com.kreig133.daogenerator.enums.ClassType;
 import com.kreig133.daogenerator.enums.Scope;
 import com.kreig133.daogenerator.files.JavaClassGenerator;
@@ -71,7 +72,7 @@ public class ModelClassGenerator extends JavaClassGenerator {
     private void generateSetterAndGetters( List<ParameterType> parameter ) {
         for ( ParameterType parameterType : parameter ) {
             generateGetterSignature(
-                    parameterType.getComment(), parameterType.getType(), parameterType.getRenameTo()
+                    getJavaDocString( parameterType ), parameterType.getType(), parameterType.getRenameTo()
             );
             insertTabs( 2 ).append( "return get(Fields." )
                     .append( convertForEnum( parameterType.getRenameTo() ) ).append( ".name()" );
@@ -79,7 +80,7 @@ public class ModelClassGenerator extends JavaClassGenerator {
             closeMethodOrInnerClassDefinition();
 
             generateSetterSignature(
-                parameterType.getComment(), parameterType.getType(), parameterType.getRenameTo()
+                getJavaDocString(parameterType), parameterType.getType(), parameterType.getRenameTo()
             );
             insertTabs( 2 ).append( "set(Fields." ).append( convertForEnum( parameterType.getRenameTo() ) )
                     .append( ".name(), " ).append( parameterType.getRenameTo() );
@@ -87,13 +88,23 @@ public class ModelClassGenerator extends JavaClassGenerator {
             closeMethodOrInnerClassDefinition();
         }
     }
+    
+    private String getJavaDocString( ParameterType parameterType ) {
+        return processComment( parameterType, true ) + " ({@link Fields#"
+                + convertForEnum( parameterType.getRenameTo() ) +"})";
+    }
+
+    private String processComment( ParameterType parameterType, boolean forJavaDoc ) {
+        return Utils.stringNotEmpty( parameterType.getComment() ) ? parameterType.getComment() :
+                ( forJavaDoc ? parameterType.getRenameTo() : "" );
+    }
 
     private void generateEnum( List<ParameterType> parameter ) {
         insertTabs( 1 ).append( "public enum Fields{" );
         insertLine();
         for ( int i = 0 ; i < parameter.size(); i ++ ) {
             insertTabs( 2 ).append( convertForEnum( parameter.get( i ).getRenameTo() ) ).append( "(\"" )
-                    .append( parameter.get( i ).getComment() ).append( "\"" );
+                    .append( processComment( parameter.get( i ), false ) ).append( "\"" );
             if ( i < parameter.size() - 1 ) {
                 builder.append( ")," );
                 insertLine();
@@ -102,16 +113,17 @@ public class ModelClassGenerator extends JavaClassGenerator {
             }
         }
         insertLine();
-        insertTabs( 2 ).append( "private final String comment;" );
+        String description = "description";
+        insertTabs( 2 ).append( "private final String " + description + ";" );
         insertLine();
         insertLine();
-        insertTabs( 2 ).append( "private Fields( String comment ) {" );
+        insertTabs( 2 ).append( "private Fields( String " + description + " ) {" );
         insertLine();
-        insertTabs( 3 ).append( "this.comment = comment;" );
+        insertTabs( 3 ).append( "this." + description + " = " + description + ";" );
         closeMethodOrInnerClassDefinition( 2 );
-        insertTabs( 2 ).append( "public String getComment(){" );
+        insertTabs( 2 ).append( "public String getDescription(){" );
         insertLine();
-        insertTabs( 3 ).append( "return comment;" );
+        insertTabs( 3 ).append( "return " + description + ";" );
         insertLine();
         closeMethodOrInnerClassDefinition( 2 );
         closeMethodOrInnerClassDefinition();

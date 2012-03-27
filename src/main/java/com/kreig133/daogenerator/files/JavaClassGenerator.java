@@ -300,7 +300,7 @@ abstract public class JavaClassGenerator {
     }
 
     protected String[] wrapCommentForGetter( String javaDoc ) {
-        return new String[] { "Получить ", "\"" + javaDoc + "\"" };
+        return new String[] { "Получить " + javaDoc };
     }
 
     public void generateSetter(
@@ -328,7 +328,7 @@ abstract public class JavaClassGenerator {
     }
 
     protected String[] wrapCommentForSetter( String javaDoc ) {
-        return new String[] { "Установить ", "\"" + javaDoc + "\"" };
+        return new String[] { "Установить "+ javaDoc };
     }
 
     /**
