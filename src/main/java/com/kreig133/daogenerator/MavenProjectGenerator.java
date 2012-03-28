@@ -4,6 +4,7 @@ import com.kreig133.daogenerator.common.Utils;
 import com.kreig133.daogenerator.files.NamingUtils;
 import com.kreig133.daogenerator.files.PackageAndFileUtils;
 import com.kreig133.daogenerator.files.mybatis.mapping.MappingGenerator;
+import com.kreig133.daogenerator.files.mybatis.test.TesterClassGenerator;
 import com.kreig133.daogenerator.settings.Settings;
 
 import java.io.*;
@@ -40,8 +41,7 @@ public class MavenProjectGenerator {
                 stream,
                 new File(
                         Settings.settings().getPathForTestResources() + "/" +
-                        PackageAndFileUtils.replacePointBySlash( Settings.settings().getMapperPackage() ) + "/" +
-                        getConfigName() + ".xml"
+                        getConfigName()
                 )
         );
     }
@@ -112,7 +112,7 @@ public class MavenProjectGenerator {
     }
     
     public static String getConfigName(){
-        return MappingGenerator.instance().getFileName() + "TestConfig";
+        return TesterClassGenerator.TEST_CONFIG;
     }
 
     public static int installProject() {

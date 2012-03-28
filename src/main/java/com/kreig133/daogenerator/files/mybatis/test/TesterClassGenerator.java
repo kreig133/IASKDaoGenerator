@@ -19,6 +19,8 @@ import java.io.IOException;
  */
 public class TesterClassGenerator extends JavaClassGenerator{
 
+    public static final String TEST_CONFIG = "gwt-rpc-servlet.xml";
+
     @Override
     public File getFile() throws IOException {
         final File file = new File(
@@ -44,8 +46,8 @@ public class TesterClassGenerator extends JavaClassGenerator{
         addImport( "java.util.HashMap" );
         addImport( "java.util.Map" );
         insertLine();
-        builder.append( "@ContextConfiguration(locations = \"").append( MavenProjectGenerator.getConfigName() )
-                .append( ".xml\" )" );
+        insertLine();
+        builder.append( "@ContextConfiguration(locations = {\"classpath:" ).append( TEST_CONFIG ).append( "\"})");
         insertLine();
         insertClassDeclaration( ClassType.CLASS, getFileName(), "AbstractDepoDaoExecuteTest", null );
         insertTabs().append( "@Autowired" );
