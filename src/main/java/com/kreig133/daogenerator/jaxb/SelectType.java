@@ -66,7 +66,7 @@ public enum SelectType {
             }
         }
 
-        return name.equals( "execute" )  ? CALL : null;
+        return name.startsWith( "exec" )  ? CALL : null;
     }
 
     public boolean isQuery(  ){
