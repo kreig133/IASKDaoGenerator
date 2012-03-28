@@ -66,13 +66,13 @@ class ParametrsModel extends AbstractTableModel {
     public void setValueAt( Object aValue, int rowIndex, int columnIndex ) {
         switch ( columnIndex ) {
             case 1:
-                parameterTypes.get( rowIndex ).setName( ( String ) aValue );
+                parameterTypes.get( rowIndex ).setName( ( ( String ) aValue ).trim() );
                 break;
             case 2:
 //                parameterTypes.get( rowIndex ).setType();
                 break;
             case 3:
-                parameterTypes.get( rowIndex ).setSqlType( ( String ) aValue );
+                parameterTypes.get( rowIndex ).setSqlType( ( ( String ) aValue ).trim() );
                 break;
             case 4:
 //                parameterTypes.get( rowIndex ).getInOut();
@@ -84,12 +84,12 @@ class ParametrsModel extends AbstractTableModel {
                 parameterTypes.get( rowIndex ).setTestValue( ( String ) aValue );
                 break;
             case 7:
-                parameterTypes.get( rowIndex ).setRenameTo( ( String ) aValue );
+                parameterTypes.get( rowIndex ).setRenameTo( ( ( String ) aValue ).trim() );
                 break;
             case 8:
                 break;
             case 9:
-                parameterTypes.get( rowIndex ).setComment( ( String ) aValue );
+                parameterTypes.get( rowIndex ).setComment( ( ( String ) aValue ).trim() );
                 break;
         }
     }

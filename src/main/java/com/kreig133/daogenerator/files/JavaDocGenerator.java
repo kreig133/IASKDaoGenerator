@@ -29,7 +29,7 @@ public class JavaDocGenerator extends Generator{
         for ( String comment : commentsLine ) {
             if ( Utils.stringNotEmpty( comment ) ) {
                 insertNewJavaDocLine();
-                builder.append( comment );
+                builder.append( comment.trim() );
             }
         }
 
