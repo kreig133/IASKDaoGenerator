@@ -81,6 +81,8 @@ public class JaxbHandler {
             try {
                 marshaller = getJaxbContext().createMarshaller();
                 marshaller.setProperty( Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE );
+                marshaller.setProperty( Marshaller.JAXB_SCHEMA_LOCATION,
+                        "http://77.72.129.146/xsd/dao-generator.xsd" );
             } catch ( JAXBException e ) {
                 throw new RuntimeException( e );
             }
