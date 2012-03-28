@@ -14,7 +14,7 @@
         <spring.version>3.0.6.RELEASE</spring.version>
         <mybatis-spring.version>1.0.2</mybatis-spring.version>
         <sqljdbc.version>3.0</sqljdbc.version>
-        <gxt.version>2.2.1</gxt.version>
+        <gxt.version>2.2.0</gxt.version>
         <aspectj.version>1.6.12</aspectj.version>
         <c3p0.version>0.9.1.2</c3p0.version>
     </properties>
