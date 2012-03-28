@@ -1,5 +1,6 @@
 package com.kreig133.daogenerator.db.extractor;
 
+import com.kreig133.daogenerator.common.Utils;
 import com.kreig133.daogenerator.db.JBDCTypeIdConverter;
 import com.kreig133.daogenerator.jaxb.*;
 
@@ -47,7 +48,7 @@ public abstract class OutputParameterExtractor {
                 for ( int i = 1; i <= metaData.getColumnCount(); i++ ) {
                     final ParameterType parameterType = new ParameterType();
                     parameterType.setName( metaData.getColumnName( i ) );
-                    parameterType.setRenameTo( parameterType.getName() );
+                    parameterType.setRenameTo( Utils. convertPBNameToName( parameterType.getName() ) );
                     parameterType.setSqlType( metaData.getColumnTypeName( i ) );
                     parameterType.setType( JavaType.getBySqlType( metaData.getColumnTypeName( i ) ) );
 
