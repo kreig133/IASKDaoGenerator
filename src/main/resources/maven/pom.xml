@@ -16,7 +16,9 @@
         <sqljdbc.version>3.0</sqljdbc.version>
         <gxt.version>2.2.0</gxt.version>
         <aspectj.version>1.6.12</aspectj.version>
+        <mybatis.ehcache.version>1.0.0</mybatis.ehcache.version>
         <c3p0.version>0.9.1.2</c3p0.version>
+        <slf4j-log4j12.version>1.6.1</slf4j-log4j12.version>
     </properties>
 
 
@@ -91,12 +93,30 @@
             <artifactId>cglib</artifactId>
             <version>2.2</version>
         </dependency>
+        <dependency>
+            <groupId>org.mybatis</groupId>
+            <artifactId>mybatis-ehcache</artifactId>
+            <version>${mybatis.ehcache.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-log4j12</artifactId>
+            <version>${slf4j-log4j12.version}</version>
+            <scope>compile</scope>
+        </dependency>
         <!--<dependency>-->
         <!--<groupId>com.aplana.sbrf.deposit</groupId>-->
         <!--<artifactId>sbrf-deposit-web</artifactId>-->
         <!--<version>0.2.2</version>-->
         <!--</dependency>-->
     </dependencies>
+
+    <repositories>
+        <repository>
+            <id>sbrf-deposit-internal</id>
+            <url>http://sbrfcredit2.aplana.com:8081/nexus/content/repositories/sbrf-deposit-internal</url>
+        </repository>
+    </repositories>
 
     <build>
         <plugins>

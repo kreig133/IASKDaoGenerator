@@ -47,14 +47,14 @@ public class DepoMappingGenerator extends MappingGenerator{
 
         setPackage( Settings.settings().getMapperPackage() );
         addDaoFilesImports();
-
         addImport( "org.apache.ibatis.annotations.*" );
         addImport( "org.apache.ibatis.mapping.StatementType" );
+        addImport( "org.apache.ibatis.annotations.CacheNamespace" );
+        builder.append( "@CacheNamespace(implementation = org.mybatis.caches.ehcache.EhcacheCache.class)" );
         insertLine();
-        //TODO блок комментариев
         insertClassDeclaration(
                 ClassType.INTERFACE,
-                Settings.settings().getOperationName()+MAPPER_PREFIX,
+                Settings.settings().getOperationName() + MAPPER_PREFIX,
                 null,
                 null
         );
@@ -83,7 +83,11 @@ public class DepoMappingGenerator extends MappingGenerator{
         insertTabs().append( ")" );
         insertLine();
         if( daoMethod.getSelectType() == SelectType.CALL ) {
-            insertTabs().append( "@Options(statementType=StatementType.CALLABLE)" );
+            insertTabs().append( "@Options(statementType=StatementType.CALLABLE");
+            if( daoMethod.getInputParametrs().isWithPaging() ) {
+                builder.append( ", useCache=false" );
+            }
+            builder.append( ")" );
             insertLine();
         }
 
