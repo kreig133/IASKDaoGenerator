@@ -40,11 +40,11 @@ import javax.xml.bind.annotation.XmlType;
 @XmlEnum
 public enum SelectType {
 
-    CALL    ("Select" ),
-    SELECT  ("Select" ),
-    INSERT  ("Insert" ),
-    DELETE  ("Delete" ),
-    UPDATE  ("Update" );
+    CALL  ( "Select" ),
+    SELECT( "Select" ),
+    INSERT( "Insert" ),
+    DELETE( "Delete" ),
+    UPDATE( "Update" );
 
     private final String annotation;
 

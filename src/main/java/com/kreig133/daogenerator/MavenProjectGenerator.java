@@ -116,7 +116,9 @@ public class MavenProjectGenerator {
     }
 
     public static int installProject() {
-        final String[] cmdarray = { "cmd", "/C", "mvn -f "+ Settings.settings().getOutputPathForJavaClasses() +
+        final String[] cmdarray = { "cmd", "/C",
+                System.getProperty( "user.dir" )+"\\"+
+                "apache-maven-3.0.4\\bin\\mvn -e -f "+ Settings.settings().getOutputPathForJavaClasses() +
                 "\\pom.xml clean install"};
 
         for ( String s1 : cmdarray ) {
