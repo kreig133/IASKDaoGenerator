@@ -8,7 +8,9 @@ import com.kreig133.daogenerator.jaxb.ParameterType;
  * @version 1.0
  */
 public class TestValueByStringGenerator {
-    
+
+    private static final String NULL = "null";
+
     public static TestValueByStringGenerator newInstance( ParameterType p ){
         if( p.getType() == JavaType.DATE || p.getType() == JavaType.STRING ){
             return new QuotedTestValueByStringGenerator();
@@ -18,7 +20,7 @@ public class TestValueByStringGenerator {
     }
     
     public String getTestValue ( ParameterType parameterType ){
-        if ( parameterType.getTestValue() == null || "null".equals( parameterType.getTestValue() ) ) {
+        if ( parameterType.getTestValue() == null || NULL.equals( parameterType.getTestValue() ) ) {
             return "NULL";
         }
 
@@ -26,6 +28,10 @@ public class TestValueByStringGenerator {
     }
 
     protected String getNotNullTestValue( ParameterType parameterType ) {
-        return parameterType.getTestValue();
+        String testValue = parameterType.getTestValue();
+        if( parameterType.getType() != JavaType.STRING && "".equals( testValue ) ){
+            return NULL;
+        }
+        return testValue;
     }
 }

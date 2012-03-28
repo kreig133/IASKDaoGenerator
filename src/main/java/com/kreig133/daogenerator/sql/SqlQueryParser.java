@@ -126,7 +126,7 @@ public class SqlQueryParser {
     Pattern storeNamePattern = Pattern.compile( "(?iu)execute\\s+(\\w+)" );
     
     public String getStoreProcedureName( String query ) {
-        final String s = query.replaceAll( "dbo\\.", "" ).trim();
+        final String s = query.replaceAll( "(?i)dbo\\.", "" ).trim();
         
         if( stringContainsMoreThanOneWord( s ) ){
             final Matcher matcher = storeNamePattern.matcher( s );
