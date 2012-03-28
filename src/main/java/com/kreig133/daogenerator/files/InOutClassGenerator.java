@@ -63,8 +63,6 @@ public class InOutClassGenerator extends JavaClassGenerator{
         addImport( "java.io.Serializable" );
         insertLine();
 
-        builder.append( COMMENT_TO_CLASS );
-
         insertClassDeclaration(
                 ClassType.CLASS,
                 NamingUtils.convertNameForClassNaming( this.name ),
@@ -139,11 +137,6 @@ public class InOutClassGenerator extends JavaClassGenerator{
     public String getFileName() {
         return NamingUtils.convertNameForClassNaming( this.name );
     }
-
-    private static final String COMMENT_TO_CLASS = "/**\n" +
-                                           " * @author DaoGenerator 2.3\n" +
-                                           " * @version 1.0\n" +
-                                           " */\n";
 
     private final List<ParameterType> parameters;
     private final String name;
