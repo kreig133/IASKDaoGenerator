@@ -75,10 +75,11 @@ public class DepoMappingGenerator extends MappingGenerator{
         insertTabs().append( "@" ).append( selectType.getAnnotation() ).append( "(" );
         insertLine();
 
-        builder.append( wrapWithQuotes(
-                QueryCreator.newInstance( daoMethod ).generateExecuteQuery( daoMethod, false ).replaceAll( "\"",
-                        "\\\\\"" )
-        ) );
+        increaseNestingLevel();
+        wrapWithQuotesAndWrite(
+                QueryCreator.newInstance( daoMethod ).generateExecuteQuery( daoMethod, false ).replaceAll( "\"", "\\\\\"" )
+        );
+        decreaseNestingLevel();
 
         insertTabs().append( ")" );
         insertLine();
@@ -129,23 +130,21 @@ public class DepoMappingGenerator extends MappingGenerator{
      * @param string
      * @return
      */
-    public static String wrapWithQuotes( String string ) {
+    public StringBuilder wrapWithQuotesAndWrite( String string ) {
 
-        String[] strings = string.split( "[\n\r]" );
+        String[] strings = string.split( "[\n\r][\n\r]?" );
 
         strings = deleteEmptyStrings( strings );
 
-        StringBuilder builder = new StringBuilder();
-
         for ( int i = 0; i < strings.length; i++ ) {
             if ( i != 0 ) {
-                Utils.insertTabs( builder, 2 ).append( "+" );
-            } else {
-                Utils.insertTabs( builder, 2 );
+                builder.append( " +" );
+                insertLine();
             }
-            builder.append( "\"" ).append( strings[ i ] ).append( "\\n\"\n" );
+            insertTabs().append( "\" " ).append( strings[ i ] ).append( "\"" );
         }
-        return builder.toString();
+        insertLine();
+        return builder;
     }
 
     /**

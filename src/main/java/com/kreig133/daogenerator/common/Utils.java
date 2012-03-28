@@ -76,18 +76,17 @@ public class Utils {
 
         for ( ParameterType p : parameterList ) {
             if ( functionalObject.filter( p ) ) {
-                for ( int i = 0; i < tabs; i++ ) {
-                    builder.append( "    " );
-                }
                 if ( ! first ) {
                     builder.append( "," );
+                    builder.append( "\n" );
                 } else {
                     first = false;
                 }
+                insertTabs( builder, tabs );
                 functionalObject.writeString( builder, p );
-                builder.append( "\n" );
             }
         }
+        builder.append( "\n" );
     }
 
 }
