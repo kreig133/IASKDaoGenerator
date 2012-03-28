@@ -35,7 +35,7 @@ public class TesterClassGenerator extends JavaClassGenerator{
     public void generateHead() throws IOException {
         setPackage( Settings.settings().getMapperPackage() );
         insertLine();
-        addImport( "com.aplana.sbrf.deposit.AbstractDepoDaoExecuteTester" );
+        addImport( "com.aplana.sbrf.deposit.AbstractDepoDaoExecuteTest" );
         addImport( "org.junit.Test" );
         addImport( "org.springframework.beans.factory.annotation.Autowired" );
         addImport( "org.springframework.test.context.ContextConfiguration" );
@@ -47,7 +47,7 @@ public class TesterClassGenerator extends JavaClassGenerator{
         builder.append( "@ContextConfiguration(locations = \"").append( MavenProjectGenerator.getConfigName() )
                 .append( ".xml\" )" );
         insertLine();
-        insertClassDeclaration( ClassType.CLASS, getFileName(), "AbstractDepoDaoExecuteTester", null );
+        insertClassDeclaration( ClassType.CLASS, getFileName(), "AbstractDepoDaoExecuteTest", null );
         insertTabs().append( "@Autowired" );
         insertLine();
         insertTabs().append( MappingGenerator.instance().getFileName() ).append( " " )
@@ -92,6 +92,6 @@ public class TesterClassGenerator extends JavaClassGenerator{
 
     @Override
     public String getFileName() {
-        return MappingGenerator.instance().getFileName() + "Tester";
+        return MappingGenerator.instance().getFileName() + "Test";
     }
 }

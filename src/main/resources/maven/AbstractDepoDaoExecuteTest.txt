@@ -23,7 +23,7 @@ import java.util.Map;
 @RunWith(SpringJUnit4ClassRunner.class)
 @TransactionConfiguration(transactionManager="txManager", defaultRollback=true)
 @Transactional
-public abstract class AbstractDepoDaoExecuteTester {
+public abstract class AbstractDepoDaoExecuteTest {
 
     private SimpleDateFormat format = new SimpleDateFormat( "M-d-yyyy H:m:s.SSS" );
 

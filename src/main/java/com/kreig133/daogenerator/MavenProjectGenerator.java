@@ -1,7 +1,6 @@
 package com.kreig133.daogenerator;
 
 import com.kreig133.daogenerator.common.Utils;
-import com.kreig133.daogenerator.files.JavaClassGenerator;
 import com.kreig133.daogenerator.files.NamingUtils;
 import com.kreig133.daogenerator.files.PackageAndFileUtils;
 import com.kreig133.daogenerator.files.mybatis.mapping.MappingGenerator;
@@ -19,7 +18,7 @@ public class MavenProjectGenerator {
         copyPropertiesFileToMavenProject();
         copyPomFileToMavenProject();
         copyAppContextConfigToMavenProject();
-        copyAbstractTester();
+        copyAbstractTest();
         copyBaseModel();
         generateSpringConfig();
     }
@@ -57,11 +56,11 @@ public class MavenProjectGenerator {
                                 MappingGenerator.instance().getFileName() ) );
     }
 
-    protected static void copyAbstractTester() throws IOException {
+    protected static void copyAbstractTest() throws IOException {
         copyFile(
-                MavenProjectGenerator.class.getClassLoader().getResourceAsStream( "AbstractDepoDaoExecuteTester.txt" ),
+                MavenProjectGenerator.class.getClassLoader().getResourceAsStream( "AbstractDepoDaoExecuteTest.txt" ),
                 new File( Settings.settings().getPathForGeneratedTests()
-                        + "/com/aplana/sbrf/deposit/AbstractDepoDaoExecuteTester.java" )
+                        + "/com/aplana/sbrf/deposit/AbstractDepoDaoExecuteTest.java" )
         );
     }
 
