@@ -45,8 +45,6 @@ public class TesterClassGenerator extends JavaClassGenerator{
         addImport( Settings.settings().getMapperPackage() + "." + MappingGenerator.instance().getFileName() );
         addImport( "java.util.HashMap" );
         addImport( "java.util.Map" );
-        insertLine();
-        insertLine();
         builder.append( "@ContextConfiguration(locations = {\"classpath:" ).append( TEST_CONFIG ).append( "\"})");
         insertLine();
         insertClassDeclaration( ClassType.CLASS, getFileName(), "AbstractDepoDaoExecuteTest", null );
@@ -82,12 +80,9 @@ public class TesterClassGenerator extends JavaClassGenerator{
         insertTabs().append( "final String methodName = \"" ).append( daoMethod.getCommon().getMethodName() )
                 .append( "\";" );
         insertLine();
-        insertLine();
         insertTabs().append( "Object invoke = invoke( dao, values, methodName );" );
         insertLine();
-        insertLine();
         insertTabs().append( "org.junit.Assert.assertNotNull( invoke );" );
-        insertLine();
         insertLine();
         closeMethodOrInnerClassDefinition();
     }

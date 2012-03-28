@@ -61,7 +61,6 @@ public class InOutClassGenerator extends JavaClassGenerator{
         setPackage( Settings.settings().getEntityPackage() );
 
         addImport( "java.io.Serializable" );
-        insertLine();
 
         insertClassDeclaration(
                 ClassType.CLASS,
