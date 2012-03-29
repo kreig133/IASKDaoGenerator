@@ -13,7 +13,7 @@ import java.util.regex.Pattern;
  * @author eshangareev
  * @version 1.0
  */
-public class SelectInputParameterExtractor extends InputParameterExtractor{
+public class SelectInputParameterExtractor extends QueryInputParameterExtractor{
 
     private static SelectInputParameterExtractor INSTANCE;
 
@@ -35,7 +35,6 @@ public class SelectInputParameterExtractor extends InputParameterExtractor{
         Set<String> names = new HashSet<String>();
 
         while( matcher.find() ){
-
             final String group = matcher.group( 1 );
             final String[] split = group.split( ";" );
 
@@ -61,7 +60,6 @@ public class SelectInputParameterExtractor extends InputParameterExtractor{
                 daoMethod.getInputParametrs().getParameter().add( parameterType );
             }
         }
-
         return daoMethod;
     }
 

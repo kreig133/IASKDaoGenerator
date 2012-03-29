@@ -36,22 +36,27 @@ import javax.xml.bind.annotation.XmlType;
 @XmlEnum
 public enum SelectType {
 
-    CALL  ( "Select" ),
-    SELECT( "Select" ),
-    INSERT( "Insert" ),
-    DELETE( "Delete" ),
-    UPDATE( "Update" );
+    CALL  ( "Select", "" ),
+    SELECT( "Select", "From" ),
+    INSERT( "Insert", "Into" ),
+    DELETE( "Delete", "From" ),
+    UPDATE( "Update", "" );
 
     private final String annotation;
+    
+    private final String keyWord;
 
-
-    public String getAnnotation() {
+    public String annotation() {
         return annotation;
     }
+    
+    public String keyWord(){
+        return keyWord;
+    }
 
-
-    SelectType( String annotation ) {
+    SelectType( String annotation, String keyWord ) {
         this.annotation = annotation;
+        this.keyWord = keyWord;
     }
 
     public static SelectType getByName( String name ){
@@ -72,5 +77,4 @@ public enum SelectType {
                 this == DELETE ||
                 this == UPDATE;
     }
-
 }

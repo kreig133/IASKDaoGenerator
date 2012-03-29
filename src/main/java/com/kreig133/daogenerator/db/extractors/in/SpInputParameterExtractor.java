@@ -2,6 +2,7 @@ package com.kreig133.daogenerator.db.extractors.in;
 
 import com.kreig133.daogenerator.common.Utils;
 import com.kreig133.daogenerator.db.JDBCConnector;
+import com.kreig133.daogenerator.db.extractors.Extractor;
 import com.kreig133.daogenerator.jaxb.*;
 
 import java.sql.*;
@@ -15,7 +16,16 @@ import java.util.regex.Pattern;
  * @version 1.0
  */
 public class SpInputParameterExtractor extends InputParameterExtractor{
-    
+
+    private static SpInputParameterExtractor INSTANCE;
+
+    static InputParameterExtractor instance() {
+        if ( INSTANCE == null ) {
+            INSTANCE = new SpInputParameterExtractor();
+        }
+        return INSTANCE;
+    }
+
     private static final String GET_INPUT_PARAMETRS_QUERY =
             "SELECT * FROM  INFORMATION_SCHEMA.PARAMETERS WHERE SPECIFIC_NAME = ? ORDER BY ORDINAL_POSITION";
 
@@ -29,7 +39,6 @@ public class SpInputParameterExtractor extends InputParameterExtractor{
     private static String spText = null;
 
     public ParameterType extractDataFromResultSetRow( ResultSet resultSet ) throws SQLException {
-
         final ParameterType parameterType = new ParameterType();
 
         parameterType.setName   ( getParameterNameFromResultSet( resultSet ) );
@@ -55,17 +64,14 @@ public class SpInputParameterExtractor extends InputParameterExtractor{
         if( JavaType.getBySqlType( sqlType ) == JavaType.STRING ){
             return sqlType + "(" + resultSet.getString( CHARACTER_MAXIMUM_LENGTH ) + ")";
         }
-
         return sqlType;
         //TODO добавить для Double
 //        if( JavaType.getBySqlType( sqlType ))
-
     }
 
     public static String getSPText(){
         return spText;
     }
-
 
     protected void getSPText( String spName ){
         final Connection connection = JDBCConnector.instance().connectToDB();
@@ -88,15 +94,12 @@ public class SpInputParameterExtractor extends InputParameterExtractor{
         }
     }
 
-
-
     private void fillComments( ParameterType type, String storeProcedureDefinition ) {
         final Matcher matcher = getCommentPattern( type.getName() ).matcher( storeProcedureDefinition );
         if ( matcher.find() ) {
-            type.setComment( matcher.group( 1 ).replaceAll( "[\n\t\r]", " " ) );
+            type.setComment( matcher.group( 1 ).replaceAll( "[\n\t\r]", " " ).trim() );
         }
     }
-
 
     private Pattern getCommentPattern( String parameterName ) {
         return Pattern.compile( String.format( "(?isu)@%s\\s+[^@]+?--([^@]+)", parameterName ) );
@@ -105,7 +108,6 @@ public class SpInputParameterExtractor extends InputParameterExtractor{
     private String getDefinitionFormSpText( String spText ) {
         //TODO есть косяк ( если в комментариях встретися \bAS\b, то сработает неправильно
         //TODO Есть вариант выпиливать предварительно комментарии
-
         final Matcher matcher = Pattern.compile( "(?isu)create\\s+procedure(.*?)\\bas\\b" ).matcher( spText );
         if( matcher.find() ){
             return matcher.group( 1 );
@@ -132,7 +134,6 @@ public class SpInputParameterExtractor extends InputParameterExtractor{
             while ( resultSet.next() ){
                 result.add( extractDataFromResultSetRow( resultSet ) );
             }
-
         } catch ( SQLException e ) {
             throw new RuntimeException( "Не удалось получить параметры для хранимой процедуры " + spName, e );
         }
@@ -150,7 +151,6 @@ public class SpInputParameterExtractor extends InputParameterExtractor{
                             parameterType.getDefaultValue()
             );
         }
-
         daoMethod.getInputParametrs().getParameter().clear();
         daoMethod.getInputParametrs().getParameter().addAll( result );
         return daoMethod;
@@ -166,7 +166,16 @@ public class SpInputParameterExtractor extends InputParameterExtractor{
         for ( ParameterType inputParametr : inputParametrs ) {
             inputParametr.setTestValue( getParameterValueFromQuery( inputParametr, query ) );
         }
+        return daoMethod;
+    }
 
+    @Override
+    public DaoMethod fillMethodName( DaoMethod daoMethod ) {
+        daoMethod.getCommon().setMethodName(
+                Utils.convertPBNameToName(
+                        Extractor.getStoreProcedureName( daoMethod.getCommon().getQuery() )
+                )
+        );
         return daoMethod;
     }
 
@@ -174,18 +183,6 @@ public class SpInputParameterExtractor extends InputParameterExtractor{
         if( determineQueryType( query ) != SelectType.CALL ) {
             throw new IllegalArgumentException();
         }
-
         return ! ( getStoreProcedureName( query ) == null || "".equals( getStoreProcedureName( query ) ) );
     }
-
-    private static SpInputParameterExtractor INSTANCE;
-
-    static InputParameterExtractor instance() {
-        if ( INSTANCE == null ) {
-            INSTANCE = new SpInputParameterExtractor();
-        }
-
-        return INSTANCE;
-    }
-
 }

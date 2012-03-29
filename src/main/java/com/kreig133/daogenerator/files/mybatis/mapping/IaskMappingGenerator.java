@@ -54,8 +54,7 @@ public class IaskMappingGenerator extends MappingGenerator{
         final String package_                     = Settings.settings().getEntityPackage();
 
         StringBuilder builder = new StringBuilder();
-        insertTabs().append( "<" ) .append( daoMethod.getSelectType().getAnnotation()
-                .toLowerCase() )
+        insertTabs().append( "<" ) .append( daoMethod.getSelectType().annotation().toLowerCase() )
                 .append( " id=\"" ).append( name ).append( "\" statementType=\"CALLABLE\"" );
 
         writeParameterType(  inputParameterList, name, "parameterType", "In" , package_, builder );
@@ -69,10 +68,9 @@ public class IaskMappingGenerator extends MappingGenerator{
         insertLine();
         decreaseNestingLevel();
 
-        insertTabs().append( "</" ).append( daoMethod.getSelectType().getAnnotation().toLowerCase() ).append( ">" );
+        insertTabs().append( "</" ).append( daoMethod.getSelectType().annotation().toLowerCase() ).append( ">" );
         insertLine();
         insertLine();
-
 
         return builder.toString();
     }

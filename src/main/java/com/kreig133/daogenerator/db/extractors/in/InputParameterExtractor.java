@@ -19,8 +19,10 @@ abstract public class InputParameterExtractor extends Extractor{
 
     public abstract DaoMethod fillTestValuesByInsertedQuery( DaoMethod daoMethod );
 
+    public abstract DaoMethod fillMethodName( DaoMethod daoMethod );
+
     public static InputParameterExtractor getInstance( DaoMethod daoMethod ){
-        switch ( daoMethod.getCommon().getConfiguration().getType() ){
+        switch ( daoMethod.getSelectType() ){
             case CALL:
                 return SpInputParameterExtractor.instance();
             case SELECT:
@@ -48,8 +50,6 @@ abstract public class InputParameterExtractor extends Extractor{
     private static Pattern getPatternForExtractTestValue( String parameterName ) {
         return Pattern.compile( String.format( "(?isu)@%s\\s*[^@]*?=\\s*null\\b", parameterName) );
     }
-
-
 
     private String getDefaultValueForQuotedFromSpDefinition( ParameterType type, String query ) {
         return getDefaultValue( type, query,
@@ -83,6 +83,4 @@ abstract public class InputParameterExtractor extends Extractor{
     private Pattern getNumberPatternForParameter( String parameterName ) {
         return Pattern.compile( String.format( "(?isu)@%s\\s*[^@]*?=\\s*([-\\d\\.]+)\\b", parameterName ) );
     }
-
-
 }

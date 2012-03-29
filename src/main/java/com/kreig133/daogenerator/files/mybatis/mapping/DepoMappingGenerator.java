@@ -1,6 +1,5 @@
 package com.kreig133.daogenerator.files.mybatis.mapping;
 
-import com.kreig133.daogenerator.common.Utils;
 import com.kreig133.daogenerator.enums.ClassType;
 import com.kreig133.daogenerator.enums.MethodType;
 import com.kreig133.daogenerator.jaxb.DaoMethod;
@@ -44,7 +43,6 @@ public class DepoMappingGenerator extends MappingGenerator{
 
     @Override
     public void generateHead() throws IOException {
-
         setPackage( Settings.settings().getMapperPackage() );
         addDaoFilesImports();
         addImport( "org.apache.ibatis.annotations.*" );
@@ -63,7 +61,6 @@ public class DepoMappingGenerator extends MappingGenerator{
     private void generateAnnotation(
             DaoMethod daoMethod
     ){
-
         if( daoMethod.getCommon().getConfiguration().isMultipleResult() ) {
             addImport( "java.util.List" );
         }
@@ -72,7 +69,7 @@ public class DepoMappingGenerator extends MappingGenerator{
 
         assert selectType != null ;
 
-        insertTabs().append( "@" ).append( selectType.getAnnotation() ).append( "(" );
+        insertTabs().append( "@" ).append( selectType.annotation() ).append( "(" );
         insertLine();
 
         increaseNestingLevel();
@@ -117,7 +114,6 @@ public class DepoMappingGenerator extends MappingGenerator{
             }
             insertTabs().append( "@Result(property = \"" ).append( parameterType.getRenameTo() )
                     .append( "\", column = \"" ).append( parameterType.getName() ).append( "\")" );
-
         }
         decreaseNestingLevel();
         insertLine();
@@ -131,7 +127,6 @@ public class DepoMappingGenerator extends MappingGenerator{
      * @return
      */
     public StringBuilder wrapWithQuotesAndWrite( String string ) {
-
         String[] strings = string.split( "[\n\r][\n\r]?" );
 
         strings = deleteEmptyStrings( strings );
@@ -163,7 +158,6 @@ public class DepoMappingGenerator extends MappingGenerator{
                 length++;
             }
         }
-
         String[] result = new String[ length ];
 
         System.arraycopy( temp, 0, result, 0, length );

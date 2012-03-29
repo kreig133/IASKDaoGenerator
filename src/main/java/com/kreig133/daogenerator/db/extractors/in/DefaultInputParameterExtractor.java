@@ -6,7 +6,7 @@ import com.kreig133.daogenerator.jaxb.DaoMethod;
  * @author eshangareev
  * @version 1.0
  */
-public class DefaultInputParameterExtractor extends InputParameterExtractor{
+public class DefaultInputParameterExtractor extends QueryInputParameterExtractor{
     @Override
     public DaoMethod extractInputParams( DaoMethod daoMethod ) {
         throw new RuntimeException();
@@ -25,5 +25,4 @@ public class DefaultInputParameterExtractor extends InputParameterExtractor{
         }
         return INSTANCE;
     }
-
 }

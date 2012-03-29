@@ -25,6 +25,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.io.*;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Pattern;
 
@@ -93,17 +94,17 @@ public class Form  implements TypeChangeListener, SourcePathChangeListener{
                     return;
                 }
                 DaoMethod currentDaoMethod = getCurrentDaoMethod();
-                final boolean isSpCall = currentDaoMethod.getCommon().getConfiguration().getType() == SelectType.CALL;
-                final boolean isSelect = currentDaoMethod.getCommon().getConfiguration().getType() == SelectType.SELECT;
+                final boolean isSpCall = currentDaoMethod.getSelectType() == SelectType.CALL;
+                final boolean isSelect = currentDaoMethod.getSelectType() == SelectType.SELECT;
 
                 SPTextButton.setEnabled( isSpCall );
                 getOutParamsButton.setEnabled( isSpCall || isSelect );
                 generateXMLButton.setEnabled( ! ( isSelect || isSpCall ) );
                 DaoMethod daoMethod = InputParameterExtractor.getInstance( currentDaoMethod )
                         .extractAndFillInputParams( currentDaoMethod );
-                updateMethodName( daoMethod );
-                updateInputParameters( daoMethod.getInputParametrs().getParameter() );
-                ( ( ParametrsModel ) ( outputParametrs.getModel() ) ).getParameterTypes().clear();
+
+                updateInputParameters ( daoMethod.getInputParametrs().getParameter() );
+                updateOutputParameters( new ArrayList<ParameterType>() );
             }
         } );
 
@@ -135,12 +136,16 @@ public class Form  implements TypeChangeListener, SourcePathChangeListener{
             public void actionPerformed( ActionEvent e ) {
                 if ( fileChooser.showSaveDialog( mainPanel ) == JFileChooser.APPROVE_OPTION ) {
                     final File dirForSave = fileChooser.getSelectedFile();
-                    final DaoMethod currentDaoMethods = getCurrentDaoMethod();
+                    final DaoMethod currentDaoMethod = getCurrentDaoMethod();
+
+                    if( ! Utils.stringNotEmpty( currentDaoMethod.getCommon().getMethodName() ) ) {
+                        InputParameterExtractor.getInstance( currentDaoMethod ).fillMethodName( currentDaoMethod );
+                    }
 
                     final String xmlFilePath = dirForSave.getAbsolutePath() + "/" +
-                            currentDaoMethods.getCommon().getMethodName() + ".xml";
+                            currentDaoMethod.getCommon().getMethodName() + ".xml";
 
-                    JaxbHandler.marshallInFile( new File( xmlFilePath ), currentDaoMethods );
+                    JaxbHandler.marshallInFile( new File( xmlFilePath ), currentDaoMethod );
 
                     new Thread(
                             new Runnable() {
@@ -182,7 +187,6 @@ public class Form  implements TypeChangeListener, SourcePathChangeListener{
                                         ex.printStackTrace();
                                     }
                                 }
-
                             }
                         ).start();
                 }
@@ -190,34 +194,25 @@ public class Form  implements TypeChangeListener, SourcePathChangeListener{
         } );
     }
 
-    private void updateMethodName( DaoMethod daoMethod ) {
-        if ( Utils.stringNotEmpty( methodNameField.getText() ) ) return;
-        methodNameField.setText( daoMethod.getCommon().getMethodName() );
-    }
-
     private void initializingDeveloperTab() {
-
         IASKRadioButton.addChangeListener( new ChangeListener() {
             @Override
             public void stateChanged( ChangeEvent e ) {
                 Settings.settings().setType( IASKRadioButton.isSelected() ? Type.IASK : Type.DEPO );
             }
         } );
-
         setSourceDirButton.addActionListener( new ActionListener() {
             @Override
             public void actionPerformed( ActionEvent e ) {
                 setSourcePath();
             }
         } );
-
         setDestDirButton.addActionListener( new ActionListener() {
             @Override
             public void actionPerformed( ActionEvent e ) {
                 setOutputPath();
             }
         } );
-
         startButton.addActionListener( new ActionListener() {
             @Override
             public void actionPerformed( ActionEvent e ) {
@@ -261,14 +256,12 @@ public class Form  implements TypeChangeListener, SourcePathChangeListener{
                 }
             }
         } );
-
         sourceDirTextField.addActionListener( new ActionListener() {
             @Override
             public void actionPerformed( ActionEvent e ) {
                 updateSourcePath();
             }
         } );
-
         sourceDirTextField.addFocusListener( new FocusListener() {
             @Override
             public void focusGained( FocusEvent e ) { /* do nothing */ }
@@ -314,7 +307,6 @@ public class Form  implements TypeChangeListener, SourcePathChangeListener{
         table.updateUI();
     }
 
-
     private void updateInputParameters( List<ParameterType> inputParametrsForSP ) {
         updateTable( inputParametrs, inputParametrsForSP );
     }
@@ -328,16 +320,14 @@ public class Form  implements TypeChangeListener, SourcePathChangeListener{
         result.getCommon().getConfiguration().setType( Extractor.determineQueryType( queryTextArea.getText() ) );
         result.getCommon().getConfiguration().setMultipleResult( isMultipleResultCheckBox.isSelected() );
 
-        if( result.getCommon().getConfiguration().getType() == SelectType.CALL ){
+        if( result.getSelectType() == SelectType.CALL ){
             result.getCommon().setSpName( Extractor.getStoreProcedureName( queryTextArea.getText() ) );
         }
 
-        result.getCommon().setQuery( queryTextArea.getText() );
-
+        result.getCommon().setQuery      ( queryTextArea.getText() );
         result.getCommon().setMethodName ( methodNameField.getText() );
         result.getCommon().setComment    ( commentTextArea.getText() );
-        result.getCommon().setMethodName( methodNameField.getText() );
-
+        result.getCommon().setMethodName ( methodNameField.getText() );
 
         result.setInputParametrs( new ParametersType() );
         result.getInputParametrs().getParameter().addAll(
@@ -348,7 +338,6 @@ public class Form  implements TypeChangeListener, SourcePathChangeListener{
         result.getOutputParametrs().getParameter().addAll(
                 ( (ParametrsModel) ( outputParametrs.getModel() ) ).getParameterTypes()
         );
-
         return result;
     }
 
@@ -359,7 +348,6 @@ public class Form  implements TypeChangeListener, SourcePathChangeListener{
             windowWithText.setDefaultCloseOperation( WindowConstants.HIDE_ON_CLOSE );
             windowWithText.add( TextView.getInstance() );
         }
-
         return windowWithText;
     }
 
@@ -387,8 +375,8 @@ public class Form  implements TypeChangeListener, SourcePathChangeListener{
         IASKRadioButton.setSelected(    iask );
         DEPORadioButton.setSelected( !  iask );
 
-        daoPackageLabel      .setVisible(   iask );
-        daoPackageTextField  .setVisible(   iask );
+        daoPackageLabel      .setVisible( iask );
+        daoPackageTextField  .setVisible( iask );
 
         destDirTextField.setText( Settings.settings().getOutputPathForJavaClasses() );
         entityPackageTextField.setText( Settings.settings().getEntityPackage() );
@@ -402,7 +390,6 @@ public class Form  implements TypeChangeListener, SourcePathChangeListener{
     }
 
     private void saveSettings() {
-
         Settings.settings().setOutputPathForJavaClasses   ( destDirTextField              .getText    () );
         Settings.settings().setSourcePath                 ( sourceDirTextField            .getText    () );
         Settings.settings().setDaoPackage                 ( daoPackageTextField           .getText    () );
@@ -420,9 +407,7 @@ public class Form  implements TypeChangeListener, SourcePathChangeListener{
             JOptionPane.showMessageDialog( mainPanel, "Одно или несколько имен пакетов не прошло валидацию." );
             return false;
         }
-
         //TODO надо бы проверить пути
-
         return true;
     }
 
@@ -454,7 +439,6 @@ public class Form  implements TypeChangeListener, SourcePathChangeListener{
         if ( INSTANCE == null ) {
             INSTANCE = new Form();
         }
-
         return INSTANCE.mainPanel;
     }
 
