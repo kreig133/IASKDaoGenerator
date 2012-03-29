@@ -159,14 +159,7 @@ abstract public class JavaClassGenerator extends Generator {
             insertTabs();
         }
         if ( inputParams != null && ! inputParams.isEmpty() ) {
-            boolean  first = true;
-            for ( String inputParam : inputParams ) {
-                if ( ! first ) {
-                    builder.append( ", " );
-                }
-                first = false;
-                builder.append( inputParam );
-            }
+            foldLeft( inputParams );
         }
         if(  needNewLineForParam ){
             insertLine();
@@ -177,18 +170,21 @@ abstract public class JavaClassGenerator extends Generator {
 
         if ( throwsing != null && ! throwsing.isEmpty() ) {
             builder.append( " throws " );
-            boolean  first = true;
-            for ( String th : throwsing ) {
-                if ( ! first ) {
-                    builder.append( "," );
-                }
-                first = false;
-                builder.append( th );
-            }
+            foldLeft( throwsing );
         }
-
         builder.append( signatureOnly ? "" : " {" );
         increaseNestingLevel();
+    }
+
+    private void foldLeft( List<String> stringList ) {
+        boolean  first = true;
+        for ( String string : stringList ) {
+            if ( ! first ) {
+                builder.append( ", " );
+            }
+            first = false;
+            builder.append( string );
+        }
     }
 
     private void insertPackageLine( String packageName ) {
