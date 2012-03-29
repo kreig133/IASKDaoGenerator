@@ -1,6 +1,9 @@
 package com.kreig133.daogenerator.sql;
 
-import com.kreig133.daogenerator.db.extractors.in.SqlQueryParser;
+import com.kreig133.daogenerator.TestHelper;
+import com.kreig133.daogenerator.db.extractors.Extractor;
+import com.kreig133.daogenerator.db.extractors.in.SelectInputParameterExtractor;
+import com.kreig133.daogenerator.db.extractors.in.SpInputParameterExtractor;
 import com.kreig133.daogenerator.jaxb.*;
 import org.intellij.lang.annotations.Language;
 import org.junit.Assert;
@@ -42,16 +45,16 @@ public class SqlQueryParserTest {
 
         daoMethod.getCommon().setQuery( value );
 
-        final DaoMethod daoMethod1 = SqlQueryParser.instance().parseSqlQueryForParameters( daoMethod );
+        final DaoMethod daoMethod1 = new SelectInputParameterExtractor().extractInputParams( daoMethod );
         System.out.println( daoMethod );
         Assert.assertTrue( daoMethod.getInputParametrs().getParameter().size() == 2 );
     }
 
     @Test
     public void getStoreProcedureName() {
-        Assert.assertEquals( "sp_ValueSearcher18", SqlQueryParser.instance().getStoreProcedureName( query1 ) );
-        Assert.assertEquals( "sp_ValueSearcher18", SqlQueryParser.instance().getStoreProcedureName( query2 ) );
-        Assert.assertEquals( "sp_ValueSearcher18", SqlQueryParser.instance().getStoreProcedureName( spName2 ) );
+        Assert.assertEquals( "sp_ValueSearcher18", Extractor.getStoreProcedureName( query1 ) );
+        Assert.assertEquals( "sp_ValueSearcher18", Extractor.getStoreProcedureName( query2 ) );
+        Assert.assertEquals( "sp_ValueSearcher18", Extractor.getStoreProcedureName( spName2 ) );
     }
     
     @Test
@@ -64,7 +67,12 @@ public class SqlQueryParserTest {
         inputParametrs.add( getParameterType( "id_user", JavaType.STRING ) );
         inputParametrs.add( getParameterType( "iexternal", JavaType.LONG ) );
 
-        SqlQueryParser.instance().fillTestValuesByInsertedQuery( inputParametrs, query1 );
+        DaoMethod daoMethodForTest = TestHelper.getDaoMethodForTest();
+        daoMethodForTest.getInputParametrs().getParameter().clear();
+        daoMethodForTest.getInputParametrs().getParameter().addAll( inputParametrs );
+        daoMethodForTest.getCommon().setQuery( query1 );
+
+        new SpInputParameterExtractor().fillTestValuesByInsertedQuery( daoMethodForTest );
 
         Assert.assertEquals( inputParametrs.get( 0 ).getTestValue(), "3-22-1990 0:0:0.000" );
         Assert.assertEquals( inputParametrs.get( 1 ).getTestValue(), "3-22-2000 0:0:0.000" );

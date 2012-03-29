@@ -2,6 +2,7 @@ package com.kreig133.daogenerator.db.extractors.out;
 
 import com.kreig133.daogenerator.common.Utils;
 import com.kreig133.daogenerator.db.JBDCTypeIdConverter;
+import com.kreig133.daogenerator.db.extractors.Extractor;
 import com.kreig133.daogenerator.jaxb.*;
 
 import java.sql.*;
@@ -12,7 +13,7 @@ import java.util.List;
  * @author kreig133
  * @version 1.0
  */
-public abstract class OutputParameterExtractor {
+public abstract class OutputParameterExtractor extends Extractor{
     
     public static OutputParameterExtractor newInstance( SelectType type ){
         switch ( type ){

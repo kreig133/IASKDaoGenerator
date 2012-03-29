@@ -15,6 +15,10 @@ import java.util.Scanner;
  */
 public class Utils {
 
+    public static boolean stringContainsMoreThanOneWord( String text ) {
+        return ( text.split( "\\s+" ).length > 1 );
+    }
+
     public static String streamToString( InputStream stream ) {
         try{
             return  new Scanner( stream ).useDelimiter( "\\A" ).next();

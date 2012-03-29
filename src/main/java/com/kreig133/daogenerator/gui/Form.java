@@ -7,8 +7,9 @@ import com.kreig133.daogenerator.WikiGenerator;
 import com.kreig133.daogenerator.common.SourcePathChangeListener;
 import com.kreig133.daogenerator.common.TypeChangeListener;
 import com.kreig133.daogenerator.common.Utils;
-import com.kreig133.daogenerator.db.StoreProcedureInfoExtractor;
-import com.kreig133.daogenerator.db.extractors.in.SqlQueryParser;
+import com.kreig133.daogenerator.db.extractors.Extractor;
+import com.kreig133.daogenerator.db.extractors.in.InputParameterExtractor;
+import com.kreig133.daogenerator.db.extractors.in.SpInputParameterExtractor;
 import com.kreig133.daogenerator.db.extractors.out.OutputParameterExtractor;
 import com.kreig133.daogenerator.enums.Type;
 import com.kreig133.daogenerator.jaxb.*;
@@ -67,7 +68,6 @@ public class Form  implements TypeChangeListener, SourcePathChangeListener{
     private boolean start = true;
 
     private final JFileChooser fileChooser = GuiUtils.getFileChooser();
-    private final SqlQueryParser parser;
 
     public Form() {
         redirectOutAndErrOutputToGui();
@@ -79,7 +79,6 @@ public class Form  implements TypeChangeListener, SourcePathChangeListener{
 
         Settings.settings().addTypeChangeListener( this );
         Settings.settings().addSourcePathChangeListener( this );
-        parser = SqlQueryParser.instance();
     }
 
     private void initializingAnalyticTab() {
@@ -88,56 +87,30 @@ public class Form  implements TypeChangeListener, SourcePathChangeListener{
         getInParamsButton.addActionListener( new ActionListener() {
             @Override
             public void actionPerformed( ActionEvent e ) {
-
                 if ( queryTextArea.getText() == null || queryTextArea.getText().equals( "" ) ) {
                     JOptionPane.showMessageDialog( getInParamsButton,
                             "Введите текст запроса или название хранимой процедуры" );
                     return;
                 }
+                DaoMethod currentDaoMethod = getCurrentDaoMethod();
+                final boolean isSpCall = currentDaoMethod.getCommon().getConfiguration().getType() == SelectType.CALL;
+                final boolean isSelect = currentDaoMethod.getCommon().getConfiguration().getType() == SelectType.SELECT;
 
-                List<ParameterType> inputParametrs;
-
-                final boolean isSpCall = parser.determineQueryType( queryTextArea.getText() ) == SelectType.CALL;
-                final boolean isSelect = parser.determineQueryType( queryTextArea.getText() ) == SelectType.SELECT;
-
-                if ( isSpCall ) {
-                    if ( ! parser.checkSPName( queryTextArea.getText() ) ){
-                        JOptionPane.showMessageDialog( null, "Введите название хранимой процедуры" );
-                        return;
-                    }
-
-                    methodNameField.setText( Utils.convertPBNameToName( parser.getStoreProcedureName(
-                            queryTextArea.getText() ) ) );
-
-                    inputParametrs =
-                            StoreProcedureInfoExtractor.getInputParametrsForSP( parser.getStoreProcedureName(
-                                    queryTextArea.getText() ) );
-
-                    parser.fillTestValuesByInsertedQuery( inputParametrs, queryTextArea.getText() );
-                } else {
-                    inputParametrs = parser.parseSqlQueryForParameters( getCurrentDaoMethod() )
-                            .getInputParametrs().getParameter();
-                }
-                
                 SPTextButton.setEnabled( isSpCall );
                 getOutParamsButton.setEnabled( isSpCall || isSelect );
                 generateXMLButton.setEnabled( ! ( isSelect || isSpCall ) );
-                updateInputParameters( inputParametrs );
-
+                DaoMethod daoMethod = InputParameterExtractor.getInstance( currentDaoMethod )
+                        .extractAndFillInputParams( currentDaoMethod );
+                updateMethodName( daoMethod );
+                updateInputParameters( daoMethod.getInputParametrs().getParameter() );
                 ( ( ParametrsModel ) ( outputParametrs.getModel() ) ).getParameterTypes().clear();
             }
-
         } );
 
         SPTextButton.addActionListener( new ActionListener() {
             @Override
             public void actionPerformed( ActionEvent e ) {
-                if( ! parser.checkSPName( queryTextArea.getText() ) ){
-                    JOptionPane.showMessageDialog( null, "Введите название хранимой процедуры" );
-                    return;
-                }
-
-                TextView.setText( StoreProcedureInfoExtractor.getSPText() );
+                TextView.setText( SpInputParameterExtractor.getSPText() );
 
                 getWindowWithText().setVisible( true );
             }
@@ -215,6 +188,11 @@ public class Form  implements TypeChangeListener, SourcePathChangeListener{
                 }
             }
         } );
+    }
+
+    private void updateMethodName( DaoMethod daoMethod ) {
+        if ( Utils.stringNotEmpty( methodNameField.getText() ) ) return;
+        methodNameField.setText( daoMethod.getCommon().getMethodName() );
     }
 
     private void initializingDeveloperTab() {
@@ -347,14 +325,14 @@ public class Form  implements TypeChangeListener, SourcePathChangeListener{
         result.setCommon( new CommonType() );
         result.getCommon().setConfiguration( new ConfigurationType() );
 
-        result.getCommon().getConfiguration().setType( parser.determineQueryType( queryTextArea.getText() ) );
+        result.getCommon().getConfiguration().setType( Extractor.determineQueryType( queryTextArea.getText() ) );
         result.getCommon().getConfiguration().setMultipleResult( isMultipleResultCheckBox.isSelected() );
 
-        if( parser.determineQueryType( queryTextArea.getText() ) == SelectType.CALL ){
-            result.getCommon().setSpName( parser.getStoreProcedureName( queryTextArea.getText() ) );
-        } else{
-            result.getCommon().setQuery( queryTextArea.getText() );
+        if( result.getCommon().getConfiguration().getType() == SelectType.CALL ){
+            result.getCommon().setSpName( Extractor.getStoreProcedureName( queryTextArea.getText() ) );
         }
+
+        result.getCommon().setQuery( queryTextArea.getText() );
 
         result.getCommon().setMethodName ( methodNameField.getText() );
         result.getCommon().setComment    ( commentTextArea.getText() );
