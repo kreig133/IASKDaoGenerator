@@ -7,6 +7,7 @@ import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
 import javax.xml.bind.Unmarshaller;
 import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 
@@ -40,7 +41,10 @@ public class JaxbHandler {
     }
 
     public static void marshallInFile( File file, DaoMethod daoMethod ){
-
+        //TODO костыль
+        daoMethod.getCommon().setQuery(
+                daoMethod.getCommon().getQuery().replaceAll( "[\\n\\r][\\n\\r]", "\n" )
+        );
         try {
             if ( !file.exists() ) {
                 file.createNewFile();
@@ -83,6 +87,7 @@ public class JaxbHandler {
                 marshaller.setProperty( Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE );
                 marshaller.setProperty( Marshaller.JAXB_SCHEMA_LOCATION,
                         "http://77.72.129.146/xsd/dao-generator.xsd" );
+                marshaller.setProperty( Marshaller.JAXB_ENCODING, "UTF-8" );
             } catch ( JAXBException e ) {
                 throw new RuntimeException( e );
             }
