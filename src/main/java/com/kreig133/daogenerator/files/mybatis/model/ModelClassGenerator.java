@@ -53,6 +53,7 @@ public class ModelClassGenerator extends JavaClassGenerator {
                 "DepoModelData",
                 null
         );
+        insertSerialVersionUID();
     }
 
     @Override

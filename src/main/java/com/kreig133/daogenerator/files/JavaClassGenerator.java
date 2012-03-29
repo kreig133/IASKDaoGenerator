@@ -213,7 +213,6 @@ abstract public class JavaClassGenerator extends Generator {
     }
 
     protected void insertSerialVersionUID() {
-        insertLine();
         insertTabs().append( Scope.PRIVATE.value() ).append( " static final long serialVersionUID = " );
         builder.append( ( long ) ( Math.random() * Long.MAX_VALUE ) ).append( "L;" );
         insertLine();
