@@ -8,6 +8,11 @@
 
     <xsl:template match="/">
 
+        <xsl:text>{info}&#10;</xsl:text>
+        <xsl:text>[XML-файл|^</xsl:text>
+        <xsl:value-of select="//apl:methodName"/>
+        <xsl:text>.xml] для маппинга&#10;{info}&#10;</xsl:text>
+
 	   	 <xsl:text>h5. Назначение:&#10;</xsl:text>
         <xsl:value-of select="//apl:common/apl:comment/text()"/>
         <xsl:text>----&#10;</xsl:text>
@@ -39,40 +44,49 @@
         <xsl:text>|&#10;----&#10;</xsl:text>
 
         <xsl:text>h5. Входные параметры&#10;</xsl:text>
-        <xsl:text>|| № пп || Название || Rename || SQL-тип || IN / OUT || Default || Комментарии ||&#10;</xsl:text>
-        <xsl:for-each select="//apl:inputParametrs/apl:parameter">
-            <xsl:text>| </xsl:text>
-            <xsl:value-of select="position()" />
-            <xsl:text>| </xsl:text>
-            <xsl:value-of select="@name" />
-            <xsl:text>| </xsl:text>
-            <xsl:value-of select="@renameTo" />
-            <xsl:text>| </xsl:text>
-            <xsl:value-of select="@sqlType" />
-            <xsl:text>| </xsl:text>
-            <xsl:value-of select="@inOut" />
-            <xsl:text>| </xsl:text>
-            <xsl:value-of select="@defaultValue" />
-            <xsl:text>| </xsl:text>
-            <xsl:value-of select="@comment" />
-            <xsl:text>|&#xA;</xsl:text>
-        </xsl:for-each>
+        <xsl:choose>
+            <xsl:when test="count(//apl:inputParametrs/apl:parameter) = 0">
+                <xsl:text>Входных параметров нет&#10;</xsl:text>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:text>|| № пп || Название || Rename || SQL-тип || IN / OUT || Default || Комментарии ||&#10;</xsl:text>
+                <xsl:for-each select="//apl:inputParametrs/apl:parameter">
+                    <xsl:text>| </xsl:text>
+                    <xsl:value-of select="position()" />
+                    <xsl:text>| </xsl:text>
+                    <xsl:value-of select="@name" />
+                    <xsl:text>| </xsl:text>
+                    <xsl:value-of select="@renameTo" />
+                    <xsl:text>| </xsl:text>
+                    <xsl:value-of select="@sqlType" />
+                    <xsl:text>| </xsl:text>
+                    <xsl:value-of select="@inOut" />
+                    <xsl:text>| </xsl:text>
+                    <xsl:value-of select="@defaultValue" />
+                    <xsl:text>| </xsl:text>
+                    <xsl:value-of select="@comment" />
+                    <xsl:text>|&#xA;</xsl:text>
+                </xsl:for-each>
+            </xsl:otherwise>
+        </xsl:choose>
+
 
         <xsl:text>----&#xA;&#xA;</xsl:text>
-
-        <xsl:text>h5. Выходные данные&#10;</xsl:text>
-        <xsl:text>|| № пп || Название || SQL-тип || Комментарии || &#xA;</xsl:text>
-        <xsl:for-each select="//apl:outputParametrs/apl:parameter">
-            <xsl:text>| </xsl:text>
-            <xsl:value-of select="position()" />
-            <xsl:text>| </xsl:text>
-            <xsl:value-of select="@name" />
-            <xsl:text>| </xsl:text>
-            <xsl:value-of select="@sqlType" />
-            <xsl:text>| </xsl:text>
-            <xsl:value-of select="@comment" />
-            <xsl:text>|&#xA;</xsl:text>
-        </xsl:for-each>
+        <xsl:if test="count(//apl:outputParametrs/apl:parameter) &gt; 0">
+            <xsl:text>h5. Выходные данные&#10;</xsl:text>
+            <xsl:text>|| № пп || Название || SQL-тип || Комментарии || &#xA;</xsl:text>
+            <xsl:for-each select="//apl:outputParametrs/apl:parameter">
+                <xsl:text>| </xsl:text>
+                <xsl:value-of select="position()"/>
+                <xsl:text>| </xsl:text>
+                <xsl:value-of select="@name"/>
+                <xsl:text>| </xsl:text>
+                <xsl:value-of select="@sqlType"/>
+                <xsl:text>| </xsl:text>
+                <xsl:value-of select="@comment"/>
+                <xsl:text>|&#xA;</xsl:text>
+            </xsl:for-each>
+        </xsl:if>
         <xsl:text>----&#xA;</xsl:text>
 		<xsl:text> {expand:title=Пример выполнения}</xsl:text>
         <xsl:text> {code:language=sql}</xsl:text>
