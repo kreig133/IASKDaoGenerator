@@ -88,44 +88,41 @@
             </xsl:for-each>
         </xsl:if>
         <xsl:text>----&#xA;</xsl:text>
-		<xsl:text> {expand:title=Пример выполнения}</xsl:text>
-        <xsl:text> {code:language=sql}</xsl:text>
-        <xsl:choose>
-            <xsl:when test="//apl:configuration/@type = 'CALL'">
-                <xsl:text>execute dbo.</xsl:text>
-                <xsl:value-of select="//apl:spName"/>
-                <xsl:text>;1&#xA;</xsl:text>
-                <xsl:for-each select="//apl:inputParametrs/apl:parameter">
-                    <xsl:text>    @</xsl:text>
-                    <xsl:value-of select="@name"/>
-                    <xsl:text> = </xsl:text>
+        <xsl:if test="not( not( //apl:configuration/@type = 'CALL' ) and count(//apl:inputParametrs/apl:parameter) = 0)">
+            <xsl:text> {expand:title=Пример выполнения}</xsl:text>
+            <xsl:text> {code:language=sql}</xsl:text>
+            <xsl:choose>
+                <xsl:when test="//apl:configuration/@type = 'CALL'">
+                    <xsl:text>execute dbo.</xsl:text>
+                    <xsl:value-of select="//apl:spName"/>
+                    <xsl:text>;1&#xA;</xsl:text>
+                    <xsl:for-each select="//apl:inputParametrs/apl:parameter">
+                        <xsl:text>    @</xsl:text>
+                        <xsl:value-of select="@name"/>
+                        <xsl:text> = </xsl:text>
 
-                    <xsl:call-template name="printTestValue">
-                        <xsl:with-param name="type" select="@type"/>
-                        <xsl:with-param name="testValue" select="@testValue" />
+                        <xsl:call-template name="printTestValue">
+                            <xsl:with-param name="type" select="@type"/>
+                            <xsl:with-param name="testValue" select="@testValue" />
+                        </xsl:call-template>
+
+                        <xsl:if test="not( position() = last() )">
+                            <xsl:text>,</xsl:text>
+                        </xsl:if>
+
+                        <xsl:text>&#xA;</xsl:text>
+                    </xsl:for-each>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:variable name="query" select="//apl:query"/>
+                    <xsl:call-template name="fillQuery">
+                        <xsl:with-param name="query" select="$query"/>
                     </xsl:call-template>
+                </xsl:otherwise>
+            </xsl:choose>
 
-                    <xsl:if test="not( position() = last() )">
-                        <xsl:text>,</xsl:text>
-                    </xsl:if>
-
-                    <xsl:text>&#xA;</xsl:text>
-                </xsl:for-each>
-            </xsl:when>
-            <xsl:otherwise>
-                <xsl:variable name="query" select="//apl:query/text()"/>
-                <xsl:call-template name="fillQuery">
-                    <xsl:with-param name="query" select="$query"/>
-                </xsl:call-template>
-            </xsl:otherwise>
-        </xsl:choose>
-
-        <xsl:text>&#xA;{code}</xsl:text>
-		<xsl:text>&#xA;{expand}</xsl:text>
-		<xsl:text>&#xA;----&#xA;</xsl:text>
-		<xsl:text>h3. XML-файл для маппинга во вложении </xsl:text>
-
-
+            <xsl:text>&#xA;{code}&#xA;{expand}</xsl:text>
+        </xsl:if>
     </xsl:template>
 
     <xsl:template name="fillQuery">
