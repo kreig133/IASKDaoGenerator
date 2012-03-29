@@ -1,4 +1,4 @@
-package com.kreig133.daogenerator.sql;
+package com.kreig133.daogenerator.db.extractors.in;
 
 import com.kreig133.daogenerator.jaxb.*;
 
@@ -180,7 +180,5 @@ public class SqlQueryParser {
             default:
                 return getDefaultValueForQuotedFromSpDefinition( type, query );
         }
-
-
     }
 }

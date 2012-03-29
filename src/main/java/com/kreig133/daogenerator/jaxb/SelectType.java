@@ -8,10 +8,6 @@
 
 package com.kreig133.daogenerator.jaxb;
 
-import com.kreig133.daogenerator.db.extractor.OutputParameterExtractor;
-import com.kreig133.daogenerator.db.extractor.QueryOutputParameterExtractor;
-import com.kreig133.daogenerator.db.extractor.SpOutputParameterExtractor;
-
 import javax.xml.bind.annotation.XmlEnum;
 import javax.xml.bind.annotation.XmlType;
 

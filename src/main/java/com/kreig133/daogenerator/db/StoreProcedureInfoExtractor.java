@@ -1,10 +1,10 @@
 package com.kreig133.daogenerator.db;
 
 import com.kreig133.daogenerator.common.Utils;
+import com.kreig133.daogenerator.db.extractors.in.SqlQueryParser;
 import com.kreig133.daogenerator.jaxb.InOutType;
 import com.kreig133.daogenerator.jaxb.JavaType;
 import com.kreig133.daogenerator.jaxb.ParameterType;
-import com.kreig133.daogenerator.sql.SqlQueryParser;
 
 import java.sql.*;
 import java.util.ArrayList;

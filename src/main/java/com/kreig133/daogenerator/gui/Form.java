@@ -8,11 +8,11 @@ import com.kreig133.daogenerator.common.SourcePathChangeListener;
 import com.kreig133.daogenerator.common.TypeChangeListener;
 import com.kreig133.daogenerator.common.Utils;
 import com.kreig133.daogenerator.db.StoreProcedureInfoExtractor;
-import com.kreig133.daogenerator.db.extractor.OutputParameterExtractor;
+import com.kreig133.daogenerator.db.extractors.in.SqlQueryParser;
+import com.kreig133.daogenerator.db.extractors.out.OutputParameterExtractor;
 import com.kreig133.daogenerator.enums.Type;
 import com.kreig133.daogenerator.jaxb.*;
 import com.kreig133.daogenerator.settings.Settings;
-import com.kreig133.daogenerator.sql.SqlQueryParser;
 
 import javax.swing.*;
 import javax.swing.event.ChangeEvent;
@@ -97,7 +97,10 @@ public class Form  implements TypeChangeListener, SourcePathChangeListener{
 
                 List<ParameterType> inputParametrs;
 
-                if ( parser.determineQueryType( queryTextArea.getText() ) == SelectType.CALL ) {
+                final boolean isSpCall = parser.determineQueryType( queryTextArea.getText() ) == SelectType.CALL;
+                final boolean isSelect = parser.determineQueryType( queryTextArea.getText() ) == SelectType.SELECT;
+
+                if ( isSpCall ) {
                     if ( ! parser.checkSPName( queryTextArea.getText() ) ){
                         JOptionPane.showMessageDialog( null, "Введите название хранимой процедуры" );
                         return;
@@ -111,19 +114,14 @@ public class Form  implements TypeChangeListener, SourcePathChangeListener{
                                     queryTextArea.getText() ) );
 
                     parser.fillTestValuesByInsertedQuery( inputParametrs, queryTextArea.getText() );
-
-                    SPTextButton.setEnabled( true );
-                    getOutParamsButton.setEnabled( true );
-
                 } else {
                     inputParametrs = parser.parseSqlQueryForParameters( getCurrentDaoMethod() )
                             .getInputParametrs().getParameter();
-
-                    final boolean isSelect = parser.determineQueryType( queryTextArea.getText() ) == SelectType.SELECT;
-
-                    getOutParamsButton.setEnabled( isSelect );
-                    generateXMLButton.setEnabled( ! isSelect );
                 }
+                
+                SPTextButton.setEnabled( isSpCall );
+                getOutParamsButton.setEnabled( isSpCall || isSelect );
+                generateXMLButton.setEnabled( ! ( isSelect || isSpCall ) );
                 updateInputParameters( inputParametrs );
 
                 ( ( ParametrsModel ) ( outputParametrs.getModel() ) ).getParameterTypes().clear();

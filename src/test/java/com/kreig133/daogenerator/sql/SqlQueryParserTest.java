@@ -1,5 +1,6 @@
 package com.kreig133.daogenerator.sql;
 
+import com.kreig133.daogenerator.db.extractors.in.SqlQueryParser;
 import com.kreig133.daogenerator.jaxb.*;
 import org.intellij.lang.annotations.Language;
 import org.junit.Assert;

@@ -1,8 +1,8 @@
 package com.kreig133.daogenerator.sql.creators;
 
+import com.kreig133.daogenerator.db.extractors.in.SqlQueryParser;
 import com.kreig133.daogenerator.jaxb.DaoMethod;
 import com.kreig133.daogenerator.jaxb.ParameterType;
-import com.kreig133.daogenerator.sql.SqlQueryParser;
 import com.kreig133.daogenerator.sql.test.TestValueByStringGenerator;
 
 import java.util.List;
