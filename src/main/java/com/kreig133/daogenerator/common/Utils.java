@@ -3,6 +3,7 @@ package com.kreig133.daogenerator.common;
 import com.kreig133.daogenerator.jaxb.ParameterType;
 
 import java.io.File;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 import java.util.List;
@@ -15,7 +16,15 @@ import java.util.Scanner;
 public class Utils {
 
     public static String streamToString( InputStream stream ) {
-        return  new Scanner( stream ).useDelimiter( "\\A" ).next();
+        try{
+            return  new Scanner( stream ).useDelimiter( "\\A" ).next();
+        } finally {
+            try {
+                stream.close();
+            } catch ( IOException e ) {
+                e.printStackTrace();
+            }
+        }
     }
 
     public static StringBuilder insertTabs( StringBuilder builder, int tabsQuantity ){
