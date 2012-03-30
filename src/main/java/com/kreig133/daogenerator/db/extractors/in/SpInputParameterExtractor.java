@@ -97,7 +97,7 @@ public class SpInputParameterExtractor extends InputParameterExtractor{
     private void fillComments( ParameterType type, String storeProcedureDefinition ) {
         final Matcher matcher = getCommentPattern( type.getName() ).matcher( storeProcedureDefinition );
         if ( matcher.find() ) {
-            type.setComment( matcher.group( 1 ).replaceAll( "[\n\t\r]", " " ).trim() );
+            type.setComment( matcher.group( 1 ).replaceAll( "[\n\t\r]", " " ).replaceAll( "\\s+", " " ).trim() );
         }
     }
 
