@@ -118,7 +118,7 @@ public class DaoGenerator {
                     generators.add( InOutClassGenerator.newInstance( daoMethod, InOutType.OUT ) );
                 }
             } else {
-                generators.add( ModelClassGenerator.newInstance( daoMethod ) );
+                generators.add( ModelClassGenerator.newInstance( daoMethod.getOutputParametrs() ) );
             }
         }
 

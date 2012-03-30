@@ -36,7 +36,7 @@ public class ImplementationGenerator extends InterfaceGenerator{
     }
 
     @Override
-    public void generateHead() throws IOException {
+    public void generateHead(){
         startingLinesOfDaoFiles();
 
         addImport( "com.luxoft.sbrf.iask.persistence.common.dao.AbstractDao" );

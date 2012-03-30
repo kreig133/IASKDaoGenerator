@@ -33,7 +33,7 @@ abstract public class JavaClassGenerator extends Generator {
     protected JavaDocGenerator jDoc = new JavaDocGenerator();
 
     abstract public File getFile() throws IOException ;
-    abstract public void generateHead() throws IOException;
+    abstract public void generateHead();
     abstract public void generateBody( DaoMethod daoMethod ) throws IOException;
     abstract public String getFileName();
 

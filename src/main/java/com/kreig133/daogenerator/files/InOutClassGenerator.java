@@ -57,7 +57,7 @@ public class InOutClassGenerator extends JavaClassGenerator{
     }
 
     @Override
-    public void generateHead() throws IOException {
+    public void generateHead() {
         setPackage( Settings.settings().getEntityPackage() );
 
         addImport( "java.io.Serializable" );

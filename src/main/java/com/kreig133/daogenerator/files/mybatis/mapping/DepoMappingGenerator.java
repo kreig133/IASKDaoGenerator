@@ -42,7 +42,7 @@ public class DepoMappingGenerator extends MappingGenerator{
     }
 
     @Override
-    public void generateHead() throws IOException {
+    public void generateHead() {
         setPackage( Settings.settings().getMapperPackage() );
         addDaoFilesImports();
         addImport( "org.apache.ibatis.annotations.*" );

@@ -34,7 +34,7 @@ public class TesterClassGenerator extends JavaClassGenerator{
     }
 
     @Override
-    public void generateHead() throws IOException {
+    public void generateHead() {
         setPackage( Settings.settings().getMapperPackage() );
         insertLine();
         addImport( "com.aplana.sbrf.deposit.AbstractDepoDaoExecuteTest" );

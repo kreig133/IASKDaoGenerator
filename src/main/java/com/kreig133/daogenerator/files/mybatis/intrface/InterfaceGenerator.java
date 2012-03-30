@@ -33,7 +33,7 @@ public class InterfaceGenerator extends DaoJavaClassGenerator {
     }
 
     @Override
-    public void generateHead() throws IOException {
+    public void generateHead() {
         startingLinesOfDaoFiles();
 
         //TODO блок комментариев

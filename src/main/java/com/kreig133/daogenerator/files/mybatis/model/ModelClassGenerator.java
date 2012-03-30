@@ -23,12 +23,12 @@ public class ModelClassGenerator extends JavaClassGenerator {
 
     final ParametersType parametersType;
 
-    public ModelClassGenerator( ParametersType parametersType ) {
+    ModelClassGenerator( ParametersType parametersType ) {
         this.parametersType = parametersType;
     }
 
-    public static ModelClassGenerator newInstance( DaoMethod method ){
-        return new ModelClassGenerator( method.getOutputParametrs() );
+    public static ModelClassGenerator newInstance( ParametersType parametersType ){
+        return new ModelClassGenerator( parametersType );
     }
 
     @Override
@@ -44,7 +44,7 @@ public class ModelClassGenerator extends JavaClassGenerator {
     }
 
     @Override
-    public void generateHead() throws IOException {
+    public void generateHead() {
         setPackage( PackageAndFileUtils.getPackage( parametersType.getJavaClassName() ) );
         addImport( "com.aplana.sbrf.deposit.web.common.client.operation.data.DepoModelData" );
         insertClassDeclaration(

@@ -37,7 +37,7 @@ public class IaskMappingGenerator extends MappingGenerator{
     }
 
     @Override
-    public void generateHead() throws IOException {
+    public void generateHead() {
         builder.append( "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" );
         builder.append( "<!DOCTYPE mapper PUBLIC \"-//mybatis.org//DTD Mapper 3.0//EN\" \"http://mybatis" +
                 ".org/dtd/mybatis-3-mapper.dtd\">\n" );
