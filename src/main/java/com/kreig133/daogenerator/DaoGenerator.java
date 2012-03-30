@@ -102,6 +102,8 @@ public class DaoGenerator {
 
         List<FileBuilder> builders = new ArrayList<FileBuilder>( 2 );
 
+        // порядок важен! из-за того, что при генерации моделей с Paging'ом
+        // обновляются имена у параметров на родительские
         builders.add( ParameterClassBuilder.newInstance() );
         builders.add( MapperFileGenerator.newInstance() );
 
