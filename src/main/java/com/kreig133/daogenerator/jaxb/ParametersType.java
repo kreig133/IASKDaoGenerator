@@ -8,9 +8,9 @@
 
 package com.kreig133.daogenerator.jaxb;
 
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
+import com.kreig133.daogenerator.files.NamingUtils;
+
+import java.util.*;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
@@ -167,42 +167,51 @@ public class ParametersType {
     }
 
     public static boolean isWithPaging( List<ParameterType> parameterTypes ) {
-        boolean id_SessionDS = false;
-        boolean i_start = false;
-        boolean i_pageLimit = false;
-        boolean i_end = false;
-        boolean s_sort = false;
-        boolean i_rowCount = false;
-        for ( ParameterType parameter : parameterTypes ) {
-            if ( parameter.getName().equals( WithPagingType.ID_SESSION_DS ) ) {
-                id_SessionDS = true;
-            }
-            if ( parameter.getName().equals( WithPagingType.I_START ) ) {
-                i_start = true;
-            }
-            if ( parameter.getName().equals( WithPagingType.I_PAGE_LIMIT ) ) {
-                i_pageLimit = true;
-            }
-            if ( parameter.getName().equals( WithPagingType.I_END ) ) {
-                i_end = true;
-            }
-            if ( parameter.getName().equals( WithPagingType.S_SORT ) ) {
-                s_sort = true;
-            }
-            if ( parameter.getName().equals( WithPagingType.I_ROW_COUNT ) ) {
-                i_rowCount = true;
+        Map<Enum, Boolean> map = new HashMap<Enum, Boolean>();
+        for ( WithPagingType withPagingType : WithPagingType.values() ) {
+            map.put( withPagingType, Boolean.FALSE );
+        }
+        for ( ParameterType parameterType : parameterTypes ) {
+            if( WithPagingType.inEnum( parameterType.getName() ) ) {
+                map.put( WithPagingType.getBySqlName( parameterType.getName() ), Boolean.TRUE );
             }
         }
-        return id_SessionDS && i_start && i_pageLimit && i_end && s_sort && i_rowCount;
+        for ( Enum anEnum : map.keySet() ) {
+            if ( ! map.get( anEnum ) ) {
+                return false;
+            }
+        }
+        return true;
     }
         
-    public static class WithPagingType{
-        public static final String ID_SESSION_DS = "id_sessionDS";
-        public static final String I_START = "i_start";
-        public static final String I_PAGE_LIMIT = "i_pageLimit";
-        public static final String I_END = "i_end";
-        public static final String S_SORT = "s_sort";
-        public static final String I_ROW_COUNT = "i_rowCount";
-        public static final String[] FIELDS = { ID_SESSION_DS, I_START, I_PAGE_LIMIT, I_END, S_SORT, I_ROW_COUNT};
+    public enum WithPagingType{
+         ID_SESSION_DS("idSession"),
+         I_START("startRowNumber"),
+         I_PAGE_LIMIT("pageLimit"),
+         I_END("endRowNumber"),
+         S_SORT("sort"),
+         I_ROW_COUNT("rowCount");
+
+        final String fieldName;
+
+        private WithPagingType( String fieldName ) {
+            this.fieldName = fieldName;
+        }
+
+        public String fieldName() {
+            return fieldName;
+        }
+
+        public static boolean inEnum( String name ){
+            return getBySqlName( name ) != null;
+        }
+
+        public static WithPagingType getBySqlName( String name ) {
+            try {
+                return valueOf( NamingUtils.convertNameForEnum( name ) );
+            } catch ( Exception e ) {
+                return null;
+            }
+        }
     }
 }

@@ -1,9 +1,12 @@
 package com.kreig133.daogenerator.files.mybatis.model;
 
 import com.kreig133.daogenerator.files.NamingUtils;
+import com.kreig133.daogenerator.jaxb.ParameterType;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+
+import java.util.List;
 
 /**
  * @author eshangareev
@@ -11,7 +14,10 @@ import org.junit.Test;
  */
 public class ModelClassGeneratorTest extends ModelClassGenerator{
 
-
+    @Override
+    protected List<ParameterType> filter( List<ParameterType> parameter ) {
+        return null;
+    }
 
     public ModelClassGeneratorTest() {
         super( null );
@@ -24,6 +30,4 @@ public class ModelClassGeneratorTest extends ModelClassGenerator{
         Assert.assertEquals( NamingUtils.convertNameForEnum( "UGroupId" ), "UGROUP_ID" );
         Assert.assertEquals( NamingUtils.convertNameForEnum( "UGroupIdS" ), "UGROUP_ID_S" );
     }
-
-
 }

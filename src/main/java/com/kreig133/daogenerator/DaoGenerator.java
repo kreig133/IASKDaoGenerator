@@ -102,8 +102,8 @@ public class DaoGenerator {
 
         List<FileBuilder> builders = new ArrayList<FileBuilder>( 2 );
 
-        builders.add( MapperFileGenerator.newInstance() );
         builders.add( ParameterClassBuilder.newInstance() );
+        builders.add( MapperFileGenerator.newInstance() );
 
         Map<File, String> builded = null;
         for ( FileBuilder builder : builders ) {

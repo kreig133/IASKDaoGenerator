@@ -18,16 +18,12 @@ import java.util.List;
  * @author eshangareev
  * @version 1.0
  */
-public class ModelClassGenerator extends JavaClassGenerator {
+abstract public class ModelClassGenerator extends JavaClassGenerator {
 
     final ParametersType parametersType;
 
     ModelClassGenerator( ParametersType parametersType ) {
         this.parametersType = parametersType;
-    }
-
-    public static ModelClassGenerator newInstance( ParametersType parametersType ){
-        return new ModelClassGenerator( parametersType );
     }
 
     @Override
@@ -45,6 +41,11 @@ public class ModelClassGenerator extends JavaClassGenerator {
     @Override
     public void generateHead() {
         setPackage( PackageAndFileUtils.getPackage( parametersType.getJavaClassName() ) );
+        insertClassDeclarationAndDetermineParent();
+        insertSerialVersionUID();
+    }
+
+    protected void insertClassDeclarationAndDetermineParent() {
         addImport( "com.aplana.sbrf.deposit.web.common.client.operation.data.DepoModelData" );
         insertClassDeclaration(
                 ClassType.CLASS,
@@ -52,15 +53,16 @@ public class ModelClassGenerator extends JavaClassGenerator {
                 "DepoModelData",
                 null
         );
-        insertSerialVersionUID();
     }
 
     @Override
     public void generateBody( DaoMethod daoMethod ) {
-        List<ParameterType> parameter = parametersType.getParameter();
+        List<ParameterType> parameter = filter(parametersType.getParameter());
         generateEnum( parameter );
         generateSetterAndGetters( parameter );
     }
+
+    protected abstract List<ParameterType> filter( List<ParameterType> parameter );
 
     private void generateSetterAndGetters( List<ParameterType> parameter ) {
         for ( ParameterType parameterType : parameter ) {
