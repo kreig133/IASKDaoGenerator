@@ -48,6 +48,9 @@ public class Utils {
      * @return
      */
     public static String convertPBNameToName( String nameForCall ) {
+        if( ! stringNotEmpty( nameForCall ) ) {
+            return "";
+        }
         {
             final char[] chars = nameForCall.toCharArray();
             chars[ 0 ] = Character.toLowerCase( chars[ 0 ] );
