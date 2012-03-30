@@ -26,7 +26,7 @@ public abstract class MappingGenerator extends DaoJavaClassGenerator {
     }
 
     @Override
-    public File getFile() throws IOException {
+    public File getFile() {
 
         File file = new File(
                 Settings.settings().getPathForGeneratedSource() + "/" +

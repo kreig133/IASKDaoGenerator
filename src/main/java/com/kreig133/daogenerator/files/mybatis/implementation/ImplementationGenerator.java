@@ -31,8 +31,12 @@ public class ImplementationGenerator extends InterfaceGenerator{
     }
 
     @Override
-    public File getFile() throws IOException {
-        return daoFile( implementationFileName( ) );
+    public File getFile() {
+        try {
+            return daoFile( implementationFileName( ) );
+        } catch ( IOException e ) {
+            throw new RuntimeException( e );
+        }
     }
 
     @Override
@@ -59,7 +63,7 @@ public class ImplementationGenerator extends InterfaceGenerator{
     }
 
     @Override
-    public void generateBody( DaoMethod daoMethod ) throws IOException {
+    public void generateBody( DaoMethod daoMethod ) {
         insertTabs().append( "@Override" );
         insertLine();
         insertTabs().append( Scope.PUBLIC.value() ).append( " " );

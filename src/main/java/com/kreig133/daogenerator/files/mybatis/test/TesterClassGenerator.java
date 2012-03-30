@@ -19,10 +19,22 @@ import java.io.IOException;
  */
 public class TesterClassGenerator extends JavaClassGenerator{
 
+    private TesterClassGenerator() {
+    }
+
+    private static TesterClassGenerator INSTANCE;
+
+    public static TesterClassGenerator instance(){
+        if ( INSTANCE == null ) {
+            INSTANCE = new TesterClassGenerator();
+        }
+        return INSTANCE;
+    }
+
     public static final String TEST_CONFIG = "gwt-rpc-servlet.xml";
 
     @Override
-    public File getFile() throws IOException {
+    public File getFile() {
         final File file = new File(
                 Settings.settings().getPathForGeneratedTests() + "/"
                         + PackageAndFileUtils.replacePointBySlash( Settings.settings().getMapperPackage() )+ "/"
@@ -56,7 +68,7 @@ public class TesterClassGenerator extends JavaClassGenerator{
     }
 
     @Override
-    public void generateBody( DaoMethod daoMethod ) throws IOException {
+    public void generateBody( DaoMethod daoMethod ) {
         insertLine();
         insertTabs().append( "@Test" );
         insertLine();

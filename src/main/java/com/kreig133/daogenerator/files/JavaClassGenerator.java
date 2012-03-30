@@ -5,6 +5,7 @@ import com.kreig133.daogenerator.enums.ClassType;
 import com.kreig133.daogenerator.enums.MethodType;
 import com.kreig133.daogenerator.enums.Scope;
 import com.kreig133.daogenerator.enums.Type;
+import com.kreig133.daogenerator.files.mybatis.ParameterClassGenerator;
 import com.kreig133.daogenerator.jaxb.DaoMethod;
 import com.kreig133.daogenerator.jaxb.JavaType;
 import com.kreig133.daogenerator.jaxb.ParameterType;
@@ -13,7 +14,6 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.*;
 
 import static com.kreig133.daogenerator.common.Utils.stringNotEmpty;
@@ -32,9 +32,9 @@ abstract public class JavaClassGenerator extends Generator {
     protected Set<String>   imports = new HashSet<String>();
     protected JavaDocGenerator jDoc = new JavaDocGenerator();
 
-    abstract public File getFile() throws IOException ;
+    abstract public File getFile();
     abstract public void generateHead();
-    abstract public void generateBody( DaoMethod daoMethod ) throws IOException;
+    abstract public void generateBody( @Nullable DaoMethod daoMethod );
     abstract public String getFileName();
 
     protected JavaClassGenerator() {
@@ -82,6 +82,9 @@ abstract public class JavaClassGenerator extends Generator {
             final MethodType methodType
     ) {
 
+        if ( Settings.settings().getType() == Type.IASK )
+            throw new IllegalArgumentException();
+
         final List<ParameterType>  inputParameterList = daoMethod.getInputParametrs().getParameter();
         final List<ParameterType> outputParameterList = daoMethod.getOutputParametrs().getParameter();
         final String methodName = daoMethod.getCommon().getMethodName();
@@ -98,14 +101,10 @@ abstract public class JavaClassGenerator extends Generator {
                     addImport( DATE_IMPORT );
                 }
             } else {
-                if ( Settings.settings().getType() == Type.IASK ) {
-                    outputClass.append( NamingUtils.convertNameForClassNaming( methodName ) ).append( "Out" );
-                } else {
-                    outputClass.append(
-                            PackageAndFileUtils.getShortName( daoMethod.getOutputParametrs().getJavaClassName() )
-                    );
-                    addImport( daoMethod.getOutputParametrs().getJavaClassName() );
-                }
+                outputClass.append(
+                        PackageAndFileUtils.getShortName( daoMethod.getOutputParametrs().getJavaClassName() )
+                );
+                addImport( daoMethod.getOutputParametrs().getJavaClassName() );
             }
             if ( daoMethod.getCommon().getConfiguration().isMultipleResult() ) {
                 outputClass.append( ">" );
@@ -114,8 +113,12 @@ abstract public class JavaClassGenerator extends Generator {
 
         List<String> inputParams = new ArrayList<String>( inputParameterList.size() );
         if ( ! inputParameterList.isEmpty() ) {
-            if ( InOutClassGenerator.checkToNeedOwnInClass( daoMethod ) ) {
-                inputParams.add( NamingUtils.convertNameForClassNaming( methodName ) + "In request" );
+            if ( ParameterClassGenerator.checkToNeedOwnInClass( daoMethod ) ) {
+                inputParams.add(
+                        PackageAndFileUtils.getShortName( daoMethod.getInputParametrs().getJavaClassName() ) +
+                                " request"
+                );
+                addImport( daoMethod.getInputParametrs().getJavaClassName() );
             } else {
                 for ( ParameterType p : inputParameterList ) {
                     if( p.getType() == JavaType.DATE ) {
@@ -123,16 +126,10 @@ abstract public class JavaClassGenerator extends Generator {
                     }
 
                     StringBuilder inputParam = new StringBuilder();
-                    if (
-                            Settings.settings().getType() == Type.DEPO && methodType == MethodType.MAPPER
-                    ) {
-                        inputParam.append( "@Param(\"" ).append( p.getRenameTo() ).append( "\") " );
-                    }
-                    inputParam.append( p.getType().value() ).append( " " )
-                            .append( Settings.settings().getType() == Type.DEPO ? p.getRenameTo() : "request" );
+                    inputParam.append( "@Param(\"" ).append( p.getRenameTo() ).append( "\") " );
+                    inputParam.append( p.getType().value() ).append( " " ).append( p.getRenameTo() );
                     inputParams.add( inputParam.toString() );
                 }
-
             }
         }
         
@@ -193,9 +190,8 @@ abstract public class JavaClassGenerator extends Generator {
         insertLine();
     }
 
-/**********************************************************************************************************************
- *  Работа с импортами
- *********************************************************************************************************************/
+
+    //<editor-fold desc="Работа с импортами">
     /**
      * @param clazz
      */
@@ -207,6 +203,7 @@ abstract public class JavaClassGenerator extends Generator {
         builder.append( "import " ).append( path ).append( ";" );
         insertLine();
     }
+    //</editor-fold>
 
     protected void insertSerialVersionUID() {
         insertTabs().append( Scope.PRIVATE.value() ).append( " static final long serialVersionUID = " );

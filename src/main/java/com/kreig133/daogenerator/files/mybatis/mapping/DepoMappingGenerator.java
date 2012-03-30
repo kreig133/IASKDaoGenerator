@@ -22,7 +22,7 @@ public class DepoMappingGenerator extends MappingGenerator{
     public static final String MAPPER_PREFIX = "Dao";
 
     @Override
-    public void generateBody( DaoMethod daoMethod ) throws IOException{
+    public void generateBody( DaoMethod daoMethod ) {
         insertLine();
         generateAnnotation( daoMethod );
         generateMethodSignature( daoMethod, MethodType.MAPPER );
@@ -44,7 +44,6 @@ public class DepoMappingGenerator extends MappingGenerator{
     @Override
     public void generateHead() {
         setPackage( Settings.settings().getMapperPackage() );
-        addDaoFilesImports();
         addImport( "org.apache.ibatis.annotations.*" );
         addImport( "org.apache.ibatis.mapping.StatementType" );
         addImport( "org.apache.ibatis.annotations.CacheNamespace" );

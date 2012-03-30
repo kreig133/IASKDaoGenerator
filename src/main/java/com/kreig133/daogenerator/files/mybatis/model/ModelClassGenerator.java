@@ -19,7 +19,6 @@ import java.util.List;
  * @version 1.0
  */
 public class ModelClassGenerator extends JavaClassGenerator {
-    private boolean generated;
 
     final ParametersType parametersType;
 
@@ -32,7 +31,7 @@ public class ModelClassGenerator extends JavaClassGenerator {
     }
 
     @Override
-    public File getFile() throws IOException {
+    public File getFile() {
         File file = new File(
                 Settings.settings().getPathForGeneratedSource() +
                         "/" +
@@ -57,14 +56,10 @@ public class ModelClassGenerator extends JavaClassGenerator {
     }
 
     @Override
-    public void generateBody( DaoMethod daoMethod ) throws IOException {
-        if ( generated ) {
-            return;
-        }
-        List<ParameterType> parameter = daoMethod.getOutputParametrs().getParameter();
+    public void generateBody( DaoMethod daoMethod ) {
+        List<ParameterType> parameter = parametersType.getParameter();
         generateEnum( parameter );
         generateSetterAndGetters( parameter );
-        generated = true;
     }
 
     private void generateSetterAndGetters( List<ParameterType> parameter ) {
@@ -95,15 +90,15 @@ public class ModelClassGenerator extends JavaClassGenerator {
 
     private String processComment( ParameterType parameterType, boolean forJavaDoc ) {
         return Utils.stringNotEmpty( parameterType.getComment() ) ? "\"" + parameterType.getComment() + "\"":
-                ( forJavaDoc ? "значение" : "" );
+                ( forJavaDoc ? "значение" : "\"\"" );
     }
 
     private void generateEnum( List<ParameterType> parameter ) {
         insertClassDeclaration( ClassType.ENUM, "Fields", null, null );
 
         for ( int i = 0 ; i < parameter.size(); i ++ ) {
-            insertTabs().append( NamingUtils.convertNameForEnum( parameter.get( i ).getRenameTo() ) ).append( "(\"" )
-                    .append( processComment( parameter.get( i ), false ) ).append( "\"" );
+            insertTabs().append( NamingUtils.convertNameForEnum( parameter.get( i ).getRenameTo() ) ).append( "(" )
+                    .append( processComment( parameter.get( i ), false ) ).append( "" );
             if ( i < parameter.size() - 1 ) {
                 builder.append( ")," );
                 insertLine();
