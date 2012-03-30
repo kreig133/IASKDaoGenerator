@@ -2,7 +2,6 @@ package com.kreig133.daogenerator;
 
 import com.kreig133.daogenerator.common.Utils;
 import com.kreig133.daogenerator.files.NamingUtils;
-import com.kreig133.daogenerator.files.PackageAndFileUtils;
 import com.kreig133.daogenerator.files.mybatis.mapping.MappingGenerator;
 import com.kreig133.daogenerator.files.mybatis.test.TesterClassGenerator;
 import com.kreig133.daogenerator.settings.Settings;
@@ -20,15 +19,27 @@ public class MavenProjectGenerator {
         copyPomFileToMavenProject();
         copyAppContextConfigToMavenProject();
         copyAbstractTest();
-        copyBaseModel();
+        copyBaseModels();
         generateSpringConfig();
     }
 
-    private static void copyBaseModel() throws IOException {
+    private static void copyBaseModels() throws IOException {
         copyFile(
-                MavenProjectGenerator.class.getClassLoader().getResourceAsStream( "DepoModelData.txt" ),
-                new File( Settings.settings().getPathForGeneratedSource()
-                        + "/com/aplana/sbrf/deposit/web/common/client/operation/data/DepoModelData.java" )
+                "DepoModelData.txt",
+                Settings.settings().getPathForGeneratedSource()
+                        + "/com/aplana/sbrf/deposit/web/common/client/operation/data/DepoModelData.java"
+        );
+        copyFile(
+                "DepoPagingModelData.txt",
+                Settings.settings().getPathForGeneratedSource()
+                        + "/com/aplana/sbrf/deposit/web/common/client/operation/data/DepoPagingModelData.java"
+        );
+    }
+
+    private static void copyFile( String resourceName, String destFilePath ) throws IOException {
+        copyFile(
+                MavenProjectGenerator.class.getClassLoader().getResourceAsStream( resourceName ),
+                new File( destFilePath )
         );
     }
 
@@ -58,32 +69,31 @@ public class MavenProjectGenerator {
 
     protected static void copyAbstractTest() throws IOException {
         copyFile(
-                MavenProjectGenerator.class.getClassLoader().getResourceAsStream( "AbstractDepoDaoExecuteTest.txt" ),
-                new File( Settings.settings().getPathForGeneratedTests()
-                        + "/com/aplana/sbrf/deposit/AbstractDepoDaoExecuteTest.java" )
+                "AbstractDepoDaoExecuteTest.txt",
+                Settings.settings().getPathForGeneratedTests()
+                        + "/com/aplana/sbrf/deposit/AbstractDepoDaoExecuteTest.java"
         );
     }
 
     protected static void copyAppContextConfigToMavenProject() throws IOException {
         copyFile(
-                MavenProjectGenerator.class.getClassLoader().getResourceAsStream( "testApplicationContext.xml" ),
-                new File( Settings.settings().getPathForTestResources() + "/testApplicationContext.xml" )
+                "testApplicationContext.xml",
+                Settings.settings().getPathForTestResources() + "/testApplicationContext.xml"
         );
     }
 
     protected static void copyPomFileToMavenProject() throws IOException {
         copyFile(
-                MavenProjectGenerator.class.getClassLoader().getResourceAsStream( "pom.xml" ),
-                new File( Settings.settings().getOutputPathForJavaClasses() + "/pom.xml" )
+                "pom.xml",
+                Settings.settings().getOutputPathForJavaClasses() + "/pom.xml"
         );
     }
 
     protected static void copyPropertiesFileToMavenProject() throws IOException {
-        final InputStream resourceAsStream = MavenProjectGenerator.class.getClassLoader().
-                getResourceAsStream( "depo/application.properties" );// TODO
-
-        final File propertiesOut = new File( Settings.settings().getPathForTestResources() + "/application.properties" );
-        copyFile( resourceAsStream, propertiesOut );
+        copyFile(
+                "depo/application.properties", //TODO
+                Settings.settings().getPathForTestResources() + "/application.properties"
+        );
     }
 
     public static void copyFile( InputStream inputStream, File outputFile  ) throws IOException {

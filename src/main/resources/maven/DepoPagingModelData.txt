@@ -1,0 +1,75 @@
+package com.aplana.sbrf.deposit.web.common.client.operation.data;
+
+import com.extjs.gxt.ui.client.data.PagingLoadConfig;
+
+/**
+ * @author eshangareev
+ * @version 1.0
+ */
+public class DepoPagingModelData extends DepoModelData {
+
+    public enum Fields{
+        I_END,
+        I_START,
+        I_PAGE_LIMIT,
+        ID_SESSION,
+        S_SORT,
+        I_ROW_COUNT
+    }
+
+    public void setPagingLoadConfig(PagingLoadConfig config) {
+        setStartRowNumber((long) config.getOffset());
+        setEndRowNumber((long) (config.getOffset() + config.getLimit()));
+        setPageLimit((long) config.getLimit());
+        setSort("");
+        setRowCount(0L);
+    }
+
+    public Long setRowCount(Long rowCount) {
+        return get(Fields.I_ROW_COUNT.name(), rowCount);
+    }
+
+    public String setSort(String sort) {
+        return get(Fields.S_SORT.name(), sort);
+    }
+
+    public Long setIdSession(Long idSessionDS) {
+        return get(Fields.ID_SESSION.name(), idSessionDS);
+    }
+
+    public Long setPageLimit(Long pageLimit) {
+        return get(Fields.I_PAGE_LIMIT.name(), pageLimit);
+    }
+
+    public Long setEndRowNumber(Long endRowNumber) {
+        return get(Fields.I_END.name(), endRowNumber);
+    }
+
+    public Long setStartRowNumber(Long startRowNumber) {
+        return get(Fields.I_START.name(), startRowNumber);
+    }
+
+    public Long getRowCount() {
+        return get(Fields.I_ROW_COUNT.name());
+    }
+
+    public String getSort() {
+        return get(Fields.S_SORT.name());
+    }
+
+    public Long getIdSession() {
+        return get(Fields.ID_SESSION.name());
+    }
+
+    public Long getPageLimit() {
+        return get(Fields.I_PAGE_LIMIT.name());
+    }
+
+    public Long getEndRowNumber() {
+        return get(Fields.I_END.name());
+    }
+
+    public Long getStartRowNumber() {
+        return get(Fields.I_START.name());
+    }
+}
