@@ -64,6 +64,7 @@ public class Form  implements TypeChangeListener, SourcePathChangeListener{
     private JLabel daoPackageLabel;
     private JTextField textField1;
     private JButton button1;
+    private JLabel entityPackageLable;
     private JFrame windowWithText;
 
     private boolean start = true;
@@ -372,11 +373,13 @@ public class Form  implements TypeChangeListener, SourcePathChangeListener{
 
     private void loadSettings() {
         final boolean iask = Settings.settings().getType() == Type.IASK;
-        IASKRadioButton.setSelected(    iask );
-        DEPORadioButton.setSelected( !  iask );
+        IASKRadioButton.setSelected(   iask );
+        DEPORadioButton.setSelected( ! iask );
 
-        daoPackageLabel      .setVisible( iask );
-        daoPackageTextField  .setVisible( iask );
+        daoPackageLabel         .setVisible( iask );
+        daoPackageTextField     .setVisible( iask );
+        entityPackageLable      .setVisible( iask );
+        entityPackageTextField  .setVisible( iask );
 
         destDirTextField.setText( Settings.settings().getOutputPathForJavaClasses() );
         entityPackageTextField.setText( Settings.settings().getEntityPackage() );
