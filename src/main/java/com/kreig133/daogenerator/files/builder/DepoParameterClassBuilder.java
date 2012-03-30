@@ -13,18 +13,11 @@ import java.util.Map;
  * @version 1.0
  */
 class DepoParameterClassBuilder extends ParameterClassBuilder{
-
     @Override
-    public Map<File, String> build( List<DaoMethod> daoMethod ) {
+    protected void prepareBuilder( List<DaoMethod> daoMethod ) {
         for ( DaoMethod method : daoMethod ) {
-            generators.add( ModelClassGenerator.newInstance( method.getInputParametrs() ) );
+            generators.add( ModelClassGenerator.newInstance( method.getInputParametrs () ) );
             generators.add( ModelClassGenerator.newInstance( method.getOutputParametrs() ) );
         }
-
-        for ( JavaClassGenerator generator : generators ) {
-            generator.generateHead();
-        }
-
-        return null;
     }
 }

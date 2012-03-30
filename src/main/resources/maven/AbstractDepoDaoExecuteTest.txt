@@ -1,5 +1,6 @@
 package com.aplana.sbrf.deposit;
 
+import com.aplana.sbrf.deposit.web.common.client.operation.data.DepoModelData;
 import org.apache.ibatis.annotations.Param;
 import org.junit.runner.RunWith;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
@@ -45,7 +46,7 @@ public abstract class AbstractDepoDaoExecuteTest {
     }
 
     /**
-     * Заполнение POJO-объекта
+     * Заполнение объекта
      * @param object  POJO-объект
      * @param values значения, которыми будет заполнен POJO-объект
      * @return заполненный POJO-объект
@@ -54,12 +55,9 @@ public abstract class AbstractDepoDaoExecuteTest {
             Object object, Map<String, String> values
     ) throws Exception {
 
-        for ( PropertyDescriptor pd : Introspector.getBeanInfo( object.getClass() ).getPropertyDescriptors() ) {
-            if ( pd.getWriteMethod() != null && ! "class".equals( pd.getName() ) ) {
-                Class<?> aClass = pd.getWriteMethod().getParameterTypes()[ 0 ];
-                String value = values.get( pd.getName() );
-                pd.getWriteMethod().invoke( object, getValueByType( aClass, value ) );
-            }
+        for ( String s : values.keySet() ) {
+            Method setter = findMethodByName( "set" + convertNameForGettersAndSetters( s ), object.getClass() );
+            setter.invoke( object, getValueByType( setter.getParameterTypes()[ 0 ], values.get( s ) ) );
         }
 
         return object;
@@ -77,6 +75,9 @@ public abstract class AbstractDepoDaoExecuteTest {
         if ( value == null || value.equals( "null" ) ) {
             return null;
         } else if ( aClass == java.util.Date.class ) {
+            if ( value.equals( "" ) ) {
+                return null;
+            }
             return format.parse( value );
         } else if ( aClass == java.lang.String.class ) {
             return value;
@@ -173,5 +174,21 @@ public abstract class AbstractDepoDaoExecuteTest {
         } catch ( Exception ex ) {
             throw new RuntimeException( ex );
         }
+    }
+
+    public static String convertNameForGettersAndSetters( String name ) {
+
+        if ( name == null || "".equals( name ) ) throw new IllegalArgumentException();
+
+        final char[] chars = name.toCharArray();
+
+        if ( Character.isLowerCase( chars[ 0 ] ) ) {
+            if ( chars.length == 1 || Character.isLowerCase( chars[ 1 ] ) ) {
+                chars[ 0 ] = Character.toUpperCase( chars[ 0 ] );
+                name = new String( chars );
+            }
+        }
+
+        return name;
     }
 }

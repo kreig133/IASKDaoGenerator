@@ -104,11 +104,11 @@
             <version>${slf4j-log4j12.version}</version>
             <scope>compile</scope>
         </dependency>
-        <!--<dependency>-->
-        <!--<groupId>com.aplana.sbrf.deposit</groupId>-->
-        <!--<artifactId>sbrf-deposit-web</artifactId>-->
-        <!--<version>0.2.2</version>-->
-        <!--</dependency>-->
+        <dependency>
+            <groupId>com.google.gwt</groupId>
+            <artifactId>gwt-user</artifactId>
+            <version>2.1.1</version>
+        </dependency>
     </dependencies>
 
     <repositories>

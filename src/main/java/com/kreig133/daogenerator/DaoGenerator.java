@@ -1,17 +1,19 @@
 package com.kreig133.daogenerator;
 
 import com.kreig133.daogenerator.common.Utils;
+import com.kreig133.daogenerator.files.builder.FileBuilder;
+import com.kreig133.daogenerator.files.builder.MapperFileGenerator;
+import com.kreig133.daogenerator.files.builder.ParameterClassBuilder;
 import com.kreig133.daogenerator.files.mybatis.model.ModelClassGenerator;
 import com.kreig133.daogenerator.files.mybatis.test.TesterClassGenerator;
 import com.kreig133.daogenerator.gui.Form;
 import com.kreig133.daogenerator.settings.OperationSettings;
 import com.kreig133.daogenerator.enums.Type;
 import com.kreig133.daogenerator.files.Appender;
-import com.kreig133.daogenerator.files.InOutClassGenerator;
+import com.kreig133.daogenerator.files.mybatis.InOutClassGenerator;
 import com.kreig133.daogenerator.files.JavaClassGenerator;
 import com.kreig133.daogenerator.files.mybatis.implementation.ImplementationGenerator;
 import com.kreig133.daogenerator.files.mybatis.intrface.InterfaceGenerator;
-import com.kreig133.daogenerator.files.mybatis.mapping.MappingGenerator;
 import com.kreig133.daogenerator.jaxb.DaoMethod;
 import com.kreig133.daogenerator.jaxb.InOutType;
 import com.kreig133.daogenerator.settings.PropertiesFileController;
@@ -77,7 +79,7 @@ public class DaoGenerator {
         }
 
         try {
-            writeFiles();
+            generateAndWriteFiles();
             MavenProjectGenerator.generate();
         } catch ( IOException e ) {
             throw new RuntimeException( e );
@@ -96,41 +98,26 @@ public class DaoGenerator {
                 );
     }
 
-    protected static void writeFiles() throws IOException {
+    protected static void generateAndWriteFiles() throws IOException {
 
-        List<JavaClassGenerator> generators = new ArrayList<JavaClassGenerator>();
+        List<FileBuilder> builders = new ArrayList<FileBuilder>( 2 );
 
-        generators.add( MappingGenerator.instance() );
+        builders.add( MapperFileGenerator.newInstance() );
+        builders.add( ParameterClassBuilder.newInstance() );
 
-        if ( Settings.settings().getType() == Type.IASK ) {
-            generators.add( InterfaceGenerator.instance() );
-            generators.add( ImplementationGenerator.instance() );
-        } else {
-            generators.add( new TesterClassGenerator() );
-        }
-
-        for ( DaoMethod daoMethod: daoMethods ) {
-            if ( InOutClassGenerator.checkToNeedOwnInClass( daoMethod ) ) {
-                generators.add( InOutClassGenerator.newInstance( daoMethod, InOutType.IN ) );
-            }
-            if( Settings.settings().getType() == Type.IASK ){
-                if ( daoMethod.getOutputParametrs().getParameter().size() > 1 ) {
-                    generators.add( InOutClassGenerator.newInstance( daoMethod, InOutType.OUT ) );
-                }
+        Map<File, String> builded = null;
+        for ( FileBuilder builder : builders ) {
+            if( builded == null ){
+                builded = builder.build( daoMethods );
             } else {
-                generators.add( ModelClassGenerator.newInstance( daoMethod.getOutputParametrs() ) );
+                builded.putAll( builder.build( daoMethods ) );
             }
         }
 
-        for ( JavaClassGenerator generator : generators ) {
-            generator.generateHead();
+        assert builded != null;
 
-            for( DaoMethod daoMethod: daoMethods ){
-                generator.generateBody( daoMethod );
-            }
-
-            appender.appendStringToFile( generator.getFile(), generator.getResult() );
-            generator.reset();
+        for ( File file : builded.keySet() ) {
+            appender.appendStringToFile( file, builded.get( file ) );
         }
 
         daoMethods.clear();

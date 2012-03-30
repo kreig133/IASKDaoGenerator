@@ -5,6 +5,7 @@ import com.kreig133.daogenerator.jaxb.DaoMethod;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -15,5 +16,28 @@ import java.util.Map;
 public abstract class FileBuilder {
     protected List<JavaClassGenerator> generators = new ArrayList<JavaClassGenerator>();
 
-    public abstract Map<File, String> build( List<DaoMethod> daoMethod );
+    final public Map<File, String> build( List<DaoMethod> daoMethod ) {
+        prepareBuilder( daoMethod );
+        generateHead();
+        generateBody( daoMethod );
+
+        HashMap<File, String> result = new HashMap<File, String>();
+
+        for ( JavaClassGenerator generator : generators ) {
+            result.put( generator.getFile(), generator.getResult() );
+            generator.reset();
+        }
+
+        return result;
+    }
+
+    protected abstract void prepareBuilder( List<DaoMethod> daoMethod );
+
+    final protected void generateHead(){
+        for ( JavaClassGenerator generator : generators ) {
+            generator.generateHead();
+        }
+    }
+
+    public abstract void generateBody( List<DaoMethod> daoMethods );
 }
