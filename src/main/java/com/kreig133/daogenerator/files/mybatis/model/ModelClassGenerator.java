@@ -120,7 +120,7 @@ abstract public class ModelClassGenerator extends JavaClassGenerator {
     
     private String enumBody =
                     "         /** Описание атрибута */\n" +
-                    "        private final String description;\n" +
+                    "        private final String caption;\n" +
                     "        \n" +
                     "        /** \n" +
                     "         * Конструктор по умолчанию \n" +
