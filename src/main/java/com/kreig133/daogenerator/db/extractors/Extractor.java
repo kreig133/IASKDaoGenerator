@@ -39,13 +39,9 @@ public class Extractor {
     }
 
     public static SelectType determineQueryType( String query ) {
-        if ( ! Utils.stringContainsMoreThanOneWord( query ) ) {
-            return SelectType.CALL;
-        }
-
-        final String firstWord = query.trim().split( "\\s" )[0];
-
-        return SelectType.getByName( firstWord );
+        return Utils.stringContainsMoreThanOneWord( query ) ?
+                    SelectType.getByName( query.trim().split( "\\s" )[0] ):
+                    SelectType.CALL;
     }
 
     public static String getStoreProcedureName( String query ) {

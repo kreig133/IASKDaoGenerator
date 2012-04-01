@@ -1,5 +1,6 @@
 package com.kreig133.daogenerator.db.extractors.out;
 
+import com.google.common.collect.Lists;
 import com.kreig133.daogenerator.common.Utils;
 import com.kreig133.daogenerator.db.JBDCTypeIdConverter;
 import com.kreig133.daogenerator.db.extractors.Extractor;
@@ -29,11 +30,9 @@ public abstract class OutputParameterExtractor extends Extractor{
     protected void fillJdbcTypeForInputParameters( ParameterMetaData parameterMetaData, DaoMethod daoMethod )
             throws SQLException {
         for ( ParameterType p : daoMethod.getInputParametrs().getParameter() ) {
-
             p.setJdbcType( JBDCTypeIdConverter.getJdbcTypeNameById( parameterMetaData.getParameterType(
                     daoMethod.getInputParametrs().getParameter().indexOf( p ) + 1
             ) ) );
-
         }
     }
 

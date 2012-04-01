@@ -156,7 +156,7 @@ abstract public class JavaClassGenerator extends Generator {
             insertTabs();
         }
         if ( inputParams != null && ! inputParams.isEmpty() ) {
-            foldLeft( inputParams );
+            builder.append( StringUtils.join( inputParams.iterator(), ", " ) );
         }
         if(  needNewLineForParam ){
             insertLine();
@@ -167,21 +167,10 @@ abstract public class JavaClassGenerator extends Generator {
 
         if ( throwsing != null && ! throwsing.isEmpty() ) {
             builder.append( " throws " );
-            foldLeft( throwsing );
+            builder.append( StringUtils.join( throwsing.iterator(), ", " ) );
         }
         builder.append( signatureOnly ? "" : " {" );
         increaseNestingLevel();
-    }
-
-    private void foldLeft( List<String> stringList ) {
-        boolean  first = true;
-        for ( String string : stringList ) {
-            if ( ! first ) {
-                builder.append( ", " );
-            }
-            first = false;
-            builder.append( string );
-        }
     }
 
     private void insertPackageLine( String packageName ) {
@@ -235,13 +224,7 @@ abstract public class JavaClassGenerator extends Generator {
 
         if( interfaces!= null && !interfaces.isEmpty() ) {
             builder.append( " implements " );
-            for ( int i = 0; i < interfaces.size(); i++ ){
-                if( i > 0 ){
-                    builder.append( "," );
-                }
-                builder.append( interfaces.get( i ) );
-                builder.append( " " );
-            }
+            builder.append( StringUtils.join( interfaces.iterator(), ", " ) );
         }
 
         builder.append( "{" );

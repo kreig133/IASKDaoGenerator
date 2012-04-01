@@ -1,9 +1,14 @@
 package com.kreig133.daogenerator.sql.creators;
 
+import com.google.common.base.Function;
+import com.google.common.collect.Iterators;
 import com.kreig133.daogenerator.common.FunctionalObjectWithoutFilter;
 import com.kreig133.daogenerator.jaxb.DaoMethod;
 import com.kreig133.daogenerator.jaxb.ParameterType;
+import com.kreig133.daogenerator.sql.test.TestValueByStringGenerator;
+import org.apache.commons.lang.StringUtils;
 
+import javax.annotation.Nullable;
 import java.util.List;
 
 import static com.kreig133.daogenerator.common.Utils.insertTabs;
@@ -14,27 +19,6 @@ import static com.kreig133.daogenerator.common.Utils.iterateForParameterList;
  * @version 1.0
  */
 public class GenerateGenerator extends CommonCallCreator{
-
-    protected void declareParamInProcedure( StringBuilder builder, ParameterType p ) {
-        declareInTypeParamInProcedure( builder, p );
-    }
-
-    protected void declareInTypeParamInProcedure( StringBuilder builder, ParameterType p ) {
-        insertParameterName( builder, p );
-        insertEscapedParamName( builder, p, false ); //TODO че за код ваще?
-    }
-
-    protected int declareParamInProcedure( StringBuilder builder, ParameterType p, int index) {
-        switch ( p.getInOut() ){
-            case IN:
-                declareInTypeParamInProcedure( builder, p );
-                return index;
-            case OUT:
-                declareOutTypeParamInProcedure( builder, p, index );
-                return ++index;
-        }
-        throw new AssertionError();
-    }
 
     protected static int declareParamInProcedureForTesting( StringBuilder builder, ParameterType p, int index ){
         switch (  p.getInOut() ) {
@@ -64,41 +48,45 @@ public class GenerateGenerator extends CommonCallCreator{
 
 
     @Override
-    public String generateExecuteQuery( DaoMethod daoMethod, boolean forTest ) {
+    public String generateExecuteQuery( DaoMethod daoMethod, final boolean forTest ) {
+
         final List<ParameterType> outputParametrs  = daoMethod.getOutputParametrs().getParameter();
         final List<ParameterType> inputParametrs   = daoMethod.getInputParametrs ().getParameter();
-
 
         StringBuilder builder      = new StringBuilder();
 
         builder.append( "create table #TempTableForNamedResultSet(\n" );
 
-        iterateForParameterList( builder, outputParametrs, new FunctionalObjectWithoutFilter() {
-            @Override
-            public void writeString( StringBuilder builder, ParameterType p ) {
-                builder.append( p.getName() ).append( " " ).append( p.getSqlType() ).append( " " ).append( "NULL" );
-            }
-        } );
+        insertTabs( builder, 1 ).append( StringUtils.join(
+                Iterators.transform( outputParametrs.iterator(),
+                        new Function<ParameterType, String>() {
+                            @Override
+                            public String apply( @Nullable ParameterType p ) {
+                                return String.format( "%s %s NULL", p.getName(), p.getSqlType() );
+                            }
+                        }
+                ), ",\n\t"
+        ) );
 
-        builder.append( ");\n" );
+        builder.append( "\n);\n" );
         builder.append( "insert into #TempTableForNamedResultSet\n" );
         insertTabs( builder, 1 ).append( "exec " ).append(  daoMethod.getCommon().getSpName() ).append( "\n" );
 
-        if( !forTest ){
-            iterateForParameterList( builder, inputParametrs, 2, new FunctionalObjectWithoutFilter() {
-                @Override
-                public void writeString( StringBuilder builder, ParameterType p ) {
-                    declareInTypeParamInProcedure( builder, p );
-                }
-            } );
-        } else {
-            iterateForParameterList( builder, inputParametrs, 2, new FunctionalObjectWithoutFilter() {
-                @Override
-                public void writeString( StringBuilder builder, ParameterType p ) {
-                    builder.append( " ?" );
-                }
-            } );
-        }
+        insertTabs( builder, 1 ).append( StringUtils.join(
+                Iterators.transform( inputParametrs.iterator(),
+                        new Function<ParameterType, String>() {
+                            @Override
+                            public String apply( @Nullable ParameterType parameter ) {
+                                return transformParameterName( parameter,
+                                        forTest ?
+                                                TestValueByStringGenerator.newInstance( parameter )
+                                                        .getTestValue( parameter ) :
+                                                getEscapedParamName( parameter, false )
+                                );
+                            }
+                        }
+                ), ",\n\t"
+        ) );
 
         builder.append( ";\n" );
         builder.append( "SELECT * FROM #TempTableForNamedResultSet" );

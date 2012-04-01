@@ -11,4 +11,7 @@ abstract public class CommonCallCreator extends QueryCreator{
     protected static StringBuilder insertParameterName( StringBuilder builder, ParameterType p ) {
         return builder.append( "@" ).append( p.getName() ).append( " = " );
     }
+    protected static String transformParameterName( ParameterType p, String rightValue ) {
+        return String.format( "@%s = %s", p.getName(), rightValue );
+    }
 }

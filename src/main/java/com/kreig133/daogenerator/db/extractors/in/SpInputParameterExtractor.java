@@ -11,6 +11,8 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import static com.google.common.base.Preconditions.*;
+
 /**
  * @author eshangareev
  * @version 1.0
@@ -52,10 +54,7 @@ public class SpInputParameterExtractor extends InputParameterExtractor{
     private String getParameterNameFromResultSet( ResultSet resultSet ) throws SQLException {
         String result = resultSet.getString( PARAMETER_NAME_COLUMN );
 
-        if( result.startsWith( "@" )){
-            return result.substring( 1 );
-        }
-        return result;
+        return result.startsWith( "@" ) ? result.substring( 1 ) : result;
     }
 
     private String getSqlTypeFromResultSet( ResultSet resultSet ) throws SQLException {
@@ -109,11 +108,7 @@ public class SpInputParameterExtractor extends InputParameterExtractor{
         //TODO есть косяк ( если в комментариях встретися \bAS\b, то сработает неправильно
         //TODO Есть вариант выпиливать предварительно комментарии
         final Matcher matcher = Pattern.compile( "(?isu)create\\s+procedure(.*?)\\bas\\b" ).matcher( spText );
-        if( matcher.find() ){
-            return matcher.group( 1 );
-        } else {
-            return "";
-        }
+        return matcher.find() ? matcher.group( 1 ) : "";
     }
 
     @Override
@@ -180,9 +175,8 @@ public class SpInputParameterExtractor extends InputParameterExtractor{
     }
 
     public boolean checkSPName( String query ) {
-        if( determineQueryType( query ) != SelectType.CALL ) {
-            throw new IllegalArgumentException();
-        }
+        checkArgument( determineQueryType( query ) != SelectType.CALL,
+                "Нельзя проверить название хранимой процедуры для SQL-запроса" );
         return ! ( getStoreProcedureName( query ) == null || "".equals( getStoreProcedureName( query ) ) );
     }
 }

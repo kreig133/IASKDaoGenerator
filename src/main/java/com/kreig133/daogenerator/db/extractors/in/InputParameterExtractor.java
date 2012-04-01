@@ -65,11 +65,7 @@ abstract public class InputParameterExtractor extends Extractor{
         if ( getNullPatternForParameter( type.getName() ).matcher( query ).find() ){
             return NULL;
         }
-        if( matcher.find() ){
-            return matcher.group( 1 );
-        } else {
-            return "";
-        }
+        return matcher.find() ? matcher.group( 1 ) : "";
     }
 
     private Pattern getStringPatternForParameter( String name ) {

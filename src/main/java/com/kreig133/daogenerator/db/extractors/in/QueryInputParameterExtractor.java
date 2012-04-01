@@ -29,10 +29,8 @@ abstract public class QueryInputParameterExtractor extends InputParameterExtract
             
     protected String getTableName( DaoMethod daoMethod ) {
         Matcher matcher = getPatterForTableNameExtracting( daoMethod.getSelectType() ).matcher(
-                daoMethod.getCommon().getQuery() );
-        if ( matcher.find() ) {
-            return matcher.group( 2 );
-        }
-        return "";
+                daoMethod.getCommon().getQuery()
+        );
+        return matcher.find() ? matcher.group( 2 ) : "";
     }
 }

@@ -24,22 +24,14 @@ public class JDBCConnector implements TypeChangeListener{
     public Connection connectToDB() {
 
         try {
-            if ( connection != null && !connection.isClosed() ) {
+            if ( connection != null && ! connection.isClosed() ) {
                 return connection;
             }
         } catch ( SQLException e ) {
             e.printStackTrace();
         }
 
-        FileInputStream props;
-
-        try {
-            props = new FileInputStream( Settings.settings().getType().pathToProperty() );
-            properties.load( props );
-            props.close();
-        } catch ( IOException e ) {
-            throw new RuntimeException( "Не удалось загрузить параметры соединения", e );
-        }
+        loadProperties();
 
         System.setProperty( "jdbc.driver", properties.getProperty( DRIVER ) );
 
@@ -54,6 +46,16 @@ public class JDBCConnector implements TypeChangeListener{
         }
 
         return connection;
+    }
+
+    private void loadProperties() {
+        try {
+            FileInputStream  props = new FileInputStream( Settings.settings().getType().pathToProperty() );
+            properties.load( props );
+            props.close();
+        } catch ( IOException e ) {
+            throw new RuntimeException( "Не удалось загрузить параметры соединения", e );
+        }
     }
 
     private static JDBCConnector INSTANCE;

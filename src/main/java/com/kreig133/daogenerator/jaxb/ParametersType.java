@@ -8,14 +8,19 @@
 
 package com.kreig133.daogenerator.jaxb;
 
+import com.google.common.base.Predicate;
+import com.google.common.collect.Iterators;
+import com.google.common.collect.Lists;
 import com.kreig133.daogenerator.files.NamingUtils;
 
 import java.util.*;
+import javax.annotation.Nullable;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlType;
 
+import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
  * <p>Java class for parametersType complex type.
@@ -133,13 +138,13 @@ public class ParametersType {
         return getParameterByName( name, getParameter() );
     }
     
-    public static ParameterType getParameterByName( String name, List<ParameterType> parameters ){
-        for ( ParameterType type : parameters ) {
-            if ( type.getName().equals( name ) ) {
-                return type;
+    public static ParameterType getParameterByName( final String name, List<ParameterType> parameters ){
+        return Iterators.tryFind( parameters.iterator(), new Predicate<ParameterType>() {
+            @Override
+            public boolean apply( @Nullable ParameterType input ) {
+                return checkNotNull( input, "Неожиданно NPE в ParametersType" ).getName().equals( name );
             }
-        }
-        return null;
+        } ).get();
     }
     
     public List<Integer> getIndexOfUnnamedParameters() {

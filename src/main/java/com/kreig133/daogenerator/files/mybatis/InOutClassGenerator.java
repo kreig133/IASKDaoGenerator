@@ -1,6 +1,7 @@
 package com.kreig133.daogenerator.files.mybatis;
 
-import com.kreig133.daogenerator.common.FunctionalObjectWithoutFilter;
+import com.google.common.base.Function;
+import com.google.common.collect.Iterators;
 import com.kreig133.daogenerator.enums.ClassType;
 import com.kreig133.daogenerator.enums.Scope;
 import com.kreig133.daogenerator.files.JavaClassGenerator;
@@ -8,13 +9,12 @@ import com.kreig133.daogenerator.files.NamingUtils;
 import com.kreig133.daogenerator.files.PackageAndFileUtils;
 import com.kreig133.daogenerator.jaxb.*;
 import com.kreig133.daogenerator.settings.Settings;
+import org.apache.commons.lang.StringUtils;
 
+import javax.annotation.Nullable;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
-
-import static com.kreig133.daogenerator.common.Utils.iterateForParameterList;
-import static com.kreig133.daogenerator.jaxb.ParametersType.getParameterByName;
 
 /**
  * @author eshangareev
@@ -146,12 +146,15 @@ public class InOutClassGenerator extends JavaClassGenerator {
                 .append( " " ).append( NamingUtils.convertNameForClassNaming( this.name ) ).append( "(" );
         insertLine();
         increaseNestingLevel();
-        iterateForParameterList( builder, parameters, 2, new FunctionalObjectWithoutFilter() {
-            @Override
-            public void writeString( StringBuilder builder, ParameterType p ) {
-                builder.append( p.getType().value() ).append( " " ).append( p.getRenameTo() );
-            }
-        } );
+
+        insertTabs().append( StringUtils.join( Iterators.transform(
+                parameters.iterator(), new Function<ParameterType, String>() {
+                    @Override
+                    public String apply( @Nullable ParameterType p ) {
+                        assert p != null;
+                        return p.getType().value() + " " + p.getRenameTo();
+                    }
+        } ), ",\n\t\t" ) );
 
         insertTabs().append( ") {" );
         insertLine();

@@ -1,5 +1,8 @@
 package com.kreig133.daogenerator.files.mybatis.mapping;
 
+import com.google.common.base.Function;
+import com.google.common.base.Functions;
+import com.google.common.collect.Iterators;
 import com.kreig133.daogenerator.enums.ClassType;
 import com.kreig133.daogenerator.enums.MethodType;
 import com.kreig133.daogenerator.jaxb.DaoMethod;
@@ -9,6 +12,7 @@ import com.kreig133.daogenerator.settings.Settings;
 import com.kreig133.daogenerator.sql.creators.QueryCreator;
 import org.apache.commons.lang.StringUtils;
 
+import javax.annotation.Nullable;
 import java.io.IOException;
 import java.util.List;
 
@@ -91,28 +95,28 @@ public class DepoMappingGenerator extends MappingGenerator{
 
         final List<Integer> indexOfUnnamedParameters = daoMethod.getOutputParametrs().getIndexOfUnnamedParameters();
 
-        if( ! indexOfUnnamedParameters.isEmpty() ) {
-            if ( indexOfUnnamedParameters.size() > 1 ) {
-                throw new RuntimeException( "Не реализованная функциональность!" );
-            }
+        if( ! indexOfUnnamedParameters.isEmpty() && indexOfUnnamedParameters.size() > 1 ) {
+            throw new RuntimeException( "Не реализованная функциональность!" );
         }
     }
 
     private void generateNameMapping( DaoMethod daoMethod ) {
         insertTabs().append( "@Results({");
         insertLine();
-        boolean first = true;
         increaseNestingLevel();
-        for ( ParameterType parameterType : daoMethod.getOutputParametrs().getParameter() ) {
-            if ( ! first ) {
-                builder.append( "," );
-                insertLine();
-            } else {
-                first = false;
-            }
-            insertTabs().append( "@Result(property = \"" ).append( parameterType.getRenameTo() )
-                    .append( "\", column = \"" ).append( parameterType.getName() ).append( "\")" );
-        }
+        insertTabs().append( StringUtils.join( Iterators.transform(
+                daoMethod.getOutputParametrs().getParameter().iterator(),
+                new Function<ParameterType, String>() {
+                    @Override
+                    public String apply( @Nullable ParameterType parameterType ) {
+                        return String.format(
+                                "@Result(property = \"%s\", column = \"%s\")",
+                                    parameterType.getRenameTo(),
+                                    parameterType.getName()
+                        );
+                    }
+                }
+        ), ",\n\t\t" ) );
         decreaseNestingLevel();
         insertLine();
         insertTabs().append( "})" );

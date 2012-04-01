@@ -33,11 +33,10 @@ public class SelectQueryCreator extends QueryCreator{
 
                 ParameterType parameter = daoMethod.getInputParametrs().getParameterByName( listOfParametrNames.get( i ) );
 
-                if ( ! forTest ){
-                    insertEscapedParamName( builder, parameter, false );
-                } else {
-                    builder.append( TestValueByStringGenerator.newInstance( parameter ).getTestValue( parameter ) );
-                }
+                builder.append( forTest ?
+                        TestValueByStringGenerator.newInstance( parameter ).getTestValue( parameter ) :
+                        getEscapedParamName( parameter, false )
+                );
             }
             builder.append( splitted[ splitted.length - 1 ] );
         }

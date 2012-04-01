@@ -1,6 +1,7 @@
 package com.kreig133.daogenerator.common;
 
 import com.kreig133.daogenerator.jaxb.ParameterType;
+import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.StringUtils;
 
 import java.io.File;
@@ -20,14 +21,15 @@ public class Utils {
     }
 
     public static String streamToString( InputStream stream ) {
-        try{
-            return  new Scanner( stream ).useDelimiter( "\\A" ).next();
-        } finally {
+        try {
             try {
+                return IOUtils.toString( stream );
+            } finally {
                 stream.close();
-            } catch ( IOException e ) {
-                e.printStackTrace();
             }
+        } catch ( IOException e ) {
+            e.printStackTrace();
+            return null;
         }
     }
 

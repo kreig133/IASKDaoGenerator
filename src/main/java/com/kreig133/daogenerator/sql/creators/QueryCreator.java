@@ -25,13 +25,15 @@ public abstract class QueryCreator {
         return new SelectQueryCreator();
     }
 
-    protected void insertEscapedParamName(StringBuilder builder, ParameterType parameterType, boolean fullFormat ){
-        builder.append( "#{" ).append( parameterType.getRenameTo() );
-        if ( fullFormat ) {
-            builder.append( ", mode=" ).append( parameterType.getInOut())
-                    .append( ", jdbcType=" ).append( parameterType.getJdbcType() );
-        }
-        builder.append( "}" );
+    protected String getEscapedParamName( ParameterType parameterType, boolean fullFormat ){
+        return fullFormat ?
+                String.format( "#{%s}", parameterType.getRenameTo() ) :
+                String.format(
+                        "#{%s, mode=%s, jdbcType=%s}",
+                            parameterType.getRenameTo(),
+                            parameterType.getInOut(),
+                            parameterType.getJdbcType()
+                ) ;
     }
 
 }
