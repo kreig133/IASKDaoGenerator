@@ -1,11 +1,11 @@
 package com.kreig133.daogenerator.common;
 
 import com.kreig133.daogenerator.jaxb.ParameterType;
+import org.apache.commons.lang.StringUtils;
 
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.UnsupportedEncodingException;
 import java.util.List;
 import java.util.Scanner;
 
@@ -38,9 +38,6 @@ public class Utils {
         return builder;
     }
 
-    public static boolean stringNotEmpty( String string ) {
-        return string != null && ! ( "".equals( string ) );
-    }
 
     /**
      * Пытается переделать имя в Java-style
@@ -48,7 +45,7 @@ public class Utils {
      * @return
      */
     public static String convertPBNameToName( String nameForCall ) {
-        if( ! stringNotEmpty( nameForCall ) ) {
+        if( StringUtils.isEmpty( nameForCall ) ) {
             return "";
         }
         {
@@ -89,7 +86,6 @@ public class Utils {
 
     ) {
         boolean first = true;
-
         for ( ParameterType p : parameterList ) {
             if ( functionalObject.filter( p ) ) {
                 if ( ! first ) {

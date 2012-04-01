@@ -10,13 +10,12 @@ import com.kreig133.daogenerator.jaxb.DaoMethod;
 import com.kreig133.daogenerator.jaxb.JavaType;
 import com.kreig133.daogenerator.jaxb.ParameterType;
 import com.kreig133.daogenerator.settings.Settings;
+import org.apache.commons.lang.StringUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
 import java.util.*;
-
-import static com.kreig133.daogenerator.common.Utils.stringNotEmpty;
 
 /**
  * @author kreig133
@@ -145,7 +144,8 @@ abstract public class JavaClassGenerator extends Generator {
             boolean signatureOnly
     ){
         insertTabs().append( scope.value() ).append( " " )
-                .append( stringNotEmpty( outputClass ) ? outputClass : "void" ).append( " " ).append( methodName )
+                .append( StringUtils.isNotEmpty( outputClass ) ? outputClass : "void" ).append( " " ).append(
+                methodName )
                 .append( "(" );
 
         boolean needNewLineForParam = inputParams != null && inputParams.size() > 2;

@@ -60,7 +60,11 @@
             <scope>runtime</scope>
             <version>2.7.1</version>
         </dependency>
-
+        <dependency>
+            <groupId>commons-lang</groupId>
+            <artifactId>commons-lang</artifactId>
+            <version>2.6</version>
+        </dependency>
     </dependencies>
 
     <repositories>

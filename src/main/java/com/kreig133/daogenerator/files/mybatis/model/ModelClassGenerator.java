@@ -1,6 +1,5 @@
 package com.kreig133.daogenerator.files.mybatis.model;
 
-import com.kreig133.daogenerator.common.Utils;
 import com.kreig133.daogenerator.enums.ClassType;
 import com.kreig133.daogenerator.files.JavaClassGenerator;
 import com.kreig133.daogenerator.files.NamingUtils;
@@ -9,9 +8,9 @@ import com.kreig133.daogenerator.jaxb.DaoMethod;
 import com.kreig133.daogenerator.jaxb.ParameterType;
 import com.kreig133.daogenerator.jaxb.ParametersType;
 import com.kreig133.daogenerator.settings.Settings;
+import org.apache.commons.lang.StringUtils;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.List;
 
 /**
@@ -91,7 +90,7 @@ abstract public class ModelClassGenerator extends JavaClassGenerator {
     }
 
     private String processComment( ParameterType parameterType, boolean forJavaDoc ) {
-        return Utils.stringNotEmpty( parameterType.getComment() ) ? "\"" + parameterType.getComment() + "\"":
+        return StringUtils.isNotEmpty( parameterType.getComment() ) ? "\"" + parameterType.getComment() + "\"":
                 ( forJavaDoc ? "значение" : "\"\"" );
     }
 

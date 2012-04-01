@@ -1,6 +1,6 @@
 package com.kreig133.daogenerator.files;
 
-import static com.kreig133.daogenerator.common.Utils.stringNotEmpty;
+import org.apache.commons.lang.StringUtils;
 
 /**
  * @author eshangareev
@@ -26,7 +26,7 @@ public class NamingUtils {
      */
     public static String convertNameForGettersAndSetters( String name ) {
 
-        if ( ! stringNotEmpty( name ) ) throw new IllegalArgumentException();
+        if ( StringUtils.isEmpty( name ) ) throw new IllegalArgumentException();
 
         final char[] chars = name.toCharArray();
 

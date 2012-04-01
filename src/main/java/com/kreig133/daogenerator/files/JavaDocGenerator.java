@@ -1,6 +1,6 @@
 package com.kreig133.daogenerator.files;
 
-import com.kreig133.daogenerator.common.Utils;
+import org.apache.commons.lang.StringUtils;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -27,7 +27,7 @@ public class JavaDocGenerator extends Generator{
         insertTabs().append( "/**" );
 
         for ( String comment : commentsLine ) {
-            if ( Utils.stringNotEmpty( comment ) ) {
+            if ( StringUtils.isNotEmpty( comment ) ) {
                 insertNewJavaDocLine();
                 builder.append( comment.trim() );
             }

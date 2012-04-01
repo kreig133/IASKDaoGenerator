@@ -14,6 +14,7 @@ import com.kreig133.daogenerator.db.extractors.out.OutputParameterExtractor;
 import com.kreig133.daogenerator.enums.Type;
 import com.kreig133.daogenerator.jaxb.*;
 import com.kreig133.daogenerator.settings.Settings;
+import org.apache.commons.lang.StringUtils;
 
 import javax.swing.*;
 import javax.swing.event.ChangeEvent;
@@ -139,7 +140,7 @@ public class Form  implements TypeChangeListener, SourcePathChangeListener{
                     final File dirForSave = fileChooser.getSelectedFile();
                     final DaoMethod currentDaoMethod = getCurrentDaoMethod();
 
-                    if( ! Utils.stringNotEmpty( currentDaoMethod.getCommon().getMethodName() ) ) {
+                    if( StringUtils.isEmpty( currentDaoMethod.getCommon().getMethodName() ) ) {
                         InputParameterExtractor.getInstance( currentDaoMethod ).fillMethodName( currentDaoMethod );
                     }
 
@@ -325,14 +326,14 @@ public class Form  implements TypeChangeListener, SourcePathChangeListener{
             result.getCommon().setSpName( Extractor.getStoreProcedureName( queryTextArea.getText() ) );
         }
 
-        result.getCommon().setQuery      ( queryTextArea.getText() );
-        result.getCommon().setMethodName ( methodNameField.getText() );
-        result.getCommon().setComment    ( commentTextArea.getText() );
-        result.getCommon().setMethodName ( methodNameField.getText() );
+        result.getCommon().setQuery( queryTextArea.getText() );
+        result.getCommon().setMethodName( methodNameField.getText() );
+        result.getCommon().setComment( commentTextArea.getText() );
+        result.getCommon().setMethodName( methodNameField.getText() );
 
         result.setInputParametrs( new ParametersType() );
         result.getInputParametrs().getParameter().addAll(
-                ( (ParametrsModel) ( inputParametrs.getModel() ) ).getParameterTypes()
+                ( ( ParametrsModel ) ( inputParametrs.getModel() ) ).getParameterTypes()
         );
 
         result.setOutputParametrs( new ParametersType() );

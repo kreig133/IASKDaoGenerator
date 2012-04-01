@@ -7,11 +7,10 @@ import com.kreig133.daogenerator.jaxb.ParameterType;
 import com.kreig133.daogenerator.jaxb.SelectType;
 import com.kreig133.daogenerator.settings.Settings;
 import com.kreig133.daogenerator.sql.creators.QueryCreator;
+import org.apache.commons.lang.StringUtils;
 
 import java.io.IOException;
 import java.util.List;
-
-import static com.kreig133.daogenerator.common.Utils.stringNotEmpty;
 
 /**
  * @author kreig133
@@ -152,7 +151,7 @@ public class DepoMappingGenerator extends MappingGenerator{
         int length = 0;
 
         for ( String s : in ) {
-            if ( stringNotEmpty( s ) ) {
+            if ( StringUtils.isNotEmpty( s ) ) {
                 temp[ length ] = s;
                 length++;
             }
