@@ -141,7 +141,7 @@ public class ParametersType {
         return Iterators.tryFind( parameters.iterator(), new Predicate<ParameterType>() {
             @Override
             public boolean apply( @Nullable ParameterType input ) {
-                return checkNotNull( input, "Неожиданно NPE в ParametersType" ).getName().equals( name );
+                return checkNotNull( input, "Неожиданно NPE в ParametersType" ).getName().equalsIgnoreCase( name );
             }
         } ).orNull();
     }

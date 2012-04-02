@@ -1,18 +1,20 @@
 package com.kreig133.daogenerator.db.extractors;
 
+import com.google.common.base.Predicate;
+import com.google.common.collect.Iterators;
 import com.kreig133.daogenerator.db.JDBCConnector;
 import com.kreig133.daogenerator.jaxb.DaoMethod;
 import com.kreig133.daogenerator.jaxb.ParameterType;
 import com.kreig133.daogenerator.jaxb.ParametersType;
+import com.kreig133.daogenerator.jaxb.SelectType;
+import org.apache.commons.lang.StringUtils;
 import org.intellij.lang.annotations.Language;
 
+import javax.annotation.Nullable;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -36,32 +38,106 @@ public class QueryPreparator {
     protected String[] subPatterns = { columnName, quotedColumnName, columnNameInBrackets };
 
     public String prepareQuery( String query ) {
-        Map<String, String> columnsFromQuery = getColumnsFromQuery( query );
-        List<ParameterType> columnsFromDbByTableName = getColumnsFromDbByTableName( getTableName( query ) );
+        List<ParameterType> result = getActualParameterList(
+                getColumnsFromQuery( query ).keySet().iterator(),
+                getColumnsFromDbByTableName( getTableName( query ) )
+        );
 
+        query = replaceTestVaulesByDaoGeneratorFormatedInfoString( query, result );
+
+        return prepareAsInsertQueryIfNeed( query )
+                .replaceAll( "(\\$\\{.+?;)'(.+?\\})", "$1$2" )
+                .replaceAll( "(\\$\\{.+?)'\\}", "$1}" )
+                .replaceAll( "#@!", "" );
+    }
+
+    protected String prepareAsInsertQueryIfNeed( String query ) {
+        if( Extractor.determineQueryType( query ) != SelectType.INSERT ) return query;
+        @Language("RegExp")
+        String regExp = "(?isu)insert\\b\\s*\\binto\\b\\s*.+?\\s*\\((.+?)\\)?\\s*\\bvalues\\b\\s*\\((.+?)\\)";
+        Matcher matcher = Pattern.compile( regExp ).matcher( query );
+        if( ! matcher.find() ) {
+            throw new RuntimeException( "Ошибка в запросе и/или в генераторе!" );
+        }
+        if ( matcher.group( 1 ) != null ) {
+            String[] columnValues = matcher.group( 1 ).split( "," );
+            String[] testValues = matcher.group( 2 ).split( "," );
+
+            assert columnValues.length == testValues.length;
+
+            List<String> columns = new ArrayList<String>();
+            for ( int i = 0; i < columnValues.length; i++ ) {
+                testValues[ i ] = testValues[ i ].trim();
+                columnValues[ i ] = columnValues[ i ].trim();
+                String input = columnValues[ i ];
+
+                if ( input.matches( quotedColumnName ) || input.matches( columnNameInBrackets ) ) {
+                    columnValues[ i ] = input.substring( 1, input.length() - 1 );
+                    columns.add( columnValues[ i ] );
+                }
+                if ( input.matches( columnName ) ) {
+                    columns.add( input );
+                }
+            }
+
+            List<ParameterType> actualParamterList = getActualParameterList(
+                    columns.iterator(),
+                    getColumnsFromDbByTableName( getTableName( query ) )
+            );
+
+            assert actualParamterList.size() <= columnValues.length;
+
+            for ( int i = 0; i < columnValues.length; i++ ) {
+                String columnValue = columnValues[ i ];
+                ParameterType parameterByName =
+                        ParametersType.getParameterByName( columnValue.trim(), actualParamterList );
+                if ( parameterByName != null ) {
+                    testValues[ i ] = String.format( "\\${%s;%s;%s}",
+                            parameterByName.getName(),
+                            parameterByName.getSqlType(),
+                            testValues[ i ].trim()
+                    );
+                }
+            }
+
+            String join = StringUtils.join( testValues, ",\n\t" );
+
+            return query.replaceAll( "(?isu)\\bvalues\\b\\s*\\((.+?)\\)", String.format( "values(\n\t%s\n)", join ) );
+        }
+        throw new RuntimeException( "ДОДЕЛАТЬ БЫ НАДО БЫ!!" ); //TODO
+    }
+
+    private String replaceTestVaulesByDaoGeneratorFormatedInfoString( String query, List<ParameterType> result ) {
+        for ( ParameterType parameterType : result ) {
+            String pattern = String.format( "(%s.*?)=\\s*(('.+?')|\\w+)", parameterType.getName() );
+            String replacement = String.format(
+                    "$1= \\${%s;%s;$2}",
+                    parameterType.getName(),
+                    parameterType.getSqlType()
+            );
+            query = query.replaceAll( pattern, replacement );
+        }
+        return query;
+    }
+
+    private List<ParameterType> getActualParameterList(
+            Iterator<String> columnsFromQuery,
+            List<ParameterType> columnsFromDbByTableName
+    ) {
         List<ParameterType> result = new ArrayList<ParameterType>();
-        for ( String column : columnsFromQuery.keySet() ) {
-            ParameterType parameterByName = ParametersType.getParameterByName( column, columnsFromDbByTableName );
+        while ( columnsFromQuery.hasNext() ) {
+            String column = columnsFromQuery.next();
+            ParameterType parameterByName = ParametersType.getParameterByName( column.trim(), columnsFromDbByTableName );
 
             if( parameterByName == null ) {
                 parameterByName = new ParameterType();
                 parameterByName.setName( column );
+                parameterByName.setSqlType( "!!ERROR!!" );
             }
 
-            parameterByName.setTestValue( columnsFromQuery.get( column ) );
             result.add( parameterByName );
         }
-
-        for ( ParameterType parameterType : result ) {
-            String format = String.format( "(%s.*?)=\\s*(('.+?')|\\w+)", parameterType.getName() );
-            String format1 = String.format(
-                    "$1= \\${%s;%s;$2}",
-                    parameterType.getName(),
-                    parameterType.getSqlType() == null ? "!!ERROR!!" : parameterType.getSqlType()
-            );
-            query = query.replaceAll( format, format1 ).replaceAll( ";'", ";" ).replaceAll( "'\\}", "}" );
-        }
-        return query;
+        return result;
     }
 
     protected Map<String, String> getColumnsFromQuery( DaoMethod daoMethod ) {
