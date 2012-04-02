@@ -25,10 +25,8 @@ abstract public class InputParameterExtractor extends Extractor{
         switch ( daoMethod.getSelectType() ){
             case CALL:
                 return SpInputParameterExtractor.instance();
-            case SELECT:
-                return SelectInputParameterExtractor.instance();
             default:
-                return DefaultInputParameterExtractor.instance();
+                return SelectInputParameterExtractor.instance();
         }
     }
 

@@ -11,8 +11,8 @@ import java.util.regex.Pattern;
  * @version 1.0
  */
 public class DefaultValueExtractorTest {
-
-    private String string = "asdfasCREATE PROCEDURE dbo.anyStoreProcedure( laksjfffфаывафыва AS ) AS AS";
+//TODO шо за фигня - переделать
+    private String string = "asdfasCREATE PROCEDURE dbo.anyStoreProcedure( -- AS\n laksjfffфаывафыва AS ) AS AS";
 
     @Test
     public void test(){

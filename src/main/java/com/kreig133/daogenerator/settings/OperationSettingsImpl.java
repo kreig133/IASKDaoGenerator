@@ -18,7 +18,7 @@ final public class OperationSettingsImpl implements OperationSettings{
     private List<TypeChangeListener> typeChangelisteners = new ArrayList<TypeChangeListener>();
     private List<SourcePathChangeListener> sourcePathChangeListeners = new ArrayList<SourcePathChangeListener>();
 
-    private Type TYPE;
+    private Type TYPE = Type.TEST;
 
     private String ENTITY_PACKAGE = "ru.sbrf.aplana.entity";
     private String DAO_PACKAGE = "ru.sbrf.aplana.dao";

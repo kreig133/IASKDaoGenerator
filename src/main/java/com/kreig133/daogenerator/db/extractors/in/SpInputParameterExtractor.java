@@ -12,12 +12,13 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import static com.google.common.base.Preconditions.*;
+import static com.kreig133.daogenerator.db.extractors.SqlTypeHelper.getSqlTypeFromResultSet;
 
 /**
  * @author eshangareev
  * @version 1.0
  */
-public class SpInputParameterExtractor extends InputParameterExtractor{
+public class SpInputParameterExtractor extends InputParameterExtractor {
 
     private static SpInputParameterExtractor INSTANCE;
 
@@ -34,8 +35,7 @@ public class SpInputParameterExtractor extends InputParameterExtractor{
     private static final String GET_SP_TEXT = "{CALL sp_helptext(?)}";
 
     public static final String PARAMETER_NAME_COLUMN    = "PARAMETER_NAME";
-    public static final String DATA_TYPE_COLUMN         = "DATA_TYPE";
-    public static final String CHARACTER_MAXIMUM_LENGTH = "CHARACTER_MAXIMUM_LENGTH";
+
     public static final String PARAMETER_MODE           = "PARAMETER_MODE";
 
     private static String spText = null;
@@ -45,7 +45,7 @@ public class SpInputParameterExtractor extends InputParameterExtractor{
 
         parameterType.setName   ( getParameterNameFromResultSet( resultSet ) );
         parameterType.setSqlType( getSqlTypeFromResultSet( resultSet ) );
-        parameterType.setType   ( JavaType.getBySqlType( resultSet.getString( DATA_TYPE_COLUMN ) ) );
+        parameterType.setType   ( JavaType.getBySqlType( parameterType.getSqlType() ) );
         parameterType.setInOut  ( InOutType.getByName( resultSet.getString( PARAMETER_MODE ) ) );
         parameterType.setRenameTo( Utils. convertPBNameToName( parameterType.getName() ) );
         return parameterType;
@@ -55,17 +55,6 @@ public class SpInputParameterExtractor extends InputParameterExtractor{
         String result = resultSet.getString( PARAMETER_NAME_COLUMN );
 
         return result.startsWith( "@" ) ? result.substring( 1 ) : result;
-    }
-
-    private String getSqlTypeFromResultSet( ResultSet resultSet ) throws SQLException {
-        String sqlType = resultSet.getString( DATA_TYPE_COLUMN );
-
-        if( JavaType.getBySqlType( sqlType ) == JavaType.STRING ){
-            return sqlType + "(" + resultSet.getString( CHARACTER_MAXIMUM_LENGTH ) + ")";
-        }
-        return sqlType;
-        //TODO добавить для Double
-//        if( JavaType.getBySqlType( sqlType ))
     }
 
     public static String getSPText(){

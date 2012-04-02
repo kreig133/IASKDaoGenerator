@@ -8,6 +8,7 @@ import com.kreig133.daogenerator.common.SourcePathChangeListener;
 import com.kreig133.daogenerator.common.TypeChangeListener;
 import com.kreig133.daogenerator.common.Utils;
 import com.kreig133.daogenerator.db.extractors.Extractor;
+import com.kreig133.daogenerator.db.extractors.QueryPreparator;
 import com.kreig133.daogenerator.db.extractors.in.InputParameterExtractor;
 import com.kreig133.daogenerator.db.extractors.in.SpInputParameterExtractor;
 import com.kreig133.daogenerator.db.extractors.out.OutputParameterExtractor;
@@ -66,6 +67,7 @@ public class Form  implements TypeChangeListener, SourcePathChangeListener{
     private JTextField textField1;
     private JButton button1;
     private JLabel entityPackageLable;
+    private JButton prepareQueryButton;
     private JFrame windowWithText;
 
     private boolean start = true;
@@ -82,10 +84,18 @@ public class Form  implements TypeChangeListener, SourcePathChangeListener{
 
         Settings.settings().addTypeChangeListener( this );
         Settings.settings().addSourcePathChangeListener( this );
+
     }
 
     private void initializingAnalyticTab() {
         queryTextArea.setContentType( "text/sql" );
+
+        prepareQueryButton.addActionListener( new ActionListener() {
+            @Override
+            public void actionPerformed( ActionEvent e ) {
+                queryTextArea.setText( QueryPreparator.instance().prepareQuery( queryTextArea.getText() ) );
+            }
+        } );
 
         getInParamsButton.addActionListener( new ActionListener() {
             @Override

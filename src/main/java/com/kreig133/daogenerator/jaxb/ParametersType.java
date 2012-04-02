@@ -10,15 +10,14 @@ package com.kreig133.daogenerator.jaxb;
 
 import com.google.common.base.Predicate;
 import com.google.common.collect.Iterators;
-import com.google.common.collect.Lists;
 import com.kreig133.daogenerator.files.NamingUtils;
 
-import java.util.*;
 import javax.annotation.Nullable;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlType;
+import java.util.*;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
@@ -144,7 +143,7 @@ public class ParametersType {
             public boolean apply( @Nullable ParameterType input ) {
                 return checkNotNull( input, "Неожиданно NPE в ParametersType" ).getName().equals( name );
             }
-        } ).get();
+        } ).orNull();
     }
     
     public List<Integer> getIndexOfUnnamedParameters() {

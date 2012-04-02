@@ -160,6 +160,12 @@
                     <properties/>
                     <border type="none"/>
                     <children>
+                      <component id="8fddb" class="javax.swing.JButton" binding="prepareQueryButton" default-binding="true">
+                        <constraints/>
+                        <properties>
+                          <text value="Prepare Query"/>
+                        </properties>
+                      </component>
                       <component id="694c4" class="javax.swing.JButton" binding="getInParamsButton" default-binding="true">
                         <constraints/>
                         <properties>

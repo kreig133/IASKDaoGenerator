@@ -1,6 +1,7 @@
 package com.kreig133.daogenerator.db;
 
 import com.kreig133.daogenerator.db.extractors.in.SpInputParameterExtractor;
+import com.kreig133.daogenerator.db.extractors.SqlTypeHelper;
 import com.kreig133.daogenerator.enums.Type;
 import com.kreig133.daogenerator.jaxb.*;
 import com.kreig133.daogenerator.settings.Settings;
@@ -42,7 +43,7 @@ public class StoreProcedureInfoExtractorTest extends SpInputParameterExtractor {
     public void test2() throws SQLException {
         ResultSet rs = Mockito.mock( ResultSet.class );
 
-        Mockito.when( rs.getString( SpInputParameterExtractor.DATA_TYPE_COLUMN ) ).thenReturn( "int" );
+        Mockito.when( rs.getString( SqlTypeHelper.DATA_TYPE_COLUMN ) ).thenReturn( "int" );
         Mockito.when( rs.getString( SpInputParameterExtractor.PARAMETER_NAME_COLUMN ) ).thenReturn( "id" );
         Mockito.when( rs.getString( SpInputParameterExtractor.PARAMETER_MODE ) ).thenReturn( "IN" );
 

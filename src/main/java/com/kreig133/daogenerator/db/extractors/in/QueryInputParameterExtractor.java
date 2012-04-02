@@ -6,6 +6,8 @@ import com.kreig133.daogenerator.jaxb.SelectType;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import static com.kreig133.daogenerator.db.extractors.TableNameHelper.getTableName;
+
 /**
  * @author eshangareev
  * @version 1.0
@@ -19,18 +21,5 @@ abstract public class QueryInputParameterExtractor extends InputParameterExtract
                 type.name().toLowerCase() + type.keyWord() + getTableName( daoMethod )
         );
         return daoMethod;
-    }
-    
-    String tableNameExtractingPatter = "(?isu)%s.*?%s\\s+(dbo\\.)?(\\w+)\\b";
-    
-    private Pattern getPatterForTableNameExtracting( SelectType type) {
-        return Pattern.compile( String.format( tableNameExtractingPatter, type.name(), type.keyWord() ) );
-    }
-            
-    protected String getTableName( DaoMethod daoMethod ) {
-        Matcher matcher = getPatterForTableNameExtracting( daoMethod.getSelectType() ).matcher(
-                daoMethod.getCommon().getQuery()
-        );
-        return matcher.find() ? matcher.group( 2 ) : "";
     }
 }

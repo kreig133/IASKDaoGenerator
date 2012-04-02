@@ -26,13 +26,7 @@ public class SqlQueryParserTest {
         value = "SELECT * FROM tTable WHERE a = ${firstParam;varchar(255);first} AND b = ${second;int;123}}";
     }
 
-    @Language( "SQL" )
-    String query1 = "execute dbo.sp_ValueSearcher18 @id_mode = 2, @b_resident = -1, @id_emitent = NULL, " +
-            "@id_bondkind = NULL, @id_cbbondkind = NULL, @s_shortname = NULL, @s_name = NULL, @s_insidecode = NULL, " +
-            "@s_regnum = NULL, @i_num = NULL, @i2_num = NULL, @d_realdate = '3-22-1990 0:0:0.000', " +
-            "@d2_realdate = '3-22-2000 0:0:0.000', @d_create = NULL, @d2_create = NULL, @s_isonum = NULL," +
-            " @i_rest = NULL, @d_rest = NULL, @id_membauth = NULL, @id_membstore = NULL, @id_status = NULL, " +
-            "@id_user = NULL, @iexternal= -1, @dt_modifiedfrom = NULL, @dt_modifiedto = NULL";
+
 
     String spName2 = " dbo.sp_ValueSearcher18 ";
     String query2 = "     eXecUte    dbo.sp_ValueSearcher18\n @id_mode";
@@ -52,7 +46,7 @@ public class SqlQueryParserTest {
 
     @Test
     public void getStoreProcedureName() {
-        Assert.assertEquals( "sp_ValueSearcher18", Extractor.getStoreProcedureName( query1 ) );
+        Assert.assertEquals( "sp_ValueSearcher18", Extractor.getStoreProcedureName( TestHelper.spCall ) );
         Assert.assertEquals( "sp_ValueSearcher18", Extractor.getStoreProcedureName( query2 ) );
         Assert.assertEquals( "sp_ValueSearcher18", Extractor.getStoreProcedureName( spName2 ) );
     }
@@ -70,7 +64,7 @@ public class SqlQueryParserTest {
         DaoMethod daoMethodForTest = TestHelper.getDaoMethodForTest();
         daoMethodForTest.getInputParametrs().getParameter().clear();
         daoMethodForTest.getInputParametrs().getParameter().addAll( inputParametrs );
-        daoMethodForTest.getCommon().setQuery( query1 );
+        daoMethodForTest.getCommon().setQuery( TestHelper.spCall );
 
         new SpInputParameterExtractor().fillTestValuesByInsertedQuery( daoMethodForTest );
 

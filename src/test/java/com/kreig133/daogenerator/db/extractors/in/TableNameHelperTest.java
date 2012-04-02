@@ -1,6 +1,7 @@
 package com.kreig133.daogenerator.db.extractors.in;
 
 import com.kreig133.daogenerator.TestHelper;
+import com.kreig133.daogenerator.db.extractors.TableNameHelper;
 import com.kreig133.daogenerator.jaxb.DaoMethod;
 import com.kreig133.daogenerator.jaxb.SelectType;
 import org.junit.Assert;
@@ -10,26 +11,18 @@ import org.junit.Test;
  * @author eshangareev
  * @version 1.0
  */
-public class QueryInputParameterExtractorTest extends QueryInputParameterExtractor{
-    @Override
-    public DaoMethod extractInputParams( DaoMethod daoMethod ) {
-        return null;
-    }
-
-    @Override
-    public DaoMethod fillTestValuesByInsertedQuery( DaoMethod daoMethod ) {
-        return null;
-    }
+public class TableNameHelperTest {
 
     @Test
     public void getTableNameTestUpdate(){
         DaoMethod daoMethodForTest = TestHelper.getDaoMethodForTest();
         daoMethodForTest.getCommon().setQuery(
-            "UPDATE   \n\tteSponsor SET sName = :sName, sPart=:sPart, sText=:sText WHERE nRecID = :nRecID"
+            "UPDATE   \n\tteSponsor SET [sName =] :sName, sPart=:sPart, sText=:sText WHERE nRecID = :nRecID"
         );
         daoMethodForTest.getCommon().getConfiguration().setType( SelectType.UPDATE );
-        Assert.assertEquals( getTableName( daoMethodForTest ), "teSponsor" ) ;
+        Assert.assertEquals( TableNameHelper.getTableName( daoMethodForTest ), "teSponsor" ) ;
     }
+
     @Test
     public void getTableNameTestSelect(){
         DaoMethod daoMethodForTest = TestHelper.getDaoMethodForTest();
@@ -40,7 +33,7 @@ public class QueryInputParameterExtractorTest extends QueryInputParameterExtract
                     "          INNER JOIN dbo.tabvalue ON ( dbo.tabvalue.ivalueid = dbo.tabstatebonds.ivalueid )"
         );
         daoMethodForTest.getCommon().getConfiguration().setType( SelectType.SELECT );
-        Assert.assertEquals( getTableName( daoMethodForTest ), "tabstatebonds" ) ;
+        Assert.assertEquals( TableNameHelper.getTableName( daoMethodForTest ), "tabstatebonds" ) ;
     }
     @Test
     public void getTableNameTestDelete(){
@@ -49,7 +42,7 @@ public class QueryInputParameterExtractorTest extends QueryInputParameterExtract
                 "DELETE \tFROM \n   dbo.teSponsor WHERE nRecID = :nRecID"
         );
         daoMethodForTest.getCommon().getConfiguration().setType( SelectType.DELETE );
-        Assert.assertEquals( getTableName( daoMethodForTest ), "teSponsor" ) ;
+        Assert.assertEquals( TableNameHelper.getTableName( daoMethodForTest ), "teSponsor" ) ;
     }
     @Test
     public void getTableNameTestInsert(){
@@ -58,7 +51,6 @@ public class QueryInputParameterExtractorTest extends QueryInputParameterExtract
                 " INSERT INTO tePackRiskChanged ( dDateBegin , nPrizn , nPackId , nCUID , sComment ) VALUES ( ? , ? , ? , ? , ? ) "
         );
         daoMethodForTest.getCommon().getConfiguration().setType( SelectType.INSERT );
-        Assert.assertEquals( getTableName( daoMethodForTest ), "tePackRiskChanged" ) ;
+        Assert.assertEquals( TableNameHelper.getTableName( daoMethodForTest ), "tePackRiskChanged" ) ;
     }
-
 }
