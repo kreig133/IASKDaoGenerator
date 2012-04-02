@@ -26,7 +26,7 @@ public class QueryPreparatorTest extends QueryPreparator {
                     "sDirLName, sDirFName, sDirFatherName, \n" +
                     "sJurPersName, sInvestorCode, idivisiontype ) \n" +
                     "VALUES\n" +
-                    "( 4058335, 1, 'russ', 'eng', \n" +
+                    "( 4058335, 1, 'ru,ss', 'eng', \n" +
                     "'11-29-2011 0:0:0.000', '0002', \n" +
                     "'0003', 'omr', '0001', '000002', \n" +
                     "'000003', '000004', 'ru', 'ki', -1 )";
@@ -79,7 +79,7 @@ public class QueryPreparatorTest extends QueryPreparator {
                         "values(\n" +
                         "\t${iDocInID;int;4058335},\n" +
                         "\t${iGeographyID;int;1},\n" +
-                        "\t${sFullName;varchar(255);russ},\n" +
+                        "\t${sFullName;varchar(255);ru,ss},\n" +
                         "\t'eng',\n" +
                         "\t'11-29-2011 0:0:0.000',\n" +
                         "\t${sOkpoCode;varchar(16);0002},\n" +

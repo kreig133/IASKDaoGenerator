@@ -34,6 +34,8 @@ public class QueryPreparator {
     protected String quotedColumnName = "\"(.+?)\"";
     @Language("RegExp")
     protected String columnNameInBrackets = "\\[(.+?)\\]";
+    @Language( "RegExp" )
+    protected String value = "(?i)(([-\\d\\.]+)|(null)|('.+?'))\\s*[,\\)]";
 
     protected String[] subPatterns = { columnName, quotedColumnName, columnNameInBrackets };
 
@@ -54,16 +56,23 @@ public class QueryPreparator {
     protected String prepareAsInsertQueryIfNeed( String query ) {
         if( Extractor.determineQueryType( query ) != SelectType.INSERT ) return query;
         @Language("RegExp")
-        String regExp = "(?isu)insert\\b\\s*\\binto\\b\\s*.+?\\s*\\((.+?)\\)?\\s*\\bvalues\\b\\s*\\((.+?)\\)";
+        String regExp = "(?isu)insert\\b\\s*\\binto\\b\\s*.+?\\s*\\((.+?)\\)?\\s*\\bvalues\\b\\s*\\((.+?\\))";
         Matcher matcher = Pattern.compile( regExp ).matcher( query );
         if( ! matcher.find() ) {
             throw new RuntimeException( "Ошибка в запросе и/или в генераторе!" );
         }
         if ( matcher.group( 1 ) != null ) {
             String[] columnValues = matcher.group( 1 ).split( "," );
-            String[] testValues = matcher.group( 2 ).split( "," );
 
-            assert columnValues.length == testValues.length;
+            String[] testValues = new String[ columnValues.length ];
+            Matcher matcher1 = Pattern.compile( value ).matcher( matcher.group( 2 ) );
+            int j = 0;
+            for (; matcher1.find();j++ ) {
+                testValues[ j ] = matcher1.group( 1 );
+
+            }
+
+            assert columnValues.length == j;
 
             List<String> columns = new ArrayList<String>();
             for ( int i = 0; i < columnValues.length; i++ ) {
