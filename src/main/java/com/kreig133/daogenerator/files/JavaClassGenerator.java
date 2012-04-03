@@ -215,14 +215,25 @@ abstract public class JavaClassGenerator extends Generator {
             String name,
             @Nullable String parentClassName,
             @Nullable List<String> interfaces
-    ){
-        insertTabs().append( Scope.PUBLIC.value() ).append( " " ).append( classType ).append( " " ).append( name );
+    ) {
+        insertClassDeclaration( classType, name, false, parentClassName, interfaces );
+    }
 
-        if( ! ( parentClassName == null || "".equals( parentClassName.trim() ) ) ){
+    protected void insertClassDeclaration(
+            ClassType classType,
+            String name,
+            boolean _static,
+            @Nullable String parentClassName,
+            @Nullable List<String> interfaces
+    ) {
+        insertTabs().append( Scope.PUBLIC.value() )
+                .append( _static ? " static " : " " ).append( classType ).append( " " ).append( name );
+
+        if ( ! ( parentClassName == null || "".equals( parentClassName.trim() ) ) ) {
             builder.append( " extends " ).append( parentClassName );
         }
 
-        if( interfaces!= null && !interfaces.isEmpty() ) {
+        if ( interfaces != null && ! interfaces.isEmpty() ) {
             builder.append( " implements " );
             builder.append( StringUtils.join( interfaces.iterator(), ", " ) );
         }

@@ -95,7 +95,7 @@ abstract public class ModelClassGenerator extends JavaClassGenerator {
     }
 
     private void generateEnum( List<ParameterType> parameter ) {
-        insertClassDeclaration( ClassType.ENUM, "Fields", null, null );
+        insertClassDeclaration( ClassType.ENUM, "Fields", true,  null, null );
 
         for ( int i = 0 ; i < parameter.size(); i ++ ) {
             insertTabs().append( NamingUtils.convertNameForEnum( parameter.get( i ).getRenameTo() ) ).append( "(" )

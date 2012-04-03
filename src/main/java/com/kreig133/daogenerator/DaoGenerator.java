@@ -2,20 +2,12 @@ package com.kreig133.daogenerator;
 
 import com.kreig133.daogenerator.common.Utils;
 import com.kreig133.daogenerator.files.builder.FileBuilder;
-import com.kreig133.daogenerator.files.builder.MapperFileGenerator;
+import com.kreig133.daogenerator.files.builder.MapperFileBuilder;
 import com.kreig133.daogenerator.files.builder.ParameterClassBuilder;
-import com.kreig133.daogenerator.files.mybatis.model.ModelClassGenerator;
-import com.kreig133.daogenerator.files.mybatis.test.TesterClassGenerator;
 import com.kreig133.daogenerator.gui.Form;
 import com.kreig133.daogenerator.settings.OperationSettings;
-import com.kreig133.daogenerator.enums.Type;
 import com.kreig133.daogenerator.files.Appender;
-import com.kreig133.daogenerator.files.mybatis.InOutClassGenerator;
-import com.kreig133.daogenerator.files.JavaClassGenerator;
-import com.kreig133.daogenerator.files.mybatis.implementation.ImplementationGenerator;
-import com.kreig133.daogenerator.files.mybatis.intrface.InterfaceGenerator;
 import com.kreig133.daogenerator.jaxb.DaoMethod;
-import com.kreig133.daogenerator.jaxb.InOutType;
 import com.kreig133.daogenerator.settings.PropertiesFileController;
 import com.kreig133.daogenerator.settings.Settings;
 import jsyntaxpane.DefaultSyntaxKit;
@@ -105,7 +97,7 @@ public class DaoGenerator {
         // порядок важен! из-за того, что при генерации моделей с Paging'ом
         // обновляются имена у параметров на родительские
         builders.add( ParameterClassBuilder.newInstance() );
-        builders.add( MapperFileGenerator.newInstance() );
+        builders.add( MapperFileBuilder.newInstance() );
 
         Map<File, String> builded = null;
         for ( FileBuilder builder : builders ) {

@@ -6,7 +6,7 @@ import com.kreig133.daogenerator.settings.Settings;
  * @author eshangareev
  * @version 1.0
  */
-abstract public class MapperFileGenerator extends OneClassForOperationFileBuilder {
+abstract public class MapperFileBuilder extends OneClassForOperationFileBuilder {
     public static FileBuilder newInstance() {
         switch ( Settings.settings().getType() ){
             case DEPO:
