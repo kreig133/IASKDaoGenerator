@@ -35,6 +35,18 @@ public class TableNameHelperTest {
         daoMethodForTest.getCommon().getConfiguration().setType( SelectType.SELECT );
         Assert.assertEquals( TableNameHelper.getTableName( daoMethodForTest ), "tabstatebonds" ) ;
     }
+
+    @Test
+    public void getTableNameTestSelect2(){
+        DaoMethod daoMethodForTest = TestHelper.getDaoMethodForTest();
+        daoMethodForTest.getCommon().setQuery(
+                    "SELECT CONVERT ( int , isNull ( svalue , '0' ) ) FROM dbo.t_Depo_setup d " +
+                            "WHERE d.n_Depo_ID is NULL AND d.sContext ='Setup' AND d.sDeclare ='ModeSign'"
+        );
+        daoMethodForTest.getCommon().getConfiguration().setType( SelectType.SELECT );
+        Assert.assertEquals( TableNameHelper.getTableName( daoMethodForTest ), "t_Depo_setup" ) ;
+    }
+
     @Test
     public void getTableNameTestDelete(){
         DaoMethod daoMethodForTest = TestHelper.getDaoMethodForTest();
@@ -44,6 +56,7 @@ public class TableNameHelperTest {
         daoMethodForTest.getCommon().getConfiguration().setType( SelectType.DELETE );
         Assert.assertEquals( TableNameHelper.getTableName( daoMethodForTest ), "teSponsor" ) ;
     }
+
     @Test
     public void getTableNameTestInsert(){
         DaoMethod daoMethodForTest = TestHelper.getDaoMethodForTest();

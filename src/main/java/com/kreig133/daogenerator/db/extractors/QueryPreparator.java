@@ -25,7 +25,7 @@ import static com.kreig133.daogenerator.db.extractors.TableNameHelper.getTableNa
 public class QueryPreparator {
 
     @Language("RegExp")
-    protected String regex = "(?u)%s\\s*=\\s*(('(.+?)')|(\\w+))";
+    protected String regex = "(?u)([\"\\[]?\\w+[\"\\]]?)?%s\\s*=\\s*(('(.+?)')|(\\w+))";
     @Language("RegExp")
     protected String columnName = "\\b([@#\\w&&[\\D]][\\w\\$@#]*)\\b";
     @Language("RegExp")
@@ -132,7 +132,7 @@ public class QueryPreparator {
 
     private String replaceTestVaulesByDaoGeneratorFormatedInfoString( String query, List<ParameterType> result ) {
         for ( ParameterType parameterType : result ) {
-            String pattern = String.format( "(%s.*?)=\\s*(('.+?')|\\w+)", parameterType.getName() );
+            String pattern = String.format( "(?i)(%s.*?)=\\s*(('.+?')|\\w+)", parameterType.getName() );
             String replacement = String.format(
                     "$1= \\${%s;%s;$2}",
                     parameterType.getName(),
@@ -172,8 +172,8 @@ public class QueryPreparator {
         for ( String subPattern : subPatterns ) {
             Matcher matcher = Pattern.compile( String.format( regex, subPattern ) ).matcher( query );
             while ( matcher.find() ) {
-                columnsWithValue.put( matcher.group( 1 ),
-                        matcher.group( 4 ) == null ? matcher.group( 5 ) : matcher.group( 4 ) );
+                columnsWithValue.put( matcher.group( 2 ),
+                        matcher.group( 5 ) == null ? matcher.group( 6 ) : matcher.group( 5 ) );
             }
         }
         return columnsWithValue;

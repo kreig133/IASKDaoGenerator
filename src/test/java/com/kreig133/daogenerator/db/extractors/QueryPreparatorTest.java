@@ -76,6 +76,17 @@ public class QueryPreparatorTest extends QueryPreparator {
                         ")"
         );
     }
+
+    @Test
+    public void prerareQueryTestSelect(){
+        Assert.assertEquals(
+            super.prepareQuery("SELECT CONVERT ( int , isNull ( svalue , '0' ) ) FROM dbo.t_Depo_setup d " +
+                    "WHERE d.n_Depo_ID is NULL AND d.sContext ='Setup' AND d.sDeclare ='ModeSign'"),
+            "SELECT CONVERT ( int , isNull ( svalue , '0' ) ) FROM dbo.t_Depo_setup d " +
+                    "WHERE d.n_Depo_ID is NULL AND d.sContext = ${scontext;varchar(40);Setup} AND d.sDeclare = ${sdeclare;varchar(40);ModeSign}"
+        );
+    }
+
     @Test
     public void prepareQueryTestInsert() {
         Assert.assertEquals(
