@@ -36,6 +36,7 @@ public class TestHelper {
         parameterType.setType           ( JavaType.LONG );
         parameterType.setComment        ( "Тут был Вася" );
         parameterType.setInOut          ( InOutType.OUT );
+        parameterType.setSqlType        ( "numeric(12,2)" );
         parameterType.setDefaultValue   ( "null" );
         parameterType.setRenameTo       ( "newParameterName" );
         parameterType.setName           ( "parameterName" );
@@ -46,6 +47,7 @@ public class TestHelper {
 
         parameterType.setName( "параметр" );
         parameterType.setRenameTo( "параметрКакПараметр" );
+        parameterType.setSqlType( "nchar(10)" );
         parameterType.setType( JavaType.LONG );
         parameterType.setDefaultValue( "123" );
         parameterType.setInOut( InOutType.IN );
@@ -56,6 +58,7 @@ public class TestHelper {
         parameterType.setRenameTo( "одавыолдавылодавыф" );
         parameterType.setInOut( InOutType.IN );
         parameterType.setDefaultValue( "" );
+        parameterType.setSqlType( "nchar(10)" );
         parameterType.setType( JavaType.STRING );
 
         parameter.add( parameterType );

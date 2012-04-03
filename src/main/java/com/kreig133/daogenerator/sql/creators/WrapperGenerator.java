@@ -45,7 +45,7 @@ public class WrapperGenerator extends CommonCallCreator{
         builder.append( "insert into #TempTableForNamedResultSet\n" );
         insertTabs( builder, 1 ).append( "exec " ).append(  daoMethod.getCommon().getSpName() ).append( "\n" );
 
-        insertTabs( builder, 1 ).append( StringUtils.join(
+        insertTabs( builder, 2 ).append( StringUtils.join(
                 Iterators.transform( inputParametrs.iterator(),
                         new Function<ParameterType, String>() {
                             @Override
@@ -58,7 +58,7 @@ public class WrapperGenerator extends CommonCallCreator{
                                 );
                             }
                         }
-                ), ",\n\t"
+                ), ",\n\t\t"
         ) );
 
         builder.append( ";\n" );
