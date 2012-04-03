@@ -33,7 +33,5 @@ public abstract class QueryCreator {
                         parameterType.getJdbcType()
                 ):
                 String.format( "#{%s}", parameterType.getRenameTo() ) ;
-
     }
-
 }
