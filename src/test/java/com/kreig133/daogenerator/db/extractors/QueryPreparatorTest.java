@@ -21,7 +21,7 @@ public class QueryPreparatorTest extends QueryPreparator {
     String insertQuery =
                     "INSERT INTO dbo.t_DocAdmMembers \n" +
                     "( iDocInID, iGeographyID, sFullName, \n" +
-                    "#@!sEngName, #@!dRegDate, sOkpoCode, \n" +
+                    "``sEngName, ``dRegDate, sOkpoCode, \n" +
                     "sINN, sOrgan, sRegNumber, \n" +
                     "sDirLName, sDirFName, sDirFatherName, \n" +
                     "sJurPersName, sInvestorCode, idivisiontype ) \n" +

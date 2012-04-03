@@ -1,7 +1,6 @@
 package com.kreig133.daogenerator.db.extractors;
 
-import com.google.common.base.Predicate;
-import com.google.common.collect.Iterators;
+import com.google.common.base.Preconditions;
 import com.kreig133.daogenerator.db.JDBCConnector;
 import com.kreig133.daogenerator.jaxb.DaoMethod;
 import com.kreig133.daogenerator.jaxb.ParameterType;
@@ -10,7 +9,6 @@ import com.kreig133.daogenerator.jaxb.SelectType;
 import org.apache.commons.lang.StringUtils;
 import org.intellij.lang.annotations.Language;
 
-import javax.annotation.Nullable;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -35,7 +33,7 @@ public class QueryPreparator {
     @Language("RegExp")
     protected String columnNameInBrackets = "\\[(.+?)\\]";
     @Language( "RegExp" )
-    protected String value = "(?i)(([-\\d\\.]+)|(null)|('.+?'))\\s*[,\\)]";
+    protected String testValues = "(?i)(([-\\d\\.]+)|(null)|('.+?'))\\s*[,\\)]";
 
     protected String[] subPatterns = { columnName, quotedColumnName, columnNameInBrackets };
 
@@ -50,7 +48,7 @@ public class QueryPreparator {
         return prepareAsInsertQueryIfNeed( query )
                 .replaceAll( "(\\$\\{.+?;)'(.+?\\})", "$1$2" )
                 .replaceAll( "(\\$\\{.+?)'\\}", "$1}" )
-                .replaceAll( "#@!", "" );
+                .replaceAll( "``", "" );
     }
 
     protected String prepareAsInsertQueryIfNeed( String query ) {
@@ -58,18 +56,16 @@ public class QueryPreparator {
         @Language("RegExp")
         String regExp = "(?isu)insert\\b\\s*\\binto\\b\\s*.+?\\s*\\((.+?)\\)?\\s*\\bvalues\\b\\s*\\((.+?\\))";
         Matcher matcher = Pattern.compile( regExp ).matcher( query );
-        if( ! matcher.find() ) {
-            throw new RuntimeException( "Ошибка в запросе и/или в генераторе!" );
-        }
+        Preconditions.checkState( matcher.find(), "Ошибка в запросе и/или в генераторе!" );
+
         if ( matcher.group( 1 ) != null ) {
             String[] columnValues = matcher.group( 1 ).split( "," );
 
             String[] testValues = new String[ columnValues.length ];
-            Matcher matcher1 = Pattern.compile( value ).matcher( matcher.group( 2 ) );
+            Matcher matcher1 = Pattern.compile( this.testValues ).matcher( matcher.group( 2 ) );
             int j = 0;
             for (; matcher1.find();j++ ) {
                 testValues[ j ] = matcher1.group( 1 );
-
             }
 
             assert columnValues.length == j;
