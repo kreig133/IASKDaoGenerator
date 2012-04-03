@@ -4,6 +4,7 @@ import com.google.common.collect.Lists;
 import com.kreig133.daogenerator.common.Utils;
 import com.kreig133.daogenerator.db.JBDCTypeIdConverter;
 import com.kreig133.daogenerator.db.extractors.Extractor;
+import com.kreig133.daogenerator.db.extractors.SqlTypeHelper;
 import com.kreig133.daogenerator.jaxb.*;
 
 import java.sql.*;
@@ -48,8 +49,8 @@ public abstract class OutputParameterExtractor extends Extractor{
                 for ( int i = 1; i <= metaData.getColumnCount(); i++ ) {
                     final ParameterType parameterType = new ParameterType();
                     parameterType.setName( metaData.getColumnName( i ) );
-                    parameterType.setRenameTo( Utils. convertPBNameToName( parameterType.getName() ) );
-                    parameterType.setSqlType( metaData.getColumnTypeName( i ) );
+                    parameterType.setRenameTo( Utils.convertPBNameToName( parameterType.getName() ) );
+                    parameterType.setSqlType( SqlTypeHelper.getSqlTypeFromResultSet( metaData, i ) );
                     parameterType.setType( JavaType.getBySqlType( metaData.getColumnTypeName( i ) ) );
 
                     parameterTypes.add( parameterType );
