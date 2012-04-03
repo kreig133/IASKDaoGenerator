@@ -167,7 +167,7 @@
         <xsl:param name="testValue" as="xs:string"/>
         
         <xsl:choose>
-            <xsl:when test="$testValue=null">
+            <xsl:when test="$testValue='null'">
                 <xsl:text>NULL</xsl:text>
             </xsl:when>
             <xsl:when test="$type='String' or $type='Date'">
