@@ -34,6 +34,9 @@ public class QueryPreparator {
     protected String columnNameInBrackets = "\\[(.+?)\\]";
     @Language( "RegExp" )
     protected String testValues = "(?i)(([-\\d\\.]+)|(null)|('.+?'))\\s*[,\\)]";
+    @Language("RegExp")
+    protected String insertRE =
+            "(?isu)insert\\b\\s*\\binto\\b\\s*.+?\\s*(\\(\\s*(.+?)\\s*\\))?\\s*\\bvalues\\b\\s*\\((.+?\\))";
 
     protected String[] subPatterns = { columnName, quotedColumnName, columnNameInBrackets };
 
@@ -52,64 +55,79 @@ public class QueryPreparator {
     }
 
     protected String prepareAsInsertQueryIfNeed( String query ) {
+
         if( Extractor.determineQueryType( query ) != SelectType.INSERT ) return query;
-        @Language("RegExp")
-        String regExp = "(?isu)insert\\b\\s*\\binto\\b\\s*.+?\\s*\\((.+?)\\)?\\s*\\bvalues\\b\\s*\\((.+?\\))";
-        Matcher matcher = Pattern.compile( regExp ).matcher( query );
+
+        Matcher matcher = Pattern.compile( insertRE ).matcher( query );
+
         Preconditions.checkState( matcher.find(), "Ошибка в запросе и/или в генераторе!" );
 
-        if ( matcher.group( 1 ) != null ) {
-            String[] columnValues = matcher.group( 1 ).split( "," );
+        String columnNamesString = matcher.group( 2 );
+        String[] testValues = getTestValues( matcher.group( 3 ) );
+        if ( columnNamesString != null ) {
+            String[] columnNames = columnNamesString.split( "\\s*,\\s*" );
 
-            String[] testValues = new String[ columnValues.length ];
-            Matcher matcher1 = Pattern.compile( this.testValues ).matcher( matcher.group( 2 ) );
-            int j = 0;
-            for (; matcher1.find();j++ ) {
-                testValues[ j ] = matcher1.group( 1 );
-            }
-
-            assert columnValues.length == j;
+            assert columnNames.length == testValues.length;
 
             List<String> columns = new ArrayList<String>();
-            for ( int i = 0; i < columnValues.length; i++ ) {
-                testValues[ i ] = testValues[ i ].trim();
-                columnValues[ i ] = columnValues[ i ].trim();
-                String input = columnValues[ i ];
+            for ( int i = 0; i < columnNames.length; i++ ) {
+                String input = columnNames[ i ];
 
                 if ( input.matches( quotedColumnName ) || input.matches( columnNameInBrackets ) ) {
-                    columnValues[ i ] = input.substring( 1, input.length() - 1 );
-                    columns.add( columnValues[ i ] );
+                    columnNames[ i ] = input.substring( 1, input.length() - 1 );
+                    columns.add( columnNames[ i ] );
                 }
                 if ( input.matches( columnName ) ) {
                     columns.add( input );
                 }
             }
-
             List<ParameterType> actualParamterList = getActualParameterList(
                     columns.iterator(),
                     getColumnsFromDbByTableName( getTableName( query ) )
             );
 
-            assert actualParamterList.size() <= columnValues.length;
+            assert actualParamterList.size() <= columnNames.length;
 
-            for ( int i = 0; i < columnValues.length; i++ ) {
-                String columnValue = columnValues[ i ];
+            for ( int i = 0; i < columnNames.length; i++ ) {
+                String columnName = columnNames[ i ];
                 ParameterType parameterByName =
-                        ParametersType.getParameterByName( columnValue.trim(), actualParamterList );
+                        ParametersType.getParameterByName( columnName, actualParamterList );
                 if ( parameterByName != null ) {
-                    testValues[ i ] = String.format( "\\${%s;%s;%s}",
-                            parameterByName.getName(),
-                            parameterByName.getSqlType(),
-                            testValues[ i ].trim()
-                    );
+                    testValues[ i ] = formatTestValue( testValues[ i ], parameterByName );
                 }
             }
+        } else {
+            List<ParameterType> columnsFromDbByTableName = getColumnsFromDbByTableName( getTableName( query ) );
 
-            String join = StringUtils.join( testValues, ",\n\t" );
+            assert testValues.length == columnsFromDbByTableName.size();
 
-            return query.replaceAll( "(?isu)\\bvalues\\b\\s*\\((.+?)\\)", String.format( "values(\n\t%s\n)", join ) );
+            for ( int i = 0; i < testValues.length; i++ ) {
+                testValues[ i ] = formatTestValue( testValues[ i ], columnsFromDbByTableName.get( i ) );
+            }
         }
-        throw new RuntimeException( "ДОДЕЛАТЬ БЫ НАДО БЫ!!" ); //TODO
+        String join = StringUtils.join( testValues, ",\n\t" );
+
+        return query.replaceAll( "(?isu)\\bvalues\\b\\s*\\((.+?)\\)", String.format( "values(\n\t%s\n)", join ) );
+    }
+
+    private String formatTestValue( String testValue, ParameterType parameterByName ) {
+        return String.format( "\\${%s;%s;%s}",
+                parameterByName.getName(),
+                parameterByName.getSqlType(),
+                testValue
+        );
+    }
+
+    private String[] getTestValues( String string ) {
+        List<String> testValueList = new ArrayList<String>();
+        Matcher testValuesMatcher = Pattern.compile( this.testValues ).matcher( string );
+        while ( testValuesMatcher.find() ) {
+            testValueList.add( testValuesMatcher.group( 1 ) );
+        }
+        String[] testValues = new String[ testValueList.size() ];
+        testValueList.toArray( testValues );
+
+        return testValues;
     }
 
     private String replaceTestVaulesByDaoGeneratorFormatedInfoString( String query, List<ParameterType> result ) {

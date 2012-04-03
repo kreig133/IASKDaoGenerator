@@ -21,8 +21,8 @@ public class QueryPreparatorTest extends QueryPreparator {
     String insertQuery =
                     "INSERT INTO dbo.t_DocAdmMembers \n" +
                     "( iDocInID, iGeographyID, sFullName, \n" +
-                    "``sEngName, ``dRegDate, sOkpoCode, \n" +
-                    "sINN, sOrgan, sRegNumber, \n" +
+                    "``sEngName, ``dRegDate, \"sOkpoCode\", \n" +
+                    "sINN, [sOrgan], sRegNumber, \n" +
                     "sDirLName, sDirFName, sDirFatherName, \n" +
                     "sJurPersName, sInvestorCode, idivisiontype ) \n" +
                     "VALUES\n" +
@@ -67,13 +67,23 @@ public class QueryPreparatorTest extends QueryPreparator {
     }
 
     @Test
+    public void prepareQueryTestInsertWithoutColumnList() {
+        Assert.assertEquals(
+                super.prepareQuery( "INSERT INTO OpsJourn VALUES ( 1, 1 )" ),
+                "INSERT INTO OpsJourn values(\n" +
+                        "\t${iInstrOpsID;int;1},\n" +
+                        "\t${iOrderID;int;1}\n" +
+                        ")"
+        );
+    }
+    @Test
     public void prepareQueryTestInsert() {
         Assert.assertEquals(
                 super.prepareQuery( insertQuery ),
                 "INSERT INTO dbo.t_DocAdmMembers \n" +
                         "( iDocInID, iGeographyID, sFullName, \n" +
-                        "sEngName, dRegDate, sOkpoCode, \n" +
-                        "sINN, sOrgan, sRegNumber, \n" +
+                        "sEngName, dRegDate, \"sOkpoCode\", \n" +
+                        "sINN, [sOrgan], sRegNumber, \n" +
                         "sDirLName, sDirFName, sDirFatherName, \n" +
                         "sJurPersName, sInvestorCode, idivisiontype ) \n" +
                         "values(\n" +
