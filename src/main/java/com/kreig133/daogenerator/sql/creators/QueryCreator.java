@@ -17,7 +17,9 @@ public abstract class QueryCreator {
 
     public static QueryCreator newInstance( DaoMethod daoMethod ){
         if( daoMethod.getSelectType() == SelectType.CALL ){
-            //TODO проверить, что не нужна обертка
+            if( daoMethod.getOutputParametrs().getIndexOfUnnamedParameters().size() > 1 ) {
+                return new WrapperGenerator();
+            }
             return  new ProcedureCallCreator();
         }
         

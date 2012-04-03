@@ -92,12 +92,6 @@ public class DepoMappingGenerator extends MappingGenerator{
         }
 
         generateNameMapping( daoMethod );
-
-        final List<Integer> indexOfUnnamedParameters = daoMethod.getOutputParametrs().getIndexOfUnnamedParameters();
-
-        if( ! indexOfUnnamedParameters.isEmpty() && indexOfUnnamedParameters.size() > 1 ) {
-            throw new RuntimeException( "Не реализованная функциональность!" );
-        }
     }
 
     private void generateNameMapping( DaoMethod daoMethod ) {
