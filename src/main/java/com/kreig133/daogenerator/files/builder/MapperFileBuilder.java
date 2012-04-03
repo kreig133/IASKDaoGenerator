@@ -10,7 +10,7 @@ abstract public class MapperFileBuilder extends OneClassForOperationFileBuilder 
     public static FileBuilder newInstance() {
         switch ( Settings.settings().getType() ){
             case DEPO:
-                return new DepoMapperFileGenerator();
+                return new DepoMapperFileBuilder();
             default:
                 throw new IllegalArgumentException( "Не реализовано" );
         }

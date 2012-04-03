@@ -10,7 +10,7 @@ import java.util.List;
  * @author eshangareev
  * @version 1.0
  */
-public class DepoMapperFileGenerator extends OneClassForOperationFileBuilder {
+public class DepoMapperFileBuilder extends OneClassForOperationFileBuilder {
     @Override
     protected void prepareBuilder( List<DaoMethod> daoMethod ) {
         generators.add( DepoMappingGenerator.instance() );

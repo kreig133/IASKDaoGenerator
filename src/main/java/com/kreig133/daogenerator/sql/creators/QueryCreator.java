@@ -19,7 +19,6 @@ public abstract class QueryCreator {
         if( daoMethod.getSelectType() == SelectType.CALL ){
             //TODO проверить, что не нужна обертка
             return  new ProcedureCallCreator();
-
         }
         
         return new SelectQueryCreator();
@@ -27,13 +26,14 @@ public abstract class QueryCreator {
 
     protected String getEscapedParamName( ParameterType parameterType, boolean fullFormat ){
         return fullFormat ?
-                String.format( "#{%s}", parameterType.getRenameTo() ) :
                 String.format(
                         "#{%s, mode=%s, jdbcType=%s}",
-                            parameterType.getRenameTo(),
-                            parameterType.getInOut(),
-                            parameterType.getJdbcType()
-                ) ;
+                        parameterType.getRenameTo(),
+                        parameterType.getInOut(),
+                        parameterType.getJdbcType()
+                ):
+                String.format( "#{%s}", parameterType.getRenameTo() ) ;
+
     }
 
 }
