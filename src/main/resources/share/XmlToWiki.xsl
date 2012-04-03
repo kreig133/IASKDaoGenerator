@@ -89,8 +89,8 @@
         </xsl:if>
         <xsl:text>----&#xA;</xsl:text>
         <xsl:if test="not( not( //apl:configuration/@type = 'CALL' ) and count(//apl:inputParametrs/apl:parameter) = 0)">
-            <xsl:text> {expand:title=Пример выполнения}</xsl:text>
-            <xsl:text> {code:language=sql}</xsl:text>
+            <xsl:text>{expand:title=Пример выполнения}&#xA;</xsl:text>
+            <xsl:text>{code:language=sql}&#xA;</xsl:text>
             <xsl:choose>
                 <xsl:when test="//apl:configuration/@type = 'CALL'">
                     <xsl:text>execute dbo.</xsl:text>
