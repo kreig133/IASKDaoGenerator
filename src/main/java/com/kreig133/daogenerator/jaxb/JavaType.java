@@ -71,7 +71,7 @@ public enum JavaType {
         linkJavaTypeWithAliases( LONG   , "int", "byte", "long", "smallint", "tinyint", "bigint" );
         linkJavaTypeWithAliases( BYTE   , "bit", "varbinary" /*TODO костыль*/ );
         linkJavaTypeWithAliases( DATE   , "datetime" );
-        linkJavaTypeWithAliases( STRING , "string", "varchar", "char", "nvarchar", "text" );
+        linkJavaTypeWithAliases( STRING , "string", "varchar", "char", "nvarchar", "text", "nchar" );
         linkJavaTypeWithAliases( DOUBLE , "decimal", "numeric" );
     }
 
