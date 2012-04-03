@@ -126,8 +126,12 @@ public class SpInputParameterExtractor extends InputParameterExtractor {
 
         String storeProcedureDefinition = getDefinitionFormSpText( spText );
         for ( ParameterType parameterType : result ) {
-            parameterType.setDefaultValue( SelectInputParameterExtractor.instance().
-                    getParameterValueFromQuery( parameterType, storeProcedureDefinition ) );
+            String parameterValueFromQuery =
+                    SelectInputParameterExtractor.instance().
+                    getParameterValueFromQuery( parameterType, storeProcedureDefinition );
+            if ( ! NOT_FOUNDED.equals( parameterValueFromQuery ) ) {
+                parameterType.setDefaultValue( parameterValueFromQuery );
+            }
             fillComments( parameterType, storeProcedureDefinition );
             parameterType.setTestValue(
                     parameterType.getDefaultValue() == null || "".equals( parameterType.getDefaultValue() ) ?
@@ -148,7 +152,12 @@ public class SpInputParameterExtractor extends InputParameterExtractor {
         if( ! Utils.stringContainsMoreThanOneWord( query ) ) return daoMethod;
 
         for ( ParameterType inputParametr : inputParametrs ) {
-            inputParametr.setTestValue( getParameterValueFromQuery( inputParametr, query ) );
+            String parameterValueFromQuery = getParameterValueFromQuery( inputParametr, query );
+            inputParametr.setTestValue(
+                    NOT_FOUNDED.equals( parameterValueFromQuery ) ?
+                            inputParametr.getDefaultValue() :
+                            parameterValueFromQuery
+            );
         }
         return daoMethod;
     }

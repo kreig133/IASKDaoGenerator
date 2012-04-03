@@ -14,6 +14,7 @@ import java.util.regex.Pattern;
 abstract public class InputParameterExtractor extends Extractor{
 
     public static final String NULL = "null";
+    public static final String NOT_FOUNDED = "~`12!@";
 
     public abstract DaoMethod extractInputParams( DaoMethod daoMethod );
 
@@ -63,7 +64,7 @@ abstract public class InputParameterExtractor extends Extractor{
         if ( getNullPatternForParameter( type.getName() ).matcher( query ).find() ){
             return NULL;
         }
-        return matcher.find() ? matcher.group( 1 ) : "";
+        return matcher.find() ? matcher.group( 1 ) : NOT_FOUNDED;
     }
 
     private Pattern getStringPatternForParameter( String name ) {
