@@ -28,6 +28,7 @@ final public class OperationSettingsImpl implements OperationSettings{
     private String PROJECT_FOLDER = "";
     private int    FRAME_WIDHT = 1200;
     private int    FRAME_HEIGHT = 800;
+    private String LAST_DIRECTORY = "C:\\";
 
     @Override
     public Type getType() {
@@ -170,5 +171,15 @@ final public class OperationSettingsImpl implements OperationSettings{
     @Override
     public void setProjectFolder( String projectFolder ) {
         PROJECT_FOLDER = projectFolder;
+    }
+
+    @Override
+    public String getLastDirectory() {
+        return LAST_DIRECTORY;
+    }
+
+    @Override
+    public void setLastDirectory( String lastDirectory ) {
+        LAST_DIRECTORY = lastDirectory;
     }
 }

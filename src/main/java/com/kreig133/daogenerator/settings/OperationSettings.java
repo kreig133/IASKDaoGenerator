@@ -56,4 +56,8 @@ public interface OperationSettings {
     String getProjectFolder();
 
     void setProjectFolder( String projectFolder );
+
+    String getLastDirectory();
+
+    public void setLastDirectory( String lastDirectory );
 }

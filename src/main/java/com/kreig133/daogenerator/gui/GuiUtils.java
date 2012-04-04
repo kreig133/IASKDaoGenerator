@@ -1,6 +1,9 @@
 package com.kreig133.daogenerator.gui;
 
+import com.kreig133.daogenerator.settings.Settings;
+
 import javax.swing.*;
+import java.awt.*;
 import java.io.File;
 
 /**
@@ -9,7 +12,7 @@ import java.io.File;
  */
 public class GuiUtils {
 
-    private static final JFileChooser jFileChooser = new JFileChooser();
+    private static final JFileChooser jFileChooser = new DaoGenFileChooser();
 
     static {
         jFileChooser.setMultiSelectionEnabled( false );
@@ -19,5 +22,22 @@ public class GuiUtils {
 
     public static JFileChooser getFileChooser(){
         return jFileChooser;
+    }
+
+    private static class DaoGenFileChooser extends JFileChooser{
+        @Override
+        public int showOpenDialog( Component parent ) throws HeadlessException {
+            setSelectedFile( new File( Settings.settings().getLastDirectory() ) );
+            int i = super.showOpenDialog( parent );
+            Settings.settings().setLastDirectory( getSelectedFile().getAbsolutePath() );
+            return i;
+        }
+        @Override
+        public int showSaveDialog( Component parent ) throws HeadlessException {
+            setSelectedFile( new File( Settings.settings().getLastDirectory() ) );
+            int i = super.showSaveDialog( parent );
+            Settings.settings().setLastDirectory( getSelectedFile().getAbsolutePath() );
+            return i;
+        }
     }
 }

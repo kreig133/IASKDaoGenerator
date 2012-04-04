@@ -33,6 +33,7 @@ public class Settings {
     public static final String MAPPING_PACKAGE = "mappingPackage";
     public static final String IASK = "iask";
     public static final String DEPO = "depo";
+    public static final String LAST_DIRECTORY = "lastDirectory";
     public static final String PROJECT_FOLDER = "home";
 
 
@@ -62,6 +63,7 @@ public class Settings {
 
         properties.setProperty( SOURCE_DIR          , operationSettings.getSourcePath() );
         properties.setProperty( PROJECT_FOLDER      , operationSettings.getProjectFolder() );
+        properties.setProperty( LAST_DIRECTORY      , operationSettings.getLastDirectory() );
 
         PropertiesFileController.saveCommonProperties( properties );
 
@@ -77,6 +79,7 @@ public class Settings {
         settings().setEntityPackage( properties.getProperty( ENTITY_PACKAGE,    settings().getEntityPackage() ) );
         settings().setMapperPackage( properties.getProperty( MAPPING_PACKAGE,   settings().getMapperPackage() ) );
         settings().setProjectFolder( properties.getProperty( PROJECT_FOLDER,    settings().getProjectFolder() ) );
+        settings().setProjectFolder( properties.getProperty( LAST_DIRECTORY,    settings().getLastDirectory() ) );
         settings().setOutputPathForJavaClasses(
                 properties.getProperty( DEST_DIR, settings().getOutputPathForJavaClasses() )
         );
