@@ -148,7 +148,7 @@
                 </xsl:call-template>
             </xsl:when>
             <xsl:otherwise>
-                <xsl:value-of select="$query"/>
+                <xsl:value-of select="$newQuery"/>
             </xsl:otherwise>
         </xsl:choose>
     </xsl:template>
