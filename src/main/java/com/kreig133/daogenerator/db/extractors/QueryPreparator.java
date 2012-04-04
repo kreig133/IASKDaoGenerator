@@ -24,8 +24,12 @@ import static com.kreig133.daogenerator.db.extractors.TableNameHelper.getTableNa
  */
 public class QueryPreparator {
 
+    @Language( "RegExp" )
+    protected String testValues = "(([-\\d\\.]+)|(null)|('.+?'))";
     @Language("RegExp")
-    protected String regex = "(?u)([\"\\[]?\\w+[\"\\]]?)?%s\\s*=\\s*(('(.+?)')|(\\w+))";
+    protected String regex = "(?u)([\"\\[]?\\w+[\"\\]]?)?%s\\s*=\\s*" + testValues;
+    @Language( "RegExp" )
+    private String castRegExp = "(?isu)(%s\\s*=.*?)\\bcast\\s*\\(\\s*"+testValues+"\\s*as\\s*(\\w+)\\s*\\)";
     @Language("RegExp")
     protected String columnName = "\\b([@#\\w&&[\\D]][\\w\\$@#]*)\\b";
     @Language("RegExp")
@@ -33,11 +37,11 @@ public class QueryPreparator {
     @Language("RegExp")
     protected String columnNameInBrackets = "\\[(.+?)\\]";
     @Language( "RegExp" )
-    protected String testValues = "(?i)(([-\\d\\.]+)|(null)|('.+?'))\\s*[,\\)]";
+    protected String testValuesInInsert = "(?i)"+ testValues + "\\s*[,\\)]";
+
     @Language("RegExp")
     protected String insertRE =
             "(?isu)insert\\b\\s*\\binto\\b\\s*.+?\\s*(\\(\\s*(.+?)\\s*\\))?\\s*\\bvalues\\b\\s*\\((.+?\\))";
-
     protected String[] subPatterns = { columnName, quotedColumnName, columnNameInBrackets };
 
     public String prepareQuery( String query ) {
@@ -48,10 +52,24 @@ public class QueryPreparator {
 
         query = replaceTestVaulesByDaoGeneratorFormatedInfoString( query, result );
 
-        return prepareAsInsertQueryIfNeed( query )
+        return prepareCast( prepareAsInsertQueryIfNeed( query ) )
                 .replaceAll( "(\\$\\{.+?;)'(.+?\\})", "$1$2" )
                 .replaceAll( "(\\$\\{.+?)'\\}", "$1}" )
                 .replaceAll( "``", "" );
+    }
+
+    protected String prepareCast( String s ) {
+        String newQuery = s;
+        for ( String subPattern : subPatterns ) {
+            String format = String.format( castRegExp, subPattern );
+            Matcher matcher = Pattern.compile( format ).matcher( s );
+            while ( matcher.find() ) {
+                newQuery = newQuery.replaceAll(
+                        format,
+                        String.format("$1\\${$2;$7;$3}" ) );
+            }
+        }
+        return newQuery;
     }
 
     protected String prepareAsInsertQueryIfNeed( String query ) {
@@ -120,7 +138,7 @@ public class QueryPreparator {
 
     private String[] getTestValues( String string ) {
         List<String> testValueList = new ArrayList<String>();
-        Matcher testValuesMatcher = Pattern.compile( this.testValues ).matcher( string );
+        Matcher testValuesMatcher = Pattern.compile( this.testValuesInInsert ).matcher( string );
         while ( testValuesMatcher.find() ) {
             testValueList.add( testValuesMatcher.group( 1 ) );
         }
@@ -132,7 +150,7 @@ public class QueryPreparator {
 
     private String replaceTestVaulesByDaoGeneratorFormatedInfoString( String query, List<ParameterType> result ) {
         for ( ParameterType parameterType : result ) {
-            String pattern = String.format( "(?i)(%s.*?)=\\s*(('.+?')|\\w+)", parameterType.getName() );
+            String pattern = String.format( "(?i)(%s.*?)=\\s*"+testValues, parameterType.getName() );
             String replacement = String.format(
                     "$1= \\${%s;%s;$2}",
                     parameterType.getName(),

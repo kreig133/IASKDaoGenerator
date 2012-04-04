@@ -34,7 +34,7 @@ public class QueryPreparatorTest extends QueryPreparator {
     @Language( "SQL" )
     String updateQuery = "UPDATE t_Depo \n" +
             "SET \"nflreport\" = 1 \n" +
-            "WHERE [nflreport] = 0 AND n_DEPO_id = '614'";
+            "WHERE [nflreport] = 0 AND n_DEPO_id = null";
 
     @Before
     public void before(){
@@ -62,7 +62,7 @@ public class QueryPreparatorTest extends QueryPreparator {
                 super.prepareQuery( updateQuery ),
                 "UPDATE t_Depo \n" +
                         "SET \"nflreport\" = ${nflreport;int;1} \n" +
-                        "WHERE [nflreport] = ${nflreport;int;0} AND n_DEPO_id = ${n_DEPO_id;int;614}"
+                        "WHERE [nflreport] = ${nflreport;int;0} AND n_DEPO_id = ${n_DEPO_id;int;null}"
         );
     }
 
@@ -84,6 +84,37 @@ public class QueryPreparatorTest extends QueryPreparator {
                     "WHERE d.n_Depo_ID is NULL AND d.sContext ='Setup' AND d.sDeclare ='ModeSign'"),
             "SELECT CONVERT ( int , isNull ( svalue , '0' ) ) FROM dbo.t_Depo_setup d " +
                     "WHERE d.n_Depo_ID is NULL AND d.sContext = ${scontext;varchar(40);Setup} AND d.sDeclare = ${sdeclare;varchar(40);ModeSign}"
+        );
+    }
+
+    @Test
+    public void prerareQueryTestWithCast(){
+        Assert.assertEquals(
+                super.prepareQuery( "select s_depo_name, \n" +
+                        "s_depo_divname \n" +
+                        "from dbo.t_depo \n" +
+                        "where n_depo_id = CAST(0 AS INT)" ),
+                "select s_depo_name, \n" +
+                        "s_depo_divname \n" +
+                        "from dbo.t_depo \n" +
+                        "where n_depo_id = ${n_depo_id;INT;0}"
+        );
+    }
+    @Test
+    public void prerareQueryTestSelectWithConstant(){
+        Assert.assertEquals(
+            super.prepareQuery("SELECT dbo.tabValue.sshortname, \n" +
+                    "dbo.tabStateBonds.sRegNumber \n" +
+                    "FROM dbo.tabStateBonds, \n" +
+                    "dbo.tabValue \n" +
+                    "WHERE dbo.tabvalue.ivalueid = dbo.tabStateBonds.iValueId and \n" +
+                    "dbo.tabStateBonds.iValueId = 6295"),
+            "SELECT dbo.tabValue.sshortname, \n" +
+                    "dbo.tabStateBonds.sRegNumber \n" +
+                    "FROM dbo.tabStateBonds, \n" +
+                    "dbo.tabValue \n" +
+                    "WHERE dbo.tabvalue.ivalueid = dbo.tabStateBonds.iValueId and \n" +
+                    "dbo.tabStateBonds.iValueId = ${iValueID;int;6295}"
         );
     }
 
