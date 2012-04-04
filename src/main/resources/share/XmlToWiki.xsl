@@ -81,6 +81,8 @@
                 <xsl:text>| </xsl:text>
                 <xsl:value-of select="@name"/>
                 <xsl:text>| </xsl:text>
+                <xsl:value-of select="@renameTo" />
+                <xsl:text>| </xsl:text>
                 <xsl:value-of select="@sqlType"/>
                 <xsl:text>| </xsl:text>
                 <xsl:value-of select="@comment"/>
