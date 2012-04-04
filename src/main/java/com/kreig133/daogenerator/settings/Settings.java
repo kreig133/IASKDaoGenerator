@@ -79,7 +79,7 @@ public class Settings {
         settings().setEntityPackage( properties.getProperty( ENTITY_PACKAGE,    settings().getEntityPackage() ) );
         settings().setMapperPackage( properties.getProperty( MAPPING_PACKAGE,   settings().getMapperPackage() ) );
         settings().setProjectFolder( properties.getProperty( PROJECT_FOLDER,    settings().getProjectFolder() ) );
-        settings().setProjectFolder( properties.getProperty( LAST_DIRECTORY,    settings().getLastDirectory() ) );
+        settings().setLastDirectory( properties.getProperty( LAST_DIRECTORY,    settings().getLastDirectory() ) );
         settings().setOutputPathForJavaClasses(
                 properties.getProperty( DEST_DIR, settings().getOutputPathForJavaClasses() )
         );
