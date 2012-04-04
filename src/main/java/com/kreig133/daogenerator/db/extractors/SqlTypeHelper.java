@@ -50,7 +50,7 @@ public class SqlTypeHelper {
 
             if( isStringWithPrecision( sqlType ) ) {
                 return String.format( "%s(%s)",
-                        sqlType, metaData.getScale( index ) );
+                        sqlType, metaData.getPrecision( index ) );
             }
 
             if ( isDouble( sqlType ) ) {
