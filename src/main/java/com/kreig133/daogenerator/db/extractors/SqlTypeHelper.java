@@ -39,7 +39,7 @@ public class SqlTypeHelper {
     }
 
     private static boolean isDouble( String sqlType ) {
-        return JavaType.getBySqlType( sqlType ) == JavaType.DOUBLE;
+        return JavaType.getBySqlType( sqlType ) == JavaType.DOUBLE && !sqlType.equalsIgnoreCase( "money" );
     }
 
     public static String getSqlTypeFromResultSet( ResultSetMetaData metaData, int index )  {

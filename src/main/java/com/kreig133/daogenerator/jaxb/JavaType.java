@@ -72,7 +72,7 @@ public enum JavaType {
         linkJavaTypeWithAliases( BYTE   , "bit", "varbinary" /*TODO костыль*/ );
         linkJavaTypeWithAliases( DATE   , "datetime" );
         linkJavaTypeWithAliases( STRING , "string", "varchar", "char", "nvarchar", "text", "nchar" );
-        linkJavaTypeWithAliases( DOUBLE , "decimal", "numeric" );
+        linkJavaTypeWithAliases( DOUBLE , "decimal", "numeric", "money" );
     }
 
     public static JavaType getBySqlType( String type ) {
