@@ -24,6 +24,10 @@ import static com.kreig133.daogenerator.db.extractors.TableNameHelper.getTableNa
  */
 public class QueryPreparator {
 
+    protected enum WorkingMode{
+        VALUE, NAME
+    }
+
     @Language( "RegExp" )
     protected String testValues = "(([-\\d\\.]+)|(null)|('.+?'))";
     @Language("RegExp")
@@ -38,24 +42,50 @@ public class QueryPreparator {
     protected String columnNameInBrackets = "\\[(.+?)\\]";
     @Language( "RegExp" )
     protected String testValuesInInsert = "(?i)"+ testValues + "\\s*[,\\)]";
-
     @Language("RegExp")
     protected String insertRE =
             "(?isu)insert\\b\\s*\\binto\\b\\s*.+?\\s*(\\(\\s*(.+?)\\s*\\))?\\s*\\bvalues\\b\\s*\\((.+?\\))";
     protected String[] subPatterns = { columnName, quotedColumnName, columnNameInBrackets };
 
     public String prepareQuery( String query ) {
+        String result;
+        if( determineWorkingMode( query ) == WorkingMode.VALUE ) {
+            result = prepareQueryValueMode( query );
+        } else {
+            result = prepareQueryNameMode ( query );
+        }
+        return result
+                .replaceAll( "(\\$\\{.+?;)'(.+?\\})", "$1$2" )
+                .replaceAll( "(\\$\\{.+?)'\\}", "$1}" )
+                .replaceAll( "``", "" );
+    }
+
+    private String prepareQueryNameMode( String query ) {
+        @Language("RegExp")
+        String regExp = "(?s):\\w+\\b";
+
+        return query;
+    }
+
+    private String prepareQueryValueMode( String query ) {
         List<ParameterType> result = getActualParameterList(
                 getColumnsFromQuery( query ).keySet().iterator(),
                 getColumnsFromDbByTableName( getTableName( query ) )
         );
-
         query = replaceTestVaulesByDaoGeneratorFormatedInfoString( query, result );
 
-        return prepareCast( prepareAsInsertQueryIfNeed( query ) )
-                .replaceAll( "(\\$\\{.+?;)'(.+?\\})", "$1$2" )
-                .replaceAll( "(\\$\\{.+?)'\\}", "$1}" )
-                .replaceAll( "``", "" );
+        return prepareCast( prepareAsInsertQueryIfNeed( query ) );
+    }
+
+    protected WorkingMode determineWorkingMode( String query ) {
+        int colonCountInsideQuote = 0;
+        int colonCountTotal = StringUtils.countMatches( query, ":" );
+        Matcher matcher = Pattern.compile( "['\"\\[].*?(:.*?)['\"\\]]" ).matcher( query );
+        while ( matcher.find() ){
+            colonCountInsideQuote += StringUtils.countMatches( matcher.group( 1 ), ":" );
+        }
+
+        return colonCountInsideQuote < colonCountTotal ? WorkingMode.NAME : WorkingMode.VALUE;
     }
 
     protected String prepareCast( String s ) {

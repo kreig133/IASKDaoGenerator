@@ -148,5 +148,11 @@ public class QueryPreparatorTest extends QueryPreparator {
         );
     }
 
+    @Test
+    public void determineWorkingModeTest(){
+        String query = "'fasdaf:asdfas', \"fa::::::dsfasf\", [dfasd:adsf:::]";
+        Assert.assertEquals( determineWorkingMode( query ), WorkingMode.VALUE );
+        Assert.assertEquals( determineWorkingMode( query + ":" ), WorkingMode.NAME );
+    }
 
 }
