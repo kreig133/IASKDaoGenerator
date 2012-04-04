@@ -26,7 +26,6 @@ abstract public class ParameterClassGenerator extends JavaClassGenerator {
 
         final Type type = Settings.settings().getType();
 
-        //TODO магические цифры, да и вообще вынести отсюда например, в тот же Parametrs
         return  ( parameters.size() > 3 && type == Type.DEPO ) ||
                 ( parameters.size() > 1 && type == Type.IASK );
     }

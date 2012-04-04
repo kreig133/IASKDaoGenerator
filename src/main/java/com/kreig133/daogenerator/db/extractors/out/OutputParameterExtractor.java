@@ -60,7 +60,7 @@ public abstract class OutputParameterExtractor extends Extractor{
                 daoMethod.getOutputParametrs().getParameter().addAll( parameterTypes );
             }
         } catch ( SQLException e ) {
-            e.printStackTrace(); // TODO
+            e.printStackTrace();
         }
 
         return daoMethod;

@@ -51,9 +51,9 @@ public class JaxbHandler {
             }
             getMarshaller().marshal( daoMethod, file );
         } catch ( JAXBException e ) {
-            e.printStackTrace(); //TODO
+            e.printStackTrace();
         } catch ( IOException e ) {
-            e.printStackTrace(); //TODO
+            e.printStackTrace();
         }
     }
 

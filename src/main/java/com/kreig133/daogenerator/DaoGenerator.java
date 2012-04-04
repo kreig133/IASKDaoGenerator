@@ -44,8 +44,7 @@ public class DaoGenerator {
                 writer = new FileOutputStream( file, false );
                 writer.write( string.getBytes( "UTF-8") );
             } catch ( IOException e ) {
-                //TODO
-                e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+                e.printStackTrace();
             } finally {
                 if ( writer != null )
                     try {
