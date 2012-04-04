@@ -139,7 +139,7 @@ public class MavenProjectGenerator {
             Process exec = Runtime.getRuntime().exec( cmdarray );
             Communicator.communicate(
                     exec,
-                    new OutputStreamWriter( System.out, "Cp866" ),
+                    new OutputStreamWriter( System.out, "Cp866" ), //написано под винду, да
                     new OutputStreamWriter( System.err, "Cp866" )
             );
             return exec.waitFor();
