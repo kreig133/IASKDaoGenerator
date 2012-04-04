@@ -1,7 +1,7 @@
 <xsl:stylesheet version="2.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
-        xmlns:xs="http://www.w3.org/2001/XMLSchema"
-        xmlns:apl="com.aplana.dao-generator"
-        extension-element-prefixes="apl"
+                xmlns:xs="http://www.w3.org/2001/XMLSchema"
+                xmlns:apl="com.aplana.dao-generator"
+                extension-element-prefixes="apl"
         >
 
     <xsl:output method="text" encoding="UTF-8" />
@@ -13,11 +13,11 @@
         <xsl:value-of select="//apl:methodName"/>
         <xsl:text>.xml] для маппинга&#10;{info}&#10;</xsl:text>
 
-	   	 <xsl:text>h5. Назначение:&#10;</xsl:text>
+        <xsl:text>h5. Назначение:&#10;</xsl:text>
         <xsl:value-of select="//apl:common/apl:comment/text()"/>
         <xsl:text>----&#10;</xsl:text>
 
-		<xsl:text>|TYPE|</xsl:text>
+        <xsl:text>|TYPE|</xsl:text>
         <xsl:value-of select="//apl:configuration/@type" />
         <xsl:text>|&#10;</xsl:text>
         <xsl:text>|MULTIPLE|</xsl:text>
@@ -31,7 +31,7 @@
                 <xsl:value-of select="//apl:spName"/>
             </xsl:when>
             <xsl:otherwise>
-				<xsl:text>h5. Текст </xsl:text>
+                <xsl:text>h5. Текст </xsl:text>
                 <xsl:value-of select="//apl:configuration/@type"/>
                 <xsl:text>-запроса </xsl:text>
                 <xsl:value-of select="//apl:methodName"/>
@@ -74,7 +74,7 @@
         <xsl:text>----&#xA;&#xA;</xsl:text>
         <xsl:if test="count(//apl:outputParametrs/apl:parameter) &gt; 0">
             <xsl:text>h5. Выходные данные&#10;</xsl:text>
-            <xsl:text>|| № пп || Название || SQL-тип || Комментарии || &#xA;</xsl:text>
+            <xsl:text>|| № пп || Название || Rename || SQL-тип || Комментарии || &#xA;</xsl:text>
             <xsl:for-each select="//apl:outputParametrs/apl:parameter">
                 <xsl:text>| </xsl:text>
                 <xsl:value-of select="position()"/>
@@ -167,7 +167,7 @@
     <xsl:template name="printTestValue">
         <xsl:param name="type" as="xs:string"/>
         <xsl:param name="testValue" as="xs:string"/>
-        
+
         <xsl:choose>
             <xsl:when test="$testValue='null'">
                 <xsl:text>NULL</xsl:text>
