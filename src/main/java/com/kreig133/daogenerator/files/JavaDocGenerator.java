@@ -24,7 +24,7 @@ public class JavaDocGenerator extends Generator{
             String ... commentsLine
     ){
 
-        insertTabs().append( "/**" );
+        initialize();
 
         for ( String comment : commentsLine ) {
             if ( StringUtils.isNotEmpty( comment ) ) {
@@ -34,18 +34,30 @@ public class JavaDocGenerator extends Generator{
         }
 
         if( withReturn ) {
-            insertNewJavaDocLine().append( "@return" );
+            insertReturn( "" );
         }
 
         if( withSince ) {
             insertNewJavaDocLine().append( "@since " )
                     .append( new SimpleDateFormat( "dd.MM.yyyy HH:mm" ).format( new Date() ) );
         }
+        close();
+
+        return builder;
+    }
+
+    private void close() {
         insertLine();
         insertTabs().append( " */" );
         insertLine();
+    }
 
-        return builder;
+    private void insertReturn( String comment ) {
+        insertNewJavaDocLine().append( "@return " ).append( comment );
+    }
+
+    private void initialize() {
+        insertTabs().append( "/**" );
     }
 
     private StringBuilder insertNewJavaDocLine() {
@@ -59,5 +71,31 @@ public class JavaDocGenerator extends Generator{
 
     public String wrapCommentForGetter( String javaDoc ) {
         return "Получить " + javaDoc;
+    }
+
+    public JavaDocBuilder getBuilder() {
+        return new JavaDocBuilder();
+    }
+
+    public class JavaDocBuilder{
+        public JavaDocBuilder initialize(){
+            JavaDocGenerator.this.initialize();
+            return this;
+        }
+        public JavaDocBuilder addComment( String comment ) {
+            insertNewJavaDocLine().append( comment );
+            return this;
+        }
+        public JavaDocBuilder addParameter( String paramName, String comment ) {
+            insertNewJavaDocLine().append( "@param " ).append( paramName ).append( " " ).append( comment );
+            return this;
+        }
+        public JavaDocBuilder addReturn( String comment ){
+            insertReturn( comment );
+            return this;
+        }
+        public void close(){
+            JavaDocGenerator.this.close();
+        }
     }
 }
