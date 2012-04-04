@@ -93,6 +93,11 @@ public class Form  implements TypeChangeListener, SourcePathChangeListener{
         prepareQueryButton.addActionListener( new ActionListener() {
             @Override
             public void actionPerformed( ActionEvent e ) {
+                if ( determineQueryType() == SelectType.CALL ) {
+                    JOptionPane.showMessageDialog( mainPanel, "Предварительная обработка для ХП не требуется!",
+                            "Не делай больше так =)", JOptionPane.WARNING_MESSAGE );
+                    return;
+                }
                 queryTextArea.setText( QueryPreparator.instance().prepareQuery( queryTextArea.getText() ) );
             }
         } );
@@ -331,7 +336,7 @@ public class Form  implements TypeChangeListener, SourcePathChangeListener{
         result.setCommon( new CommonType() );
         result.getCommon().setConfiguration( new ConfigurationType() );
 
-        result.getCommon().getConfiguration().setType( Extractor.determineQueryType( queryTextArea.getText() ) );
+        result.getCommon().getConfiguration().setType( determineQueryType() );
         result.getCommon().getConfiguration().setMultipleResult( isMultipleResultCheckBox.isSelected() );
 
         if( result.getSelectType() == SelectType.CALL ){
@@ -353,6 +358,10 @@ public class Form  implements TypeChangeListener, SourcePathChangeListener{
                 ( (ParametrsModel) ( outputParametrs.getModel() ) ).getParameterTypes()
         );
         return result;
+    }
+
+    private SelectType determineQueryType() {
+        return Extractor.determineQueryType( queryTextArea.getText() );
     }
 
     public JFrame getWindowWithText() {
