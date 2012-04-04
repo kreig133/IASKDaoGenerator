@@ -89,6 +89,8 @@ public class Form  implements TypeChangeListener, SourcePathChangeListener{
 
     private void initializingAnalyticTab() {
         queryTextArea.setContentType( "text/sql" );
+        inputParametrs .getTableHeader().setReorderingAllowed( false );
+        outputParametrs.getTableHeader().setReorderingAllowed( false );
 
         prepareQueryButton.addActionListener( new ActionListener() {
             @Override
