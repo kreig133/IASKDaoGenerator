@@ -57,8 +57,6 @@ public class TesterClassGenerator extends JavaClassGenerator{
         addImport( Settings.settings().getMapperPackage() + "." + MappingGenerator.instance().getFileName() );
         addImport( "java.util.HashMap" );
         addImport( "java.util.Map" );
-        builder.append( "@ContextConfiguration(locations = {\"classpath:" ).append( TEST_CONFIG ).append( "\"})");
-        insertLine();
         insertClassDeclaration( ClassType.CLASS, getFileName(), "AbstractDepoDaoExecuteTest", null );
         insertTabs().append( "@Autowired" );
         insertLine();

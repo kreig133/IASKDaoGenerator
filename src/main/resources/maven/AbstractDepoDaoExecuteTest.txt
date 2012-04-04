@@ -1,14 +1,12 @@
 package com.aplana.sbrf.deposit;
 
-import com.aplana.sbrf.deposit.web.common.client.operation.data.DepoModelData;
 import org.apache.ibatis.annotations.Param;
 import org.junit.runner.RunWith;
+import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.transaction.TransactionConfiguration;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.beans.Introspector;
-import java.beans.PropertyDescriptor;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 import java.text.SimpleDateFormat;
@@ -20,9 +18,10 @@ import java.util.Map;
  * @author eshangareev
  * @version 1.0
  */
+@Transactional
 @RunWith(SpringJUnit4ClassRunner.class)
 @TransactionConfiguration(transactionManager="txManager", defaultRollback=true)
-@Transactional
+@ContextConfiguration(locations = {"classpath:gwt-rpc-servlet.xml"})
 public abstract class AbstractDepoDaoExecuteTest {
 
     private SimpleDateFormat format = new SimpleDateFormat( "M-d-yyyy H:m:s.SSS" );
