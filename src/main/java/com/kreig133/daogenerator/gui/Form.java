@@ -31,7 +31,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Pattern;
 
-import static com.kreig133.daogenerator.gui.GuiUtils.getFileChooser;
+import static com.kreig133.daogenerator.gui.GuiUtils.getNewFileChooser;
 
 /**
  * @author eshangareev
@@ -146,8 +146,9 @@ public class Form  implements TypeChangeListener, SourcePathChangeListener{
         generateXMLButton.addActionListener( new ActionListener() {
             @Override
             public void actionPerformed( ActionEvent e ) {
-                if ( getFileChooser().showSaveDialog( mainPanel ) == JFileChooser.APPROVE_OPTION ) {
-                    final File dirForSave = getFileChooser().getSelectedFile();
+                JFileChooser newFileChooser = getNewFileChooser();
+                if ( newFileChooser.showSaveDialog( mainPanel ) == JFileChooser.APPROVE_OPTION ) {
+                    final File dirForSave = newFileChooser.getSelectedFile();
                     final DaoMethod currentDaoMethod = getCurrentDaoMethod();
 
                     if( StringUtils.isEmpty( currentDaoMethod.getCommon().getMethodName() ) ) {
@@ -185,14 +186,15 @@ public class Form  implements TypeChangeListener, SourcePathChangeListener{
         generateWikiButton.addActionListener( new ActionListener() {
             @Override
             public void actionPerformed( ActionEvent e ) {
-                if ( getFileChooser().showOpenDialog( generateWikiButton ) == JFileChooser.APPROVE_OPTION ) {
+                final JFileChooser newFileChooser = getNewFileChooser();
+                if ( newFileChooser.showOpenDialog( generateWikiButton ) == JFileChooser.APPROVE_OPTION ) {
 
                     new Thread(
                             new Runnable() {
                                 @Override
                                 public void run() {
                                     try {
-                                        WikiGenerator.generateWiki( getFileChooser().getSelectedFile().getAbsolutePath() );
+                                        WikiGenerator.generateWiki( newFileChooser.getSelectedFile().getAbsolutePath() );
                                     } catch ( IOException ex ) {
                                         ex.printStackTrace();
                                     } catch ( InterruptedException ex ) {
@@ -430,16 +432,18 @@ public class Form  implements TypeChangeListener, SourcePathChangeListener{
     }
 
     private void setOutputPath() {
-        if ( getFileChooser().showSaveDialog( null ) == JFileChooser.APPROVE_OPTION ) {
-            File file = getFileChooser().getSelectedFile();
+        JFileChooser newFileChooser = getNewFileChooser();
+        if ( newFileChooser.showSaveDialog( null ) == JFileChooser.APPROVE_OPTION ) {
+            File file = newFileChooser.getSelectedFile();
             destDirTextField.setText( file.getAbsolutePath() );
         }
     }
 
 
     private void setSourcePath() {
-        if ( getFileChooser().showOpenDialog( mainPanel ) == JFileChooser.APPROVE_OPTION ) {
-            File file           = getFileChooser().getSelectedFile();
+        JFileChooser newFileChooser = getNewFileChooser();
+        if ( newFileChooser.showOpenDialog( mainPanel ) == JFileChooser.APPROVE_OPTION ) {
+            File file           = newFileChooser.getSelectedFile();
             sourceDirTextField.setText( file.getAbsolutePath() );
             updateSourcePath();
         }

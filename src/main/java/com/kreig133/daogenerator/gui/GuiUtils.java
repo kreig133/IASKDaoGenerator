@@ -12,29 +12,24 @@ import java.io.File;
  */
 public class GuiUtils {
 
-    private static final JFileChooser jFileChooser = new DaoGenFileChooser();
-
-    static {
+    public static JFileChooser getNewFileChooser(){
+        JFileChooser jFileChooser = new DaoGenFileChooser();
         jFileChooser.setMultiSelectionEnabled( false );
-        jFileChooser.setCurrentDirectory( new File( System.getProperty( "user.home" ) ) );
         jFileChooser.setFileSelectionMode( JFileChooser.DIRECTORIES_ONLY );
-    }
-
-    public static JFileChooser getFileChooser(){
+        jFileChooser.setSelectedFile( new File( Settings.settings().getLastDirectory() ) );
         return jFileChooser;
     }
 
     private static class DaoGenFileChooser extends JFileChooser{
         @Override
         public int showOpenDialog( Component parent ) throws HeadlessException {
-            setSelectedFile( new File( Settings.settings().getLastDirectory() ) );
             int i = super.showOpenDialog( parent );
             Settings.settings().setLastDirectory( getSelectedFile().getAbsolutePath() );
             return i;
         }
         @Override
         public int showSaveDialog( Component parent ) throws HeadlessException {
-            setSelectedFile( new File( Settings.settings().getLastDirectory() ) );
+
             int i = super.showSaveDialog( parent );
             Settings.settings().setLastDirectory( getSelectedFile().getAbsolutePath() );
             return i;
