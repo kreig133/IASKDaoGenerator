@@ -110,7 +110,11 @@ public class DepoMappingGenerator extends MappingGenerator{
     }
 
     private void generateNameMapping( DaoMethod daoMethod ) {
-        if( !daoMethod.getOutputParametrs().getParameter().isEmpty() ){
+        if(
+                !daoMethod.getOutputParametrs().getParameter().isEmpty() &&
+                daoMethod.getOutputParametrs().getIndexOfUnnamedParameters().size() < 2
+
+        ){
             final NamingMapFormatter namingMapFormatter = new NamingMapFormatter();
             namingMapFormatter.determineMaxLength( daoMethod );
             insertTabs().append( "@Results({");
