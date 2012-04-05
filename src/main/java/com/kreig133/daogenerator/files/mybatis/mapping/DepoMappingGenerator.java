@@ -111,8 +111,9 @@ public class DepoMappingGenerator extends MappingGenerator{
 
     private void generateNameMapping( DaoMethod daoMethod ) {
         if(
-                !daoMethod.getOutputParametrs().getParameter().isEmpty() &&
-                daoMethod.getOutputParametrs().getIndexOfUnnamedParameters().size() < 2
+                ! daoMethod.getOutputParametrs().getParameter().isEmpty() &&
+                  daoMethod.getOutputParametrs().getIndexOfUnnamedParameters().size() < 2 &&
+                ! daoMethod.getOutputParametrs().containsSameNames()
 
         ){
             final NamingMapFormatter namingMapFormatter = new NamingMapFormatter();

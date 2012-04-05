@@ -170,6 +170,20 @@ public class ParametersType {
         return isWithPaging( getParameter() );
     }
 
+    public boolean containsSameNames() {
+        return containsSameNames( getParameter() );
+    }
+
+    public static boolean containsSameNames( List<ParameterType> parameterTypes ) {
+        Set<String> names = new HashSet<String>();
+        for ( ParameterType parameterType : parameterTypes ) {
+            if ( names.contains( parameterType.getName() ) ) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     public static boolean isWithPaging( List<ParameterType> parameterTypes ) {
         Map<Enum, Boolean> map = new HashMap<Enum, Boolean>();
         for ( WithPagingType withPagingType : WithPagingType.values() ) {
