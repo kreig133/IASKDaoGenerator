@@ -30,11 +30,7 @@ public class InterfaceGenerator extends DaoJavaClassGenerator {
 
     @Override
     public File getFile() {
-        try {
-            return daoFile( getFileName() );
-        } catch ( IOException e ) {
-            throw new RuntimeException( e );
-        }
+        return daoFile( getFileName() );
     }
 
     @Override

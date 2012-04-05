@@ -34,11 +34,7 @@ public class ImplementationGenerator extends InterfaceGenerator{
 
     @Override
     public File getFile() {
-        try {
-            return daoFile( implementationFileName( ) );
-        } catch ( IOException e ) {
-            throw new RuntimeException( e );
-        }
+        return daoFile( implementationFileName( ) );
     }
 
     @Override
