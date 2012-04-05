@@ -8,6 +8,7 @@ import com.kreig133.daogenerator.common.SourcePathChangeListener;
 import com.kreig133.daogenerator.common.TypeChangeListener;
 import com.kreig133.daogenerator.common.Utils;
 import com.kreig133.daogenerator.db.extractors.Extractor;
+import com.kreig133.daogenerator.db.preparators.DoubleQueryPreparator;
 import com.kreig133.daogenerator.db.preparators.QueryPreparator;
 import com.kreig133.daogenerator.db.extractors.in.InputParameterExtractor;
 import com.kreig133.daogenerator.db.extractors.in.SpInputParameterExtractor;
@@ -71,6 +72,10 @@ public class Form  implements TypeChangeListener, SourcePathChangeListener{
     private JLabel entityPackageLable;
     private JButton prepareQueryButton;
     private JButton parentSpTextButton;
+    private JRadioButton singleQueryRadioButton;
+    private JRadioButton doubleQueryRadioButton;
+    private JEditorPane secondQuery;
+    private JScrollPane secondQueryPanel;
     private JFrame windowWithText;
 
     private boolean start = true;
@@ -89,9 +94,18 @@ public class Form  implements TypeChangeListener, SourcePathChangeListener{
 
     private void initializingAnalyticTab() {
         queryTextArea.setContentType( "text/sql" );
+        secondQuery.setContentType( "text/sql" );
         inputParametrs .getTableHeader().setReorderingAllowed( false );
         outputParametrs.getTableHeader().setReorderingAllowed( false );
 
+        singleQueryRadioButton.addChangeListener( new ChangeListener(){
+            @Override
+            public void stateChanged( ChangeEvent e ) {
+                secondQueryPanel.setVisible( ! singleQueryRadioButton.isSelected() );
+                ( (JSplitPane) secondQueryPanel.getParent() ).setDividerLocation( 0.5 );
+                secondQueryPanel.getParent().repaint();
+            }
+        } );
         prepareQueryButton.addActionListener( new ActionListener() {
             @Override
             public void actionPerformed( ActionEvent e ) {
@@ -100,7 +114,14 @@ public class Form  implements TypeChangeListener, SourcePathChangeListener{
                             "Не делай больше так =)", JOptionPane.WARNING_MESSAGE );
                     return;
                 }
-                queryTextArea.setText( QueryPreparator.instance().prepareQuery( queryTextArea.getText() ) );
+                String preparedQuery;
+                if( doubleQueryRadioButton.isSelected() ){
+                    preparedQuery = DoubleQueryPreparator.instance().prepareQuery( queryTextArea.getText(),
+                            secondQuery.getText() );
+                } else {
+                    preparedQuery = QueryPreparator.instance().prepareQuery( queryTextArea.getText() );
+                }
+                queryTextArea.setText( preparedQuery );
             }
         } );
         getInParamsButton.addActionListener( new ActionListener() {
