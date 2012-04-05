@@ -2,6 +2,7 @@ package com.kreig133.daogenerator.db.preparators;
 
 import com.kreig133.daogenerator.db.JDBCConnector;
 import com.kreig133.daogenerator.db.extractors.SqlTypeHelper;
+import com.kreig133.daogenerator.jaxb.JavaType;
 import com.kreig133.daogenerator.jaxb.ParameterType;
 import com.kreig133.daogenerator.jaxb.ParametersType;
 import org.apache.commons.lang.StringUtils;
@@ -11,8 +12,11 @@ import org.jetbrains.annotations.NotNull;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -84,6 +88,9 @@ public class QueryPreparator {
 
     protected ParameterType getActualParameter( List<ParameterType> columnsFromDbByTableName, @NotNull String column ) {
         ParameterType parameterByName = ParametersType.getParameterByName( column.trim(), columnsFromDbByTableName );
+        if( parameterByName == null ) {
+            parameterByName = getColumnFromDbByColumnName( column.trim() );
+        }
 
         if( parameterByName == null ) {
             parameterByName = new ParameterType();
@@ -91,6 +98,36 @@ public class QueryPreparator {
             parameterByName.setSqlType( ERROR );
         }
         return parameterByName;
+    }
+
+    protected ParameterType getColumnFromDbByColumnName( String columnName ) {
+        Connection connection = JDBCConnector.instance().connectToDB();
+        assert connection != null;
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement(
+                    "SELECT DISTINCT DATA_TYPE FROM INFORMATION_SCHEMA.COLUMNS WHERE COLUMN_NAME = ?"
+            );
+            preparedStatement.setString( 1, columnName );
+            Set<JavaType> types = new HashSet<JavaType>();
+
+            String s = null;
+            ResultSet resultSet = preparedStatement.executeQuery();
+            while ( resultSet.next() ) {
+                s = resultSet.getString( 1 );
+                types.add( JavaType.getBySqlType( s ) );
+            }
+
+            assert types.size() == 1;
+
+            ParameterType parameterType = new ParameterType();
+            parameterType.setSqlType( s );
+            parameterType.setName( columnName );
+
+            return parameterType;
+        } catch ( SQLException e ) {
+            e.printStackTrace();
+            return null;
+        }
     }
 
     @NotNull
