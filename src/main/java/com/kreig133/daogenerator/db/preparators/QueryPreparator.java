@@ -84,7 +84,11 @@ public class QueryPreparator {
         }
         query = replaceCastNameMode( query );
 
-        return query;
+        return replaceOthersNameMode( query );
+    }
+
+    private String replaceOthersNameMode( String query ) {
+        return query.replaceAll( ":(\\w+)", "\\${$1;"+ERROR+"}" );
     }
 
     protected String replaceCastNameMode( String query ) {
