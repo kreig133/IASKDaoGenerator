@@ -19,7 +19,7 @@ public class WikiGenerator {
 
     public static void generateWikiForXmlFile( String xmlFileName ) throws IOException, InterruptedException {
         final String[] cmdarray = { "cmd", "/C",
-                "java  -classpath DaoGenerator-2.7.jar org.apache.xalan.xslt.Process " +
+                "java  -classpath DaoGenerator-2.9.jar org.apache.xalan.xslt.Process " +
                         "-IN " + xmlFileName +
                         " -XSL XmlToWiki.xsl " +
                         "-OUT " + xmlFileName + ".txt" };

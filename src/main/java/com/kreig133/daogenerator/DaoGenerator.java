@@ -140,7 +140,7 @@ public class DaoGenerator {
                 } catch ( Exception e ) {
                     e.printStackTrace();
                 }
-                final JFrame frame = new JFrame( "DaoGenerator 2.7" );
+                final JFrame frame = new JFrame( "DaoGenerator 2.9" );
 
 
                 frame.setContentPane( Form.getInstance() );
