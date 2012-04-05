@@ -1,6 +1,7 @@
 package com.kreig133.daogenerator.files;
 
 import org.apache.commons.lang.StringUtils;
+import org.jetbrains.annotations.NotNull;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -21,7 +22,7 @@ public class JavaDocGenerator extends Generator{
     public StringBuilder insertJavaDoc(
             boolean  withReturn,
             boolean  withSince,
-            String ... commentsLine
+            @NotNull String ... commentsLine
     ){
 
         initialize();
@@ -65,31 +66,38 @@ public class JavaDocGenerator extends Generator{
         return insertTabs().append( " * " );
     }
 
+    @NotNull
     public String wrapCommentForSetter( String javaDoc ) {
         return "Установить " + javaDoc;
     }
 
+    @NotNull
     public String wrapCommentForGetter( String javaDoc ) {
         return "Получить " + javaDoc;
     }
 
+    @NotNull
     public JavaDocBuilder getBuilder() {
         return new JavaDocBuilder();
     }
 
     public class JavaDocBuilder{
+        @NotNull
         public JavaDocBuilder initialize(){
             JavaDocGenerator.this.initialize();
             return this;
         }
+        @NotNull
         public JavaDocBuilder addComment( String comment ) {
             insertNewJavaDocLine().append( comment );
             return this;
         }
+        @NotNull
         public JavaDocBuilder addParameter( String paramName, String comment ) {
             insertNewJavaDocLine().append( "@param " ).append( paramName ).append( " " ).append( comment );
             return this;
         }
+        @NotNull
         public JavaDocBuilder addReturn( String comment ){
             insertReturn( comment );
             return this;

@@ -2,6 +2,7 @@ package com.kreig133.daogenerator.db.preparators;
 
 import com.kreig133.daogenerator.jaxb.ParameterType;
 import org.intellij.lang.annotations.Language;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 import java.util.regex.Matcher;
@@ -15,7 +16,7 @@ import static com.kreig133.daogenerator.db.extractors.TableNameHelper.getTableNa
  */
 public class NameModeQueryPreparator extends  QueryPreparator{
 
-    public String prepareQueryNameMode( String query ) {
+    public String prepareQueryNameMode( @NotNull String query ) {
         @Language("RegExp")
         String regExp = "(?s)((%s)\\s*=\\s*):(\\w+)\\b";
 
@@ -46,7 +47,7 @@ public class NameModeQueryPreparator extends  QueryPreparator{
         return query;
     }
 
-    private String replaceOthersNameMode( String query ) {
+    private String replaceOthersNameMode( @NotNull String query ) {
         return query.replaceAll( ":(\\w+)", "\\${$1;"+ERROR+"}" );
     }
 }

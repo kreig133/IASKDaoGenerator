@@ -5,6 +5,7 @@ import com.kreig133.daogenerator.files.PackageAndFileUtils;
 import com.kreig133.daogenerator.jaxb.DaoMethod;
 import com.kreig133.daogenerator.jaxb.ParameterType;
 import com.kreig133.daogenerator.jaxb.ParametersType;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,7 +19,8 @@ public class InModelClassGenerator extends ModelClassGenerator {
         super( parametersType );
     }
 
-    public static ModelClassGenerator newInstance( DaoMethod daoMethod ){
+    @NotNull
+    public static ModelClassGenerator newInstance( @NotNull DaoMethod daoMethod ){
         return new InModelClassGenerator( daoMethod.getInputParametrs() );
     }
 
@@ -37,8 +39,9 @@ public class InModelClassGenerator extends ModelClassGenerator {
         }
     }
 
+    @NotNull
     @Override
-    protected List<ParameterType> filter( List<ParameterType> parameter ) {
+    protected List<ParameterType> filter( @NotNull List<ParameterType> parameter ) {
         if ( parametersType.isWithPaging() ) {
             List<ParameterType> result = new ArrayList<ParameterType>();
             for ( ParameterType parameterType : parameter ) {

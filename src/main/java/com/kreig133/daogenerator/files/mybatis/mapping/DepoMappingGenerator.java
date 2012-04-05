@@ -10,9 +10,9 @@ import com.kreig133.daogenerator.jaxb.DaoMethod;
 import com.kreig133.daogenerator.jaxb.ParameterType;
 import com.kreig133.daogenerator.jaxb.SelectType;
 import com.kreig133.daogenerator.settings.Settings;
-import com.kreig133.daogenerator.sql.creators.QueryCreator;
 import com.kreig133.daogenerator.sql.creators.QueryCreatorFabric;
 import org.apache.commons.lang.StringUtils;
+import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
 
@@ -22,10 +22,10 @@ import javax.annotation.Nullable;
  */
 public class DepoMappingGenerator extends MappingGenerator{
 
-    public static final String MAPPER_PREFIX = "Dao";
+    private static final String MAPPER_PREFIX = "Dao";
 
     @Override
-    public void generateBody( DaoMethod daoMethod ) {
+    public void generateBody( @NotNull DaoMethod daoMethod ) {
         insertLine();
 
         JavaDocGenerator.JavaDocBuilder javaDocBuilder =
@@ -50,6 +50,7 @@ public class DepoMappingGenerator extends MappingGenerator{
         insertLine();
     }
 
+    @NotNull
     @Override
     public String getFileName() {
         return Settings.settings().getOperationName() + MAPPER_PREFIX;
@@ -77,7 +78,7 @@ public class DepoMappingGenerator extends MappingGenerator{
     }
 
     private void generateAnnotation(
-            DaoMethod daoMethod
+            @NotNull DaoMethod daoMethod
     ){
         if( daoMethod.getCommon().getConfiguration().isMultipleResult() ) {
             addImport( "java.util.List" );
@@ -111,7 +112,7 @@ public class DepoMappingGenerator extends MappingGenerator{
         generateNameMapping( daoMethod );
     }
 
-    private void generateNameMapping( DaoMethod daoMethod ) {
+    private void generateNameMapping( @NotNull DaoMethod daoMethod ) {
         if(
                 ! daoMethod.getOutputParametrs().getParameter().isEmpty() &&
                   daoMethod.getOutputParametrs().getIndexOfUnnamedParameters().size() < 2 &&
@@ -128,6 +129,7 @@ public class DepoMappingGenerator extends MappingGenerator{
                     new Function<ParameterType, String>() {
                         @Override
                         public String apply( @Nullable ParameterType parameterType ) {
+                            assert parameterType != null;
                             return namingMapFormatter.getNameMappingString( parameterType );
                         }
                     }
@@ -144,7 +146,7 @@ public class DepoMappingGenerator extends MappingGenerator{
      * @param string
      * @return
      */
-    public StringBuilder wrapWithQuotesAndWrite( String string ) {
+    public StringBuilder wrapWithQuotesAndWrite( @NotNull String string ) {
         String[] strings = string.split( "[\n\r][\n\r]?" );
 
         strings = deleteEmptyStrings( strings );
@@ -165,7 +167,8 @@ public class DepoMappingGenerator extends MappingGenerator{
      * @param in
      * @return
      */
-    private static String[] deleteEmptyStrings( String[] in ) {
+    @NotNull
+    private static String[] deleteEmptyStrings( @NotNull String[] in ) {
         String[] temp = new String[ in.length ];
 
         int length = 0;
@@ -186,7 +189,7 @@ public class DepoMappingGenerator extends MappingGenerator{
     private static class NamingMapFormatter{
         int maxLengthProperty;
         int maxLenghtColumn;
-        void determineMaxLength( DaoMethod daoMethod ){
+        void determineMaxLength( @NotNull DaoMethod daoMethod ){
             for ( ParameterType type : daoMethod.getOutputParametrs().getParameter() ) {
                 maxLenghtColumn = type.getName().length() > maxLenghtColumn ?
                         type.getName().length() :
@@ -197,7 +200,7 @@ public class DepoMappingGenerator extends MappingGenerator{
             }
         }
 
-        private String getNameMappingString( ParameterType parameterType ) {
+        private String getNameMappingString( @NotNull ParameterType parameterType ) {
             return String.format(
                     "@Result(property = %s, column = %s)",
                     format( parameterType.getRenameTo(), maxLengthProperty ),
@@ -205,7 +208,8 @@ public class DepoMappingGenerator extends MappingGenerator{
             );
         }
 
-        private String format( String string, int max ) {
+        @NotNull
+        private String format( @NotNull String string, int max ) {
             return "\"" + string + "\"" + fillString( max - string.length() );
         }
 

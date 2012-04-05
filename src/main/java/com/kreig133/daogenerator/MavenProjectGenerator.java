@@ -5,6 +5,7 @@ import com.kreig133.daogenerator.jaxb.NamingUtils;
 import com.kreig133.daogenerator.files.mybatis.mapping.MappingGenerator;
 import com.kreig133.daogenerator.files.mybatis.test.TesterClassGenerator;
 import com.kreig133.daogenerator.settings.Settings;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.*;
 
@@ -57,7 +58,7 @@ public class MavenProjectGenerator {
         );
     }
 
-    protected static String fillContextTemplateByData( String string ) {
+    protected static String fillContextTemplateByData( @NotNull String string ) {
         return string
                 .replaceFirst( "\\$\\{beanClass\\}",
                         Settings.settings().getMapperPackage() + "." +
@@ -96,7 +97,7 @@ public class MavenProjectGenerator {
         );
     }
 
-    public static void copyFile( InputStream inputStream, File outputFile  ) throws IOException {
+    public static void copyFile( InputStream inputStream, @NotNull File outputFile  ) throws IOException {
         outputFile.getParentFile().mkdirs();
 
         final BufferedInputStream bufferedInputStream = new BufferedInputStream( inputStream );
@@ -121,6 +122,7 @@ public class MavenProjectGenerator {
         }
     }
     
+    @NotNull
     public static String getConfigName(){
         return TesterClassGenerator.TEST_CONFIG;
     }
@@ -136,13 +138,7 @@ public class MavenProjectGenerator {
         }
 
         try {
-            Process exec = Runtime.getRuntime().exec( cmdarray );
-            Communicator.communicate(
-                    exec,
-                    new OutputStreamWriter( System.out, "Cp866" ), //написано под винду, да
-                    new OutputStreamWriter( System.err, "Cp866" )
-            );
-            return exec.waitFor();
+            return Communicator.communicate( cmdarray ).waitFor();
         } catch ( IOException e ) {
             e.printStackTrace();
             return -1;

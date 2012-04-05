@@ -10,6 +10,7 @@ import com.kreig133.daogenerator.files.PackageAndFileUtils;
 import com.kreig133.daogenerator.jaxb.*;
 import com.kreig133.daogenerator.settings.Settings;
 import org.apache.commons.lang.StringUtils;
+import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
 import java.io.File;
@@ -22,7 +23,8 @@ import java.util.List;
  */
 public class InOutClassGenerator extends JavaClassGenerator {
 
-    public static InOutClassGenerator newInstance( DaoMethod daoMethod, InOutType type ){
+    @NotNull
+    public static InOutClassGenerator newInstance( @NotNull DaoMethod daoMethod, InOutType type ){
         InOutClassGenerator inOutClassGenerator = new InOutClassGenerator(
                 type == InOutType.IN ?
                         daoMethod.getInputParametrs().getParameter() :
@@ -41,6 +43,7 @@ public class InOutClassGenerator extends JavaClassGenerator {
         return inOutClassGenerator;
     }
 
+    @NotNull
     @Override
     public File getFile() {
         File file = new File(
@@ -149,6 +152,7 @@ public class InOutClassGenerator extends JavaClassGenerator {
 
         insertTabs().append( StringUtils.join( Iterators.transform(
                 parameters.iterator(), new Function<ParameterType, String>() {
+                    @NotNull
                     @Override
                     public String apply( @Nullable ParameterType p ) {
                         assert p != null;
@@ -159,8 +163,7 @@ public class InOutClassGenerator extends JavaClassGenerator {
         insertTabs().append( ") {" );
         insertLine();
         for( ParameterType p: parameters ){
-            insertTabs().append( "this." ).append( p.getRenameTo() ).append( " = " ).append( p.getRenameTo() )
-                    .append( ";" );
+            insertTabs().append( String.format( "this.%s = %s;", p.getRenameTo(), p.getRenameTo() ) );
             insertLine();
         }
         closeMethodOrInnerClassDefinition();
@@ -184,9 +187,9 @@ public class InOutClassGenerator extends JavaClassGenerator {
         closeMethodOrInnerClassDefinition();
     }
 
-    public void insertFieldDeclaration( ParameterType p ) {
+    public void insertFieldDeclaration( @NotNull ParameterType p ) {
 
-        jDoc.insertJavaDoc( new String[] { p.getCommentForJavaDoc() } );
+        jDoc.insertJavaDoc( p.getCommentForJavaDoc() );
         insertTabs().append( Scope.PRIVATE.value() ).append( " " ).append( p.getType().value() )
                 .append( " " ).append( p.getRenameTo() );
 
@@ -200,7 +203,7 @@ public class InOutClassGenerator extends JavaClassGenerator {
         insertLine();
     }
 
-    private void generateGetter( ParameterType parameterType ){
+    private void generateGetter( @NotNull ParameterType parameterType ){
         super.generateGetter( 
                 parameterType.getCommentForJavaDoc(),
                 parameterType.getType(), 
@@ -208,7 +211,7 @@ public class InOutClassGenerator extends JavaClassGenerator {
         );
     }
 
-    public void generateSetter( ParameterType parameterType ) {
+    public void generateSetter( @NotNull ParameterType parameterType ) {
         super.generateSetter(
                 parameterType.getCommentForJavaDoc(),
                 parameterType.getType(),

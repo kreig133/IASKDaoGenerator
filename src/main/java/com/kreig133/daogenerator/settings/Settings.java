@@ -8,6 +8,7 @@ package com.kreig133.daogenerator.settings;
  */
 
 import com.kreig133.daogenerator.enums.Type;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.util.Properties;
@@ -16,8 +17,10 @@ import java.util.Properties;
  * Хранит имена параметров, чтобы по ним обращаться к файлу с настройками
  */
 public class Settings {
+    @NotNull
     private static OperationSettings operationSettings = new OperationSettingsImpl();
 
+    @NotNull
     public static OperationSettings settings(){
         return operationSettings;
     }
@@ -69,17 +72,17 @@ public class Settings {
 
     }
 
-    public static void loadSettingsFromProperties( Properties properties ){
+    public static void loadSettingsFromProperties( @NotNull Properties properties ){
 
         settings().setType(
                 Boolean.parseBoolean( properties.getProperty( IASK, "1" ) ) ? Type.IASK : Type.DEPO
         );
 
         settings().setDaoPackage   ( properties.getProperty( INTERFACE_PACKAGE, settings().getDaoPackage   () ) );
-        settings().setEntityPackage( properties.getProperty( ENTITY_PACKAGE,    settings().getEntityPackage() ) );
-        settings().setMapperPackage( properties.getProperty( MAPPING_PACKAGE,   settings().getMapperPackage() ) );
-        settings().setProjectFolder( properties.getProperty( PROJECT_FOLDER,    settings().getProjectFolder() ) );
-        settings().setLastDirectory( properties.getProperty( LAST_DIRECTORY,    settings().getLastDirectory() ) );
+        settings().setEntityPackage( properties.getProperty( ENTITY_PACKAGE, settings().getEntityPackage() ) );
+        settings().setMapperPackage( properties.getProperty( MAPPING_PACKAGE, settings().getMapperPackage() ) );
+        settings().setProjectFolder( properties.getProperty( PROJECT_FOLDER, settings().getProjectFolder() ) );
+        settings().setLastDirectory( properties.getProperty( LAST_DIRECTORY, settings().getLastDirectory() ) );
         settings().setOutputPathForJavaClasses(
                 properties.getProperty( DEST_DIR, settings().getOutputPathForJavaClasses() )
         );

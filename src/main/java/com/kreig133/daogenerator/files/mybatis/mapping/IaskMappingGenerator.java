@@ -6,6 +6,7 @@ import com.kreig133.daogenerator.jaxb.DaoMethod;
 import com.kreig133.daogenerator.jaxb.ParameterType;
 import com.kreig133.daogenerator.settings.Settings;
 import com.kreig133.daogenerator.sql.creators.QueryCreatorFabric;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
@@ -16,7 +17,7 @@ import java.util.List;
 public class IaskMappingGenerator extends MappingGenerator{
 
     @Override
-    public void generateBody( DaoMethod daoMethod ) {
+    public void generateBody( @NotNull DaoMethod daoMethod ) {
         builder.append( generateXmlMapping( daoMethod ) );
     }
 
@@ -30,6 +31,7 @@ public class IaskMappingGenerator extends MappingGenerator{
 //        builder.append( "</mapper>" );
 //    }
 
+    @NotNull
     @Override
     protected String getFileNameEnding() {
         return ".map.xml";
@@ -45,7 +47,7 @@ public class IaskMappingGenerator extends MappingGenerator{
     }
 
     private String generateXmlMapping(
-            final DaoMethod daoMethod
+            @NotNull final DaoMethod daoMethod
     ){
         final List<ParameterType> inputParameterList  = daoMethod.getInputParametrs ().getParameter();
         final List<ParameterType> outputParameterList = daoMethod.getOutputParametrs().getParameter();
@@ -75,12 +77,12 @@ public class IaskMappingGenerator extends MappingGenerator{
     }
 
     private void writeParameterType(
-            List<ParameterType> outputParameterList,
+            @NotNull List<ParameterType> outputParameterList,
             String name,
             String type,
             String suffix,
             String package_,
-            StringBuilder builder
+            @NotNull StringBuilder builder
     ) {
         if ( ! outputParameterList.isEmpty() ) {
             insertLine();

@@ -8,6 +8,8 @@ import com.kreig133.daogenerator.files.JavaClassGenerator;
 import com.kreig133.daogenerator.jaxb.DaoMethod;
 import com.kreig133.daogenerator.settings.OperationSettings;
 import com.kreig133.daogenerator.settings.Settings;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -23,12 +25,14 @@ import java.util.Map;
  * @version 1.0
  */
 public abstract class FileBuilder {
+    @NotNull
     protected List<JavaClassGenerator> generators = new ArrayList<JavaClassGenerator>();
 
-    final public Map<File, String> build( List<DaoMethod> daoMethod ) {
-        prepareBuilder( daoMethod );
+    @NotNull
+    final public Map<File, String> build() {
+        prepareBuilder( daoMethods );
         generateHead();
-        generateBody( daoMethod );
+        generateBody( daoMethods );
 
         HashMap<File, String> result = new HashMap<File, String>();
 
@@ -76,7 +80,7 @@ public abstract class FileBuilder {
         return ( new File( path ) )
                 .list(
                         new FilenameFilter() {
-                            public boolean accept( File dir, String name ) {
+                            public boolean accept( File dir, @NotNull String name ) {
                                 return name.endsWith( "xml" );
                             }
                         }
@@ -85,9 +89,10 @@ public abstract class FileBuilder {
 
     private static final java.util.List<DaoMethod> daoMethods = new ArrayList<DaoMethod>();
 
+    @Nullable
     protected static final Appender appender = new Appender() {
         @Override
-        public void appendStringToFile( File file, String string ) {
+        public void appendStringToFile( File file, @NotNull String string ) {
             FileOutputStream writer = null;
             try {
                 writer = new FileOutputStream( file, false );
@@ -105,11 +110,7 @@ public abstract class FileBuilder {
         }
     };
 
-
-
-
-
-    protected static void generateAndWriteFiles() throws IOException {
+    protected static void generateAndWriteFiles() {
 
         List<FileBuilder> builders = new ArrayList<FileBuilder>( 2 );
 
@@ -121,15 +122,16 @@ public abstract class FileBuilder {
         Map<File, String> builded = null;
         for ( FileBuilder builder : builders ) {
             if( builded == null ){
-                builded = builder.build( daoMethods );
+                builded = builder.build();
             } else {
-                builded.putAll( builder.build( daoMethods ) );
+                builded.putAll( builder.build() );
             }
         }
 
         assert builded != null;
 
         for ( File file : builded.keySet() ) {
+            assert appender != null;
             appender.appendStringToFile( file, builded.get( file ) );
         }
 

@@ -3,6 +3,7 @@ package com.kreig133.daogenerator.db.preparators;
 import com.kreig133.daogenerator.jaxb.ParameterType;
 import junit.framework.Assert;
 import org.intellij.lang.annotations.Language;
+import org.jetbrains.annotations.NotNull;
 import org.junit.Test;
 
 import java.util.ArrayList;
@@ -14,8 +15,9 @@ import java.util.List;
  */
 public class DoubleQueryPreparatorTest extends DoubleQueryPreparator{
 
+    @NotNull
     @Language( "SQL" )
-    String query = "SELECT distinct\n" +
+    private String query = "SELECT distinct\n" +
             " tm.imembercid, \n" +
             "ltrim(tm.sShortName) as sshortname \n" +
             "FROM dbo.tabBondKind bk with (nolock) \n" +
@@ -37,8 +39,9 @@ public class DoubleQueryPreparatorTest extends DoubleQueryPreparator{
             "FROM dbo.v_dummy \n" +
             "ORDER BY sshortname";
 
+    @NotNull
     @Language( "SQL" )
-    String fiiledQuery = "SELECT distinct\n" +
+    private String fiiledQuery = "SELECT distinct\n" +
             " tm.imembercid, \n" +
             "ltrim(tm.sShortName) as sshortname \n" +
             "FROM dbo.tabBondKind bk with (nolock) \n" +

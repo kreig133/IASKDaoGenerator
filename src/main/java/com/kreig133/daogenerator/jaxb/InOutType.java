@@ -8,6 +8,8 @@
 
 package com.kreig133.daogenerator.jaxb;
 
+import org.jetbrains.annotations.NotNull;
+
 import javax.xml.bind.annotation.XmlEnum;
 import javax.xml.bind.annotation.XmlType;
 
@@ -44,7 +46,8 @@ public enum InOutType {
         return valueOf(v);
     }
 
-    public static InOutType getByName( String name ) {
+    @NotNull
+    public static InOutType getByName( @NotNull String name ) {
         for( InOutType inputOrOutputType : InOutType.values() ){
             if( inputOrOutputType.toString().equalsIgnoreCase( name.trim() )){
                 return inputOrOutputType;

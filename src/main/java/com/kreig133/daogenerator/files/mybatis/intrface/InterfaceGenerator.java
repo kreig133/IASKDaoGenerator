@@ -6,6 +6,7 @@ import com.kreig133.daogenerator.files.mybatis.DaoJavaClassGenerator;
 import com.kreig133.daogenerator.files.PackageAndFileUtils;
 import com.kreig133.daogenerator.jaxb.DaoMethod;
 import com.kreig133.daogenerator.settings.Settings;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.io.IOException;
@@ -50,7 +51,7 @@ public class InterfaceGenerator extends DaoJavaClassGenerator {
     }
 
     @Override
-    public void generateBody( DaoMethod daoMethod ) {
+    public void generateBody( @NotNull DaoMethod daoMethod ) {
         jDoc.insertJavaDoc( daoMethod.getCommon().getComment().split( "\n" ) );
         insertTabs();
         generateMethodSignature( daoMethod, MethodType.DAO );
@@ -58,13 +59,15 @@ public class InterfaceGenerator extends DaoJavaClassGenerator {
         insertLine();
     }
 
+    @NotNull
     @Override
     public String getFileName() {
         return Settings.settings().getOperationName() + "Dao";
     }
 
 
-    protected File daoFile( String fileName ) throws IOException {
+    @NotNull
+    protected File daoFile( String fileName ) {
         File file = new File(
                 Settings.settings().getPathForGeneratedSource() + "/" +
                         PackageAndFileUtils.replacePointBySlash( Settings.settings().getDaoPackage() ) + "/" +

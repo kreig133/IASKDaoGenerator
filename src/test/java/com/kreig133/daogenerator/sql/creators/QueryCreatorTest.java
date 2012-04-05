@@ -5,6 +5,7 @@ import com.kreig133.daogenerator.jaxb.DaoMethod;
 import com.kreig133.daogenerator.jaxb.ParameterType;
 import com.kreig133.daogenerator.jaxb.SelectType;
 import junit.framework.Assert;
+import org.jetbrains.annotations.NotNull;
 import org.junit.Test;
 
 import java.util.ArrayList;
@@ -44,7 +45,7 @@ public class QueryCreatorTest {
         Assert.assertTrue( queryCreator instanceof ProcedureCallCreator );
     }
 
-    private void setOutputParameters( DaoMethod daoMethod, List<ParameterType> typeList ) {
+    private void setOutputParameters( @NotNull DaoMethod daoMethod, List<ParameterType> typeList ) {
         daoMethod.getOutputParametrs().getParameter().clear();
         daoMethod.getOutputParametrs().getParameter().addAll( typeList );
     }

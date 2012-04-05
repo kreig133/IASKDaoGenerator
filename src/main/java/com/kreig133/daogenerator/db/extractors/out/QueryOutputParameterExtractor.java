@@ -5,6 +5,8 @@ import com.kreig133.daogenerator.jaxb.DaoMethod;
 import com.kreig133.daogenerator.jaxb.ParameterType;
 import com.kreig133.daogenerator.sql.creators.QueryCreator;
 import com.kreig133.daogenerator.sql.test.TestValueByStringGenerator;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -17,8 +19,9 @@ import java.util.List;
  */
 public class QueryOutputParameterExtractor extends OutputParameterExtractor{
 
+    @Nullable
     @Override
-    protected ResultSet getResultSet( DaoMethod daoMethod ) throws SQLException {
+    protected ResultSet getResultSet( @NotNull DaoMethod daoMethod ) throws SQLException {
         final String query =
                 QueryCreator.getQueryStringWithoutMetaData( daoMethod.getCommon().getQuery() );
 

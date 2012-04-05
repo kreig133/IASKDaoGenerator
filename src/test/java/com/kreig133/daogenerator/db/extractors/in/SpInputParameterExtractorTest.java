@@ -5,6 +5,7 @@ import com.kreig133.daogenerator.db.extractors.SqlTypeHelper;
 import com.kreig133.daogenerator.enums.Type;
 import com.kreig133.daogenerator.jaxb.*;
 import com.kreig133.daogenerator.settings.Settings;
+import org.jetbrains.annotations.NotNull;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -118,6 +119,7 @@ public class SpInputParameterExtractorTest extends SpInputParameterExtractor{
                 " laksjfffфаывафыва " );
     }
 
+    @NotNull
     private ParameterType getParameterType( String name, JavaType type ) {
         ParameterType parameterType = new ParameterType();
         parameterType.setName( name );
@@ -126,8 +128,10 @@ public class SpInputParameterExtractorTest extends SpInputParameterExtractor{
     }
 
 
+    @NotNull
     String string = "asdfasCREATE PROCEDURE dbo.anyStoreProcedure( -- AS\n laksjfffфаывафыва AS ) AS AS";
 
+    @NotNull
     String result = " dbo.zvaSelectCarry_Bill \n" +
             "\t @dtb\t\tDateTime\t\t\t-- Дата начала периода\n" +
             "\t,@dte\t\tDateTime\t\t\t-- Дата окончания периода\n" +
@@ -160,6 +164,7 @@ public class SpInputParameterExtractorTest extends SpInputParameterExtractor{
             "\t,@nStorno\tINT\t\t= 0\t\t-- не показывать ссылки на сторнирующие документы\n" +
             "\t,@n4Client\tINT\t\t= 0\t\t-- =1 выписка для клиента, =0 выписка для банка\n";
 
+    @NotNull
     String s =
             "CREATE PROCEDURE dbo.zvaSelectCarry_Bill \n" +
                     "\t @dtb\t\tDateTime\t\t\t-- Дата начала периода\n" +

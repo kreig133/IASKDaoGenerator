@@ -2,6 +2,7 @@ package com.kreig133.daogenerator.db.preparators;
 
 import com.kreig133.daogenerator.jaxb.ParameterType;
 import org.apache.commons.lang.StringUtils;
+import org.jetbrains.annotations.NotNull;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -66,7 +67,7 @@ public class DoubleQueryPreparator extends QueryPreparator {
         return result.toString();
     }
 
-    protected void determineSqlTypeByTestValue( ParameterType pType ) {
+    protected void determineSqlTypeByTestValue( @NotNull ParameterType pType ) {
         if(pType.getTestValue().matches( "(-)?\\d+" )){
             pType.setSqlType( "int" );
         } else if( pType.getTestValue().matches( "(-)?[\\d\\.]+" ) ){
@@ -87,7 +88,9 @@ public class DoubleQueryPreparator extends QueryPreparator {
         }
     }
 
-    protected void parseQueryWithName( List<String> queryPiece, List<String> paramNames, String queryWithNames ) {
+    protected void parseQueryWithName(
+            @NotNull List<String> queryPiece, @NotNull List<String> paramNames, @NotNull String queryWithNames
+    ) {
         char[] chars = queryWithNames.toCharArray();
 
         StringBuilder queryPieceBuilder = new StringBuilder();
@@ -137,7 +140,7 @@ public class DoubleQueryPreparator extends QueryPreparator {
         }
     }
 
-    private char getCloseChar( Character quote ) {
+    private char getCloseChar( @NotNull Character quote ) {
         switch ( quote ){
             case '\'':
                 return '\'';

@@ -3,7 +3,6 @@ package com.kreig133.daogenerator;
 import com.kreig133.daogenerator.files.builder.FileBuilder;
 
 import java.io.IOException;
-import java.io.OutputStreamWriter;
 
 /**
  * @author eshangareev
@@ -29,12 +28,7 @@ public class WikiGenerator {
         for ( String s1 : cmdarray ) {
             System.out.println( s1 );
         }
-        Process exec = Runtime.getRuntime().exec( cmdarray );
-        Communicator.communicate( exec,
-                new OutputStreamWriter( System.out, "Cp866" ),
-                new OutputStreamWriter( System.err, "Cp866" )
-        );
-        exec.waitFor();
+        Communicator.communicate( cmdarray ).waitFor();
 
         System.out.println( " END " );
     }

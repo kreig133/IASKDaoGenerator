@@ -1,6 +1,7 @@
 package com.kreig133.daogenerator.gui;
 
 import com.kreig133.daogenerator.settings.Settings;
+import org.jetbrains.annotations.NotNull;
 
 import javax.swing.*;
 import java.awt.*;
@@ -10,8 +11,9 @@ import java.io.File;
  * @author eshangareev
  * @version 1.0
  */
-public class GuiUtils {
+class GuiUtils {
 
+    @NotNull
     public static JFileChooser getNewFileChooser(){
         JFileChooser jFileChooser = new DaoGenFileChooser();
         jFileChooser.setMultiSelectionEnabled( false );

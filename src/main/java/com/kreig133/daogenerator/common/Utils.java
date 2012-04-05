@@ -1,14 +1,13 @@
 package com.kreig133.daogenerator.common;
 
-import com.kreig133.daogenerator.jaxb.ParameterType;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.StringUtils;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.List;
-import java.util.Scanner;
 
 /**
  * @author eshangareev
@@ -16,11 +15,12 @@ import java.util.Scanner;
  */
 public class Utils {
 
-    public static boolean stringContainsMoreThanOneWord( String text ) {
+    public static boolean stringContainsMoreThanOneWord( @NotNull String text ) {
         return ( text.split( "\\s+" ).length > 1 );
     }
 
-    public static String streamToString( InputStream stream ) {
+    @Nullable
+    public static String streamToString( @NotNull InputStream stream ) {
         try {
             try {
                 return IOUtils.toString( stream );
@@ -33,7 +33,8 @@ public class Utils {
         }
     }
 
-    public static StringBuilder insertTabs( StringBuilder builder, int tabsQuantity ){
+    @NotNull
+    public static StringBuilder insertTabs( @NotNull StringBuilder builder, int tabsQuantity ){
         for( int i = 0 ; i < tabsQuantity; i ++ ){
             builder.append( "    " );
         }
@@ -46,7 +47,7 @@ public class Utils {
      * @param nameForCall
      * @return
      */
-    public static String convertPBNameToName( String nameForCall ) {
+    public static String convertPBNameToName( @NotNull String nameForCall ) {
         if( StringUtils.isEmpty( nameForCall ) ) {
             return "";
         }
@@ -68,6 +69,7 @@ public class Utils {
         return builder.toString();
     }
 
+    @NotNull
     public static File getFileFromDirectoryByName( String directoryPath, String fileName ) {
         return new File( new File( directoryPath ).getAbsolutePath() + "/" + fileName );
     }

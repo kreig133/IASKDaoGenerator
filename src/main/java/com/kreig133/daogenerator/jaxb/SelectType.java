@@ -8,6 +8,8 @@
 
 package com.kreig133.daogenerator.jaxb;
 
+import org.jetbrains.annotations.Nullable;
+
 import javax.xml.bind.annotation.XmlEnum;
 import javax.xml.bind.annotation.XmlType;
 
@@ -59,6 +61,7 @@ public enum SelectType {
         this.keyWord = keyWord;
     }
 
+    @Nullable
     public static SelectType getByName( String name ){
         name = name.trim().toLowerCase();
         for( SelectType selectType: SelectType.values() ){

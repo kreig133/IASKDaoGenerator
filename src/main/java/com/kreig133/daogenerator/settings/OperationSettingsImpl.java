@@ -3,6 +3,7 @@ package com.kreig133.daogenerator.settings;
 import com.kreig133.daogenerator.common.SourcePathChangeListener;
 import com.kreig133.daogenerator.common.TypeChangeListener;
 import com.kreig133.daogenerator.enums.Type;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -15,7 +16,9 @@ import java.util.Properties;
  */
 final public class OperationSettingsImpl implements OperationSettings{
 
+    @NotNull
     private List<TypeChangeListener> typeChangelisteners = new ArrayList<TypeChangeListener>();
+    @NotNull
     private List<SourcePathChangeListener> sourcePathChangeListeners = new ArrayList<SourcePathChangeListener>();
 
     private Type TYPE = Type.TEST;
@@ -40,16 +43,19 @@ final public class OperationSettingsImpl implements OperationSettings{
         return OUTPUT_PATH_FOR_JAVA_CLASSES;
     }
 
+    @NotNull
     @Override
     public String getPathForGeneratedSource() {
         return OUTPUT_PATH_FOR_JAVA_CLASSES + "\\src\\main\\java";
     }
 
+    @NotNull
     @Override
     public String getPathForGeneratedTests() {
         return OUTPUT_PATH_FOR_JAVA_CLASSES + "\\src\\test\\java";
     }
 
+    @NotNull
     @Override
     public String getPathForTestResources() {
         return OUTPUT_PATH_FOR_JAVA_CLASSES + "\\src\\test\\resources";

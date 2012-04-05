@@ -8,6 +8,8 @@
 
 package com.kreig133.daogenerator.jaxb;
 
+import org.jetbrains.annotations.NotNull;
+
 import javax.xml.bind.annotation.XmlEnum;
 import javax.xml.bind.annotation.XmlEnumValue;
 import javax.xml.bind.annotation.XmlType;
@@ -55,6 +57,7 @@ public enum JavaType {
         return value;
     }
 
+    @NotNull
     public static JavaType fromValue(String v) {
         for (JavaType c: JavaType.values()) {
             if (c.value.equals(v)) {
@@ -90,7 +93,7 @@ public enum JavaType {
         );
     }
 
-    private static void linkJavaTypeWithAliases(JavaType type, String...aliases){
+    private static void linkJavaTypeWithAliases(JavaType type, @NotNull String...aliases){
         List<String> listOfStrings = new ArrayList<String>( aliases.length );
         Collections.addAll( listOfStrings, aliases );
         map.put( type, listOfStrings );

@@ -1,6 +1,7 @@
 package com.kreig133.daogenerator.gui;
 
 import com.kreig133.daogenerator.jaxb.ParameterType;
+import org.jetbrains.annotations.NotNull;
 
 import javax.swing.table.AbstractTableModel;
 import java.util.ArrayList;
@@ -8,13 +9,16 @@ import java.util.List;
 
 class ParametrsModel extends AbstractTableModel {
 
+    @NotNull
     static String[] columnsName = {
             "№", "Название", "Тип", "SQL-тип", "IN/OUT", "По умолчанию",
             "Для теста", "Переименовать в", "JDBC-тип", "Комментарий"
     };
 
+    @NotNull
     List<ParameterType> parameterTypes = new ArrayList<ParameterType>();
 
+    @NotNull
     public List<ParameterType> getParameterTypes() {
         return parameterTypes;
     }
@@ -63,7 +67,7 @@ class ParametrsModel extends AbstractTableModel {
     }
 
     @Override
-    public void setValueAt( Object aValue, int rowIndex, int columnIndex ) {
+    public void setValueAt( @NotNull Object aValue, int rowIndex, int columnIndex ) {
         switch ( columnIndex ) {
             case 1:
                 parameterTypes.get( rowIndex ).setName( ( ( String ) aValue ).trim() );

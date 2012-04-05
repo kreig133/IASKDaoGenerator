@@ -1,6 +1,5 @@
 package com.kreig133.daogenerator.gui;
 
-import com.kreig133.daogenerator.DaoGenerator;
 import com.kreig133.daogenerator.JaxbHandler;
 import com.kreig133.daogenerator.MavenProjectGenerator;
 import com.kreig133.daogenerator.WikiGenerator;
@@ -8,16 +7,17 @@ import com.kreig133.daogenerator.common.SourcePathChangeListener;
 import com.kreig133.daogenerator.common.TypeChangeListener;
 import com.kreig133.daogenerator.common.Utils;
 import com.kreig133.daogenerator.db.extractors.Extractor;
-import com.kreig133.daogenerator.db.preparators.DoubleQueryPreparator;
-import com.kreig133.daogenerator.db.preparators.QueryPreparator;
 import com.kreig133.daogenerator.db.extractors.in.InputParameterExtractor;
 import com.kreig133.daogenerator.db.extractors.in.SpInputParameterExtractor;
 import com.kreig133.daogenerator.db.extractors.out.OutputParameterExtractor;
+import com.kreig133.daogenerator.db.preparators.DoubleQueryPreparator;
+import com.kreig133.daogenerator.db.preparators.QueryPreparator;
 import com.kreig133.daogenerator.enums.Type;
 import com.kreig133.daogenerator.files.builder.FileBuilder;
 import com.kreig133.daogenerator.jaxb.*;
 import com.kreig133.daogenerator.settings.Settings;
 import org.apache.commons.lang.StringUtils;
+import org.jetbrains.annotations.NotNull;
 
 import javax.swing.*;
 import javax.swing.event.ChangeEvent;
@@ -339,7 +339,7 @@ public class Form  implements TypeChangeListener, SourcePathChangeListener{
             }
 
             @Override
-            public void write( byte[] b ) throws IOException {
+            public void write( @NotNull byte[] b ) throws IOException {
                 write( b, 0, b.length );
             }
         };
@@ -352,7 +352,7 @@ public class Form  implements TypeChangeListener, SourcePathChangeListener{
         updateTable( outputParametrs, inputParametrsForSP );
     }
 
-    private void updateTable( JTable table, List<ParameterType> inputParametrsForSP ) {
+    private void updateTable( @NotNull JTable table, List<ParameterType> inputParametrsForSP ) {
         final List<ParameterType> parameterTypes =
                 ( ( ParametrsModel ) ( table.getModel() ) ).getParameterTypes();
         parameterTypes.clear();
@@ -364,6 +364,7 @@ public class Form  implements TypeChangeListener, SourcePathChangeListener{
         updateTable( inputParametrs, inputParametrsForSP );
     }
 
+    @NotNull
     private DaoMethod getCurrentDaoMethod(){
         final DaoMethod result = new DaoMethod();
 
@@ -394,11 +395,12 @@ public class Form  implements TypeChangeListener, SourcePathChangeListener{
         return result;
     }
 
+    @NotNull
     private SelectType determineQueryType() {
         return Extractor.determineQueryType( queryTextArea.getText() );
     }
 
-    public JFrame getWindowWithText() {
+    JFrame getWindowWithText() {
         if ( windowWithText == null ) {
             windowWithText = new JFrame();
             windowWithText.setSize( 1024, 700 );

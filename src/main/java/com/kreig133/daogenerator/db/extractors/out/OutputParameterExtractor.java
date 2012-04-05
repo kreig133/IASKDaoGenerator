@@ -1,13 +1,16 @@
 package com.kreig133.daogenerator.db.extractors.out;
 
-import com.google.common.collect.Lists;
 import com.kreig133.daogenerator.common.Utils;
 import com.kreig133.daogenerator.db.JBDCTypeIdConverter;
 import com.kreig133.daogenerator.db.extractors.Extractor;
 import com.kreig133.daogenerator.db.extractors.SqlTypeHelper;
 import com.kreig133.daogenerator.jaxb.*;
+import org.jetbrains.annotations.NotNull;
 
-import java.sql.*;
+import java.sql.ParameterMetaData;
+import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
+import java.sql.SQLException;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -17,7 +20,8 @@ import java.util.List;
  */
 public abstract class OutputParameterExtractor extends Extractor{
     
-    public static OutputParameterExtractor newInstance( SelectType type ){
+    @NotNull
+    public static OutputParameterExtractor newInstance( @NotNull SelectType type ){
         switch ( type ){
             case CALL:
                 return new SpOutputParameterExtractor();
@@ -28,7 +32,7 @@ public abstract class OutputParameterExtractor extends Extractor{
         }
     }
 
-    protected void fillJdbcTypeForInputParameters( ParameterMetaData parameterMetaData, DaoMethod daoMethod )
+    protected void fillJdbcTypeForInputParameters( @NotNull ParameterMetaData parameterMetaData, @NotNull DaoMethod daoMethod )
             throws SQLException {
         for ( ParameterType p : daoMethod.getInputParametrs().getParameter() ) {
             p.setJdbcType( JBDCTypeIdConverter.getJdbcTypeNameById( parameterMetaData.getParameterType(
@@ -37,7 +41,8 @@ public abstract class OutputParameterExtractor extends Extractor{
         }
     }
 
-    public DaoMethod getOutputParameters( final DaoMethod daoMethod ){
+    @NotNull
+    public DaoMethod getOutputParameters( @NotNull final DaoMethod daoMethod ){
 
         try {
             final ResultSet resultSet = getResultSet( daoMethod );

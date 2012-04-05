@@ -1,6 +1,8 @@
 package com.kreig133.daogenerator.settings;
 
 import com.kreig133.daogenerator.common.Utils;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import javax.swing.*;
 import java.io.File;
@@ -18,6 +20,7 @@ public class PropertiesFileController {
     private static final String COMMENTS = "Settings for DaoGenerator";
     private static final String CREATE_FILE_MESSAGE = "Создать файл" + Settings.PROPERTIES_FILE_NAME + "в папке \"%s\"?";
 
+    @Nullable
     public static Properties getDefaultProperties() {
         try{
             Properties settings = new Properties();
@@ -44,6 +47,7 @@ public class PropertiesFileController {
         return Settings.PROPERTIES_FILE_NAME ;
     }
 
+    @Nullable
     public static Properties getPropertiesFromSourceDir( String sourceDirPath ) {
         try{
             Properties settings = new Properties();
@@ -64,6 +68,7 @@ public class PropertiesFileController {
         }
     }
 
+    @Nullable
     private static File getSpecificPropertiesFile( String sourceDirPath, boolean createIfNotExist ) {
 
         final File fileFromDirectoryByName =
@@ -89,7 +94,7 @@ public class PropertiesFileController {
         return fileFromDirectoryByName;
     }
 
-    public static void saveCommonProperties( Properties properties ) {
+    public static void saveCommonProperties( @NotNull Properties properties ) {
         try {
             properties.store( new FileOutputStream( getDefaultPropertiesFileName() ), COMMENTS );
         } catch ( IOException e ) {
@@ -97,7 +102,7 @@ public class PropertiesFileController {
         }
     }
 
-    public static void saveSpecificProperties( String sourcePath, Properties properties ) {
+    public static void saveSpecificProperties( String sourcePath, @NotNull Properties properties ) {
         try {
             properties.store( new FileOutputStream( getSpecificPropertiesFile( sourcePath, true ) ), COMMENTS );
         } catch ( IOException e ) {

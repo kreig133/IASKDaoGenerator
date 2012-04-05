@@ -1,12 +1,14 @@
 package com.kreig133.daogenerator.db;
 
-import com.kreig133.daogenerator.DaoGenerator;
 import com.kreig133.daogenerator.common.TypeChangeListener;
 import com.kreig133.daogenerator.settings.Settings;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
 import java.util.Properties;
 
 import static com.kreig133.daogenerator.settings.Settings.*;
@@ -19,8 +21,10 @@ public class JDBCConnector implements TypeChangeListener{
 
     private final Properties properties = new Properties();
 
+    @Nullable
     private Connection connection = null;
 
+    @Nullable
     public Connection connectToDB() {
 
         try {

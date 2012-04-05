@@ -10,6 +10,7 @@ package com.kreig133.daogenerator.jaxb;
 
 import com.google.common.base.Predicate;
 import com.google.common.collect.Iterators;
+import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
 import javax.xml.bind.annotation.XmlAccessType;
@@ -132,11 +133,13 @@ public class ParametersType {
         return this.parameter;
     }
 
+    @org.jetbrains.annotations.Nullable
     public ParameterType getParameterByName( String name ) {
         return getParameterByName( name, getParameter() );
     }
     
-    public static ParameterType getParameterByName( final String name, List<ParameterType> parameters ){
+    @org.jetbrains.annotations.Nullable
+    public static ParameterType getParameterByName( final String name, @NotNull List<ParameterType> parameters ){
         return Iterators.tryFind( parameters.iterator(), new Predicate<ParameterType>() {
             @Override
             public boolean apply( @Nullable ParameterType input ) {
@@ -145,6 +148,7 @@ public class ParametersType {
         } ).orNull();
     }
     
+    @NotNull
     public List<Integer> getIndexOfUnnamedParameters() {
         final List<Integer> result = new LinkedList<Integer>();
 
@@ -173,17 +177,19 @@ public class ParametersType {
         return containsSameNames( getParameter() );
     }
 
-    public static boolean containsSameNames( List<ParameterType> parameterTypes ) {
+    public static boolean containsSameNames( @NotNull List<ParameterType> parameterTypes ) {
         Set<String> names = new HashSet<String>();
         for ( ParameterType parameterType : parameterTypes ) {
             if ( names.contains( parameterType.getName() ) ) {
                 return true;
+            } else {
+                names.add( parameterType.getName() );
             }
         }
         return false;
     }
 
-    public static boolean isWithPaging( List<ParameterType> parameterTypes ) {
+    public static boolean isWithPaging( @NotNull List<ParameterType> parameterTypes ) {
         Map<Enum, Boolean> map = new HashMap<Enum, Boolean>();
         for ( WithPagingType withPagingType : WithPagingType.values() ) {
             map.put( withPagingType, Boolean.FALSE );
@@ -223,6 +229,7 @@ public class ParametersType {
             return getBySqlName( name ) != null;
         }
 
+        @org.jetbrains.annotations.Nullable
         public static WithPagingType getBySqlName( String name ) {
             try {
                 return valueOf( NamingUtils.convertNameForEnum( name ) );

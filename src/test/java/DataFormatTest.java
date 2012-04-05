@@ -1,3 +1,5 @@
+import org.jetbrains.annotations.NotNull;
+
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 
@@ -6,7 +8,8 @@ import java.text.SimpleDateFormat;
  * @version 1.0
  */
 public class DataFormatTest {
-    SimpleDateFormat format = new SimpleDateFormat( "M-d-yyyy H:m:s.SSS" );
+    @NotNull
+    private SimpleDateFormat format = new SimpleDateFormat( "M-d-yyyy H:m:s.SSS" );
 
 
     @org.junit.Test

@@ -1,19 +1,22 @@
 package com.kreig133.daogenerator.jaxb;
 
 import org.apache.commons.lang.StringUtils;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * @author eshangareev
  * @version 1.0
  */
 public class NamingUtils {
-    public static String convertNameForClassNaming( String name ) {
+    @NotNull
+    public static String convertNameForClassNaming( @NotNull String name ) {
         final char[] chars = name.toCharArray();
         chars[ 0 ] = Character.toUpperCase( chars[ 0 ] );
         return new String( chars );
     }
 
-    public static String convertNameForNonClassNaming( String name ) {
+    @NotNull
+    public static String convertNameForNonClassNaming( @NotNull String name ) {
         final char[] chars = name.toCharArray();
         chars[ 0 ] = Character.toLowerCase( chars[ 0 ] );
         return new String( chars );
@@ -24,7 +27,8 @@ public class NamingUtils {
      * @param name
      * @return
      */
-    public static String convertNameForGettersAndSetters( String name ) {
+    @NotNull
+    public static String convertNameForGettersAndSetters( @NotNull String name ) {
 
         if ( StringUtils.isEmpty( name ) ) throw new IllegalArgumentException();
 
@@ -40,7 +44,7 @@ public class NamingUtils {
         return name;
     }
 
-    public static String convertNameForEnum( String name ) {
+    public static String convertNameForEnum( @NotNull String name ) {
         StringBuilder builder = new StringBuilder();
         char[] chars = name.toCharArray();
         for(  int i = 0 ; i< chars.length; i ++ ) {

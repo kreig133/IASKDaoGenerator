@@ -1,6 +1,7 @@
 package com.kreig133.daogenerator.sql.creators;
 
 import com.kreig133.daogenerator.jaxb.*;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -20,7 +21,7 @@ public abstract class QueryCreator {
             boolean forTest
     );
 
-    protected String getEscapedParamName( ParameterType parameterType, boolean fullFormat ){
+    protected String getEscapedParamName( @NotNull ParameterType parameterType, boolean fullFormat ){
         return fullFormat ?
                 String.format(
                         "#{%s, mode=%s, jdbcType=%s}",
@@ -31,12 +32,13 @@ public abstract class QueryCreator {
                 String.format( "#{%s}", parameterType.getRenameTo() ) ;
     }
 
-    public static String getQueryStringWithoutMetaData( String query ){
+    public static String getQueryStringWithoutMetaData( @NotNull String query ){
         return query.replaceAll( daoGeneratorEscapedParamInfo.pattern(), "?" ) ;
     }
 
     protected static final Pattern daoGeneratorEscapedParamInfo = Pattern.compile( "\\$\\{(.+?)\\}");
 
+    @NotNull
     public static List<String> getListOfParametrNames( String query ) {
         final List<String> names = new ArrayList<String>();
 
@@ -53,6 +55,7 @@ public abstract class QueryCreator {
         return daoGeneratorEscapedParamInfo.matcher( query );
     }
 
+    @NotNull
     public static List<ParameterType> extractInputParams( String query ) {
         Set<String> names = new HashSet<String>();
         Matcher matcher = getMatcher( query );

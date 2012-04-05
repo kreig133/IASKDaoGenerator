@@ -2,6 +2,7 @@ package com.kreig133.daogenerator.sql.test;
 
 import com.kreig133.daogenerator.jaxb.JavaType;
 import com.kreig133.daogenerator.jaxb.ParameterType;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * @author kreig133
@@ -11,7 +12,8 @@ public class TestValueByStringGenerator {
 
     private static final String NULL = "null";
 
-    public static TestValueByStringGenerator newInstance( ParameterType p ){
+    @NotNull
+    public static TestValueByStringGenerator newInstance( @NotNull ParameterType p ){
         if( p.getType() == JavaType.DATE || p.getType() == JavaType.STRING ){
             return new QuotedTestValueByStringGenerator();
         }
@@ -19,7 +21,7 @@ public class TestValueByStringGenerator {
         return new TestValueByStringGenerator();
     }
     
-    public String getTestValue ( ParameterType parameterType ){
+    public String getTestValue ( @NotNull ParameterType parameterType ){
         if ( parameterType.getTestValue() == null || NULL.equals( parameterType.getTestValue() ) ) {
             return "NULL";
         }
@@ -27,7 +29,7 @@ public class TestValueByStringGenerator {
         return getNotNullTestValue( parameterType );
     }
 
-    protected String getNotNullTestValue( ParameterType parameterType ) {
+    protected String getNotNullTestValue( @NotNull ParameterType parameterType ) {
         String testValue = parameterType.getTestValue();
         if( parameterType.getType() != JavaType.STRING && "".equals( testValue ) ){
             return NULL;

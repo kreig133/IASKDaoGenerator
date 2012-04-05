@@ -2,6 +2,8 @@ package com.kreig133.daogenerator.files.mybatis.model;
 
 import com.kreig133.daogenerator.jaxb.NamingUtils;
 import com.kreig133.daogenerator.jaxb.ParameterType;
+import com.kreig133.daogenerator.jaxb.ParametersType;
+import org.jetbrains.annotations.Nullable;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -13,13 +15,14 @@ import java.util.List;
  */
 public class ModelClassGeneratorTest extends ModelClassGenerator{
 
+    @Nullable
     @Override
     protected List<ParameterType> filter( List<ParameterType> parameter ) {
         return null;
     }
 
     public ModelClassGeneratorTest() {
-        super( null );
+        super( new ParametersType() );
     }
 
     @Test

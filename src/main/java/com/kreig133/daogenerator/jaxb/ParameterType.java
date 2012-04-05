@@ -8,6 +8,9 @@
 
 package com.kreig133.daogenerator.jaxb;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
 import javax.xml.bind.annotation.*;
 
 /**
@@ -311,13 +314,15 @@ public class ParameterType {
         return comment;
     }
 
+    @NotNull
     public String getDefaultValueForJavaCode() {
         return defaultValue.trim() +
                 ( type == JavaType.LONG ?
                         ( "null".equals( defaultValue.toLowerCase().trim() ) ? "" : "L" ) : "" );
     }
     
-    public static String getDefaultTestValue( ParameterType parameterType ) {
+    @Nullable
+    public static String getDefaultTestValue( @NotNull ParameterType parameterType ) {
         switch ( parameterType.getType() ) {
             case DATE:
                 return "12-12-2012 0:00:00.000";

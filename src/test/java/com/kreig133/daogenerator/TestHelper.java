@@ -2,6 +2,7 @@ package com.kreig133.daogenerator;
 
 import com.kreig133.daogenerator.jaxb.*;
 import org.intellij.lang.annotations.Language;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
@@ -10,6 +11,7 @@ import java.util.List;
  * @version 1.0
  */
 public class TestHelper {
+    @NotNull
     @Language( "SQL" )
     public static String spCall = "execute dbo.sp_ValueSearcher18 @id_mode = 2, @b_resident = -1, @id_emitent = NULL, " +
             "@id_bondkind = NULL, @id_cbbondkind = NULL, @s_shortname = NULL, @s_name = NULL, @s_insidecode = NULL, " +
@@ -18,6 +20,7 @@ public class TestHelper {
             " @i_rest = NULL, @d_rest = NULL, @id_membauth = NULL, @id_membstore = NULL, @id_status = NULL, " +
             "@id_user = NULL, @iexternal= -1, @dt_modifiedfrom = NULL, @dt_modifiedto = NULL";
 
+    @NotNull
     public static DaoMethod getDaoMethodForTest(){
         final DaoMethod daoMethod = new DaoMethod();
 

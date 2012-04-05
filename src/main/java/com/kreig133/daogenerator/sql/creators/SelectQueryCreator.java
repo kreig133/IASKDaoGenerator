@@ -3,6 +3,7 @@ package com.kreig133.daogenerator.sql.creators;
 import com.kreig133.daogenerator.jaxb.DaoMethod;
 import com.kreig133.daogenerator.jaxb.ParameterType;
 import com.kreig133.daogenerator.sql.test.TestValueByStringGenerator;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
@@ -12,7 +13,7 @@ import java.util.List;
  */
 public class SelectQueryCreator extends QueryCreator{
     @Override
-    public String generateExecuteQuery( DaoMethod daoMethod, boolean forTest ) {
+    public String generateExecuteQuery( @NotNull DaoMethod daoMethod, boolean forTest ) {
 
         String sqlQuery = daoMethod.getCommon().getQuery();
 
@@ -32,6 +33,7 @@ public class SelectQueryCreator extends QueryCreator{
 
                 ParameterType parameter = daoMethod.getInputParametrs().getParameterByName( listOfParametrNames.get( i ) );
 
+                assert parameter != null;
                 builder.append( forTest ?
                         TestValueByStringGenerator.newInstance( parameter ).getTestValue( parameter ) :
                         getEscapedParamName( parameter, false )

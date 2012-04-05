@@ -7,6 +7,7 @@ import com.kreig133.daogenerator.jaxb.ParameterType;
 import com.kreig133.daogenerator.jaxb.ParametersType;
 import com.kreig133.daogenerator.jaxb.SelectType;
 import org.apache.commons.lang.StringUtils;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
 import java.util.regex.Matcher;
@@ -19,7 +20,7 @@ import static com.kreig133.daogenerator.db.extractors.TableNameHelper.getTableNa
  * @version 1.0
  */
 public class ValueModeQueryPreparator extends QueryPreparator {
-    public String prepareQueryValueMode( String query ) {
+    public String prepareQueryValueMode( @NotNull String query ) {
         List<ParameterType> result = getActualParameterList(
                 getColumnsFromQuery( query ).keySet().iterator(),
                 getColumnsFromDbByTableName( getTableName( query ) )
@@ -29,8 +30,9 @@ public class ValueModeQueryPreparator extends QueryPreparator {
         return prepareCast( prepareAsInsertQueryIfNeed( query ) );
     }
 
+    @NotNull
     private List<ParameterType> getActualParameterList(
-            Iterator<String> columnsFromQuery,
+            @NotNull Iterator<String> columnsFromQuery,
             List<ParameterType> columnsFromDbByTableName
     ) {
         List<ParameterType> result = new ArrayList<ParameterType>();
@@ -40,10 +42,12 @@ public class ValueModeQueryPreparator extends QueryPreparator {
         return result;
     }
 
-    protected Map<String, String> getColumnsFromQuery( DaoMethod daoMethod ) {
+    @NotNull
+    protected Map<String, String> getColumnsFromQuery( @NotNull DaoMethod daoMethod ) {
         return getColumnsFromQuery( daoMethod.getCommon().getQuery() );
     }
 
+    @NotNull
     protected Map<String, String> getColumnsFromQuery( String query ) {
         Map<String, String> columnsWithValue = new HashMap<String, String>();
         for ( String subPattern : subPatterns ) {
@@ -70,7 +74,7 @@ public class ValueModeQueryPreparator extends QueryPreparator {
         return newQuery;
     }
 
-    protected String replaceTestVaulesByDaoGeneratorFormatedInfoString( String query, List<ParameterType> result ) {
+    protected String replaceTestVaulesByDaoGeneratorFormatedInfoString( String query, @NotNull List<ParameterType> result ) {
         for ( ParameterType parameterType : result ) {
             String pattern = String.format( "(?i)(%s.*?)=\\s*"+ TEST_VALUES, parameterType.getName() );
             String replacement = String.format(
@@ -83,7 +87,7 @@ public class ValueModeQueryPreparator extends QueryPreparator {
         return query;
     }
 
-    protected String prepareAsInsertQueryIfNeed( String query ) {
+    protected String prepareAsInsertQueryIfNeed( @NotNull String query ) {
 
         if( Extractor.determineQueryType( query ) != SelectType.INSERT ) return query;
 
@@ -139,6 +143,7 @@ public class ValueModeQueryPreparator extends QueryPreparator {
         return query.replaceAll( "(?isu)\\bvalues\\b\\s*\\((.+?)\\)", String.format( "values(\n\t%s\n)", join ) );
     }
 
+    @NotNull
     private String[] getTestValues( String string ) {
         List<String> testValueList = new ArrayList<String>();
         Matcher testValuesMatcher = Pattern.compile( this.testValuesInInsert ).matcher( string );
@@ -151,7 +156,7 @@ public class ValueModeQueryPreparator extends QueryPreparator {
         return testValues;
     }
 
-    private String formatTestValue( String testValue, ParameterType parameterByName ) {
+    private String formatTestValue( String testValue, @NotNull ParameterType parameterByName ) {
         return String.format( "\\${%s;%s;%s}",
                 parameterByName.getName(),
                 parameterByName.getSqlType(),

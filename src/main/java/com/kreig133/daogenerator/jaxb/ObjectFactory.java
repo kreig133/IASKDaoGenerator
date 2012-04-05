@@ -8,6 +8,8 @@
 
 package com.kreig133.daogenerator.jaxb;
 
+import org.jetbrains.annotations.NotNull;
+
 import javax.xml.bind.annotation.XmlRegistry;
 
 
@@ -40,6 +42,7 @@ public class ObjectFactory {
      * Create an instance of {@link ParametersType }
      * 
      */
+    @NotNull
     public ParametersType createParametersType() {
         return new ParametersType();
     }
@@ -48,6 +51,7 @@ public class ObjectFactory {
      * Create an instance of {@link CommonType }
      * 
      */
+    @NotNull
     public CommonType createCommonType() {
         return new CommonType();
     }
@@ -56,6 +60,7 @@ public class ObjectFactory {
      * Create an instance of {@link ConfigurationType }
      * 
      */
+    @NotNull
     public ConfigurationType createConfigurationType() {
         return new ConfigurationType();
     }
@@ -64,6 +69,7 @@ public class ObjectFactory {
      * Create an instance of {@link ParameterType }
      * 
      */
+    @NotNull
     public ParameterType createParameterType() {
         return new ParameterType();
     }
@@ -72,6 +78,7 @@ public class ObjectFactory {
      * Create an instance of {@link DaoMethod }
      * 
      */
+    @NotNull
     public DaoMethod createDaoMethod() {
         return new DaoMethod();
     }

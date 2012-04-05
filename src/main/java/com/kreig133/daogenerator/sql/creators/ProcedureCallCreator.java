@@ -7,6 +7,7 @@ import com.kreig133.daogenerator.jaxb.ParameterType;
 import com.kreig133.daogenerator.jaxb.SelectType;
 import com.kreig133.daogenerator.sql.test.TestValueByStringGenerator;
 import org.apache.commons.lang.StringUtils;
+import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
 
@@ -17,7 +18,7 @@ import javax.annotation.Nullable;
 public class ProcedureCallCreator extends CommonCallCreator{
 
     protected static String generateProcedureCall(
-            DaoMethod daoMethod,
+            @NotNull DaoMethod daoMethod,
             Function<ParameterType, String> function
     ) {
         StringBuilder builder      = new StringBuilder();
@@ -40,12 +41,13 @@ public class ProcedureCallCreator extends CommonCallCreator{
     }
 
     @Override
-    public String generateExecuteQuery( final DaoMethod daoMethod, final boolean forTest ) {
+    public String generateExecuteQuery( @NotNull final DaoMethod daoMethod, final boolean forTest ) {
         return ProcedureCallCreator.generateProcedureCall(
                 daoMethod,
                 new Function<ParameterType, String>() {
                     @Override
                     public String apply( @Nullable ParameterType input ) {
+                        assert input != null;
                         return transformParameterName(
                                 input,
                                 forTest ?

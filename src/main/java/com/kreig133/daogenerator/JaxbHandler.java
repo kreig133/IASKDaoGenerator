@@ -1,13 +1,13 @@
 package com.kreig133.daogenerator;
 
 import com.kreig133.daogenerator.jaxb.DaoMethod;
+import org.jetbrains.annotations.NotNull;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
 import javax.xml.bind.Unmarshaller;
 import java.io.File;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 
@@ -20,6 +20,7 @@ public class JaxbHandler {
     private static Unmarshaller unmarshaller;
     private static Marshaller marshaller;
 
+    @NotNull
     public static DaoMethod unmarshallFile(
             File fileWithData
     ) {
@@ -30,6 +31,7 @@ public class JaxbHandler {
         }
     }
 
+    @NotNull
     public static DaoMethod unmarshallStream(
             InputStream stream
     ) {
@@ -40,7 +42,7 @@ public class JaxbHandler {
         }
     }
 
-    public static void marshallInFile( File file, DaoMethod daoMethod ){
+    public static void marshallInFile( @NotNull File file, @NotNull DaoMethod daoMethod ){
         //TODO костыль
         daoMethod.getCommon().setQuery(
                 daoMethod.getCommon().getQuery().replaceAll( "[\\n\\r][\\n\\r]", "\n" )

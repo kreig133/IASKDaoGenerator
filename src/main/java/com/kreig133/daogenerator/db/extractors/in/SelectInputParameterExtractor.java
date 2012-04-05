@@ -1,14 +1,9 @@
 package com.kreig133.daogenerator.db.extractors.in;
 
-import com.kreig133.daogenerator.common.Utils;
-import com.kreig133.daogenerator.jaxb.*;
+import com.kreig133.daogenerator.jaxb.DaoMethod;
+import com.kreig133.daogenerator.jaxb.ParameterType;
 import com.kreig133.daogenerator.sql.creators.QueryCreator;
-
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * @author eshangareev
@@ -25,8 +20,9 @@ public class SelectInputParameterExtractor extends QueryInputParameterExtractor{
         return INSTANCE;
     }
 
+    @NotNull
     @Override
-    public DaoMethod extractInputParams( DaoMethod daoMethod ) {
+    public DaoMethod extractInputParams( @NotNull DaoMethod daoMethod ) {
         final String query = daoMethod.getCommon().getQuery();
 
 

@@ -1,16 +1,15 @@
 package com.kreig133.daogenerator.db.preparators;
 
-import com.kreig133.daogenerator.db.preparators.QueryPreparator;
 import com.kreig133.daogenerator.enums.Type;
 import com.kreig133.daogenerator.jaxb.ParameterType;
 import com.kreig133.daogenerator.settings.Settings;
 import junit.framework.Assert;
 import org.intellij.lang.annotations.Language;
+import org.jetbrains.annotations.NotNull;
 import org.junit.Before;
 import org.junit.Test;
 
 import java.util.List;
-import java.util.Map;
 
 /**
  * @author eshangareev
@@ -18,6 +17,7 @@ import java.util.Map;
  */
 public class QueryPreparatorTest extends QueryPreparator {
 
+    @NotNull
     @Language( "SQL" )
     String insertQuery =
                     "INSERT INTO dbo.t_DocAdmMembers \n" +
@@ -32,6 +32,7 @@ public class QueryPreparatorTest extends QueryPreparator {
                     "'0003', 'omr', '0001', '000002', \n" +
                     "'000003', '000004', 'ru', 'ki', -1 )";
 
+    @NotNull
     @Language( "SQL" )
     static String updateQuery = "UPDATE t_Depo \n" +
             "SET \"nflreport\" = 1 \n" +

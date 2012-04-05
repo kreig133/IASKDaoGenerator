@@ -1,24 +1,20 @@
 package com.kreig133.daogenerator.db.preparators;
 
-import com.google.common.base.Preconditions;
 import com.kreig133.daogenerator.db.JDBCConnector;
-import com.kreig133.daogenerator.db.extractors.Extractor;
 import com.kreig133.daogenerator.db.extractors.SqlTypeHelper;
-import com.kreig133.daogenerator.jaxb.DaoMethod;
 import com.kreig133.daogenerator.jaxb.ParameterType;
 import com.kreig133.daogenerator.jaxb.ParametersType;
-import com.kreig133.daogenerator.jaxb.SelectType;
 import org.apache.commons.lang.StringUtils;
 import org.intellij.lang.annotations.Language;
+import org.jetbrains.annotations.NotNull;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
-import static com.kreig133.daogenerator.db.extractors.TableNameHelper.getTableName;
 
 /**
  * @author eshangareev
@@ -36,21 +32,29 @@ public class QueryPreparator {
     protected static final String SQL_TYPE = "\\w+(\\s*\\(\\s*\\d+(\\s*,\\s*\\d+)?\\s*\\))?";
     @Language( "RegExp" )
     protected static final String TEST_VALUES = "(([-\\d\\.]+)|(null)|('.+?'))";
+    @NotNull
     @Language("RegExp")
     protected String regex = "(?u)([\"\\[]?\\w+[\"\\]]?)?%s\\s*=\\s*" + TEST_VALUES;
+    @NotNull
     @Language( "RegExp" )
     protected String castRegExp = "(?isu)(%s\\s*=.*?)\\bcast\\s*\\(\\s*"+ TEST_VALUES +"\\s*as\\s*("+ SQL_TYPE + ")\\s*\\)";
+    @NotNull
     @Language("RegExp")
     protected String columnName = "\\b([@#\\w&&[\\D]][\\w\\$@#]*)\\b";
+    @NotNull
     @Language("RegExp")
     protected String quotedColumnName = "\"(.+?)\"";
+    @NotNull
     @Language("RegExp")
     protected String columnNameInBrackets = "\\[(.+?)\\]";
+    @NotNull
     @Language( "RegExp" )
     protected String testValuesInInsert = "(?i)"+ TEST_VALUES + "\\s*[,\\)]";
+    @NotNull
     @Language("RegExp")
     protected String insertRE =
             "(?isu)insert\\b\\s*\\binto\\b\\s*.+?\\s*(\\(\\s*(.+?)\\s*\\))?\\s*\\bvalues\\b\\s*\\((.+?\\))";
+    @NotNull
     protected String[] subPatterns = { columnName, quotedColumnName, columnNameInBrackets };
 
     public String prepareQuery( String query ) {
@@ -66,6 +70,7 @@ public class QueryPreparator {
                 .replaceAll( "``", "" );
     }
 
+    @NotNull
     protected WorkingMode determineWorkingMode( String query ) {
         int colonCountInsideQuote = 0;
         int colonCountTotal = StringUtils.countMatches( query, ":" );
@@ -77,7 +82,7 @@ public class QueryPreparator {
         return colonCountInsideQuote < colonCountTotal ? WorkingMode.NAME : WorkingMode.VALUE;
     }
 
-    protected ParameterType getActualParameter( List<ParameterType> columnsFromDbByTableName, String column ) {
+    protected ParameterType getActualParameter( List<ParameterType> columnsFromDbByTableName, @NotNull String column ) {
         ParameterType parameterByName = ParametersType.getParameterByName( column.trim(), columnsFromDbByTableName );
 
         if( parameterByName == null ) {
@@ -88,6 +93,7 @@ public class QueryPreparator {
         return parameterByName;
     }
 
+    @NotNull
     protected List<ParameterType> getColumnsFromDbByTableName( String tableName ) {
         try {
             Connection connection = JDBCConnector.instance().connectToDB();

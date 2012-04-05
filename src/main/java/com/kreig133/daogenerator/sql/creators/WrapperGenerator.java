@@ -6,6 +6,7 @@ import com.kreig133.daogenerator.jaxb.DaoMethod;
 import com.kreig133.daogenerator.jaxb.ParameterType;
 import com.kreig133.daogenerator.sql.test.TestValueByStringGenerator;
 import org.apache.commons.lang.StringUtils;
+import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
 import java.util.List;
@@ -19,7 +20,7 @@ import static com.kreig133.daogenerator.common.Utils.insertTabs;
 public class WrapperGenerator extends CommonCallCreator{
 
     @Override
-    public String generateExecuteQuery( DaoMethod daoMethod, final boolean forTest ) {
+    public String generateExecuteQuery( @NotNull DaoMethod daoMethod, final boolean forTest ) {
 
         final List<ParameterType> outputParametrs  = daoMethod.getOutputParametrs().getParameter();
         final List<ParameterType> inputParametrs   = daoMethod.getInputParametrs ().getParameter();
@@ -33,6 +34,7 @@ public class WrapperGenerator extends CommonCallCreator{
                         new Function<ParameterType, String>() {
                             @Override
                             public String apply( @Nullable ParameterType p ) {
+                                assert p != null;
                                 return String.format( "%s %s NULL", p.getName(), p.getSqlType() );
                             }
                         }
@@ -48,6 +50,7 @@ public class WrapperGenerator extends CommonCallCreator{
                         new Function<ParameterType, String>() {
                             @Override
                             public String apply( @Nullable ParameterType parameter ) {
+                                assert parameter != null;
                                 return transformParameterName( parameter,
                                         forTest ?
                                                 TestValueByStringGenerator.newInstance( parameter )

@@ -1,25 +1,35 @@
 package com.kreig133.daogenerator;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.Writer;
+import org.jetbrains.annotations.NotNull;
+
+import java.io.*;
 
 /**
  * @author eshangareev
  * @version 1.0
  */
 public class Communicator {
+
+    public static Process communicate( String[] cmdArray ) throws IOException {
+        Process exec = Runtime.getRuntime().exec( cmdArray );
+        Communicator.communicate(
+                exec,
+                new OutputStreamWriter( System.out, "Cp866" ), //написано под винду, да
+                new OutputStreamWriter( System.err, "Cp866" )
+        );
+        return exec;
+    }
+
     /**
      *  Handle communication with a process, reading its output/error and feeding its input
      *  @param process The process to execute
      *  @param out Writer that will receive the output of the process
      *  @param err Writer that will receive the error pipe of the process
      */
-    public static void communicate(
-            Process process,
-            final Writer out,
-            final Writer err)
+    private static void communicate(
+            @NotNull Process process,
+            @NotNull final Writer out,
+            @NotNull final Writer err )
     {
 
         // Final versions of the the params, to be used within the threads

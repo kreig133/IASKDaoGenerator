@@ -1,6 +1,5 @@
 package com.kreig133.daogenerator.files.mybatis.test;
 
-import com.kreig133.daogenerator.MavenProjectGenerator;
 import com.kreig133.daogenerator.enums.ClassType;
 import com.kreig133.daogenerator.enums.Scope;
 import com.kreig133.daogenerator.files.JavaClassGenerator;
@@ -9,9 +8,9 @@ import com.kreig133.daogenerator.files.mybatis.mapping.MappingGenerator;
 import com.kreig133.daogenerator.jaxb.DaoMethod;
 import com.kreig133.daogenerator.jaxb.ParameterType;
 import com.kreig133.daogenerator.settings.Settings;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
-import java.io.IOException;
 
 /**
  * @author eshangareev
@@ -33,6 +32,7 @@ public class TesterClassGenerator extends JavaClassGenerator{
 
     public static final String TEST_CONFIG = "gwt-rpc-servlet.xml";
 
+    @NotNull
     @Override
     public File getFile() {
         final File file = new File(
@@ -66,7 +66,7 @@ public class TesterClassGenerator extends JavaClassGenerator{
     }
 
     @Override
-    public void generateBody( DaoMethod daoMethod ) {
+    public void generateBody( @NotNull DaoMethod daoMethod ) {
         insertLine();
         insertTabs().append( "@Test" );
         insertLine();
@@ -82,8 +82,10 @@ public class TesterClassGenerator extends JavaClassGenerator{
         insertTabs().append( "final Map<String, String> values = new HashMap<String, String>();" );
         insertLine();
         for ( ParameterType parameterType : daoMethod.getInputParametrs().getParameter() ) {
-            insertTabs().append( "values.put( \"" ).append( parameterType.getRenameTo() ).append( "\", \"" )
-                    .append( parameterType.getTestValue() ).append( "\" );" );
+            insertTabs().append(
+                    String.format( "values.put( \"%s\", \"%s\");",
+                            parameterType.getRenameTo(),
+                            parameterType.getTestValue() ));
             insertLine();
         }
         insertLine();
@@ -97,6 +99,7 @@ public class TesterClassGenerator extends JavaClassGenerator{
         closeMethodOrInnerClassDefinition();
     }
 
+    @NotNull
     @Override
     public String getFileName() {
         return MappingGenerator.instance().getFileName() + "Test";

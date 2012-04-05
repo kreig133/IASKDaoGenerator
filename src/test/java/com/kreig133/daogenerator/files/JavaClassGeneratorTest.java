@@ -1,5 +1,6 @@
 package com.kreig133.daogenerator.files;
 
+import org.jetbrains.annotations.NotNull;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -9,7 +10,9 @@ import org.junit.Test;
  */
 public class JavaClassGeneratorTest{
 
+    @NotNull
     private String javaClassName = "com.kreig133.daogenerator.files.JavaClassGenerator";
+    @NotNull
     private String javaClassName2 = "com.aplana.deposit.ledom.WhatTheModel";
 
     @Test

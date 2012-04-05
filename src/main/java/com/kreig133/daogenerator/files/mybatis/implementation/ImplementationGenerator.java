@@ -6,6 +6,7 @@ import com.kreig133.daogenerator.enums.Scope;
 import com.kreig133.daogenerator.files.mybatis.intrface.InterfaceGenerator;
 import com.kreig133.daogenerator.jaxb.DaoMethod;
 import com.kreig133.daogenerator.settings.Settings;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.io.IOException;
@@ -26,6 +27,7 @@ public class ImplementationGenerator extends InterfaceGenerator{
         return INSTANCE;
     }
 
+    @NotNull
     protected String implementationFileName() {
         return Settings.settings().getOperationName() + "DaoImpl";
     }
@@ -63,7 +65,7 @@ public class ImplementationGenerator extends InterfaceGenerator{
     }
 
     @Override
-    public void generateBody( DaoMethod daoMethod ) {
+    public void generateBody( @NotNull DaoMethod daoMethod ) {
         insertTabs().append( "@Override" );
         insertLine();
         insertTabs().append( Scope.PUBLIC.value() ).append( " " );
@@ -84,8 +86,8 @@ public class ImplementationGenerator extends InterfaceGenerator{
     }
 
     private static void generateIaskStyleMethodCall(
-            DaoMethod  daoMethod,
-            StringBuilder     builder
+            @NotNull DaoMethod  daoMethod,
+            @NotNull StringBuilder     builder
     ) {
         builder.append( "select" );
         if ( daoMethod.getCommon().getConfiguration().isMultipleResult() ) {

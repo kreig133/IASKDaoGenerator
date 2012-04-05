@@ -3,6 +3,7 @@ package com.kreig133.daogenerator.files.mybatis.model;
 import com.kreig133.daogenerator.jaxb.DaoMethod;
 import com.kreig133.daogenerator.jaxb.ParameterType;
 import com.kreig133.daogenerator.jaxb.ParametersType;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
@@ -20,7 +21,8 @@ public class OutModelClassGenerator extends ModelClassGenerator {
         return parameter;
     }
 
-    public static ModelClassGenerator newInstance( DaoMethod daoMethod ){
+    @NotNull
+    public static ModelClassGenerator newInstance( @NotNull DaoMethod daoMethod ){
         return new OutModelClassGenerator( daoMethod.getOutputParametrs() );
     }
 }

@@ -9,6 +9,7 @@ import com.kreig133.daogenerator.jaxb.DaoMethod;
 import com.kreig133.daogenerator.jaxb.JavaType;
 import com.kreig133.daogenerator.jaxb.ParameterType;
 import com.kreig133.daogenerator.settings.Settings;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,7 +35,7 @@ abstract public class DaoJavaClassGenerator extends JavaClassGenerator {
      * @return
      */
     public static boolean checkToNeedOwnInClass(
-            DaoMethod daoMethod
+            @NotNull DaoMethod daoMethod
     ) {
         final List<ParameterType> parameters = daoMethod.getInputParametrs().getParameter();
 
@@ -45,7 +46,7 @@ abstract public class DaoJavaClassGenerator extends JavaClassGenerator {
     }
 
     protected void generateMethodSignature(
-            final DaoMethod daoMethod,
+            @NotNull final DaoMethod daoMethod,
             final MethodType methodType
     ) {
 

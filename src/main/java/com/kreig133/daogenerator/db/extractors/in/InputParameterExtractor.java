@@ -3,6 +3,7 @@ package com.kreig133.daogenerator.db.extractors.in;
 import com.kreig133.daogenerator.db.extractors.Extractor;
 import com.kreig133.daogenerator.jaxb.DaoMethod;
 import com.kreig133.daogenerator.jaxb.ParameterType;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -22,7 +23,7 @@ abstract public class InputParameterExtractor extends Extractor{
 
     public abstract DaoMethod fillMethodName( DaoMethod daoMethod );
 
-    public static InputParameterExtractor getInstance( DaoMethod daoMethod ){
+    public static InputParameterExtractor getInstance( @NotNull DaoMethod daoMethod ){
         switch ( daoMethod.getSelectType() ){
             case CALL:
                 return SpInputParameterExtractor.instance();
@@ -35,7 +36,8 @@ abstract public class InputParameterExtractor extends Extractor{
         return fillTestValuesByInsertedQuery( extractInputParams( daoMethod ) );
     }
 
-    protected String getParameterValueFromQuery( ParameterType type, String query ) {
+    @NotNull
+    protected String getParameterValueFromQuery( @NotNull ParameterType type, String query ) {
         switch ( type.getType() ){
             case LONG:
             case BYTE:
@@ -50,17 +52,20 @@ abstract public class InputParameterExtractor extends Extractor{
         return Pattern.compile( String.format( "(?isu)@%s\\s*[^@]*?=\\s*null\\b", parameterName) );
     }
 
-    private String getDefaultValueForQuotedFromSpDefinition( ParameterType type, String query ) {
+    @NotNull
+    private String getDefaultValueForQuotedFromSpDefinition( @NotNull ParameterType type, String query ) {
         return getDefaultValue( type, query,
                 getStringPatternForParameter( type.getName() ).matcher( query ) );
     }
 
-    protected String getDefaultValueForNumberFromSpDefinition( ParameterType type, String query ) {
+    @NotNull
+    protected String getDefaultValueForNumberFromSpDefinition( @NotNull ParameterType type, String query ) {
         return getDefaultValue( type, query,
                 getNumberPatternForParameter( type.getName() ).matcher( query ) );
     }
 
-    private String getDefaultValue( ParameterType type, String query, Matcher matcher  ){
+    @NotNull
+    private String getDefaultValue( @NotNull ParameterType type, String query, @NotNull Matcher matcher  ){
         if ( getNullPatternForParameter( type.getName() ).matcher( query ).find() ){
             return NULL;
         }

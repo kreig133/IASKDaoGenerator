@@ -4,6 +4,7 @@ import com.kreig133.daogenerator.files.mybatis.DaoJavaClassGenerator;
 import com.kreig133.daogenerator.files.mybatis.model.InModelClassGenerator;
 import com.kreig133.daogenerator.files.mybatis.model.OutModelClassGenerator;
 import com.kreig133.daogenerator.jaxb.DaoMethod;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
@@ -13,7 +14,7 @@ import java.util.List;
  */
 class DepoParameterClassBuilder extends ParameterClassBuilder{
     @Override
-    protected void prepareBuilder( List<DaoMethod> daoMethod ) {
+    protected void prepareBuilder( @NotNull List<DaoMethod> daoMethod ) {
         for ( DaoMethod method : daoMethod ) {
             if( DaoJavaClassGenerator.checkToNeedOwnInClass( method ) )
                 generators.add( InModelClassGenerator .newInstance( method ) );

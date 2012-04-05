@@ -9,6 +9,8 @@ import com.kreig133.daogenerator.jaxb.ParameterType;
 import com.kreig133.daogenerator.jaxb.ParametersType;
 import com.kreig133.daogenerator.settings.Settings;
 import org.apache.commons.lang.StringUtils;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
 import java.util.List;
@@ -25,6 +27,7 @@ abstract public class ModelClassGenerator extends JavaClassGenerator {
         this.parametersType = parametersType;
     }
 
+    @NotNull
     @Override
     public File getFile() {
         File file = new File(
@@ -63,7 +66,7 @@ abstract public class ModelClassGenerator extends JavaClassGenerator {
 
     protected abstract List<ParameterType> filter( List<ParameterType> parameter );
 
-    private void generateSetterAndGetters( List<ParameterType> parameter ) {
+    private void generateSetterAndGetters( @NotNull List<ParameterType> parameter ) {
         for ( ParameterType parameterType : parameter ) {
             generateGetterSignature(
                     getJavaDocString( parameterType ), parameterType.getType(), parameterType.getRenameTo()
@@ -84,17 +87,19 @@ abstract public class ModelClassGenerator extends JavaClassGenerator {
         }
     }
     
-    private String getJavaDocString( ParameterType parameterType ) {
+    @NotNull
+    private String getJavaDocString( @NotNull ParameterType parameterType ) {
         return processComment( parameterType, true ) + " ({@link Fields#"
                 + NamingUtils.convertNameForEnum( parameterType.getRenameTo() ) +"})";
     }
 
-    private String processComment( ParameterType parameterType, boolean forJavaDoc ) {
+    @NotNull
+    private String processComment( @NotNull ParameterType parameterType, boolean forJavaDoc ) {
         return StringUtils.isNotEmpty( parameterType.getComment() ) ? "\"" + parameterType.getComment() + "\"":
                 ( forJavaDoc ? "значение" : "\"\"" );
     }
 
-    private void generateEnum( List<ParameterType> parameter ) {
+    private void generateEnum( @NotNull List<ParameterType> parameter ) {
         insertClassDeclaration( ClassType.ENUM, "Fields", true,  null, null );
 
         for ( int i = 0 ; i < parameter.size(); i ++ ) {
@@ -112,11 +117,13 @@ abstract public class ModelClassGenerator extends JavaClassGenerator {
         closeMethodOrInnerClassDefinition();
     }
 
+    @Nullable
     @Override
     public String getFileName() {
         return null;  //TODO
     }
     
+    @NotNull
     private String enumBody =
                     "         /** Описание атрибута */\n" +
                     "        private final String caption;\n" +
