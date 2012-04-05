@@ -143,7 +143,7 @@ public class SpInputParameterExtractor extends InputParameterExtractor {
         spText = getSPText( spName );
 
         fillParameterByInfoFromSpText( result, getDefinitionFromSpText( spText ) );
-        if( spText != null ){
+        if( parentSpText != null ){
             fillParameterByInfoFromSpText( result, getDefinitionFromSpText( parentSpText ) );
         }
     }
