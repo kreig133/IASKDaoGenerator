@@ -5,7 +5,7 @@ import com.google.common.collect.Iterators;
 import com.kreig133.daogenerator.enums.ClassType;
 import com.kreig133.daogenerator.enums.Scope;
 import com.kreig133.daogenerator.files.JavaClassGenerator;
-import com.kreig133.daogenerator.files.NamingUtils;
+import com.kreig133.daogenerator.jaxb.NamingUtils;
 import com.kreig133.daogenerator.files.PackageAndFileUtils;
 import com.kreig133.daogenerator.jaxb.*;
 import com.kreig133.daogenerator.settings.Settings;

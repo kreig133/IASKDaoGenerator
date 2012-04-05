@@ -1,7 +1,7 @@
 package com.kreig133.daogenerator;
 
 import com.kreig133.daogenerator.common.Utils;
-import com.kreig133.daogenerator.files.NamingUtils;
+import com.kreig133.daogenerator.jaxb.NamingUtils;
 import com.kreig133.daogenerator.files.mybatis.mapping.MappingGenerator;
 import com.kreig133.daogenerator.files.mybatis.test.TesterClassGenerator;
 import com.kreig133.daogenerator.settings.Settings;

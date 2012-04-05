@@ -1,5 +1,7 @@
 package com.kreig133.daogenerator;
 
+import com.kreig133.daogenerator.files.builder.FileBuilder;
+
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 
@@ -10,7 +12,7 @@ import java.io.OutputStreamWriter;
 public class WikiGenerator {
     public static void generateWiki( String path ) throws IOException, InterruptedException {
 
-        final String[] xmlFileNamesInDirectory = DaoGenerator.getXmlFileNamesInDirectory( path );
+        final String[] xmlFileNamesInDirectory = FileBuilder.getXmlFileNamesInDirectory( path );
 
         for ( String s : xmlFileNamesInDirectory ) {
             generateWikiForXmlFile( path + "\\" +  s );

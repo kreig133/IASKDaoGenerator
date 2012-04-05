@@ -1,9 +1,8 @@
 package com.kreig133.daogenerator.files.mybatis.model;
 
-import com.kreig133.daogenerator.files.NamingUtils;
+import com.kreig133.daogenerator.jaxb.NamingUtils;
 import com.kreig133.daogenerator.jaxb.ParameterType;
 import org.junit.Assert;
-import org.junit.Before;
 import org.junit.Test;
 
 import java.util.List;

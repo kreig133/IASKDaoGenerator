@@ -5,12 +5,13 @@ import com.google.common.collect.Iterators;
 import com.kreig133.daogenerator.enums.ClassType;
 import com.kreig133.daogenerator.enums.MethodType;
 import com.kreig133.daogenerator.files.JavaDocGenerator;
-import com.kreig133.daogenerator.files.mybatis.ParameterClassGenerator;
+import com.kreig133.daogenerator.files.mybatis.DaoJavaClassGenerator;
 import com.kreig133.daogenerator.jaxb.DaoMethod;
 import com.kreig133.daogenerator.jaxb.ParameterType;
 import com.kreig133.daogenerator.jaxb.SelectType;
 import com.kreig133.daogenerator.settings.Settings;
 import com.kreig133.daogenerator.sql.creators.QueryCreator;
+import com.kreig133.daogenerator.sql.creators.QueryCreatorFabric;
 import org.apache.commons.lang.StringUtils;
 
 import javax.annotation.Nullable;
@@ -30,7 +31,7 @@ public class DepoMappingGenerator extends MappingGenerator{
         JavaDocGenerator.JavaDocBuilder javaDocBuilder =
                 jDoc.getBuilder().initialize().addComment( daoMethod.getCommon().getComment() );
 
-        if( ParameterClassGenerator.checkToNeedOwnInClass( daoMethod ) ){
+        if( DaoJavaClassGenerator.checkToNeedOwnInClass( daoMethod ) ){
             javaDocBuilder.addParameter( "request" /**TODO хардкод*/, "объект, содержащий входные данные для запроса" );
         } else {
             for ( ParameterType type : daoMethod.getInputParametrs().getParameter() ) {
@@ -91,7 +92,8 @@ public class DepoMappingGenerator extends MappingGenerator{
 
         increaseNestingLevel();
         wrapWithQuotesAndWrite(
-                QueryCreator.newInstance( daoMethod ).generateExecuteQuery( daoMethod, false ).replaceAll( "\"", "\\\\\"" )
+                QueryCreatorFabric.newInstance( daoMethod )
+                        .generateExecuteQuery( daoMethod, false ).replaceAll( "\"", "\\\\\"" )
         );
         decreaseNestingLevel();
 

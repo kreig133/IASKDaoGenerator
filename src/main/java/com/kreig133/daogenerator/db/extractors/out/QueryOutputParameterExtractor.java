@@ -3,6 +3,7 @@ package com.kreig133.daogenerator.db.extractors.out;
 import com.kreig133.daogenerator.db.JDBCConnector;
 import com.kreig133.daogenerator.jaxb.DaoMethod;
 import com.kreig133.daogenerator.jaxb.ParameterType;
+import com.kreig133.daogenerator.sql.creators.QueryCreator;
 import com.kreig133.daogenerator.sql.test.TestValueByStringGenerator;
 
 import java.sql.PreparedStatement;
@@ -19,13 +20,13 @@ public class QueryOutputParameterExtractor extends OutputParameterExtractor{
     @Override
     protected ResultSet getResultSet( DaoMethod daoMethod ) throws SQLException {
         final String query =
-                getQueryStringWithoutMetaData( daoMethod.getCommon().getQuery() );
+                QueryCreator.getQueryStringWithoutMetaData( daoMethod.getCommon().getQuery() );
 
         assert query != null;
 
         final PreparedStatement statement = JDBCConnector.instance().connectToDB().prepareStatement( query );
 
-        List<String> names = getListOfParametrNames( daoMethod.getCommon().getQuery() );
+        List<String> names = QueryCreator.getListOfParametrNames( daoMethod.getCommon().getQuery() );
 
         for ( int i = 0; i < names.size(); i++ ) {
             ParameterType paramter = daoMethod.getInputParametrs().getParameterByName( names.get( i ) );

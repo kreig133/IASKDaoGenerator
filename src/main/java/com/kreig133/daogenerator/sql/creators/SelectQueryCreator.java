@@ -1,6 +1,5 @@
 package com.kreig133.daogenerator.sql.creators;
 
-import com.kreig133.daogenerator.db.extractors.Extractor;
 import com.kreig133.daogenerator.jaxb.DaoMethod;
 import com.kreig133.daogenerator.jaxb.ParameterType;
 import com.kreig133.daogenerator.sql.test.TestValueByStringGenerator;
@@ -26,7 +25,7 @@ public class SelectQueryCreator extends QueryCreator{
             builder = new StringBuilder();
 
             final List<String> listOfParametrNames =
-                    Extractor.getListOfParametrNames( daoMethod.getCommon().getQuery() );
+                    getListOfParametrNames( daoMethod.getCommon().getQuery() );
 
             for( int i = 0; i < splitted.length - 1; i++ ){
                 builder.append( splitted[i] );

@@ -14,29 +14,10 @@ import java.util.regex.Pattern;
  */
 public class Extractor {
 
-    protected static final Pattern daoGeneratorEscapedParamInfo = Pattern.compile( "\\$\\{(.+?)\\}");
+
 
     protected static final Pattern storeNamePattern = Pattern.compile( "(?iu)exec\\w*\\s+(\\w+)" );
 
-    public String getQueryStringWithoutMetaData( String query ){
-        return query.replaceAll( daoGeneratorEscapedParamInfo.pattern(), "?" ) ;
-    }
-
-    protected static Matcher getMatcher( String query ) {
-        return daoGeneratorEscapedParamInfo.matcher( query );
-    }
-
-    public static List<String> getListOfParametrNames( String query ) {
-        final ArrayList<String> names = new ArrayList<String>();
-
-        Matcher matcher = getMatcher( query );
-
-        while ( matcher.find() ) {
-            names.add( matcher.group( 1 ).split( ";" )[ 0 ] );
-        }
-
-        return names;
-    }
 
     public static SelectType determineQueryType( String query ) {
         return Utils.stringContainsMoreThanOneWord( query ) ?

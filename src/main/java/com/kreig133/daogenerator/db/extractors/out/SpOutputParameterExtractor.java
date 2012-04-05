@@ -3,6 +3,7 @@ package com.kreig133.daogenerator.db.extractors.out;
 import com.kreig133.daogenerator.db.JDBCConnector;
 import com.kreig133.daogenerator.jaxb.DaoMethod;
 import com.kreig133.daogenerator.sql.creators.QueryCreator;
+import com.kreig133.daogenerator.sql.creators.QueryCreatorFabric;
 
 import java.sql.CallableStatement;
 import java.sql.Connection;
@@ -16,7 +17,7 @@ import java.sql.SQLException;
 public class SpOutputParameterExtractor extends OutputParameterExtractor{
     @Override
     protected ResultSet getResultSet( DaoMethod daoMethod ) throws SQLException {
-        final String query = QueryCreator.newInstance( daoMethod ).generateExecuteQuery( daoMethod, true );
+        final String query = QueryCreatorFabric.newInstance( daoMethod ).generateExecuteQuery( daoMethod, true );
 
         assert query != null;
 

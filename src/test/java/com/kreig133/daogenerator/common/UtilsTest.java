@@ -8,7 +8,7 @@ import com.kreig133.daogenerator.settings.Settings;
 import junit.framework.Assert;
 import org.junit.Test;
 
-import static com.kreig133.daogenerator.files.mybatis.ParameterClassGenerator.checkToNeedOwnInClass;
+import static com.kreig133.daogenerator.files.mybatis.DaoJavaClassGenerator.checkToNeedOwnInClass;
 
 /**
  * @author eshangareev

@@ -1,4 +1,4 @@
-package com.kreig133.daogenerator.db.extractors;
+package com.kreig133.daogenerator.db.preparators;
 
 import com.kreig133.daogenerator.db.preparators.QueryPreparator;
 import com.kreig133.daogenerator.enums.Type;
@@ -33,7 +33,7 @@ public class QueryPreparatorTest extends QueryPreparator {
                     "'000003', '000004', 'ru', 'ki', -1 )";
 
     @Language( "SQL" )
-    String updateQuery = "UPDATE t_Depo \n" +
+    static String updateQuery = "UPDATE t_Depo \n" +
             "SET \"nflreport\" = 1 \n" +
             "WHERE [nflreport] = 0 AND n_DEPO_id = null";
 
@@ -42,13 +42,6 @@ public class QueryPreparatorTest extends QueryPreparator {
         Settings.settings().setType( Type.TEST );
     }
 
-    @Test
-    public void columnsFromQueryTest() {
-        Map<String, String> columnsFromQuery = super.getColumnsFromQuery( updateQuery );
-        Assert.assertEquals( columnsFromQuery.size(), 2 );
-        Assert.assertTrue( columnsFromQuery.keySet().contains( "nflreport" ) );
-        Assert.assertTrue( columnsFromQuery.keySet().contains( "n_DEPO_id" ) );
-    }
 
     @Test
     public void getColumnsFromDbByTableNameTest(){
@@ -156,32 +149,6 @@ public class QueryPreparatorTest extends QueryPreparator {
         Assert.assertEquals( determineWorkingMode( query + ":" ), WorkingMode.NAME );
     }
 
-    @Test
-    public void replaceCastNameModeTest(){
-        Assert.assertEquals(
-                    replaceCastNameMode(
-                        "from dbo.t_depo \n" +
-                        "where n_depo_id = CAST(:id AS INT)" ),
 
-                        "from dbo.t_depo \n" +
-                        "where n_depo_id = CAST(${id;INT} AS INT)"
-        );
-        Assert.assertEquals(
-                replaceCastNameMode(
-                        "from dbo.t_depo \n" +
-                                "where n_depo_id = CAST(:id        AS varchar  ( 255  ) )" ),
-
-                "from dbo.t_depo \n" +
-                        "where n_depo_id = CAST(${id;varchar  ( 255  )}        AS varchar  ( 255  ) )"
-        );
-        Assert.assertEquals(
-                replaceCastNameMode(
-                        "from dbo.t_depo \n" +
-                                "where n_depo_id = CAST(:id   AS numeric  ( 255  , 10 ) )" ),
-
-                "from dbo.t_depo \n" +
-                        "where n_depo_id = CAST(${id;numeric  ( 255  , 10 )}   AS numeric  ( 255  , 10 ) )"
-        );
-    }
 
 }

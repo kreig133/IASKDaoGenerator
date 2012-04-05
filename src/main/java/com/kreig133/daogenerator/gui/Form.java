@@ -14,6 +14,7 @@ import com.kreig133.daogenerator.db.extractors.in.InputParameterExtractor;
 import com.kreig133.daogenerator.db.extractors.in.SpInputParameterExtractor;
 import com.kreig133.daogenerator.db.extractors.out.OutputParameterExtractor;
 import com.kreig133.daogenerator.enums.Type;
+import com.kreig133.daogenerator.files.builder.FileBuilder;
 import com.kreig133.daogenerator.jaxb.*;
 import com.kreig133.daogenerator.settings.Settings;
 import org.apache.commons.lang.StringUtils;
@@ -278,7 +279,7 @@ public class Form  implements TypeChangeListener, SourcePathChangeListener{
                             public void run() {
                                 try{
                                     tabbedPane1.setEnabled( false );
-                                    DaoGenerator.generateJavaCode();
+                                    FileBuilder.generateJavaCode();
                                     int status = MavenProjectGenerator.installProject();
                                     if( status == 0 ) {
                                         if (

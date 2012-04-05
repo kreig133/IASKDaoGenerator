@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import static com.google.common.base.Preconditions.*;
+import static com.google.common.base.Preconditions.checkArgument;
 import static com.kreig133.daogenerator.db.extractors.SqlTypeHelper.getSqlTypeFromResultSet;
 
 /**

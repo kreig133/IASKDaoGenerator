@@ -10,7 +10,6 @@ package com.kreig133.daogenerator.jaxb;
 
 import com.google.common.base.Predicate;
 import com.google.common.collect.Iterators;
-import com.kreig133.daogenerator.files.NamingUtils;
 
 import javax.annotation.Nullable;
 import javax.xml.bind.annotation.XmlAccessType;

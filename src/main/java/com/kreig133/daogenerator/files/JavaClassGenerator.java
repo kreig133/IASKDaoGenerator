@@ -1,15 +1,11 @@
 package com.kreig133.daogenerator.files;
 
+import com.kreig133.daogenerator.jaxb.NamingUtils;
 import com.kreig133.daogenerator.common.Utils;
 import com.kreig133.daogenerator.enums.ClassType;
-import com.kreig133.daogenerator.enums.MethodType;
 import com.kreig133.daogenerator.enums.Scope;
-import com.kreig133.daogenerator.enums.Type;
-import com.kreig133.daogenerator.files.mybatis.ParameterClassGenerator;
 import com.kreig133.daogenerator.jaxb.DaoMethod;
 import com.kreig133.daogenerator.jaxb.JavaType;
-import com.kreig133.daogenerator.jaxb.ParameterType;
-import com.kreig133.daogenerator.settings.Settings;
 import org.apache.commons.lang.StringUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -74,65 +70,6 @@ abstract public class JavaClassGenerator extends Generator {
 
     protected void setPackage( String packageString ){
         this._package = packageString;
-    }
-
-    protected void generateMethodSignature(
-            final DaoMethod daoMethod,
-            final MethodType methodType
-    ) {
-
-        if ( Settings.settings().getType() == Type.IASK )
-            throw new IllegalArgumentException();
-
-        final List<ParameterType>  inputParameterList = daoMethod.getInputParametrs().getParameter();
-        final List<ParameterType> outputParameterList = daoMethod.getOutputParametrs().getParameter();
-        final String methodName = daoMethod.getCommon().getMethodName();
-
-        StringBuilder outputClass = new StringBuilder();
-
-        if ( ! outputParameterList.isEmpty() ) {
-            if ( daoMethod.getCommon().getConfiguration().isMultipleResult() ) {
-                outputClass.append( "List<" );
-            }
-            if ( outputParameterList.size() == 1 ) {
-                outputClass.append( outputParameterList.get( 0 ).getType().value() );
-                if( outputParameterList.get( 0 ).getType() == JavaType.DATE ) {
-                    addImport( DATE_IMPORT );
-                }
-            } else {
-                outputClass.append(
-                        PackageAndFileUtils.getShortName( daoMethod.getOutputParametrs().getJavaClassName() )
-                );
-                addImport( daoMethod.getOutputParametrs().getJavaClassName() );
-            }
-            if ( daoMethod.getCommon().getConfiguration().isMultipleResult() ) {
-                outputClass.append( ">" );
-            }
-        }
-
-        List<String> inputParams = new ArrayList<String>( inputParameterList.size() );
-        if ( ! inputParameterList.isEmpty() ) {
-            if ( ParameterClassGenerator.checkToNeedOwnInClass( daoMethod ) ) {
-                inputParams.add(
-                        PackageAndFileUtils.getShortName( daoMethod.getInputParametrs().getJavaClassName() ) +
-                                " request"
-                );
-                addImport( daoMethod.getInputParametrs().getJavaClassName() );
-            } else {
-                for ( ParameterType p : inputParameterList ) {
-                    if( p.getType() == JavaType.DATE ) {
-                        addImport( DATE_IMPORT );
-                    }
-
-                    StringBuilder inputParam = new StringBuilder();
-                    inputParam.append( "@Param(\"" ).append( p.getRenameTo() ).append( "\") " );
-                    inputParam.append( p.getType().value() ).append( " " ).append( p.getRenameTo() );
-                    inputParams.add( inputParam.toString() );
-                }
-            }
-        }
-        
-        generateMethodSignature( Scope.PUBLIC, outputClass.toString(), methodName, inputParams, null, true );
     }
 
     protected void generateMethodSignature(

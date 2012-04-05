@@ -31,7 +31,7 @@ public class QueryCreatorTest {
 
         setOutputParameters( daoMethod, typeList );
 
-        QueryCreator queryCreator = QueryCreator.newInstance( daoMethod );
+        QueryCreator queryCreator = QueryCreatorFabric.newInstance( daoMethod );
         Assert.assertTrue( queryCreator instanceof WrapperGenerator );
 
         typeList.clear();
@@ -40,7 +40,7 @@ public class QueryCreatorTest {
 
         setOutputParameters(daoMethod, typeList);
 
-        queryCreator = QueryCreator.newInstance( daoMethod );
+        queryCreator = QueryCreatorFabric.newInstance( daoMethod );
         Assert.assertTrue( queryCreator instanceof ProcedureCallCreator );
     }
 

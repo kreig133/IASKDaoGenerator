@@ -1,4 +1,4 @@
-package com.kreig133.daogenerator.files;
+package com.kreig133.daogenerator.jaxb;
 
 import org.apache.commons.lang.StringUtils;
 

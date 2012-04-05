@@ -1,13 +1,12 @@
 package com.kreig133.daogenerator.files.mybatis.mapping;
 
-import com.kreig133.daogenerator.files.NamingUtils;
+import com.kreig133.daogenerator.jaxb.NamingUtils;
 import com.kreig133.daogenerator.files.mybatis.intrface.InterfaceGenerator;
 import com.kreig133.daogenerator.jaxb.DaoMethod;
 import com.kreig133.daogenerator.jaxb.ParameterType;
 import com.kreig133.daogenerator.settings.Settings;
-import com.kreig133.daogenerator.sql.creators.QueryCreator;
+import com.kreig133.daogenerator.sql.creators.QueryCreatorFabric;
 
-import java.io.IOException;
 import java.util.List;
 
 /**
@@ -63,7 +62,7 @@ public class IaskMappingGenerator extends MappingGenerator{
         builder.append( ">\n\n" );
         increaseNestingLevel();
         insertTabs().append(
-                QueryCreator.newInstance( daoMethod ).generateExecuteQuery( daoMethod, false )
+                QueryCreatorFabric.newInstance( daoMethod ).generateExecuteQuery( daoMethod, false )
         );
         insertLine();
         decreaseNestingLevel();
