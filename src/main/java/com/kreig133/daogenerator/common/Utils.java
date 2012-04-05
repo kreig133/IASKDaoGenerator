@@ -71,36 +71,4 @@ public class Utils {
     public static File getFileFromDirectoryByName( String directoryPath, String fileName ) {
         return new File( new File( directoryPath ).getAbsolutePath() + "/" + fileName );
     }
-
-    public static void iterateForParameterList(
-            StringBuilder builder,
-            List<ParameterType> parameterList,
-            FuctionalObject functionalObject
-    ) {
-        iterateForParameterList( builder, parameterList, 1, functionalObject );
-    }
-
-    public static void iterateForParameterList(
-            StringBuilder builder,
-            List<ParameterType> parameterList,
-            int tabs,
-            FuctionalObject functionalObject
-
-    ) {
-        boolean first = true;
-        for ( ParameterType p : parameterList ) {
-            if ( functionalObject.filter( p ) ) {
-                if ( ! first ) {
-                    builder.append( "," );
-                    builder.append( "\n" );
-                } else {
-                    first = false;
-                }
-                insertTabs( builder, tabs );
-                functionalObject.writeString( builder, p );
-            }
-        }
-        builder.append( "\n" );
-    }
-
 }

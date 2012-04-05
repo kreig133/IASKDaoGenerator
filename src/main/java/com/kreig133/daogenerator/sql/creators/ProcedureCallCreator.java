@@ -10,8 +10,6 @@ import org.apache.commons.lang.StringUtils;
 
 import javax.annotation.Nullable;
 
-import static com.kreig133.daogenerator.common.Utils.iterateForParameterList;
-
 /**
  * @author eshangareev
  * @version 1.0

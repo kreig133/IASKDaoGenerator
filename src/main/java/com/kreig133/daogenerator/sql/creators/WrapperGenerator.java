@@ -2,7 +2,6 @@ package com.kreig133.daogenerator.sql.creators;
 
 import com.google.common.base.Function;
 import com.google.common.collect.Iterators;
-import com.kreig133.daogenerator.common.FunctionalObjectWithoutFilter;
 import com.kreig133.daogenerator.jaxb.DaoMethod;
 import com.kreig133.daogenerator.jaxb.ParameterType;
 import com.kreig133.daogenerator.sql.test.TestValueByStringGenerator;
@@ -12,7 +11,6 @@ import javax.annotation.Nullable;
 import java.util.List;
 
 import static com.kreig133.daogenerator.common.Utils.insertTabs;
-import static com.kreig133.daogenerator.common.Utils.iterateForParameterList;
 
 /**
  * @author eshangareev
