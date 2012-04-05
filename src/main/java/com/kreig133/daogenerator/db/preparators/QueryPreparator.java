@@ -26,16 +26,20 @@ import static com.kreig133.daogenerator.db.extractors.TableNameHelper.getTableNa
  */
 public class QueryPreparator {
 
+    protected static final String ERROR = "!!ERROR!!";
+
     protected enum WorkingMode{
         VALUE, NAME
     }
+    @Language( "RegExp" )
+    protected static final String SQL_TYPE = "\\w+(\\s*\\(\\s*\\d+(\\s*,\\s*\\d+)?\\s*\\))?";
 
     @Language( "RegExp" )
-    protected String testValues = "(([-\\d\\.]+)|(null)|('.+?'))";
+    protected static final String TEST_VALUES = "(([-\\d\\.]+)|(null)|('.+?'))";
     @Language("RegExp")
-    protected String regex = "(?u)([\"\\[]?\\w+[\"\\]]?)?%s\\s*=\\s*" + testValues;
+    protected String regex = "(?u)([\"\\[]?\\w+[\"\\]]?)?%s\\s*=\\s*" + TEST_VALUES;
     @Language( "RegExp" )
-    private String castRegExp = "(?isu)(%s\\s*=.*?)\\bcast\\s*\\(\\s*"+testValues+"\\s*as\\s*(\\w+)\\s*\\)";
+    private String castRegExp = "(?isu)(%s\\s*=.*?)\\bcast\\s*\\(\\s*"+ TEST_VALUES +"\\s*as\\s*("+ SQL_TYPE + ")\\s*\\)";
     @Language("RegExp")
     protected String columnName = "\\b([@#\\w&&[\\D]][\\w\\$@#]*)\\b";
     @Language("RegExp")
@@ -43,7 +47,7 @@ public class QueryPreparator {
     @Language("RegExp")
     protected String columnNameInBrackets = "\\[(.+?)\\]";
     @Language( "RegExp" )
-    protected String testValuesInInsert = "(?i)"+ testValues + "\\s*[,\\)]";
+    protected String testValuesInInsert = "(?i)"+ TEST_VALUES + "\\s*[,\\)]";
     @Language("RegExp")
     protected String insertRE =
             "(?isu)insert\\b\\s*\\binto\\b\\s*.+?\\s*(\\(\\s*(.+?)\\s*\\))?\\s*\\bvalues\\b\\s*\\((.+?\\))";
@@ -84,7 +88,8 @@ public class QueryPreparator {
     }
 
     protected String replaceCastNameMode( String query ) {
-        String castNameModeRegex = "(?i)(\\bcast\\s*\\(\\s*):(\\w+)(\\s*as\\s*(\\w+(\\s*\\(\\s*\\d+(\\s*,\\s*\\d+)?\\s*\\))?)\\s*\\))";
+        String castNameModeRegex = "(?i)(\\bcast\\s*\\(\\s*):(\\w+)(\\s*as\\s*("
+                + SQL_TYPE +")\\s*\\))";
         Matcher matcher = Pattern.compile( castNameModeRegex ).matcher( query );
         while ( matcher.find() ){
             query = query.replaceAll( castNameModeRegex, "$1\\${$2;$4}$3" );
@@ -205,7 +210,7 @@ public class QueryPreparator {
 
     private String replaceTestVaulesByDaoGeneratorFormatedInfoString( String query, List<ParameterType> result ) {
         for ( ParameterType parameterType : result ) {
-            String pattern = String.format( "(?i)(%s.*?)=\\s*"+testValues, parameterType.getName() );
+            String pattern = String.format( "(?i)(%s.*?)=\\s*"+ TEST_VALUES, parameterType.getName() );
             String replacement = String.format(
                     "$1= \\${%s;%s;$2}",
                     parameterType.getName(),
@@ -233,7 +238,7 @@ public class QueryPreparator {
         if( parameterByName == null ) {
             parameterByName = new ParameterType();
             parameterByName.setName( column );
-            parameterByName.setSqlType( "!!ERROR!!" );
+            parameterByName.setSqlType( ERROR );
         }
         return parameterByName;
     }
