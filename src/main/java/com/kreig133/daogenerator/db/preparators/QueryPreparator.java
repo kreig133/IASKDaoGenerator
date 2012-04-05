@@ -1,7 +1,9 @@
-package com.kreig133.daogenerator.db.extractors;
+package com.kreig133.daogenerator.db.preparators;
 
 import com.google.common.base.Preconditions;
 import com.kreig133.daogenerator.db.JDBCConnector;
+import com.kreig133.daogenerator.db.extractors.Extractor;
+import com.kreig133.daogenerator.db.extractors.SqlTypeHelper;
 import com.kreig133.daogenerator.jaxb.DaoMethod;
 import com.kreig133.daogenerator.jaxb.ParameterType;
 import com.kreig133.daogenerator.jaxb.ParametersType;
@@ -62,8 +64,31 @@ public class QueryPreparator {
 
     private String prepareQueryNameMode( String query ) {
         @Language("RegExp")
-        String regExp = "(?s):\\w+\\b";
+        String regExp = "(?s)((%s)\\s*=\\s*):(\\w+)\\b";
 
+        List<ParameterType> columnsFromDbByTableName = getColumnsFromDbByTableName( getTableName( query ) );
+
+        for ( String subPattern : subPatterns ) {
+            Matcher matcher = Pattern.compile( String.format( regExp, subPattern ) ).matcher( query );
+            while ( matcher.find() ) {
+                ParameterType actualParameter = getActualParameter( columnsFromDbByTableName, matcher.group( 3 ) );
+                query = query.replaceAll(
+                        String.format( regExp, matcher.group( 2 ) ),
+                        String.format( "$1\\${%s;%s}", actualParameter.getName(), actualParameter.getSqlType() )
+                );
+            }
+        }
+        query = replaceCastNameMode( query );
+
+        return query;
+    }
+
+    protected String replaceCastNameMode( String query ) {
+        String castNameModeRegex = "(?i)(\\bcast\\s*\\(\\s*):(\\w+)(\\s*as\\s*(\\w+(\\s*\\(\\s*\\d+(\\s*,\\s*\\d+)?\\s*\\))?)\\s*\\))";
+        Matcher matcher = Pattern.compile( castNameModeRegex ).matcher( query );
+        while ( matcher.find() ){
+            query = query.replaceAll( castNameModeRegex, "$1\\${$2;$4}$3" );
+        }
         return query;
     }
 
@@ -197,18 +222,20 @@ public class QueryPreparator {
     ) {
         List<ParameterType> result = new ArrayList<ParameterType>();
         while ( columnsFromQuery.hasNext() ) {
-            String column = columnsFromQuery.next();
-            ParameterType parameterByName = ParametersType.getParameterByName( column.trim(), columnsFromDbByTableName );
-
-            if( parameterByName == null ) {
-                parameterByName = new ParameterType();
-                parameterByName.setName( column );
-                parameterByName.setSqlType( "!!ERROR!!" );
-            }
-
-            result.add( parameterByName );
+            result.add( getActualParameter( columnsFromDbByTableName, columnsFromQuery.next() ) );
         }
         return result;
+    }
+
+    private ParameterType getActualParameter( List<ParameterType> columnsFromDbByTableName, String column ) {
+        ParameterType parameterByName = ParametersType.getParameterByName( column.trim(), columnsFromDbByTableName );
+
+        if( parameterByName == null ) {
+            parameterByName = new ParameterType();
+            parameterByName.setName( column );
+            parameterByName.setSqlType( "!!ERROR!!" );
+        }
+        return parameterByName;
     }
 
     protected Map<String, String> getColumnsFromQuery( DaoMethod daoMethod ) {

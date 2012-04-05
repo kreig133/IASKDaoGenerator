@@ -8,7 +8,7 @@ import com.kreig133.daogenerator.common.SourcePathChangeListener;
 import com.kreig133.daogenerator.common.TypeChangeListener;
 import com.kreig133.daogenerator.common.Utils;
 import com.kreig133.daogenerator.db.extractors.Extractor;
-import com.kreig133.daogenerator.db.extractors.QueryPreparator;
+import com.kreig133.daogenerator.db.preparators.QueryPreparator;
 import com.kreig133.daogenerator.db.extractors.in.InputParameterExtractor;
 import com.kreig133.daogenerator.db.extractors.in.SpInputParameterExtractor;
 import com.kreig133.daogenerator.db.extractors.out.OutputParameterExtractor;
