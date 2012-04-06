@@ -150,7 +150,9 @@
                 </xsl:call-template>
             </xsl:when>
             <xsl:otherwise>
-                <xsl:value-of select="$query"/>
+                <xsl:if test="string-length( $before ) = 0">
+                    <xsl:value-of select="$query"/>
+                </xsl:if>
             </xsl:otherwise>
         </xsl:choose>
     </xsl:template>
