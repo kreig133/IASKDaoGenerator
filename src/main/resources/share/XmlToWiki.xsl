@@ -150,7 +150,7 @@
                 </xsl:call-template>
             </xsl:when>
             <xsl:otherwise>
-                <xsl:value-of select="$newQuery"/>
+                <xsl:value-of select="$query"/>
             </xsl:otherwise>
         </xsl:choose>
     </xsl:template>
