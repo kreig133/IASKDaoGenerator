@@ -72,7 +72,7 @@ public class DoubleQueryPreparatorTest extends DoubleQueryPreparator{
         String inputWithTestVlue =
                 "select count(n_ad_id) from dbo.t_ad_rasp where not n_ad_id is null and n_adr_raspor = 376682 and iisdeleted = 0";
         String s = prepareQuery( inputWithName, inputWithTestVlue );
-        System.out.println(s);
+        Assert.assertEquals( s, "select count(n_ad_id) from dbo.t_ad_rasp where not n_ad_id is null and n_adr_raspor = ${irasp_id;int;376682} and iisdeleted = 0" );
     }
     @Test
     public void testParse(){
