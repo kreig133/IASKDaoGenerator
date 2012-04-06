@@ -39,7 +39,7 @@ public class DoubleQueryPreparator extends QueryPreparator {
 
         for ( int i = 0; i < paramNames.size(); i++ ) {
             result.append( queryPiece.get( i ) );
-            String after = StringUtils.substringAfter( queryWithTestValues, queryPiece.get( 1 ) );
+            String after = StringUtils.substringAfter( queryWithTestValues, queryPiece.get( i ) );
             ParameterType pType = new ParameterType();
             {
                 Matcher matcher = Pattern.compile( "(?iu)" + TEST_VALUES ).matcher( after );

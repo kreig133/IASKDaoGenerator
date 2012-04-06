@@ -64,6 +64,17 @@ public class DoubleQueryPreparatorTest extends DoubleQueryPreparator{
             "ORDER BY sshortname";
 
     @Test
+    public void prepareQueryTest(){
+        @Language( "SQL" )
+        String inputWithName =
+                "select count(n_ad_id) from dbo.t_ad_rasp where not n_ad_id is null and n_adr_raspor = :irasp_id and iisdeleted = 0";
+        @Language( "SQL" )
+        String inputWithTestVlue =
+                "select count(n_ad_id) from dbo.t_ad_rasp where not n_ad_id is null and n_adr_raspor = 376682 and iisdeleted = 0";
+        String s = prepareQuery( inputWithName, inputWithTestVlue );
+        System.out.println(s);
+    }
+    @Test
     public void testParse(){
         String s = prepareQuery( query, fiiledQuery );
         System.out.println(s);
