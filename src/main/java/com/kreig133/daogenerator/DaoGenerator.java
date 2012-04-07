@@ -22,11 +22,15 @@ import static com.kreig133.daogenerator.settings.Settings.settings;
  */
 public class DaoGenerator {
 
+    public static String VERSION = "error";
+
     public static void main( String[] args ) {
         final Properties defaultProperties = PropertiesFileController.getDefaultProperties();
 
         assert defaultProperties != null;
         Settings.loadSettingsFromProperties( defaultProperties );
+
+        VERSION = defaultProperties.getProperty( Settings.VERSION );
 
         final String property = defaultProperties.getProperty( SOURCE_DIR, "" );
 
@@ -47,7 +51,7 @@ public class DaoGenerator {
                 } catch ( Exception e ) {
                     e.printStackTrace();
                 }
-                final JFrame frame = new JFrame( "DaoGenerator 2.9" );
+                final JFrame frame = new JFrame( "DaoGenerator " + VERSION );
 
 
                 frame.setContentPane( Form.getInstance() );

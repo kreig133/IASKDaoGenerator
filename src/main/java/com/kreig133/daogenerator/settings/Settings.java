@@ -7,6 +7,7 @@ package com.kreig133.daogenerator.settings;
  * Time: 12:30
  */
 
+import com.kreig133.daogenerator.DaoGenerator;
 import com.kreig133.daogenerator.enums.Type;
 import org.jetbrains.annotations.NotNull;
 
@@ -38,6 +39,7 @@ public class Settings {
     public static final String DEPO = "depo";
     public static final String LAST_DIRECTORY = "lastDirectory";
     public static final String PROJECT_FOLDER = "home";
+    public static final String VERSION = "version";
 
 
     public static final String URL = "jdbc.url";
@@ -67,6 +69,7 @@ public class Settings {
         properties.setProperty( SOURCE_DIR          , operationSettings.getSourcePath() );
         properties.setProperty( PROJECT_FOLDER      , operationSettings.getProjectFolder() );
         properties.setProperty( LAST_DIRECTORY      , operationSettings.getLastDirectory() );
+        properties.setProperty( VERSION             , DaoGenerator.VERSION );
 
         PropertiesFileController.saveCommonProperties( properties );
 
