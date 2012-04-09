@@ -142,7 +142,7 @@ public class Form  implements TypeChangeListener, SourcePathChangeListener{
                 getOutParamsButton.setEnabled( isSpCall || isSelect );
                 generateXMLButton.setEnabled( ! ( isSelect || isSpCall ) );
                 DaoMethod daoMethod = InputParameterExtractor.getInstance( currentDaoMethod )
-                        .extractAndFillInputParams( currentDaoMethod );
+                        .extractInputParams( currentDaoMethod );
 
                 updateInputParameters ( daoMethod.getInputParametrs().getParameter() );
                 updateOutputParameters( new ArrayList<ParameterType>() );
@@ -173,7 +173,7 @@ public class Form  implements TypeChangeListener, SourcePathChangeListener{
         getOutParamsButton.addActionListener( new ActionListener() {
             @Override
             public void actionPerformed( ActionEvent e ) {
-                final DaoMethod daoMethod  = OutputParameterExtractor.newInstance(
+                final DaoMethod daoMethod  = OutputParameterExtractor.instance(
                         getCurrentDaoMethod().getSelectType()
                 ).getOutputParameters( getCurrentDaoMethod() );
 

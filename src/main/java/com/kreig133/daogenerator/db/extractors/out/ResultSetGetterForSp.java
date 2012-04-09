@@ -11,14 +11,17 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+import static com.kreig133.daogenerator.db.JBDCTypeIdConverter.fillJdbcTypeForInputParameters;
+
 /**
  * @author kreig133
  * @version 1.0
  */
-public class SpOutputParameterExtractor extends OutputParameterExtractor{
+public class ResultSetGetterForSp implements ResultSetGetter{
+
     @Nullable
     @Override
-    protected ResultSet getResultSet( @NotNull DaoMethod daoMethod ) throws SQLException {
+    public ResultSet getResultSet( @NotNull DaoMethod daoMethod ) throws SQLException {
         final String query = QueryCreatorFabric.newInstance( daoMethod ).generateExecuteQuery( daoMethod, true );
 
         assert query != null;

@@ -1,13 +1,11 @@
 package com.kreig133.daogenerator.db.extractors.out;
 
 import com.kreig133.daogenerator.common.Utils;
-import com.kreig133.daogenerator.db.JBDCTypeIdConverter;
 import com.kreig133.daogenerator.db.extractors.Extractor;
 import com.kreig133.daogenerator.db.extractors.SqlTypeHelper;
 import com.kreig133.daogenerator.jaxb.*;
 import org.jetbrains.annotations.NotNull;
 
-import java.sql.ParameterMetaData;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
@@ -18,35 +16,24 @@ import java.util.List;
  * @author kreig133
  * @version 1.0
  */
-public abstract class OutputParameterExtractor extends Extractor{
-    
-    @NotNull
-    public static OutputParameterExtractor newInstance( @NotNull SelectType type ){
-        switch ( type ){
-            case CALL:
-                return new SpOutputParameterExtractor();
-            case SELECT:
-                return new QueryOutputParameterExtractor();
-            default:
-                throw new IllegalArgumentException();
-        }
+public class OutputParameterExtractor extends Extractor{
+
+    private static final OutputParameterExtractor INSTANCE = new OutputParameterExtractor();
+
+    private OutputParameterExtractor() {
     }
 
-    protected void fillJdbcTypeForInputParameters( @NotNull ParameterMetaData parameterMetaData, @NotNull DaoMethod daoMethod )
-            throws SQLException {
-        for ( ParameterType p : daoMethod.getInputParametrs().getParameter() ) {
-            p.setJdbcType( JBDCTypeIdConverter.getJdbcTypeNameById( parameterMetaData.getParameterType(
-                    daoMethod.getInputParametrs().getParameter().indexOf( p ) + 1
-            ) ) );
-        }
+    @NotNull
+    public static OutputParameterExtractor instance( @NotNull SelectType type ){
+        return INSTANCE;
     }
 
     @NotNull
     public DaoMethod getOutputParameters( @NotNull final DaoMethod daoMethod ){
 
         try {
-            final ResultSet resultSet = getResultSet( daoMethod );
-            if( resultSet != null ){
+            final ResultSet resultSet = ResultSetGetter.Factory.get( daoMethod.getSelectType() ).getResultSet( daoMethod );
+            if ( resultSet != null ) {
 
                 final ResultSetMetaData metaData = resultSet.getMetaData();
                 final List<ParameterType> parameterTypes = new LinkedList<ParameterType>();
@@ -70,6 +57,4 @@ public abstract class OutputParameterExtractor extends Extractor{
 
         return daoMethod;
     }
-
-    protected abstract ResultSet getResultSet( DaoMethod daoMethod ) throws SQLException;
 }

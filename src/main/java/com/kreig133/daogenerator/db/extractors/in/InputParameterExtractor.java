@@ -19,8 +19,6 @@ abstract public class InputParameterExtractor extends Extractor{
 
     public abstract DaoMethod extractInputParams( DaoMethod daoMethod );
 
-    public abstract DaoMethod fillTestValuesByInsertedQuery( DaoMethod daoMethod );
-
     public abstract DaoMethod fillMethodName( DaoMethod daoMethod );
 
     public static InputParameterExtractor getInstance( @NotNull DaoMethod daoMethod ){
@@ -32,12 +30,8 @@ abstract public class InputParameterExtractor extends Extractor{
         }
     }
 
-    public DaoMethod extractAndFillInputParams( DaoMethod daoMethod ){
-        return fillTestValuesByInsertedQuery( extractInputParams( daoMethod ) );
-    }
-
     @NotNull
-    protected String getParameterValueFromQuery( @NotNull ParameterType type, String query ) {
+    String getParameterValueFromQuery( @NotNull ParameterType type, String query ) {
         switch ( type.getType() ){
             case LONG:
             case BYTE:

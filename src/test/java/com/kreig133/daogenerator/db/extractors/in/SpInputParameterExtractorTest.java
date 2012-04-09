@@ -32,9 +32,7 @@ public class SpInputParameterExtractorTest{
 
     @Test
     public void extractInputParamsTest(){
-        DaoMethod daoMethod = new DaoMethod();
-        daoMethod.setCommon( new CommonType() );
-        daoMethod.setInputParametrs( new ParametersType() );
+        DaoMethod daoMethod = TestHelper.getDaoMethodForTest();
         daoMethod.getCommon().setSpName( "sp_bilPg_GetBillMakerList" );
 
         final List<ParameterType> sp_bilPg_getBillMakerList =
@@ -82,7 +80,8 @@ public class SpInputParameterExtractorTest{
         daoMethodForTest.getInputParametrs().getParameter().addAll( inputParametrs );
         daoMethodForTest.getCommon().setQuery( TestHelper.spCall );
 
-        SpInputParameterExtractor.instance().fillTestValuesByInsertedQuery( daoMethodForTest );
+        ( ( SpInputParameterExtractor ) SpInputParameterExtractor.instance() )
+                .fillTestValuesByInsertedQuery( daoMethodForTest );
 
         Assert.assertEquals( inputParametrs.get( 0 ).getTestValue(), "3-22-1990 0:0:0.000" );
         Assert.assertEquals( inputParametrs.get( 1 ).getTestValue(), "3-22-2000 0:0:0.000" );

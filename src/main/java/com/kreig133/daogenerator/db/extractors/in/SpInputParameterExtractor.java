@@ -67,8 +67,7 @@ public class SpInputParameterExtractor extends InputParameterExtractor {
     }
 
     @NotNull
-    @Override
-    public DaoMethod fillTestValuesByInsertedQuery( @NotNull DaoMethod daoMethod ) {
+    DaoMethod fillTestValuesByInsertedQuery( @NotNull DaoMethod daoMethod ) {
         List<ParameterType> inputParametrs = daoMethod.getInputParametrs().getParameter();
         String query = daoMethod.getCommon().getQuery();
 
@@ -99,7 +98,7 @@ public class SpInputParameterExtractor extends InputParameterExtractor {
         daoMethod.getInputParametrs().getParameter().clear();
         daoMethod.getInputParametrs().getParameter().addAll( result );
 
-        return daoMethod;
+        return fillTestValuesByInsertedQuery( daoMethod );
     }
 
     //<editor-fold desc="Получение данных из INFORMATION_SCHEMA">

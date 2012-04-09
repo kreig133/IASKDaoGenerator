@@ -17,11 +17,11 @@ import java.util.List;
  * @author kreig133
  * @version 1.0
  */
-public class QueryOutputParameterExtractor extends OutputParameterExtractor{
+public class ResultSetGetterForQuery implements  ResultSetGetter{
 
     @Nullable
     @Override
-    protected ResultSet getResultSet( @NotNull DaoMethod daoMethod ) throws SQLException {
+    public ResultSet getResultSet( @NotNull DaoMethod daoMethod ) throws SQLException {
         final String query =
                 QueryCreator.getQueryStringWithoutMetaData( daoMethod.getCommon().getQuery() );
 
