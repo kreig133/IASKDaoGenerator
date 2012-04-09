@@ -81,7 +81,7 @@ public class Form  implements TypeChangeListener, SourcePathChangeListener{
 
     private boolean start = true;
 
-    public Form() {
+    private Form() {
         redirectOutAndErrOutputToGui();
 
         initializingAnalyticTab();
@@ -498,7 +498,7 @@ public class Form  implements TypeChangeListener, SourcePathChangeListener{
         Settings.settings().setSourcePath( sourceDirTextField.getText() );
     }
 
-    public static JPanel getInstance(){
+    public synchronized static JPanel getInstance(){
         if ( INSTANCE == null ) {
             INSTANCE = new Form();
         }

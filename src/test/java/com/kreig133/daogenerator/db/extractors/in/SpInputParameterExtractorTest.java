@@ -23,7 +23,7 @@ import static org.junit.Assert.assertNotNull;
  * @author eshangareev
  * @version 1.0
  */
-public class SpInputParameterExtractorTest extends SpInputParameterExtractor{
+public class SpInputParameterExtractorTest{
 
     @Before
     public void before(){
@@ -38,7 +38,7 @@ public class SpInputParameterExtractorTest extends SpInputParameterExtractor{
         daoMethod.getCommon().setSpName( "sp_bilPg_GetBillMakerList" );
 
         final List<ParameterType> sp_bilPg_getBillMakerList =
-                new SpInputParameterExtractor().extractInputParams( daoMethod  ).getInputParametrs().getParameter();
+                SpInputParameterExtractor.instance().extractInputParams( daoMethod  ).getInputParametrs().getParameter();
 
         assertEquals( 37, sp_bilPg_getBillMakerList.size() );
     }
@@ -51,7 +51,8 @@ public class SpInputParameterExtractorTest extends SpInputParameterExtractor{
         Mockito.when( rs.getString( SpInputParameterExtractor.PARAMETER_NAME_COLUMN ) ).thenReturn( "id" );
         Mockito.when( rs.getString( SpInputParameterExtractor.PARAMETER_MODE ) ).thenReturn( "IN" );
 
-        final ParameterType parameterType = new SpInputParameterExtractor().extractDataFromResultSetRow( rs );
+        final ParameterType parameterType =
+               ( ( SpInputParameterExtractor ) SpInputParameterExtractor.instance() ).extractDataFromResultSetRow( rs );
 
         assertEquals( parameterType.getName(), "id" );
         assertEquals( parameterType.getType(), JavaType.LONG );
@@ -59,8 +60,8 @@ public class SpInputParameterExtractorTest extends SpInputParameterExtractor{
 
     @Test
     public void getSPTextTest(){
-        super.getSPText( "sp_bilPg_GetBillMakerList" );
-        final String sp_bilPg_getBillMakerList =  getSPText();
+        ( ( SpInputParameterExtractor ) SpInputParameterExtractor.instance() ).getSPText( "sp_bilPg_GetBillMakerList" );
+        final String sp_bilPg_getBillMakerList = SpInputParameterExtractor.getSPText();
         System.out.println( "sp_bilPg_getBillMakerList = " + sp_bilPg_getBillMakerList );
         assertNotNull( sp_bilPg_getBillMakerList );
 
@@ -81,7 +82,7 @@ public class SpInputParameterExtractorTest extends SpInputParameterExtractor{
         daoMethodForTest.getInputParametrs().getParameter().addAll( inputParametrs );
         daoMethodForTest.getCommon().setQuery( TestHelper.spCall );
 
-        new SpInputParameterExtractor().fillTestValuesByInsertedQuery( daoMethodForTest );
+        SpInputParameterExtractor.instance().fillTestValuesByInsertedQuery( daoMethodForTest );
 
         Assert.assertEquals( inputParametrs.get( 0 ).getTestValue(), "3-22-1990 0:0:0.000" );
         Assert.assertEquals( inputParametrs.get( 1 ).getTestValue(), "3-22-2000 0:0:0.000" );
@@ -94,7 +95,7 @@ public class SpInputParameterExtractorTest extends SpInputParameterExtractor{
     @Test
     public void getParentSpNameTest() throws SQLException {
         ResultSet mock = Mockito.mock( ResultSet.class );
-        Mockito.when( mock.getString( S_EXECUTE ) ).thenReturn(
+        Mockito.when( mock.getString( SpInputParameterExtractor.S_EXECUTE ) ).thenReturn(
                 "insert into ##_usp_pg_journal_leads_new_mode1 exec dbo.usp_journal_leads_new @n_co_id=@n_co_id," +
                         "@n_u_id=@n_u_id,@tdivisionid=@tdivisionid,@dtdatefrom=@dtdatefrom,@dtdateto=@dtdateto," +
                         "@dtexecfrom=@dtexecfrom,@dtexecto=@dtexecto,@tvalueid=@tvalueid,@tflag=@tflag,@ddepo=@ddepo," +
@@ -104,18 +105,21 @@ public class SpInputParameterExtractorTest extends SpInputParameterExtractor{
                         "select @i_rowCount = @@ROWCOUNT; update ##_SessionDataSet set iRowCount = @i_rowCount " +
                         "where iSessionDataSetID = @id_sessionDS;"
         );
-        String parentSpName = super.getParentSpName( mock );
+        String parentSpName = ( ( SpInputParameterExtractor ) SpInputParameterExtractor.instance() ).getParentSpName(
+                mock );
 
         Assert.assertEquals( "usp_journal_leads_new", parentSpName );
     }
 
     @Test
     public void getDefinitionFromSpText1(){
-        Assert.assertEquals( super.getDefinitionFromSpText( s ), result );
+        Assert.assertEquals( ( ( SpInputParameterExtractor ) SpInputParameterExtractor.instance() ).getDefinitionFromSpText(
+                s ), result );
     }
     @Test
     public void getDefinitionFromSpText2(){
-        Assert.assertEquals( super.getDefinitionFromSpText( string ), " dbo.anyStoreProcedure( -- AS\n" +
+        Assert.assertEquals( ( ( SpInputParameterExtractor ) SpInputParameterExtractor.instance() ).getDefinitionFromSpText(
+                string ), " dbo.anyStoreProcedure( -- AS\n" +
                 " laksjfffфаывафыва " );
     }
 
@@ -126,7 +130,6 @@ public class SpInputParameterExtractorTest extends SpInputParameterExtractor{
         parameterType.setType( type );
         return parameterType;
     }
-
 
     @NotNull
     String string = "asdfasCREATE PROCEDURE dbo.anyStoreProcedure( -- AS\n laksjfffфаывафыва AS ) AS AS";

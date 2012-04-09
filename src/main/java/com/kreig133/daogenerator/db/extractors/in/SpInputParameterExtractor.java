@@ -23,12 +23,12 @@ import static com.kreig133.daogenerator.db.extractors.SqlTypeHelper.getSqlTypeFr
 public class SpInputParameterExtractor extends InputParameterExtractor {
 
     //<editor-fold desc="instance">
-    private static SpInputParameterExtractor INSTANCE;
+    private final static SpInputParameterExtractor INSTANCE = new SpInputParameterExtractor();
+
+    private SpInputParameterExtractor() {
+    }
 
     static InputParameterExtractor instance() {
-        if ( INSTANCE == null ) {
-            INSTANCE = new SpInputParameterExtractor();
-        }
         return INSTANCE;
     }
     //</editor-fold>

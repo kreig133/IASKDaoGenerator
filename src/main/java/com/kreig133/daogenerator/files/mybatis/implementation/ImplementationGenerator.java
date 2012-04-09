@@ -9,7 +9,6 @@ import com.kreig133.daogenerator.settings.Settings;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 
 /**
@@ -18,12 +17,12 @@ import java.util.ArrayList;
  */
 public class ImplementationGenerator extends InterfaceGenerator{
 
-    private static ImplementationGenerator INSTANCE;
+    private final static ImplementationGenerator INSTANCE = new ImplementationGenerator();
+
+    private ImplementationGenerator() {
+    }
 
     public static ImplementationGenerator instance(){
-        if ( INSTANCE == null ) {
-            INSTANCE = new ImplementationGenerator();
-        }
         return INSTANCE;
     }
 

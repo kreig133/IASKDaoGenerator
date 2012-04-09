@@ -153,11 +153,12 @@ public class DoubleQueryPreparator extends QueryPreparator {
         }
     }
 
-    private static DoubleQueryPreparator INSTANCE;
+    private final static DoubleQueryPreparator INSTANCE = new DoubleQueryPreparator();
+
+    private DoubleQueryPreparator() {
+    }
+
     public static DoubleQueryPreparator instance(){
-        if ( INSTANCE == null ) {
-            INSTANCE = new DoubleQueryPreparator();
-        }
         return INSTANCE;
     }
 }

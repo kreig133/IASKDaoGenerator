@@ -64,7 +64,10 @@ public class JDBCConnector implements TypeChangeListener{
 
     private static JDBCConnector INSTANCE;
 
-    public static JDBCConnector instance(){
+    private JDBCConnector() {
+    }
+
+    public synchronized static JDBCConnector instance(){
         if ( INSTANCE == null ) {
             INSTANCE = new JDBCConnector();
             Settings.settings().addTypeChangeListener( INSTANCE );

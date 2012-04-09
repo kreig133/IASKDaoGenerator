@@ -134,6 +134,9 @@ public class QueryPreparator {
     protected List<ParameterType> getColumnsFromDbByTableName( String tableName ) {
         try {
             Connection connection = JDBCConnector.instance().connectToDB();
+
+            assert connection != null;
+
             PreparedStatement statement = connection.prepareStatement(
                     "SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = ? ORDER BY ORDINAL_POSITION" );
             statement.setString( 1, tableName );
@@ -153,12 +156,13 @@ public class QueryPreparator {
         }
     }
 
-    private static QueryPreparator INSTANCE;
+    private final static QueryPreparator INSTANCE = new QueryPreparator();
+
+    //TODO че за ?
+    protected QueryPreparator() {
+    }
 
     public static QueryPreparator instance(){
-        if ( INSTANCE == null ) {
-            INSTANCE = new QueryPreparator();
-        }
         return INSTANCE;
     }
 }

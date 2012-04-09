@@ -11,12 +11,12 @@ import org.jetbrains.annotations.NotNull;
  */
 public class SelectInputParameterExtractor extends QueryInputParameterExtractor{
 
-    private static SelectInputParameterExtractor INSTANCE;
+    private final static SelectInputParameterExtractor INSTANCE = new SelectInputParameterExtractor();
+
+    private SelectInputParameterExtractor() {
+    }
 
     static SelectInputParameterExtractor instance(){
-        if ( INSTANCE == null ) {
-            INSTANCE = new SelectInputParameterExtractor();
-        }
         return INSTANCE;
     }
 

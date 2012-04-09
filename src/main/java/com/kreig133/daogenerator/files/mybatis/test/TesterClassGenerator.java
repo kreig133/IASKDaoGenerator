@@ -18,15 +18,12 @@ import java.io.File;
  */
 public class TesterClassGenerator extends JavaClassGenerator{
 
+    private final static TesterClassGenerator INSTANCE = new TesterClassGenerator();
+
     private TesterClassGenerator() {
     }
 
-    private static TesterClassGenerator INSTANCE;
-
     public static TesterClassGenerator instance(){
-        if ( INSTANCE == null ) {
-            INSTANCE = new TesterClassGenerator();
-        }
         return INSTANCE;
     }
 

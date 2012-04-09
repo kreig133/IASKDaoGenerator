@@ -2,14 +2,13 @@ package com.kreig133.daogenerator.files.mybatis.intrface;
 
 import com.kreig133.daogenerator.enums.ClassType;
 import com.kreig133.daogenerator.enums.MethodType;
-import com.kreig133.daogenerator.files.mybatis.DaoJavaClassGenerator;
 import com.kreig133.daogenerator.files.PackageAndFileUtils;
+import com.kreig133.daogenerator.files.mybatis.DaoJavaClassGenerator;
 import com.kreig133.daogenerator.jaxb.DaoMethod;
 import com.kreig133.daogenerator.settings.Settings;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
-import java.io.IOException;
 
 /**
  * @author kreig133
@@ -17,16 +16,15 @@ import java.io.IOException;
  */
 public class InterfaceGenerator extends DaoJavaClassGenerator {
 
-    private static InterfaceGenerator INSTANCE;
+    private final static InterfaceGenerator INSTANCE = new InterfaceGenerator();
 
-    public static InterfaceGenerator instance(){
-        if ( INSTANCE == null ) {
-            INSTANCE = new InterfaceGenerator();
-        }
-        return INSTANCE;
+    //TODO че за?
+    protected InterfaceGenerator() {
     }
 
-
+    public static InterfaceGenerator instance(){
+        return INSTANCE;
+    }
 
     @Override
     public File getFile() {

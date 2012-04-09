@@ -13,7 +13,7 @@ import java.util.List;
  * @author eshangareev
  * @version 1.0
  */
-public class DoubleQueryPreparatorTest extends DoubleQueryPreparator{
+public class DoubleQueryPreparatorTest{
 
     @NotNull
     @Language( "SQL" )
@@ -71,12 +71,12 @@ public class DoubleQueryPreparatorTest extends DoubleQueryPreparator{
         @Language( "SQL" )
         String inputWithTestVlue =
                 "select count(n_ad_id) from dbo.t_ad_rasp where not n_ad_id is null and n_adr_raspor = 376682 and iisdeleted = 0";
-        String s = prepareQuery( inputWithName, inputWithTestVlue );
+        String s = DoubleQueryPreparator.instance().prepareQuery( inputWithName, inputWithTestVlue );
         Assert.assertEquals( s, "select count(n_ad_id) from dbo.t_ad_rasp where not n_ad_id is null and n_adr_raspor = ${irasp_id;int;376682} and iisdeleted = 0" );
     }
     @Test
     public void testParse(){
-        String s = prepareQuery( query, fiiledQuery );
+        String s = DoubleQueryPreparator.instance().prepareQuery( query, fiiledQuery );
         System.out.println(s);
     }
 
@@ -85,7 +85,7 @@ public class DoubleQueryPreparatorTest extends DoubleQueryPreparator{
         List<String> queryPiece = new ArrayList<String>();
         List<String> paramNames = new ArrayList<String>();
 
-        parseQueryWithName( queryPiece, paramNames, query );
+        DoubleQueryPreparator.instance().parseQueryWithName( queryPiece, paramNames, query );
 
         Assert.assertEquals( paramNames.size(), 3 );
     }
@@ -104,7 +104,7 @@ public class DoubleQueryPreparatorTest extends DoubleQueryPreparator{
     private void testDetermineSqlTypeByTestValue( String testValue, String sqlType ) {
         ParameterType parameterType = new ParameterType();
         parameterType.setTestValue( testValue );
-        determineSqlTypeByTestValue( parameterType );
+        DoubleQueryPreparator.instance().determineSqlTypeByTestValue( parameterType );
 
         Assert.assertEquals( parameterType.getSqlType(), sqlType );
     }
