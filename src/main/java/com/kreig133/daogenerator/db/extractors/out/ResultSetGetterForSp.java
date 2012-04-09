@@ -2,7 +2,7 @@ package com.kreig133.daogenerator.db.extractors.out;
 
 import com.kreig133.daogenerator.db.JDBCConnector;
 import com.kreig133.daogenerator.jaxb.DaoMethod;
-import com.kreig133.daogenerator.sql.creators.QueryCreatorFabric;
+import com.kreig133.daogenerator.sql.creators.QueryCreatorFactory;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -21,14 +21,15 @@ public class ResultSetGetterForSp implements ResultSetGetter{
 
     @Nullable
     @Override
-    public ResultSet getResultSet( @NotNull DaoMethod daoMethod ) throws SQLException {
-        final String query = QueryCreatorFabric.newInstance( daoMethod ).generateExecuteQuery( daoMethod, true );
+    public ResultSet getResultSetAndFillJdbcTypeIfNeed( @NotNull DaoMethod daoMethod ) throws SQLException {
+        final String query = QueryCreatorFactory.newInstance( daoMethod ).generateExecuteQuery( daoMethod, true );
 
         assert query != null;
 
         final Connection connection = JDBCConnector.instance().connectToDB();
 
         assert connection != null;
+
         final CallableStatement callableStatement = connection.prepareCall( query );
 
         connection.createStatement().execute( "SET NOCOUNT ON;" );

@@ -32,7 +32,8 @@ public class OutputParameterExtractor extends Extractor{
     public DaoMethod getOutputParameters( @NotNull final DaoMethod daoMethod ){
 
         try {
-            final ResultSet resultSet = ResultSetGetter.Factory.get( daoMethod.getSelectType() ).getResultSet( daoMethod );
+            final ResultSet resultSet = ResultSetGetter.Factory.get( daoMethod.getSelectType() )
+                    .getResultSetAndFillJdbcTypeIfNeed( daoMethod );
             if ( resultSet != null ) {
 
                 final ResultSetMetaData metaData = resultSet.getMetaData();

@@ -10,7 +10,7 @@ import com.kreig133.daogenerator.jaxb.DaoMethod;
 import com.kreig133.daogenerator.jaxb.ParameterType;
 import com.kreig133.daogenerator.jaxb.SelectType;
 import com.kreig133.daogenerator.settings.Settings;
-import com.kreig133.daogenerator.sql.creators.QueryCreatorFabric;
+import com.kreig133.daogenerator.sql.creators.QueryCreatorFactory;
 import org.apache.commons.lang.StringUtils;
 import org.jetbrains.annotations.NotNull;
 
@@ -93,7 +93,7 @@ public class DepoMappingGenerator extends MappingGenerator{
 
         increaseNestingLevel();
         wrapWithQuotesAndWrite(
-                QueryCreatorFabric.newInstance( daoMethod )
+                QueryCreatorFactory.newInstance( daoMethod )
                         .generateExecuteQuery( daoMethod, false ).replaceAll( "\"", "\\\\\"" )
         );
         decreaseNestingLevel();

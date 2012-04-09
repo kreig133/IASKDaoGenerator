@@ -8,7 +8,7 @@ import org.jetbrains.annotations.NotNull;
  * @author eshangareev
  * @version 1.0
  */
-public class QueryCreatorFabric {
+public class QueryCreatorFactory {
     @NotNull
     public static QueryCreator newInstance( @NotNull DaoMethod daoMethod ){
         if( daoMethod.getSelectType() == SelectType.CALL ){

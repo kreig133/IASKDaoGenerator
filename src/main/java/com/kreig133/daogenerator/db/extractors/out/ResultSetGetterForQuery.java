@@ -21,7 +21,7 @@ public class ResultSetGetterForQuery implements  ResultSetGetter{
 
     @Nullable
     @Override
-    public ResultSet getResultSet( @NotNull DaoMethod daoMethod ) throws SQLException {
+    public ResultSet getResultSetAndFillJdbcTypeIfNeed( @NotNull DaoMethod daoMethod ) throws SQLException {
         final String query =
                 QueryCreator.getQueryStringWithoutMetaData( daoMethod.getCommon().getQuery() );
 

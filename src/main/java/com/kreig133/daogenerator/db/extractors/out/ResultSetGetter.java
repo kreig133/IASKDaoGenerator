@@ -13,7 +13,7 @@ import java.util.Map;
  * @version 1.0
  */
 public interface ResultSetGetter {
-    ResultSet getResultSet( DaoMethod daoMethod ) throws SQLException;
+    ResultSet getResultSetAndFillJdbcTypeIfNeed( DaoMethod daoMethod ) throws SQLException;
 
     class Factory{
         private static final Map<SelectType, ResultSetGetter> resultSetGetterMap = new HashMap<SelectType, ResultSetGetter>();
