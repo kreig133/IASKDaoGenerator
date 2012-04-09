@@ -105,9 +105,6 @@
             <resource>
                 <directory>src/main/resources/maven</directory>
             </resource>
-            <resource>
-                <directory>src/main/resources/properties/db</directory>
-            </resource>
         </resources>
 
         <plugins>
