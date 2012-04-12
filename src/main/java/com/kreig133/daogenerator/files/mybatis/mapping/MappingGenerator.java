@@ -14,15 +14,8 @@ import java.io.File;
  */
 public abstract class MappingGenerator extends DaoJavaClassGenerator {
 
-    private static MappingGenerator INSTANCE;
-
     public static MappingGenerator instance (){
-        if ( INSTANCE == null ) {
-            INSTANCE = Settings.settings().getType() == Type.IASK ?
-                    new IaskMappingGenerator() :  new DepoMappingGenerator();
-        }
-
-        return INSTANCE;
+        return Settings.settings().getType() == Type.IASK ? new IaskMappingGenerator() :  new DepoMappingGenerator();
     }
 
     @NotNull
