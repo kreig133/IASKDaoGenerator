@@ -35,11 +35,16 @@ public class DepoMappingGenerator extends MappingGenerator{
             javaDocBuilder.addParameter( "request" /**TODO хардкод*/, "объект, содержащий входные данные для запроса" );
         } else {
             for ( ParameterType type : daoMethod.getInputParametrs().getParameter() ) {
-                javaDocBuilder.addParameter( type.getRenameTo(), type.getComment() );
+                javaDocBuilder.addParameter(
+                        type.getRenameTo(),
+                        StringUtils.isNotBlank(type.getComment()) ?
+                                type.getComment():
+                                "входной параметр запроса"
+                );
             }
         }
         if ( ! daoMethod.getOutputParametrs().getParameter().isEmpty() ) {
-            javaDocBuilder.addReturn( "объект, содержащий данные, которые вернул запрос" );
+            javaDocBuilder.addReturn( "данные, которые вернул запрос" );
         }
         javaDocBuilder.close();
 
