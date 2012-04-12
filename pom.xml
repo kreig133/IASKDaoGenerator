@@ -105,6 +105,10 @@
             <resource>
                 <directory>src/main/resources/maven</directory>
             </resource>
+            <!--Конфиги к БД для тестового приложения-->
+            <resource>
+                <directory>src/main/resources/properties/db</directory>
+            </resource>
         </resources>
 
         <plugins>
