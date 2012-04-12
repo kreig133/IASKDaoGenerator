@@ -125,22 +125,22 @@ abstract public class ModelClassGenerator extends JavaClassGenerator {
     
     @NotNull
     private String enumBody =
-                    "         /** Описание атрибута */\n" +
-                    "        private final String caption;\n" +
-                    "        \n" +
-                    "        /** \n" +
-                    "         * Конструктор по умолчанию \n" +
-                    "         * @param caption описание атрибута\n" +
-                    "         */\n" +
-                    "        private Fields(String caption) {\n" +
-                    "            this.caption = caption;\n" +
-                    "        }\n" +
-                    "        \n" +
-                    "        /**\n" +
-                    "         * Вернуть описание атрибута\n" +
-                    "         * @return String\n" +
-                    "         */\n" +
-                    "        public String getCaption(){\n" +
-                    "            return caption;\n" +
-                    "        }\n";
+                    "\t\t/** Описание атрибута */\n" +
+                    "\t\tprivate final String caption;\n" +
+                    "\n" +
+                    "\t\t/** \n" +
+                    "\t\t * Конструктор по умолчанию \n" +
+                    "\t\t * @param caption описание атрибута\n" +
+                    "\t\t */\n" +
+                    "\t\tprivate Fields(String caption) {\n" +
+                    "\t\t\tthis.caption = caption;\n" +
+                    "\t\t}\n" +
+                    "\n" +
+                    "\t\t/**\n" +
+                    "\t\t * Вернуть описание атрибута\n" +
+                    "\t\t * @return String\n" +
+                    "\t\t */\n" +
+                    "\t\tpublic String getCaption(){\n" +
+                    "\t\t\treturn caption;\n" +
+                    "\t\t}\n";
 }

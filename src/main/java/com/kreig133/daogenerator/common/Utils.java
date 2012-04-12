@@ -36,7 +36,7 @@ public class Utils {
     @NotNull
     public static StringBuilder insertTabs( @NotNull StringBuilder builder, int tabsQuantity ){
         for( int i = 0 ; i < tabsQuantity; i ++ ){
-            builder.append( "    " );
+            builder.append( "\t" );
         }
         return builder;
     }
