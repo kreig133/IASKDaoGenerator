@@ -7,7 +7,7 @@
     <groupId>com.kreig133</groupId>
     <artifactId>DaoGenerator</artifactId>
     <packaging>jar</packaging>
-    <version>2.9.6</version>
+    <version>2.9.7</version>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
