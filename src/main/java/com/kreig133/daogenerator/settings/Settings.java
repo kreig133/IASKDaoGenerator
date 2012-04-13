@@ -51,26 +51,23 @@ public class Settings {
     public static void saveProperties() {
         Properties properties = new Properties();
 
-        properties.setProperty( IASK                , String.valueOf( operationSettings.getType() == Type.IASK ) );
-        properties.setProperty( DEPO                , String.valueOf( operationSettings.getType() == Type.DEPO ) );
-
-        properties.setProperty( WIDTH               , String.valueOf( settings().getFrameWidth () ) );
-        properties.setProperty( HEIGHT              , String.valueOf( settings().getFrameHeight() ) );
-
         properties.setProperty( DEST_DIR            , operationSettings.getOutputPathForJavaClasses () );
-        properties.setProperty( ENTITY_PACKAGE      , operationSettings.getEntityPackage            () );
-        properties.setProperty( INTERFACE_PACKAGE   , operationSettings.getDaoPackage               () );
         properties.setProperty( MAPPING_PACKAGE     , operationSettings.getMapperPackage            () );
 
         if ( new File( settings().getSourcePath()  ).exists() ) {
             PropertiesFileController.saveSpecificProperties( operationSettings.getSourcePath(), properties );
         }
 
+        properties.setProperty( ENTITY_PACKAGE      , operationSettings.getEntityPackage            () );
+        properties.setProperty( INTERFACE_PACKAGE   , operationSettings.getDaoPackage               () );
+        properties.setProperty( WIDTH               , String.valueOf( settings().getFrameWidth () ) );
+        properties.setProperty( HEIGHT              , String.valueOf( settings().getFrameHeight() ) );
         properties.setProperty( SOURCE_DIR          , operationSettings.getSourcePath() );
         properties.setProperty( PROJECT_FOLDER      , operationSettings.getProjectFolder() );
         properties.setProperty( LAST_DIRECTORY      , operationSettings.getLastDirectory() );
         properties.setProperty( VERSION             , DaoGenerator.VERSION );
-
+        properties.setProperty( IASK                , String.valueOf( operationSettings.getType() == Type.IASK ) );
+        properties.setProperty( DEPO                , String.valueOf( operationSettings.getType() == Type.DEPO ) );
         PropertiesFileController.saveCommonProperties( properties );
 
     }

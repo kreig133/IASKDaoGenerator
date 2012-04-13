@@ -31,9 +31,10 @@ public class PropertiesFileController {
             //Пытаемся считать настройки из папки SOURCE_DIR
             if( sourceDir != null && !"".equals( sourceDir ) ){
                 final Properties propertiesFromSourceDir = getPropertiesFromSourceDir( sourceDir );
-                if( propertiesFromSourceDir != null ){
-                    settings = propertiesFromSourceDir;
-                    settings.setProperty( Settings.SOURCE_DIR, sourceDir );
+                if( propertiesFromSourceDir != null ) {
+                    settings.setProperty( Settings.DEST_DIR, propertiesFromSourceDir.getProperty( Settings.DEST_DIR ) );
+                    settings.setProperty( Settings.MAPPING_PACKAGE,
+                            propertiesFromSourceDir.getProperty( Settings.MAPPING_PACKAGE ) );
                 }
             }
 
