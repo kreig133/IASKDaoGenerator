@@ -31,7 +31,6 @@ class GuiUtils {
         }
         @Override
         public int showSaveDialog( Component parent ) throws HeadlessException {
-
             int i = super.showSaveDialog( parent );
             Settings.settings().setLastDirectory( getSelectedFile().getAbsolutePath() );
             return i;

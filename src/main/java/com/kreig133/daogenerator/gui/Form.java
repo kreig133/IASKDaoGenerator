@@ -128,7 +128,7 @@ public class Form  implements TypeChangeListener, SourcePathChangeListener{
         getInParamsButton.addActionListener( new ActionListener() {
             @Override
             public void actionPerformed( ActionEvent e ) {
-                if ( queryTextArea.getText() == null || queryTextArea.getText().equals( "" ) ) {
+                if ( StringUtils.isBlank( queryTextArea.getText() ) ) {
                     JOptionPane.showMessageDialog( getInParamsButton,
                             "Введите текст запроса или название хранимой процедуры" );
                     return;
@@ -152,7 +152,6 @@ public class Form  implements TypeChangeListener, SourcePathChangeListener{
             @Override
             public void actionPerformed( ActionEvent e ) {
                 TextView.setText( SpInputParameterExtractor.getSPText() );
-
                 getWindowWithText().setVisible( true );
             }
         } );
@@ -191,7 +190,7 @@ public class Form  implements TypeChangeListener, SourcePathChangeListener{
                     final File dirForSave = newFileChooser.getSelectedFile();
                     final DaoMethod currentDaoMethod = getCurrentDaoMethod();
 
-                    if( StringUtils.isEmpty( currentDaoMethod.getCommon().getMethodName() ) ) {
+                    if( StringUtils.isBlank( currentDaoMethod.getCommon().getMethodName() ) ) {
                         InputParameterExtractor.getInstance( currentDaoMethod ).fillMethodName( currentDaoMethod );
                     }
 
@@ -478,7 +477,7 @@ public class Form  implements TypeChangeListener, SourcePathChangeListener{
 
     private void setOutputPath() {
         JFileChooser newFileChooser = getNewFileChooser();
-        if ( newFileChooser.showSaveDialog( null ) == JFileChooser.APPROVE_OPTION ) {
+        if ( newFileChooser.showSaveDialog( mainPanel ) == JFileChooser.APPROVE_OPTION ) {
             File file = newFileChooser.getSelectedFile();
             destDirTextField.setText( file.getAbsolutePath() );
         }

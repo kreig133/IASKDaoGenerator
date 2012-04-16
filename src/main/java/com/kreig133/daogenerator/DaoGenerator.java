@@ -4,6 +4,7 @@ import com.kreig133.daogenerator.gui.Form;
 import com.kreig133.daogenerator.settings.PropertiesFileController;
 import com.kreig133.daogenerator.settings.Settings;
 import jsyntaxpane.DefaultSyntaxKit;
+import org.apache.commons.lang.StringUtils;
 
 import javax.swing.*;
 import java.awt.*;
@@ -34,7 +35,7 @@ public class DaoGenerator {
 
         final String property = defaultProperties.getProperty( SOURCE_DIR, "" );
 
-        if( ! "".equals( property ) ){
+        if( StringUtils.isNotBlank( property ) ){
             Settings.settings().setSourcePath( property );
             final Properties propertiesFromSourceDir = PropertiesFileController.getPropertiesFromSourceDir( property );
             if( propertiesFromSourceDir != null ){

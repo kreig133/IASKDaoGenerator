@@ -1,6 +1,7 @@
 package com.kreig133.daogenerator.settings;
 
 import com.kreig133.daogenerator.common.Utils;
+import org.apache.commons.lang.StringUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -29,7 +30,7 @@ public class PropertiesFileController {
 
             final String sourceDir = settings.getProperty( Settings.SOURCE_DIR );
             //Пытаемся считать настройки из папки SOURCE_DIR
-            if( sourceDir != null && !"".equals( sourceDir ) ){
+            if( StringUtils.isNotEmpty( sourceDir ) ){
                 final Properties propertiesFromSourceDir = getPropertiesFromSourceDir( sourceDir );
                 if( propertiesFromSourceDir != null ) {
                     settings.setProperty( Settings.DEST_DIR, propertiesFromSourceDir.getProperty( Settings.DEST_DIR ) );

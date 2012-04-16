@@ -4,6 +4,7 @@ import com.kreig133.daogenerator.common.Utils;
 import com.kreig133.daogenerator.db.JDBCConnector;
 import com.kreig133.daogenerator.db.extractors.Extractor;
 import com.kreig133.daogenerator.jaxb.*;
+import org.apache.commons.lang.StringUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -167,7 +168,7 @@ public class SpInputParameterExtractor extends InputParameterExtractor {
                         getParameterValueFromQuery( parameterType, storeProcedureDefinition );
         if ( ! NOT_FOUNDED.equals( parameterValueFromQuery ) ) {
             String defaultValue = parameterType.getDefaultValue();
-            if( defaultValue == null || defaultValue.trim().equals( "" ) ) {
+            if( StringUtils.isBlank( defaultValue ) ) {
                 parameterType.setDefaultValue( parameterValueFromQuery );
             }
         }

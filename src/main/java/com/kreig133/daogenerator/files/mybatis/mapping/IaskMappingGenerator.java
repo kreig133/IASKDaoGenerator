@@ -1,5 +1,6 @@
 package com.kreig133.daogenerator.files.mybatis.mapping;
 
+import com.kreig133.daogenerator.common.Utils;
 import com.kreig133.daogenerator.jaxb.NamingUtils;
 import com.kreig133.daogenerator.files.mybatis.intrface.InterfaceGenerator;
 import com.kreig133.daogenerator.jaxb.DaoMethod;
@@ -84,7 +85,7 @@ public class IaskMappingGenerator extends MappingGenerator{
             String package_,
             @NotNull StringBuilder builder
     ) {
-        if ( ! outputParameterList.isEmpty() ) {
+        if ( Utils.collectionNotEmpty( outputParameterList ) ) {
             insertLine();
             increaseNestingLevel();
             insertTabs().append( type ).append( "=\"" );

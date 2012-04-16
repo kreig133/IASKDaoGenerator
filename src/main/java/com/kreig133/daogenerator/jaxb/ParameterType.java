@@ -8,6 +8,7 @@
 
 package com.kreig133.daogenerator.jaxb;
 
+import org.apache.commons.lang.StringUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -307,7 +308,7 @@ public class ParameterType {
     }
 
     public String getCommentForJavaDoc() {
-        if ( comment == null || "".equals( comment ) || comment.toLowerCase().equals( "null" ) ) {
+        if ( StringUtils.isEmpty( comment ) || comment.toLowerCase().equals( "null" ) ) {
             return renameTo;
         }
 

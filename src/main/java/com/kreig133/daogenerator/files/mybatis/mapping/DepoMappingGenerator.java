@@ -2,6 +2,7 @@ package com.kreig133.daogenerator.files.mybatis.mapping;
 
 import com.google.common.base.Function;
 import com.google.common.collect.Iterators;
+import com.kreig133.daogenerator.common.Utils;
 import com.kreig133.daogenerator.enums.ClassType;
 import com.kreig133.daogenerator.enums.MethodType;
 import com.kreig133.daogenerator.files.JavaDocGenerator;
@@ -43,7 +44,7 @@ public class DepoMappingGenerator extends MappingGenerator{
                 );
             }
         }
-        if ( ! daoMethod.getOutputParametrs().getParameter().isEmpty() ) {
+        if ( Utils.collectionNotEmpty( daoMethod.getOutputParametrs().getParameter() ) ) {
             javaDocBuilder.addReturn( "данные, которые вернул запрос" );
         }
         javaDocBuilder.close();
@@ -119,7 +120,7 @@ public class DepoMappingGenerator extends MappingGenerator{
 
     private void generateNameMapping( @NotNull DaoMethod daoMethod ) {
         if(
-                ! daoMethod.getOutputParametrs().getParameter().isEmpty() &&
+                  Utils.collectionNotEmpty( daoMethod.getOutputParametrs().getParameter() ) &&
                   daoMethod.getOutputParametrs().getIndexOfUnnamedParameters().size() < 2 &&
                 ! daoMethod.getOutputParametrs().containsSameNames()
 

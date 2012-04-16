@@ -15,7 +15,7 @@ public class QueryCreatorFactory {
             if(
                     daoMethod.getOutputParametrs().getIndexOfUnnamedParameters().size() > 1 ||
                             daoMethod.getOutputParametrs().containsSameNames()
-                    ) {
+            ) {
                 return new WrapperGenerator();
             }
             return  new ProcedureCallCreator();

@@ -8,6 +8,7 @@ import org.jetbrains.annotations.Nullable;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.List;
 
 /**
  * @author eshangareev
@@ -48,7 +49,7 @@ public class Utils {
      * @return
      */
     public static String convertPBNameToName( @NotNull String nameForCall ) {
-        if( StringUtils.isEmpty( nameForCall ) ) {
+        if( StringUtils.isBlank( nameForCall ) ) {
             return "";
         }
         {
@@ -72,5 +73,9 @@ public class Utils {
     @NotNull
     public static File getFileFromDirectoryByName( String directoryPath, String fileName ) {
         return new File( new File( directoryPath ).getAbsolutePath() + "/" + fileName );
+    }
+
+    public static boolean collectionNotEmpty( List inputParams ) {
+        return inputParams != null && ! inputParams.isEmpty();
     }
 }

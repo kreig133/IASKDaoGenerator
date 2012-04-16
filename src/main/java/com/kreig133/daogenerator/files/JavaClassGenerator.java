@@ -97,7 +97,7 @@ abstract public class JavaClassGenerator extends Generator {
             increaseNestingLevel();
             insertTabs();
         }
-        if ( inputParams != null && ! inputParams.isEmpty() ) {
+        if ( Utils.collectionNotEmpty( inputParams ) ) {
             builder.append( StringUtils.join( inputParams.iterator(), ", " ) );
         }
         if(  needNewLineForParam ){
@@ -107,7 +107,7 @@ abstract public class JavaClassGenerator extends Generator {
         }
         builder.append( ")" );
 
-        if ( throwsing != null && ! throwsing.isEmpty() ) {
+        if ( Utils.collectionNotEmpty( throwsing ) ) {
             builder.append( " throws " );
             builder.append( StringUtils.join( throwsing.iterator(), ", " ) );
         }
@@ -175,7 +175,7 @@ abstract public class JavaClassGenerator extends Generator {
             builder.append( " extends " ).append( parentClassName );
         }
 
-        if ( interfaces != null && ! interfaces.isEmpty() ) {
+        if ( Utils.collectionNotEmpty( interfaces ) ) {
             builder.append( " implements " );
             builder.append( StringUtils.join( interfaces.iterator(), ", " ) );
         }

@@ -1,5 +1,6 @@
 package com.kreig133.daogenerator.files.mybatis.implementation;
 
+import com.kreig133.daogenerator.common.Utils;
 import com.kreig133.daogenerator.enums.ClassType;
 import com.kreig133.daogenerator.enums.MethodType;
 import com.kreig133.daogenerator.enums.Scope;
@@ -70,7 +71,7 @@ public class ImplementationGenerator extends InterfaceGenerator{
         insertLine();
         insertTabs();
 
-        if( ! daoMethod.getOutputParametrs().getParameter().isEmpty() ){
+        if ( Utils.collectionNotEmpty( daoMethod.getOutputParametrs().getParameter() ) ) {
             builder.append( "return " );
         }
 
@@ -94,7 +95,7 @@ public class ImplementationGenerator extends InterfaceGenerator{
         builder.append( "(\"" ).append( Settings.settings().getDaoPackage() ).append( "." )
                 .append( InterfaceGenerator.instance().getFileName() ).append( "." )
                 .append( daoMethod.getCommon().getMethodName() ).append( "\" ").append( "," );
-        if( ! daoMethod.getInputParametrs().getParameter().isEmpty() ){
+        if( Utils.collectionNotEmpty( daoMethod.getInputParametrs().getParameter() ) ){
             builder.append( "request" );
         } else {
             builder.append( "null" );

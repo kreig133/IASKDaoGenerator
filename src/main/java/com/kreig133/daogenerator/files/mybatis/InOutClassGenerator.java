@@ -194,7 +194,7 @@ public class InOutClassGenerator extends JavaClassGenerator {
                 .append( " " ).append( p.getRenameTo() );
 
         String defaultValue = p.getDefaultValue();
-        if( defaultValue != null  && ! defaultValue.isEmpty() ) {
+        if( StringUtils.isNotEmpty(  defaultValue ) ) {
             builder.append( " = ").append( p.getDefaultValueForJavaCode() );
         }
 
