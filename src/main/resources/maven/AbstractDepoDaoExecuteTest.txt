@@ -81,14 +81,19 @@ public abstract class AbstractDepoDaoExecuteTest {
         } else if ( aClass == java.lang.String.class ) {
             return value;
         } else if (
-                aClass == java.lang.Long.class || aClass == java.lang.Byte.class || aClass == java.lang.Double.class
-                ) {
+                aClass == java.lang.Long.class   ||
+                aClass == java.lang.Byte.class   ||
+                aClass == java.lang.Double.class ||
+                aClass == Integer.class
+        ) {
             if ( value.equals( "" ) ) {
                 return null;
             } else {
                 Method valueOf = aClass.getMethod( "valueOf", String.class );
                 return valueOf.invoke( aClass, value );
             }
+        } else if(aClass.getName().equals("int")) {
+            return Integer.valueOf(value);
         }
 
         throw new IllegalArgumentException();
@@ -106,7 +111,7 @@ public abstract class AbstractDepoDaoExecuteTest {
         Method method = null;
 
         for ( Method m : methods ) {
-            if ( m.getName().equals( methodName ) ) {
+            if ( m.getName().equalsIgnoreCase(methodName) ) {
                 method = m;
                 break;
             }
@@ -129,7 +134,7 @@ public abstract class AbstractDepoDaoExecuteTest {
 
             final Class<?>[] parameterTypes = method.getParameterTypes();
 
-            Object invoke = null;
+            Object invoke;
 
             switch ( parameterTypes.length ) {
                 case 0:
@@ -160,10 +165,16 @@ public abstract class AbstractDepoDaoExecuteTest {
                     invoke = method.invoke( dao, values.toArray() );
             }
 
+            if( invoke == null && method.getReturnType().getName().equals("void") ){
+                invoke = "Method don't have to return any value";
+            }
+
             assert invoke != null;
 
             if ( invoke instanceof List ) {
-                for ( Object object : ( List ) invoke ) {
+                @SuppressWarnings ("unchecked")
+            	List<Object> list = (List<Object>) invoke;
+                for ( Object object : list) {
                     System.out.println( object );
                 }
             } else {
