@@ -77,6 +77,7 @@ public class Form  implements TypeChangeListener, SourcePathChangeListener{
     private JRadioButton doubleQueryRadioButton;
     private JEditorPane secondQuery;
     private JScrollPane secondQueryPanel;
+    private JCheckBox forDictCheckBox;
     private JFrame windowWithText;
 
     private boolean start = true;
@@ -190,7 +191,7 @@ public class Form  implements TypeChangeListener, SourcePathChangeListener{
                     final File dirForSave = newFileChooser.getSelectedFile();
                     final DaoMethod currentDaoMethod = getCurrentDaoMethod();
 
-                    if( StringUtils.isBlank( currentDaoMethod.getCommon().getMethodName() ) ) {
+                    if( StringUtils.isBlank(currentDaoMethod.getCommon().getMethodName()) ) {
                         InputParameterExtractor.getInstance( currentDaoMethod ).fillMethodName( currentDaoMethod );
                     }
 
@@ -204,7 +205,11 @@ public class Form  implements TypeChangeListener, SourcePathChangeListener{
                                 @Override
                                 public void run() {
                                     try {
-                                        WikiGenerator.generateWikiForXmlFile( xmlFilePath );
+                                        if (forDictCheckBox.isSelected()) {
+                                            WikiGenerator.generateWikiForXmlFile(xmlFilePath, 2);
+                                        } else {
+                                            WikiGenerator.generateWikiForXmlFile(xmlFilePath, 1);
+                                        }
 
                                         TextView.setText(
                                                 Utils.streamToString( new FileInputStream( xmlFilePath + ".txt" ) ) );
