@@ -14,15 +14,22 @@ public class WikiGenerator {
         final String[] xmlFileNamesInDirectory = FileBuilder.getXmlFileNamesInDirectory( path );
 
         for ( String s : xmlFileNamesInDirectory ) {
-            generateWikiForXmlFile( path + "\\" +  s );
+            generateWikiForXmlFile( path + "\\" +  s, 1 );
         }
     }
 
-    public static void generateWikiForXmlFile( String xmlFileName ) throws IOException, InterruptedException {
+    public static void generateWikiForXmlFile( String xmlFileName, int mode ) throws IOException, InterruptedException {
+        String xsltFileName;
+         if (mode == 1)      {
+             xsltFileName="XmlToWiki";
+         } else {
+             xsltFileName="XmlToWikiForDirectory";
+         }
+
         final String[] cmdarray = { "cmd", "/C",
                 "java  -classpath DaoGenerator-" + DaoGenerator.VERSION + ".jar org.apache.xalan.xslt.Process " +
                         "-IN " + xmlFileName +
-                        " -XSL XmlToWiki.xsl " +
+                        " -XSL " + xsltFileName + ".xsl "+
                         "-OUT " + xmlFileName + ".txt" };
 
         for ( String s1 : cmdarray ) {
