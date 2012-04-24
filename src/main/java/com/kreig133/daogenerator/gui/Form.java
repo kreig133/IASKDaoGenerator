@@ -205,11 +205,7 @@ public class Form  implements TypeChangeListener, SourcePathChangeListener{
                                 @Override
                                 public void run() {
                                     try {
-                                        if (forDictCheckBox.isSelected()) {
-                                            WikiGenerator.generateWikiForXmlFile(xmlFilePath, 2);
-                                        } else {
-                                            WikiGenerator.generateWikiForXmlFile(xmlFilePath, 1);
-                                        }
+                                        WikiGenerator.generateWikiForXmlFile(xmlFilePath, forDictCheckBox.isSelected());
 
                                         TextView.setText(
                                                 Utils.streamToString( new FileInputStream( xmlFilePath + ".txt" ) ) );

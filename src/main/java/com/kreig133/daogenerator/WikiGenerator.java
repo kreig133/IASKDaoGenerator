@@ -9,27 +9,27 @@ import java.io.IOException;
  * @version 1.0
  */
 public class WikiGenerator {
+
+    private static final String XML_TO_WIKI = "XmlToWiki";
+    private static final String XML_TO_WIKI_FOR_DIRECTORY = "XmlToWikiForDirectory";
+
     public static void generateWiki( String path ) throws IOException, InterruptedException {
 
         final String[] xmlFileNamesInDirectory = FileBuilder.getXmlFileNamesInDirectory( path );
 
         for ( String s : xmlFileNamesInDirectory ) {
-            generateWikiForXmlFile( path + "\\" +  s, 1 );
+            generateWikiForXmlFile( path + "\\" +  s, false );
         }
     }
 
-    public static void generateWikiForXmlFile( String xmlFileName, int mode ) throws IOException, InterruptedException {
-        String xsltFileName;
-         if (mode == 1)      {
-             xsltFileName="XmlToWiki";
-         } else {
-             xsltFileName="XmlToWikiForDirectory";
-         }
+    public static void generateWikiForXmlFile(
+            String xmlFileName, boolean forDirectory
+    ) throws IOException, InterruptedException {
 
         final String[] cmdarray = { "cmd", "/C",
                 "java  -classpath DaoGenerator-" + DaoGenerator.VERSION + ".jar org.apache.xalan.xslt.Process " +
                         "-IN " + xmlFileName +
-                        " -XSL " + xsltFileName + ".xsl "+
+                        " -XSL " + ( forDirectory ? XML_TO_WIKI_FOR_DIRECTORY : XML_TO_WIKI ) + ".xsl "+
                         "-OUT " + xmlFileName + ".txt" };
 
         for ( String s1 : cmdarray ) {

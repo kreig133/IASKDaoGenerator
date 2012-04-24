@@ -25,7 +25,7 @@
               <tabbedpane title="Settings"/>
             </constraints>
             <properties>
-              <visible value="true"/>
+              <visible value="false"/>
             </properties>
             <border type="none"/>
             <children>
@@ -215,6 +215,12 @@
                           <text value="Generate Wiki"/>
                         </properties>
                       </component>
+                      <component id="433b2" class="javax.swing.JCheckBox" binding="forDictCheckBox" default-binding="true">
+                        <constraints/>
+                        <properties>
+                          <text value="Wiki for direct."/>
+                        </properties>
+                      </component>
                     </children>
                   </grid>
                   <grid id="4a94f" layout-manager="GridLayoutManager" row-count="2" column-count="12" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
@@ -258,7 +264,7 @@
                               <splitpane position="left"/>
                             </constraints>
                             <properties>
-                              <dividerLocation value="990"/>
+                              <dividerLocation value="994"/>
                             </properties>
                             <border type="none"/>
                             <children>
@@ -343,14 +349,6 @@
                         </constraints>
                         <properties>
                           <text value="Double Query"/>
-                        </properties>
-                      </component>
-                      <component id="433b2" class="javax.swing.JCheckBox" binding="forDictCheckBox" default-binding="true">
-                        <constraints>
-                          <grid row="0" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
-                        </constraints>
-                        <properties>
-                          <text value="Wiki for direct."/>
                         </properties>
                       </component>
                     </children>
