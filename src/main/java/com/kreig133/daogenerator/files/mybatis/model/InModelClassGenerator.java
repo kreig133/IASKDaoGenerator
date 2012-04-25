@@ -45,10 +45,19 @@ public class InModelClassGenerator extends ModelClassGenerator {
         if ( parametersType.isWithPaging() ) {
             List<ParameterType> result = new ArrayList<ParameterType>();
             for ( ParameterType parameterType : parameter ) {
-                if ( ParametersType.WithPagingType.inEnum( parameterType.getName() ) ) {
-                    parameterType.setRenameTo(
-                            ParametersType.WithPagingType.getBySqlName( parameterType.getName() ).fieldName()
-                    );
+                if (
+                        ParametersType.WithPagingType.inEnum( parameterType.getName() )||
+                        parameterType.getName().equals("s_like")
+                ) {
+                    if( parameterType.getName().equals("s_like")){
+                        parameterType.setRenameTo("sLike");
+                    } else {
+                        parameterType.setRenameTo(
+                            ParametersType.WithPagingType.getBySqlName(
+                                    parameterType.getName()
+                            ).fieldName()
+                        );
+                    }
                 } else {
                     result.add( parameterType );
                 }
