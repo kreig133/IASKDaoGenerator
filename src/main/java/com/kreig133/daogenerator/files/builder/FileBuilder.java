@@ -57,7 +57,7 @@ public abstract class FileBuilder {
 
     public abstract void generateBody( List<DaoMethod> daoMethods );
 
-    public static void generateJavaCode() {
+    public static boolean generateJavaCode() {
         System.out.println("Generating new maven project started...");
 
         final OperationSettings opSettings = Settings.settings();
@@ -69,11 +69,12 @@ public abstract class FileBuilder {
                     Utils.getFileFromDirectoryByName( opSettings.getSourcePath(), s )
             ) );
         }
-
+        boolean success = false;
         if( checkDaoMethods( daoMethods ) ){
             try {
                 generateAndWriteFiles();
                 MavenProjectGenerator.generate();
+                success = true;
             } catch ( IOException e ) {
                 throw new RuntimeException( e );
             }
@@ -82,6 +83,7 @@ public abstract class FileBuilder {
         daoMethods.clear();
 
         System.out.println("..generating new maven project finished.");
+        return success;
     }
 
     static boolean checkDaoMethods( List<DaoMethod> daoMethods ) {
@@ -109,7 +111,7 @@ public abstract class FileBuilder {
         }
 
         boolean containsSameRenameToValues =
-                daoMethod.getInputParametrs ().containsSameRenameTo() &&
+                daoMethod.getInputParametrs ().containsSameRenameTo() ||
                 daoMethod.getOutputParametrs().containsSameRenameTo();
         if( containsSameRenameToValues ) {
             System.out.println( String.format( "ERROR! В методе %s в RenameTo есть поля с одинаковыми названиями.",

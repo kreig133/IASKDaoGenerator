@@ -279,7 +279,7 @@ public class Form  implements TypeChangeListener, SourcePathChangeListener{
                             public void run() {
                                 try{
                                     tabbedPane1.setEnabled( false );
-                                    FileBuilder.generateJavaCode();
+                                    if( ! FileBuilder.generateJavaCode() ) return;
                                     int status = MavenProjectGenerator.installProject();
                                     if( status == 0 ) {
                                         if (

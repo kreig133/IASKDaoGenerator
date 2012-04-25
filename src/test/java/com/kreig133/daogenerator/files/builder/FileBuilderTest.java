@@ -24,7 +24,7 @@ public class FileBuilderTest {
     }
 
     @Test
-    public void test(){
+    public void testCheckRenameTos(){
         DaoMethod daoMethodForTest = TestHelper.getDaoMethodForTest();
         daoMethodForTest.getInputParametrs().getParameter().get( 0 ).setRenameTo( "" );
         Assert.assertFalse( FileBuilder.checkRenameTos( daoMethodForTest ) );
