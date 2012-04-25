@@ -176,14 +176,35 @@ public class ParametersType {
     public boolean containsSameNames() {
         return containsSameNames( getParameter() );
     }
+    public boolean containsSameRenameTo() {
+        return containsSameRenameTo( getParameter() );
+    }
+
+    public static boolean containsSameRenameTo( @NotNull List<ParameterType> parameterTypes ) {
+        return containsSameFieldValues( parameterTypes, new FieldAccessor() {
+            @Override
+            public String getFieldValue( ParameterType parameterType ) {
+                return parameterType.getRenameTo();
+            }
+        } );
+    }
 
     public static boolean containsSameNames( @NotNull List<ParameterType> parameterTypes ) {
+        return containsSameFieldValues( parameterTypes, new FieldAccessor() {
+            @Override
+            public String getFieldValue( ParameterType parameterType ) {
+                return parameterType.getName();
+            }
+        } );
+    }
+
+    public static boolean containsSameFieldValues( @NotNull List<ParameterType> parameterTypes, FieldAccessor accessor ) {
         Set<String> names = new HashSet<String>();
         for ( ParameterType parameterType : parameterTypes ) {
-            if ( names.contains( parameterType.getName() ) ) {
+            if ( names.contains( accessor.getFieldValue( parameterType ) ) ) {
                 return true;
             } else {
-                names.add( parameterType.getName() );
+                names.add( accessor.getFieldValue( parameterType ) );
             }
         }
         return false;
@@ -237,5 +258,9 @@ public class ParametersType {
                 return null;
             }
         }
+    }
+
+    private interface FieldAccessor {
+        String getFieldValue( ParameterType parameterType );
     }
 }

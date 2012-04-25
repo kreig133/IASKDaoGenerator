@@ -5,9 +5,12 @@ import com.kreig133.daogenerator.MavenProjectGenerator;
 import com.kreig133.daogenerator.common.Utils;
 import com.kreig133.daogenerator.files.Appender;
 import com.kreig133.daogenerator.files.JavaClassGenerator;
+import com.kreig133.daogenerator.files.mybatis.DaoJavaClassGenerator;
 import com.kreig133.daogenerator.jaxb.DaoMethod;
+import com.kreig133.daogenerator.jaxb.ParameterType;
 import com.kreig133.daogenerator.settings.OperationSettings;
 import com.kreig133.daogenerator.settings.Settings;
+import org.apache.commons.lang.StringUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -67,13 +70,82 @@ public abstract class FileBuilder {
             ) );
         }
 
-        try {
-            generateAndWriteFiles();
-            MavenProjectGenerator.generate();
-        } catch ( IOException e ) {
-            throw new RuntimeException( e );
+        if( checkDaoMethods( daoMethods ) ){
+            try {
+                generateAndWriteFiles();
+                MavenProjectGenerator.generate();
+            } catch ( IOException e ) {
+                throw new RuntimeException( e );
+            }
         }
+
+        daoMethods.clear();
+
         System.out.println("..generating new maven project finished.");
+    }
+
+    static boolean checkDaoMethods( List<DaoMethod> daoMethods ) {
+        boolean allIsOk = true;
+        for ( DaoMethod daoMethod : daoMethods ) {
+            allIsOk = checkJavaClassNames( daoMethod ) && allIsOk;
+            allIsOk = checkRenameTos     ( daoMethod ) && allIsOk;
+        }
+        return  allIsOk;
+    }
+
+    static boolean checkRenameTos( DaoMethod daoMethod ) {
+        List<ParameterType> parameter = new ArrayList<ParameterType>( daoMethod.getInputParametrs().getParameter() );
+        parameter.addAll( daoMethod.getOutputParametrs().getParameter() );
+
+        boolean containsEmptyRenameTo = false;
+
+        for ( ParameterType parameterType : parameter ) {
+            if( StringUtils.isBlank( parameterType.getRenameTo() ) ) {
+                containsEmptyRenameTo = true;
+                System.out.println( String.format( "ERROR! В методе %s в RenameTo есть пустые значения!",
+                        daoMethod.getCommon().getMethodName() )
+                );
+            }
+        }
+
+        boolean containsSameRenameToValues =
+                daoMethod.getInputParametrs ().containsSameRenameTo() &&
+                daoMethod.getOutputParametrs().containsSameRenameTo();
+        if( containsSameRenameToValues ) {
+            System.out.println( String.format( "ERROR! В методе %s в RenameTo есть поля с одинаковыми названиями.",
+                    daoMethod.getCommon().getMethodName()
+                )
+            );
+        }
+        return ! ( containsSameRenameToValues ||  containsEmptyRenameTo );
+    }
+
+    static boolean checkJavaClassNames( DaoMethod daoMethod ) {
+        boolean isOk = true;
+        String errorMessage = "ERROR! Для метода %s не указано javaClassName для %s модели!";
+        if( DaoJavaClassGenerator.checkToNeedOwnInClass( daoMethod ) ){
+            if( StringUtils.isBlank(daoMethod.getInputParametrs().getJavaClassName() ) ){
+                System.out.println(String.format(
+                        errorMessage,
+                        daoMethod.getCommon().getMethodName(),
+                        "входной"
+                        )
+                );
+                isOk = false;
+            }
+        }
+        if( daoMethod.getOutputParametrs().getParameter().size() > 1 ){
+            if( StringUtils.isBlank(daoMethod.getOutputParametrs().getJavaClassName() ) ){
+                System.out.println(String.format(
+                        errorMessage,
+                        daoMethod.getCommon().getMethodName(),
+                        "выходной"
+                    )
+                );
+                isOk = false;
+            }
+        }
+        return isOk;
     }
 
     public static String[] getXmlFileNamesInDirectory( String path ) {
@@ -87,7 +159,7 @@ public abstract class FileBuilder {
                 );
     }
 
-    private static final java.util.List<DaoMethod> daoMethods = new ArrayList<DaoMethod>();
+    private static final List<DaoMethod> daoMethods = new ArrayList<DaoMethod>();
 
     @Nullable
     protected static final Appender appender = new Appender() {
@@ -134,7 +206,5 @@ public abstract class FileBuilder {
             assert appender != null;
             appender.appendStringToFile( file, builded.get( file ) );
         }
-
-        daoMethods.clear();
     }
 }
