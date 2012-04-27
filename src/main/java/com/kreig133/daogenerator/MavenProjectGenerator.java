@@ -28,7 +28,7 @@ public class MavenProjectGenerator {
         copyFile(
                 "DepoModelData.txt",
                 Settings.settings().getPathForGeneratedSource()
-                        + "/com/aplana/sbrf/deposit/web/common/client/operation/data/DepoModelData.java"
+                        + "/com/aplana/sbrf/deposit/common/client/data/DepoModelData.java"
         );
         copyFile(
                 "DepoPagingModelData.txt",

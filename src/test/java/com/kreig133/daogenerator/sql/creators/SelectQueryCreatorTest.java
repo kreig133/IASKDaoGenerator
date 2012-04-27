@@ -13,13 +13,12 @@ import org.junit.Test;
  */
 public class SelectQueryCreatorTest {
 
-    @Language( "SQL" )
     private static String inputQuery =
             "SELECT MIN(inct.iIncomeTransferID) AS MINiIncomeTransferID, COUNT(*) AS COUNTIncomeTransfer \n" +
             "FROM dbo.t_IncomeTransfer inct WITH (NOLOCK)  \n" +
             "WHERE inct.iIsDeleted = 0 " +
                     "and inct.iIncomeStatusID &lt;&gt; 4 " +
-                    "and inct.iIncomeCalcID = ${iIncomeCalcID;int;2876}";
+                    "and inct.iIncomeCalcID = ${iIncomeCalcID;int;2876}" ;
 
     @Test
     public void testGenerateExecuteQuery() throws Exception {

@@ -48,7 +48,7 @@ abstract public class ModelClassGenerator extends JavaClassGenerator {
     }
 
     protected void insertClassDeclarationAndDetermineParent() {
-        addImport( "com.aplana.sbrf.deposit.web.common.client.operation.data.DepoModelData" );
+        addImport( "com.aplana.sbrf.deposit.common.client.data.DepoModelData" );
         insertClassDeclaration(
                 ClassType.CLASS,
                 PackageAndFileUtils.getShortName( parametersType.getJavaClassName() ),

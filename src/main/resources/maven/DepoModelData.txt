@@ -1,4 +1,4 @@
-package com.aplana.sbrf.deposit.web.common.client.operation.data;
+package com.aplana.sbrf.deposit.common.client.data;
 
 import java.util.Map;
 import java.util.Map.Entry;
