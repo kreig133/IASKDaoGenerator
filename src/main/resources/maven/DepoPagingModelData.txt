@@ -9,15 +9,16 @@ import com.extjs.gxt.ui.client.data.PagingLoadConfig;
  */
 public class DepoPagingModelData extends DepoModelData {
 
-	private static final long serialVersionUID = 4971643088727987940L;
+    private static final long serialVersionUID = 4971643088727987940L;
 
-	public enum Fields{
+    public enum Fields {
         I_END,
         I_START,
         I_PAGE_LIMIT,
         ID_SESSION,
         S_SORT,
-        I_ROW_COUNT
+        I_ROW_COUNT,
+        S_LIKE
     }
 
     public void setPagingLoadConfig(PagingLoadConfig config) {
@@ -52,6 +53,10 @@ public class DepoPagingModelData extends DepoModelData {
         return set(Fields.I_START.name(), startRowNumber);
     }
 
+    public String setsLike(String sLike) {
+        return set(Fields.S_LIKE.name(), sLike);
+    }
+
     public Long getRowCount() {
         return get(Fields.I_ROW_COUNT.name());
     }
@@ -74,5 +79,10 @@ public class DepoPagingModelData extends DepoModelData {
 
     public Long getStartRowNumber() {
         return get(Fields.I_START.name());
+    }
+
+    public String getsLike() {
+        String s_like = get(Fields.S_LIKE.name());
+        return (s_like == null || s_like.isEmpty()) ? "%" : "%" + s_like.replaceAll("%", "[%]") + "%";
     }
 }
