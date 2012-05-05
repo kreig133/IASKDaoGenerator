@@ -113,12 +113,6 @@ public abstract class FileBuilder {
         boolean containsSameRenameToValues =
                 daoMethod.getInputParametrs ().containsSameRenameTo() ||
                 daoMethod.getOutputParametrs().containsSameRenameTo();
-        if( containsSameRenameToValues ) {
-            System.out.println( String.format( "ERROR! В методе %s в RenameTo есть поля с одинаковыми названиями.",
-                    daoMethod.getCommon().getMethodName()
-                )
-            );
-        }
         return ! ( containsSameRenameToValues ||  containsEmptyRenameTo );
     }
 

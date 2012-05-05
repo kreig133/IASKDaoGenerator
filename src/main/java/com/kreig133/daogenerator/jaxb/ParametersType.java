@@ -202,15 +202,18 @@ public class ParametersType {
     }
 
     public static boolean containsSameFieldValues( @NotNull List<ParameterType> parameterTypes, FieldAccessor accessor ) {
+        boolean result = false;
         Set<String> names = new HashSet<String>();
         for ( ParameterType parameterType : parameterTypes ) {
             if ( names.contains( accessor.getFieldValue( parameterType ) ) ) {
-                return true;
+                System.err.println("ERROR! В методе %s в RenameTo есть поля с одинаковыми названиями: " +
+                        accessor.getFieldValue( parameterType ) );
+                result = true;
             } else {
                 names.add( accessor.getFieldValue( parameterType ) );
             }
         }
-        return false;
+        return result;
     }
 
     public static boolean isWithPaging( @NotNull List<ParameterType> parameterTypes ) {
