@@ -18,7 +18,7 @@ import java.util.List;
 public class IaskMappingGenerator extends MappingGenerator{
 
     @Override
-    public void generateBody( @NotNull DaoMethod daoMethod ) {
+    public void generateBody( DaoMethod daoMethod ) {
         builder.append( generateXmlMapping( daoMethod ) );
     }
 

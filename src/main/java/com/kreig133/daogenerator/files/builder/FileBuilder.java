@@ -88,7 +88,7 @@ public abstract class FileBuilder {
 
     static boolean checkDaoMethods( List<DaoMethod> daoMethods ) {
         boolean allIsOk = true;
-        for ( DaoMethod daoMethod : daoMethods ) {
+        for ( DaoMethod daoMethod : FileBuilder.daoMethods ) {
             allIsOk = checkJavaClassNames( daoMethod ) && allIsOk;
             allIsOk = checkRenameTos     ( daoMethod ) && allIsOk;
         }

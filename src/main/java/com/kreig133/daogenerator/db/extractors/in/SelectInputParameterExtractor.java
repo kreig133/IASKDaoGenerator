@@ -35,14 +35,4 @@ public class SelectInputParameterExtractor extends InputParameterExtractor{
 
         return daoMethod;
     }
-
-    @NotNull
-    @Override
-    public DaoMethod fillMethodName( @NotNull DaoMethod daoMethod ) {
-        SelectType type = daoMethod.getSelectType();
-        daoMethod.getCommon().setMethodName(
-                type.name().toLowerCase() + type.keyWord() + getTableName( daoMethod )
-        );
-        return daoMethod;
-    }
 }

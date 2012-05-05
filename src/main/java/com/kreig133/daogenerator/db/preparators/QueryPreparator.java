@@ -8,6 +8,7 @@ import com.kreig133.daogenerator.jaxb.ParametersType;
 import org.apache.commons.lang.StringUtils;
 import org.intellij.lang.annotations.Language;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -100,6 +101,7 @@ public class QueryPreparator {
         return parameterByName;
     }
 
+    @Nullable
     protected ParameterType getColumnFromDbByColumnName( String columnName ) {
         Connection connection = JDBCConnector.instance().connectToDB();
         assert connection != null;

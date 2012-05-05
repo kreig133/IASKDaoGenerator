@@ -45,7 +45,7 @@ public class InterfaceGenerator extends DaoJavaClassGenerator {
     }
 
     @Override
-    public void generateBody( @NotNull DaoMethod daoMethod ) {
+    public void generateBody( DaoMethod daoMethod ) {
         jDoc.insertJavaDoc( daoMethod.getCommon().getComment().split( "\n" ) );
         insertTabs();
         generateMethodSignature( daoMethod, MethodType.DAO );

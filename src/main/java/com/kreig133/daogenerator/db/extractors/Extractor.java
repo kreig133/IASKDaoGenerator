@@ -16,7 +16,6 @@ public class Extractor {
 
     protected static final Pattern storeNamePattern = Pattern.compile( "(?iu)exec\\w*\\s+(\\w+)" );
 
-    @NotNull
     public static SelectType determineQueryType( @NotNull String query ) {
         return Utils.stringContainsMoreThanOneWord( query ) ?
                     SelectType.getByName( query.trim().split( "\\s" )[0] ):

@@ -34,7 +34,7 @@ abstract public class JavaClassGenerator extends Generator {
 
     abstract public File getFile();
     abstract public void generateHead();
-    abstract public void generateBody( @Nullable DaoMethod daoMethod );
+    abstract public void generateBody( @NotNull DaoMethod daoMethod );
     @Nullable
     abstract public String getFileName();
 

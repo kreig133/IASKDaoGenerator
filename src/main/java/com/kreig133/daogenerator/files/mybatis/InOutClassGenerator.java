@@ -77,7 +77,6 @@ public class InOutClassGenerator extends JavaClassGenerator {
 
     @Override
     public void generateBody( DaoMethod daoMethod ) {
-        writeConstructorForPagination();
         writeFullConstructor();
 
         for ( ParameterType p : parameters ) {
@@ -90,43 +89,6 @@ public class InOutClassGenerator extends JavaClassGenerator {
         }
 
         writeToString();
-    }
-
-    private void writeConstructorForPagination() {
-//        if( ParametersType.isWithPaging( parameters ) ){
-//            addImport( "com.extjs.gxt.ui.client.data.PagingLoadConfig" );
-//
-//            insertTabs().append( Scope.PUBLIC.value() ).append( " " )
-//                    .append( NamingUtils.convertNameForClassNaming( this.name ) )
-//                    .append( "(Long session, PagingLoadConfig loadConfig) {" );
-//            increaseNestingLevel();
-//            insertLine();
-//            insertTabs().append( "this." ).append(
-//                    getParameterByName( ParametersType.WithPagingType.ID_SESSION_DS, parameters ).getRenameTo()
-//            ).append( " = session;" );
-//            insertLine();
-//            insertTabs().append( "this." ).append(
-//                    getParameterByName( ParametersType.WithPagingType.I_START, parameters ).getRenameTo()
-//            ).append( " = loadConfig == null ? 0L : loadConfig.getOffset();" );
-//            insertLine();
-//            insertTabs().append( "this." ).append(
-//                    getParameterByName( ParametersType.WithPagingType.I_PAGE_LIMIT, parameters ).getRenameTo()
-//            ).append( " = loadConfig == null ? 0L : loadConfig.getLimit();" );
-//            insertLine();
-//            insertTabs().append( "this." ).append(
-//                    getParameterByName( ParametersType.WithPagingType.I_END, parameters ).getRenameTo()
-//            ).append( " = 0L;" );
-//            insertLine();
-//            insertTabs().append( "this." ).append(
-//                    getParameterByName( ParametersType.WithPagingType.S_SORT, parameters ).getRenameTo()
-//            ).append( " = \"\";" );
-//            insertLine();
-//            insertTabs().append( "this." ).append(
-//                    getParameterByName( ParametersType.WithPagingType.I_ROW_COUNT, parameters ).getRenameTo()
-//            ).append( " = 0L;" );
-//            insertLine();
-//            closeMethodOrInnerClassDefinition();
-//        }
     }
 
     @Override

@@ -13,7 +13,7 @@ abstract public class OneClassForEachMethodFileBuilder extends FileBuilder {
     @Override
     public void generateBody( List<DaoMethod> daoMethods ) {
         for ( JavaClassGenerator generator : generators ) {
-            generator.generateBody( null );
+            generator.generateBody( new DaoMethod() );
         }
     }
 }
