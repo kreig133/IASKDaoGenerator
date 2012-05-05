@@ -50,8 +50,8 @@ import static com.google.common.base.Preconditions.checkNotNull;
 })
 public class ParametersType {
 
-    @XmlElement( defaultValue = "java.lang.Object" )
-    protected String parent;
+    @XmlElement(defaultValue = "DEFAULT")
+    protected ParentType parent;
     @XmlElement( defaultValue = "Default" )
     protected String javaClassName;
     @XmlElement( required = true )
@@ -62,10 +62,10 @@ public class ParametersType {
      *
      * @return
      *     possible object is
-     *     {@link String }
+     *     {@link ParentType }
      *
      */
-    public String getParent() {
+    public ParentType getParent() {
         return parent;
     }
 
@@ -74,10 +74,10 @@ public class ParametersType {
      *
      * @param value
      *     allowed object is
-     *     {@link String }
+     *     {@link ParentType }
      *
      */
-    public void setParent(String value) {
+    public void setParent(ParentType value) {
         this.parent = value;
     }
 

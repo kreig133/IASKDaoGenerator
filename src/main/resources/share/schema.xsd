@@ -46,7 +46,7 @@
 
     <xs:complexType name="parametersType">
         <xs:sequence>
-            <xs:element type="xs:string" name="parent" default="java.lang.Object" minOccurs="0" maxOccurs="1"/>
+            <xs:element type="this:parentType" name="parent" default="DEFAULT" minOccurs="0" maxOccurs="1"/>
             <xs:element type="xs:string" name="javaClassName" default="Default" minOccurs="0" maxOccurs="1"/>
             <xs:element type="this:parameterType" name="parameter" maxOccurs="unbounded" minOccurs="1"/>
         </xs:sequence>
@@ -74,6 +74,14 @@
             <xs:enumeration value="IN"/>
             <xs:enumeration value="OUT"/>
             <xs:enumeration value="INOUT"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:simpleType name="parentType">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="DEFAULT"/>
+            <xs:enumeration value="CATALOGUE"/>
+            <xs:enumeration value="SAVED_QUERY"/>
         </xs:restriction>
     </xs:simpleType>
 
