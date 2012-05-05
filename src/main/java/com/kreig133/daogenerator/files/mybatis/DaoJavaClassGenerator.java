@@ -43,6 +43,13 @@ abstract public class DaoJavaClassGenerator extends JavaClassGenerator {
         return  ( parameters.size() > 3 ) || daoMethod.getInputParametrs().getParent() != ParentType.DEFAULT;
     }
 
+    public static boolean checkToNeedOwnOutClass(
+            @NotNull DaoMethod daoMethod
+    ) {
+        return daoMethod.getOutputParametrs().getParameter().size() > 1 ||
+                daoMethod.getOutputParametrs().getParent() != ParentType.DEFAULT;
+    }
+
     protected void generateMethodSignature(
             @NotNull final DaoMethod daoMethod,
             final MethodType methodType
@@ -57,7 +64,7 @@ abstract public class DaoJavaClassGenerator extends JavaClassGenerator {
             if ( daoMethod.getCommon().getConfiguration().isMultipleResult() ) {
                 outputClass.append( "List<" );
             }
-            if ( outputParameterList.size() == 1 ) {
+            if ( ! checkToNeedOwnOutClass( daoMethod ) ) {
                 outputClass.append( outputParameterList.get( 0 ).getType().value() );
                 if( outputParameterList.get( 0 ).getType() == JavaType.DATE ) {
                     addImport( DATE_IMPORT );

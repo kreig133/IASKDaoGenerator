@@ -130,7 +130,7 @@ public abstract class FileBuilder {
                 isOk = false;
             }
         }
-        if( daoMethod.getOutputParametrs().getParameter().size() > 1 ){
+        if( DaoJavaClassGenerator.checkToNeedOwnOutClass( daoMethod ) ){
             if( StringUtils.isBlank(daoMethod.getOutputParametrs().getJavaClassName() ) ){
                 System.out.println(String.format(
                         errorMessage,

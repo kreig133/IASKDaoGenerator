@@ -18,7 +18,7 @@ class DepoParameterClassBuilder extends ParameterClassBuilder{
         for ( DaoMethod method : daoMethod ) {
             if( DaoJavaClassGenerator.checkToNeedOwnInClass( method ) )
                 generators.add( InModelClassGenerator .newInstance( method ) );
-            if( method.getOutputParametrs().getParameter().size() > 1 )
+            if( DaoJavaClassGenerator.checkToNeedOwnOutClass( method ) )
                 generators.add( OutModelClassGenerator.newInstance( method ) );
         }
     }
