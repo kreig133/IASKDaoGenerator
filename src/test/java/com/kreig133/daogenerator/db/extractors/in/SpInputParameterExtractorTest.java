@@ -2,7 +2,6 @@ package com.kreig133.daogenerator.db.extractors.in;
 
 import com.kreig133.daogenerator.TestHelper;
 import com.kreig133.daogenerator.db.extractors.SqlTypeHelper;
-import com.kreig133.daogenerator.enums.Type;
 import com.kreig133.daogenerator.jaxb.*;
 import com.kreig133.daogenerator.settings.Settings;
 import org.jetbrains.annotations.NotNull;
@@ -16,6 +15,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.kreig133.daogenerator.TestHelper.chanePathToPropertiesForTests;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
@@ -27,9 +27,8 @@ public class SpInputParameterExtractorTest{
 
     @Before
     public void before(){
-        Settings.settings().setType( Type.TEST );
+        chanePathToPropertiesForTests();
     }
-
     @Test
     public void extractInputParamsTest(){
         DaoMethod daoMethod = TestHelper.getDaoMethodForTest();

@@ -11,11 +11,6 @@ abstract public class ParameterClassBuilder extends OneClassForEachMethodFileBui
 
     @NotNull
     public static FileBuilder newInstance() {
-        switch ( Settings.settings().getType() ) {
-            case DEPO:
-                return new DepoParameterClassBuilder();
-            default:
-                throw new IllegalArgumentException( "Не рализовано" );
-        }
+        return new DepoParameterClassBuilder();
     }
 }

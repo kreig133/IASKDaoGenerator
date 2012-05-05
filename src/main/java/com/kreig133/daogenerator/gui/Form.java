@@ -4,7 +4,6 @@ import com.kreig133.daogenerator.JaxbHandler;
 import com.kreig133.daogenerator.MavenProjectGenerator;
 import com.kreig133.daogenerator.WikiGenerator;
 import com.kreig133.daogenerator.common.SourcePathChangeListener;
-import com.kreig133.daogenerator.common.TypeChangeListener;
 import com.kreig133.daogenerator.common.Utils;
 import com.kreig133.daogenerator.db.extractors.Extractor;
 import com.kreig133.daogenerator.db.extractors.in.InputParameterExtractor;
@@ -12,7 +11,6 @@ import com.kreig133.daogenerator.db.extractors.in.SpInputParameterExtractor;
 import com.kreig133.daogenerator.db.extractors.out.OutputParameterExtractor;
 import com.kreig133.daogenerator.db.preparators.DoubleQueryPreparator;
 import com.kreig133.daogenerator.db.preparators.QueryPreparator;
-import com.kreig133.daogenerator.enums.Type;
 import com.kreig133.daogenerator.files.builder.FileBuilder;
 import com.kreig133.daogenerator.jaxb.*;
 import com.kreig133.daogenerator.settings.Settings;
@@ -39,7 +37,7 @@ import static com.kreig133.daogenerator.gui.GuiUtils.getNewFileChooser;
  * @author eshangareev
  * @version 1.0
  */
-public class Form  implements TypeChangeListener, SourcePathChangeListener{
+public class Form  implements SourcePathChangeListener{
     private static Form INSTANCE;
     private static final String WARNING_DIALOG_TITLE = "Голактего в опастносте!!11один";
 
@@ -66,8 +64,6 @@ public class Form  implements TypeChangeListener, SourcePathChangeListener{
     private JTextField daoPackageTextField;
     private JTextField mappingPackageTextField;
     private JButton startButton;
-    private JRadioButton IASKRadioButton;
-    private JRadioButton DEPORadioButton;
     private JLabel daoPackageLabel;
     private JTextField textField1;
     private JButton button1;
@@ -92,7 +88,6 @@ public class Form  implements TypeChangeListener, SourcePathChangeListener{
 
         loadSettings();
 
-        Settings.settings().addTypeChangeListener( this );
         Settings.settings().addSourcePathChangeListener( this );
     }
 
@@ -280,12 +275,6 @@ public class Form  implements TypeChangeListener, SourcePathChangeListener{
     }
 
     private void initializingDeveloperTab() {
-        IASKRadioButton.addChangeListener( new ChangeListener() {
-            @Override
-            public void stateChanged( ChangeEvent e ) {
-                Settings.settings().setType( IASKRadioButton.isSelected() ? Type.IASK : Type.DEPO );
-            }
-        } );
         setSourceDirButton.addActionListener( new ActionListener() {
             @Override
             public void actionPerformed( ActionEvent e ) {
@@ -465,15 +454,6 @@ public class Form  implements TypeChangeListener, SourcePathChangeListener{
     }
 
     private void loadSettings() {
-        final boolean iask = Settings.settings().getType() == Type.IASK;
-        IASKRadioButton.setSelected(   iask );
-        DEPORadioButton.setSelected( ! iask );
-
-        daoPackageLabel         .setVisible( iask );
-        daoPackageTextField     .setVisible( iask );
-        entityPackageLable      .setVisible( iask );
-        entityPackageTextField  .setVisible( iask );
-
         destDirTextField.setText( Settings.settings().getOutputPathForJavaClasses() );
         entityPackageTextField.setText( Settings.settings().getEntityPackage() );
         daoPackageTextField.setText( Settings.settings().getDaoPackage() );
@@ -495,9 +475,6 @@ public class Form  implements TypeChangeListener, SourcePathChangeListener{
 
     private boolean validateBeforeStartGenerateJavaClasses() {
         if(
-                ( ! isPackageName( daoPackageTextField      .getText() )
-                           && Settings.settings().getType() == Type.IASK ) ||
-                ( ! isPackageName( entityPackageTextField   .getText() ) ) ||
                 ( ! isPackageName( mappingPackageTextField  .getText() ) )
         ){
             JOptionPane.showMessageDialog( mainPanel, "Одно или несколько имен пакетов не прошло валидацию." );
@@ -538,11 +515,6 @@ public class Form  implements TypeChangeListener, SourcePathChangeListener{
             INSTANCE = new Form();
         }
         return INSTANCE.mainPanel;
-    }
-
-    @Override
-    public void typeChanged() {
-        loadSettings();
     }
 
     @Override

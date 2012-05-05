@@ -1,9 +1,11 @@
 package com.kreig133.daogenerator;
 
+import com.kreig133.daogenerator.db.JDBCConnector;
 import com.kreig133.daogenerator.jaxb.*;
 import org.intellij.lang.annotations.Language;
 import org.jetbrains.annotations.NotNull;
 
+import java.lang.reflect.Field;
 import java.util.List;
 
 /**
@@ -70,5 +72,17 @@ public class TestHelper {
         daoMethod.setOutputParametrs( daoMethod.getInputParametrs() );
 
         return daoMethod;
+    }
+
+    public static void chanePathToPropertiesForTests() {
+        try {
+            Field path = JDBCConnector.class.getDeclaredField( "PATH" );
+            path.setAccessible( true );
+            path.set( JDBCConnector.class, "target/db/depo/application.properties" );
+        } catch ( NoSuchFieldException e ) {
+            e.printStackTrace();
+        } catch ( IllegalAccessException e ) {
+            e.printStackTrace();
+        }
     }
 }

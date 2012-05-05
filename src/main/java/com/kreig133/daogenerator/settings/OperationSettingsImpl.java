@@ -1,8 +1,6 @@
 package com.kreig133.daogenerator.settings;
 
 import com.kreig133.daogenerator.common.SourcePathChangeListener;
-import com.kreig133.daogenerator.common.TypeChangeListener;
-import com.kreig133.daogenerator.enums.Type;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
@@ -15,13 +13,8 @@ import java.util.Properties;
  * @version 1.0
  */
 final public class OperationSettingsImpl implements OperationSettings{
-
-    @NotNull
-    private List<TypeChangeListener> typeChangelisteners = new ArrayList<TypeChangeListener>();
     @NotNull
     private List<SourcePathChangeListener> sourcePathChangeListeners = new ArrayList<SourcePathChangeListener>();
-
-    private Type TYPE = Type.TEST;
 
     private String ENTITY_PACKAGE = "ru.sbrf.aplana.entity";
     private String DAO_PACKAGE = "ru.sbrf.aplana.dao";
@@ -33,10 +26,6 @@ final public class OperationSettingsImpl implements OperationSettings{
     private int    FRAME_HEIGHT = 800;
     private String LAST_DIRECTORY = "C:\\";
 
-    @Override
-    public Type getType() {
-        return TYPE;
-    }
 
     @Override
     public String getOutputPathForJavaClasses() {
@@ -59,11 +48,6 @@ final public class OperationSettingsImpl implements OperationSettings{
     @Override
     public String getPathForTestResources() {
         return OUTPUT_PATH_FOR_JAVA_CLASSES + "\\src\\test\\resources";
-    }
-
-    @Override
-    public void addTypeChangeListener( TypeChangeListener listener ) {
-        typeChangelisteners.add( listener );
     }
 
     @Override
@@ -92,17 +76,6 @@ final public class OperationSettingsImpl implements OperationSettings{
             throw new RuntimeException( "SOURCE_PATH еще не установлен." );
         }
         return SOURCE_PATH;
-    }
-
-    @Override
-    public void setType( Type type ) {
-        if( TYPE != type ){
-            this.TYPE = type;
-
-            for ( TypeChangeListener listener : typeChangelisteners ) {
-                listener.typeChanged();
-            }
-        }
     }
 
     @Override

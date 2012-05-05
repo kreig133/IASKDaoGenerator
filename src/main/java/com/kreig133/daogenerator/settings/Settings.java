@@ -8,7 +8,6 @@ package com.kreig133.daogenerator.settings;
  */
 
 import com.kreig133.daogenerator.DaoGenerator;
-import com.kreig133.daogenerator.enums.Type;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
@@ -35,8 +34,6 @@ public class Settings {
     public static final String INTERFACE_PACKAGE = "interfacePackage";
     public static final String PROPERTIES_FILE_NAME = "DaoGenerator.properties";
     public static final String MAPPING_PACKAGE = "mappingPackage";
-    public static final String IASK = "iask";
-    public static final String DEPO = "depo";
     public static final String LAST_DIRECTORY = "lastDirectory";
     public static final String PROJECT_FOLDER = "home";
     public static final String VERSION = "version";
@@ -66,17 +63,11 @@ public class Settings {
         properties.setProperty( PROJECT_FOLDER      , operationSettings.getProjectFolder() );
         properties.setProperty( LAST_DIRECTORY      , operationSettings.getLastDirectory() );
         properties.setProperty( VERSION             , DaoGenerator.VERSION );
-        properties.setProperty( IASK                , String.valueOf( operationSettings.getType() == Type.IASK ) );
-        properties.setProperty( DEPO                , String.valueOf( operationSettings.getType() == Type.DEPO ) );
         PropertiesFileController.saveCommonProperties( properties );
 
     }
 
     public static void loadSettingsFromProperties( @NotNull Properties properties ){
-
-        settings().setType(
-                Boolean.parseBoolean( properties.getProperty( IASK, "1" ) ) ? Type.IASK : Type.DEPO
-        );
 
         settings().setDaoPackage   ( properties.getProperty( INTERFACE_PACKAGE, settings().getDaoPackage   () ) );
         settings().setEntityPackage( properties.getProperty( ENTITY_PACKAGE, settings().getEntityPackage() ) );

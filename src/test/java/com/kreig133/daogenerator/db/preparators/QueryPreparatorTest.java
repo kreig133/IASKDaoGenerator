@@ -1,6 +1,6 @@
 package com.kreig133.daogenerator.db.preparators;
 
-import com.kreig133.daogenerator.enums.Type;
+import com.kreig133.daogenerator.db.JDBCConnector;
 import com.kreig133.daogenerator.jaxb.ParameterType;
 import com.kreig133.daogenerator.settings.Settings;
 import junit.framework.Assert;
@@ -9,7 +9,11 @@ import org.jetbrains.annotations.NotNull;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
 import java.util.List;
+
+import static com.kreig133.daogenerator.TestHelper.chanePathToPropertiesForTests;
 
 /**
  * @author eshangareev
@@ -32,17 +36,16 @@ public class QueryPreparatorTest extends QueryPreparator {
                     "'0003', 'omr', '0001', '000002', \n" +
                     "'000003', '000004', 'ru', 'ki', -1 )";
 
+    @Before
+    public void before(){
+        chanePathToPropertiesForTests();
+    }
+
     @NotNull
     @Language( "SQL" )
     static String updateQuery = "UPDATE t_Depo \n" +
             "SET \"nflreport\" = 1 \n" +
             "WHERE [nflreport] = 0 AND n_DEPO_id = null";
-
-    @Before
-    public void before(){
-        Settings.settings().setType( Type.TEST );
-    }
-
 
     @Test
     public void getColumnsFromDbByTableNameTest(){

@@ -1,6 +1,5 @@
 package com.kreig133.daogenerator.files.mybatis.mapping;
 
-import com.kreig133.daogenerator.enums.Type;
 import com.kreig133.daogenerator.files.PackageAndFileUtils;
 import com.kreig133.daogenerator.files.mybatis.DaoJavaClassGenerator;
 import com.kreig133.daogenerator.settings.Settings;
@@ -15,7 +14,7 @@ import java.io.File;
 public abstract class MappingGenerator extends DaoJavaClassGenerator {
 
     public static MappingGenerator instance (){
-        return Settings.settings().getType() == Type.IASK ? new IaskMappingGenerator() :  new DepoMappingGenerator();
+        return new DepoMappingGenerator();
     }
 
     @NotNull

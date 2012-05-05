@@ -1,6 +1,5 @@
 package com.kreig133.daogenerator.db;
 
-import com.kreig133.daogenerator.common.TypeChangeListener;
 import com.kreig133.daogenerator.settings.Settings;
 import org.jetbrains.annotations.Nullable;
 
@@ -17,12 +16,13 @@ import static com.kreig133.daogenerator.settings.Settings.*;
  * @author eshangareev
  * @version 1.0
  */
-public class JDBCConnector implements TypeChangeListener{
+public class JDBCConnector{
 
     private final Properties properties = new Properties();
 
     @Nullable
     private Connection connection = null;
+    private static String PATH = "db/depo/application.properties";
 
     @Nullable
     public Connection connectToDB() {
@@ -54,7 +54,7 @@ public class JDBCConnector implements TypeChangeListener{
 
     private void loadProperties() {
         try {
-            FileInputStream  props = new FileInputStream( Settings.settings().getType().pathToProperty() );
+            FileInputStream  props = new FileInputStream( PATH );
             properties.load( props );
             props.close();
         } catch ( IOException e ) {
@@ -70,13 +70,7 @@ public class JDBCConnector implements TypeChangeListener{
     public synchronized static JDBCConnector instance(){
         if ( INSTANCE == null ) {
             INSTANCE = new JDBCConnector();
-            Settings.settings().addTypeChangeListener( INSTANCE );
         }
         return INSTANCE;
-    }
-
-    @Override
-    public void typeChanged() {
-        connection = null;
     }
 }

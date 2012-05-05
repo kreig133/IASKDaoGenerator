@@ -10,11 +10,6 @@ import org.jetbrains.annotations.NotNull;
 abstract public class MapperFileBuilder extends OneClassForOperationFileBuilder {
     @NotNull
     public static FileBuilder newInstance() {
-        switch ( Settings.settings().getType() ){
-            case DEPO:
-                return new DepoMapperFileBuilder();
-            default:
-                throw new IllegalArgumentException( "Не реализовано" );
-        }
+        return new DepoMapperFileBuilder();
     }
 }

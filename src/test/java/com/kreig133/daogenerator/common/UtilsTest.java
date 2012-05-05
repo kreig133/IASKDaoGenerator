@@ -1,6 +1,5 @@
 package com.kreig133.daogenerator.common;
 
-import com.kreig133.daogenerator.enums.Type;
 import com.kreig133.daogenerator.jaxb.DaoMethod;
 import com.kreig133.daogenerator.jaxb.ParameterType;
 import com.kreig133.daogenerator.jaxb.ParametersType;
@@ -23,7 +22,6 @@ public class UtilsTest{
     
     @Test
     public void testCheckToNeedOwnInClass(){
-        Settings.settings().setType( Type.DEPO );
 
         final DaoMethod daoMethod = new DaoMethod();
         daoMethod.setInputParametrs( new ParametersType() );
@@ -31,15 +29,7 @@ public class UtilsTest{
         
         Assert.assertFalse( checkToNeedOwnInClass( daoMethod ) );
 
-        Settings.settings().setType( Type.IASK );
-
-        Assert.assertFalse( checkToNeedOwnInClass( daoMethod ) );
-
         daoMethod.getInputParametrs().getParameter().add( new ParameterType() );
-
-        Assert.assertTrue( checkToNeedOwnInClass( daoMethod ) );
-
-        Settings.settings().setType( Type.DEPO );
 
         Assert.assertFalse( checkToNeedOwnInClass( daoMethod ) );
 

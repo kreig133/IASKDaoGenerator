@@ -3,12 +3,12 @@ package com.kreig133.daogenerator.files.mybatis;
 import com.kreig133.daogenerator.common.Utils;
 import com.kreig133.daogenerator.enums.MethodType;
 import com.kreig133.daogenerator.enums.Scope;
-import com.kreig133.daogenerator.enums.Type;
 import com.kreig133.daogenerator.files.JavaClassGenerator;
 import com.kreig133.daogenerator.files.PackageAndFileUtils;
 import com.kreig133.daogenerator.jaxb.DaoMethod;
 import com.kreig133.daogenerator.jaxb.JavaType;
 import com.kreig133.daogenerator.jaxb.ParameterType;
+import com.kreig133.daogenerator.jaxb.ParentType;
 import com.kreig133.daogenerator.settings.Settings;
 import org.jetbrains.annotations.NotNull;
 
@@ -40,20 +40,13 @@ abstract public class DaoJavaClassGenerator extends JavaClassGenerator {
     ) {
         final List<ParameterType> parameters = daoMethod.getInputParametrs().getParameter();
 
-        final Type type = Settings.settings().getType();
-
-        return  ( parameters.size() > 3 && type == Type.DEPO ) ||
-                ( parameters.size() > 1 && type == Type.IASK );
+        return  ( parameters.size() > 3 ) || daoMethod.getInputParametrs().getParent() != ParentType.DEFAULT;
     }
 
     protected void generateMethodSignature(
             @NotNull final DaoMethod daoMethod,
             final MethodType methodType
     ) {
-
-        if ( Settings.settings().getType() == Type.IASK )
-            throw new IllegalArgumentException();
-
         final List<ParameterType>  inputParameterList = daoMethod.getInputParametrs().getParameter();
         final List<ParameterType> outputParameterList = daoMethod.getOutputParametrs().getParameter();
         final String methodName = daoMethod.getCommon().getMethodName();
