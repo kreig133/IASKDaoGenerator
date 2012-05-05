@@ -277,6 +277,7 @@ public class Form  implements TypeChangeListener, SourcePathChangeListener{
             public void actionPerformed( ActionEvent e ) {
                 if( validateBeforeStartGenerateJavaClasses() ){
                     saveSettings();
+                    log.setText( "" );
                     tabbedPane1.setSelectedIndex( 3 );
                     //TODO
                     new Thread(
