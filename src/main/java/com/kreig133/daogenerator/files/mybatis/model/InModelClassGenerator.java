@@ -5,6 +5,7 @@ import com.kreig133.daogenerator.files.PackageAndFileUtils;
 import com.kreig133.daogenerator.jaxb.DaoMethod;
 import com.kreig133.daogenerator.jaxb.ParameterType;
 import com.kreig133.daogenerator.jaxb.ParametersType;
+import com.kreig133.daogenerator.jaxb.ParentType;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
@@ -15,6 +16,7 @@ import java.util.List;
  * @version 1.0
  */
 public class InModelClassGenerator extends ModelClassGenerator {
+
     InModelClassGenerator( ParametersType parametersType ) {
         super( parametersType );
     }
@@ -27,13 +29,7 @@ public class InModelClassGenerator extends ModelClassGenerator {
     @Override
     protected void insertClassDeclarationAndDetermineParent() {
         if ( parametersType.isWithPaging() ) {
-            addImport( "com.aplana.sbrf.deposit.web.common.client.operation.data.DepoPagingModelData" );
-            insertClassDeclaration(
-                    ClassType.CLASS,
-                    PackageAndFileUtils.getShortName( parametersType.getJavaClassName() ),
-                    "DepoPagingModelData",
-                    null
-            );
+            insertClassDeclarationAndParent( ParentType.WITH_PAGING );
         } else {
             super.insertClassDeclarationAndDetermineParent();
         }

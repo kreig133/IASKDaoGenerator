@@ -31,9 +31,21 @@ import javax.xml.bind.annotation.XmlType;
 @XmlEnum
 public enum ParentType {
 
-    DEFAULT,
-    CATALOGUE,
-    SAVED_QUERY;
+    DEFAULT("По умолчанию"),
+    CATALOGUE("Справочник"),
+    //не представлен в схеме
+    WITH_PAGING("Вы не должны это видеть!"),
+    SAVED_QUERY("Сохраненный запрос");
+
+    final String decription;
+
+    private ParentType( String decription ) {
+        this.decription = decription;
+    }
+
+    public String getDecription() {
+        return decription;
+    }
 
     public String value() {
         return name();
@@ -43,4 +55,8 @@ public enum ParentType {
         return valueOf(v);
     }
 
+    @Override
+    public String toString() {
+        return decription;
+    }
 }

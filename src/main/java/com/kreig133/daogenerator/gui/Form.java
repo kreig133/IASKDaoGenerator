@@ -41,6 +41,7 @@ import static com.kreig133.daogenerator.gui.GuiUtils.getNewFileChooser;
  */
 public class Form  implements TypeChangeListener, SourcePathChangeListener{
     private static Form INSTANCE;
+    private static final String WARNING_DIALOG_TITLE = "Голактего в опастносте!!11один";
 
     private JPanel mainPanel;
     private JTable inputParametrs;
@@ -77,7 +78,8 @@ public class Form  implements TypeChangeListener, SourcePathChangeListener{
     private JRadioButton doubleQueryRadioButton;
     private JEditorPane secondQuery;
     private JScrollPane secondQueryPanel;
-    private JCheckBox forDictCheckBox;
+    private JComboBox outputParamsType;
+    private JComboBox inputParamsType;
     private JFrame windowWithText;
 
     private boolean start = true;
@@ -95,16 +97,21 @@ public class Form  implements TypeChangeListener, SourcePathChangeListener{
     }
 
     private void initializingAnalyticTab() {
+        outputParamsType.setModel(
+                new DefaultComboBoxModel( new ParentType[] { ParentType.DEFAULT, ParentType.CATALOGUE } ) );
+        inputParamsType.setModel(
+                new DefaultComboBoxModel( new ParentType[] { ParentType.DEFAULT, ParentType.SAVED_QUERY } ) );
+
         queryTextArea.setContentType( "text/sql" );
         secondQuery.setContentType( "text/sql" );
-        inputParametrs .getTableHeader().setReorderingAllowed( false );
+        inputParametrs.getTableHeader().setReorderingAllowed( false );
         outputParametrs.getTableHeader().setReorderingAllowed( false );
 
-        singleQueryRadioButton.addChangeListener( new ChangeListener(){
+        singleQueryRadioButton.addChangeListener( new ChangeListener() {
             @Override
             public void stateChanged( ChangeEvent e ) {
                 secondQueryPanel.setVisible( ! singleQueryRadioButton.isSelected() );
-                ( (JSplitPane) secondQueryPanel.getParent() ).setDividerLocation( 0.5 );
+                ( ( JSplitPane ) secondQueryPanel.getParent() ).setDividerLocation( 0.5 );
                 secondQueryPanel.getParent().repaint();
             }
         } );
@@ -113,11 +120,11 @@ public class Form  implements TypeChangeListener, SourcePathChangeListener{
             public void actionPerformed( ActionEvent e ) {
                 if ( determineQueryType() == SelectType.CALL ) {
                     JOptionPane.showMessageDialog( mainPanel, "Предварительная обработка для ХП не требуется!",
-                            "Не делай больше так =)", JOptionPane.WARNING_MESSAGE );
+                            WARNING_DIALOG_TITLE, JOptionPane.WARNING_MESSAGE );
                     return;
                 }
                 String preparedQuery;
-                if( doubleQueryRadioButton.isSelected() ){
+                if ( doubleQueryRadioButton.isSelected() ) {
                     preparedQuery = DoubleQueryPreparator.instance().prepareQuery( queryTextArea.getText(),
                             secondQuery.getText() );
                 } else {
@@ -145,7 +152,7 @@ public class Form  implements TypeChangeListener, SourcePathChangeListener{
                 DaoMethod daoMethod = InputParameterExtractor.getInstance( currentDaoMethod )
                         .extractInputParams( currentDaoMethod );
 
-                updateInputParameters ( daoMethod.getInputParametrs().getParameter() );
+                updateInputParameters( daoMethod.getInputParametrs().getParameter() );
                 updateOutputParameters( new ArrayList<ParameterType>() );
             }
         } );
@@ -160,7 +167,7 @@ public class Form  implements TypeChangeListener, SourcePathChangeListener{
             @Override
             public void actionPerformed( ActionEvent e ) {
                 String spText = SpInputParameterExtractor.getParenSpText();
-                if( spText == null ) {
+                if ( spText == null ) {
                     JOptionPane.showMessageDialog( mainPanel, "Хранимка не является оберткой!",
                             "Говорит DaoGenerator:", JOptionPane.INFORMATION_MESSAGE );
                     return;
@@ -173,7 +180,7 @@ public class Form  implements TypeChangeListener, SourcePathChangeListener{
         getOutParamsButton.addActionListener( new ActionListener() {
             @Override
             public void actionPerformed( ActionEvent e ) {
-                final DaoMethod daoMethod  = OutputParameterExtractor.instance(
+                final DaoMethod daoMethod = OutputParameterExtractor.instance(
                         getCurrentDaoMethod().getSelectType()
                 ).getOutputParameters( getCurrentDaoMethod() );
 
@@ -186,19 +193,14 @@ public class Form  implements TypeChangeListener, SourcePathChangeListener{
         generateXMLButton.addActionListener( new ActionListener() {
             @Override
             public void actionPerformed( ActionEvent e ) {
-                if ( StringUtils.isBlank( methodNameField.getText() ) ) {
-                    JOptionPane.showMessageDialog( mainPanel,
-                            "Введи адекватное название метода, а то Марат придет... и покарает!",
-                            "Голактеко в опастносте!!11один",
-                            JOptionPane.WARNING_MESSAGE
-                    );
-                    return;
-                }
+                final DaoMethod currentDaoMethod = getCurrentDaoMethod();
+
+                if ( ! validateBeforeGenerateXML( currentDaoMethod ) ) return;
 
                 JFileChooser newFileChooser = getNewFileChooser();
                 if ( newFileChooser.showSaveDialog( mainPanel ) == JFileChooser.APPROVE_OPTION ) {
                     final File dirForSave = newFileChooser.getSelectedFile();
-                    final DaoMethod currentDaoMethod = getCurrentDaoMethod();
+
 
                     final String xmlFilePath = dirForSave.getAbsolutePath() + "/" +
                             currentDaoMethod.getCommon().getMethodName() + ".xml";
@@ -211,7 +213,7 @@ public class Form  implements TypeChangeListener, SourcePathChangeListener{
                                 public void run() {
                                     try {
                                         WikiGenerator.generateWikiForXmlFile( xmlFilePath,
-                                                forDictCheckBox.isSelected() );
+                                                outputParamsType.getSelectedItem() == ParentType.CATALOGUE );
 
                                         TextView.setText(
                                                 Utils.streamToString( new FileInputStream( xmlFilePath + ".txt" ) ) );
@@ -239,7 +241,8 @@ public class Form  implements TypeChangeListener, SourcePathChangeListener{
                                 @Override
                                 public void run() {
                                     try {
-                                        WikiGenerator.generateWiki( newFileChooser.getSelectedFile().getAbsolutePath() );
+                                        WikiGenerator.generateWiki(
+                                                newFileChooser.getSelectedFile().getAbsolutePath() );
                                     } catch ( IOException ex ) {
                                         ex.printStackTrace();
                                     } catch ( InterruptedException ex ) {
@@ -247,10 +250,33 @@ public class Form  implements TypeChangeListener, SourcePathChangeListener{
                                     }
                                 }
                             }
-                        ).start();
+                    ).start();
                 }
             }
         } );
+    }
+
+    private boolean validateBeforeGenerateXML( DaoMethod currentDaoMethod ) {
+        if ( StringUtils.isBlank( methodNameField.getText() ) ) {
+            JOptionPane.showMessageDialog( mainPanel,
+                    "Введи адекватное название метода, а то Марат придет... и покарает!",
+                    WARNING_DIALOG_TITLE,
+                    JOptionPane.WARNING_MESSAGE
+            );
+            return false;
+        }
+        if(
+                currentDaoMethod.getInputParametrs ().getParent() == ParentType.SAVED_QUERY &&
+                currentDaoMethod.getOutputParametrs().getParent() == ParentType.CATALOGUE
+        ){
+            JOptionPane.showMessageDialog( mainPanel,
+                    "Неправильное сочетание типов входных и выходных параметров",
+                    WARNING_DIALOG_TITLE,
+                    JOptionPane.WARNING_MESSAGE
+            );
+            return false;
+        }
+        return true;
     }
 
     private void initializingDeveloperTab() {
@@ -391,11 +417,13 @@ public class Form  implements TypeChangeListener, SourcePathChangeListener{
         result.getCommon().setMethodName( methodNameField.getText() );
 
         result.setInputParametrs( new ParametersType() );
+        result.getInputParametrs().setParent( ( ParentType ) inputParamsType.getSelectedItem() );
         result.getInputParametrs().getParameter().addAll(
                 ( ( ParametrsModel ) ( inputParametrs.getModel() ) ).getParameterTypes()
         );
 
         result.setOutputParametrs( new ParametersType() );
+        result.getOutputParametrs().setParent( ( ParentType ) outputParamsType.getSelectedItem() );
         result.getOutputParametrs().getParameter().addAll(
                 ( (ParametrsModel) ( outputParametrs.getModel() ) ).getParameterTypes()
         );

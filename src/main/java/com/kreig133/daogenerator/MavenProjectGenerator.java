@@ -1,9 +1,12 @@
 package com.kreig133.daogenerator;
 
 import com.kreig133.daogenerator.common.Utils;
+import com.kreig133.daogenerator.files.PackageAndFileUtils;
+import com.kreig133.daogenerator.files.mybatis.model.ModelClassGenerator;
 import com.kreig133.daogenerator.jaxb.NamingUtils;
 import com.kreig133.daogenerator.files.mybatis.mapping.MappingGenerator;
 import com.kreig133.daogenerator.files.mybatis.test.TesterClassGenerator;
+import com.kreig133.daogenerator.jaxb.ParentType;
 import com.kreig133.daogenerator.settings.Settings;
 import org.jetbrains.annotations.NotNull;
 
@@ -25,16 +28,15 @@ public class MavenProjectGenerator {
     }
 
     private static void copyBaseModels() throws IOException {
-        copyFile(
-                "DepoModelData.txt",
-                Settings.settings().getPathForGeneratedSource()
-                        + "/com/aplana/sbrf/deposit/common/client/data/DepoModelData.java"
-        );
-        copyFile(
-                "DepoPagingModelData.txt",
-                Settings.settings().getPathForGeneratedSource()
-                        + "/com/aplana/sbrf/deposit/web/common/client/operation/data/DepoPagingModelData.java"
-        );
+        for ( ParentType parentType : ParentType.values() ) {
+            copyFile(
+                    PackageAndFileUtils.getShortName( ModelClassGenerator.parentImport.get( parentType ) ) + ".txt",
+                    Settings.settings().getPathForGeneratedSource() +  "/"
+                            + PackageAndFileUtils.replacePointBySlash(
+                                ModelClassGenerator.parentImport.get( parentType )
+                            ) + ".java"
+            );
+        }
     }
 
     private static void copyFile( String resourceName, String destFilePath ) throws IOException {

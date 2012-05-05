@@ -66,6 +66,9 @@ public class ParametersType {
      *
      */
     public ParentType getParent() {
+        if( parent == null ) {
+            parent = ParentType.DEFAULT;
+        }
         return parent;
     }
 

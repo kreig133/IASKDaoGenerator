@@ -2,24 +2,31 @@ package com.kreig133.daogenerator.files.mybatis.model;
 
 import com.kreig133.daogenerator.enums.ClassType;
 import com.kreig133.daogenerator.files.JavaClassGenerator;
-import com.kreig133.daogenerator.jaxb.NamingUtils;
+import com.kreig133.daogenerator.jaxb.*;
 import com.kreig133.daogenerator.files.PackageAndFileUtils;
-import com.kreig133.daogenerator.jaxb.DaoMethod;
-import com.kreig133.daogenerator.jaxb.ParameterType;
-import com.kreig133.daogenerator.jaxb.ParametersType;
 import com.kreig133.daogenerator.settings.Settings;
 import org.apache.commons.lang.StringUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author eshangareev
  * @version 1.0
  */
 abstract public class ModelClassGenerator extends JavaClassGenerator {
+
+    public static final Map<ParentType, String> parentImport = new HashMap<ParentType, String>(3);
+    static {
+        parentImport.put( ParentType.DEFAULT    , "com.aplana.sbrf.deposit.common.client.data.DepoModelData" );
+        parentImport.put( ParentType.CATALOGUE  , "com.aplana.sbrf.deposit.common.client.data.RefBookModelData" );
+        parentImport.put( ParentType.SAVED_QUERY, "com.aplana.sbrf.deposit.common.client.data.QueryModelData" );
+        parentImport.put( ParentType.WITH_PAGING, "com.aplana.sbrf.deposit.common.client.data.DepoPagingModelData" );
+    }
 
     final ParametersType parametersType;
 
@@ -48,11 +55,15 @@ abstract public class ModelClassGenerator extends JavaClassGenerator {
     }
 
     protected void insertClassDeclarationAndDetermineParent() {
-        addImport( "com.aplana.sbrf.deposit.common.client.data.DepoModelData" );
+        insertClassDeclarationAndParent( parametersType.getParent() );
+    }
+
+    protected void insertClassDeclarationAndParent( ParentType type ){
+        addImport( parentImport.get( type ) );
         insertClassDeclaration(
                 ClassType.CLASS,
                 PackageAndFileUtils.getShortName( parametersType.getJavaClassName() ),
-                "DepoModelData",
+                PackageAndFileUtils.getShortName( parentImport.get( type ) ),
                 null
         );
     }
