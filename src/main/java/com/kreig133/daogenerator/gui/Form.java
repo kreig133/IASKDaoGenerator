@@ -186,14 +186,19 @@ public class Form  implements TypeChangeListener, SourcePathChangeListener{
         generateXMLButton.addActionListener( new ActionListener() {
             @Override
             public void actionPerformed( ActionEvent e ) {
+                if ( StringUtils.isBlank( methodNameField.getText() ) ) {
+                    JOptionPane.showMessageDialog( mainPanel,
+                            "Введи адекватное название метода, а то Марат придет... и покарает!",
+                            "Голактеко в опастносте!!11один",
+                            JOptionPane.WARNING_MESSAGE
+                    );
+                    return;
+                }
+
                 JFileChooser newFileChooser = getNewFileChooser();
                 if ( newFileChooser.showSaveDialog( mainPanel ) == JFileChooser.APPROVE_OPTION ) {
                     final File dirForSave = newFileChooser.getSelectedFile();
                     final DaoMethod currentDaoMethod = getCurrentDaoMethod();
-
-                    if( StringUtils.isBlank(currentDaoMethod.getCommon().getMethodName()) ) {
-                        InputParameterExtractor.getInstance( currentDaoMethod ).fillMethodName( currentDaoMethod );
-                    }
 
                     final String xmlFilePath = dirForSave.getAbsolutePath() + "/" +
                             currentDaoMethod.getCommon().getMethodName() + ".xml";
@@ -205,7 +210,8 @@ public class Form  implements TypeChangeListener, SourcePathChangeListener{
                                 @Override
                                 public void run() {
                                     try {
-                                        WikiGenerator.generateWikiForXmlFile(xmlFilePath, forDictCheckBox.isSelected());
+                                        WikiGenerator.generateWikiForXmlFile( xmlFilePath,
+                                                forDictCheckBox.isSelected() );
 
                                         TextView.setText(
                                                 Utils.streamToString( new FileInputStream( xmlFilePath + ".txt" ) ) );
