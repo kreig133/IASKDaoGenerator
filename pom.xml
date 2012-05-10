@@ -107,7 +107,11 @@
             </resource>
             <!--Конфиги к БД для тестового приложения-->
             <resource>
-                <directory>src/main/resources/properties/db</directory>
+                <directory>src/main/resources/properties</directory>
+                <filtering>true</filtering>
+                <excludes>
+                    <exclude>DaoGenerator.properties</exclude>
+                </excludes>
             </resource>
         </resources>
 
@@ -199,7 +203,7 @@
         <profile>
             <id>depo</id>
             <properties>
-                <jdbc.url>jdbc:sqlserver://192.168.101.173\\DEPO;DatabaseName=depomostest</jdbc.url>
+                <jdbc.url>jdbc:sqlserver://192.168.101.173:1433;DatabaseName=depomostest</jdbc.url>
                 <jdbc.username>sa</jdbc.username>
                 <jdbc.password>depo</jdbc.password>
                 <jdbc.driverClass>com.microsoft.sqlserver.jdbc.SQLServerDriver</jdbc.driverClass>
