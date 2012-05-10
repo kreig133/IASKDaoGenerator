@@ -29,25 +29,7 @@ public class DepoMappingGenerator extends MappingGenerator{
     public void generateBody( @NotNull DaoMethod daoMethod ) {
         insertLine();
 
-        JavaDocGenerator.JavaDocBuilder javaDocBuilder =
-                jDoc.getBuilder().initialize().addComment( daoMethod.getCommon().getComment() );
-
-        if( DaoJavaClassGenerator.checkToNeedOwnInClass( daoMethod ) ){
-            javaDocBuilder.addParameter( "request" /**TODO хардкод*/, "объект, содержащий входные данные для запроса" );
-        } else {
-            for ( ParameterType type : daoMethod.getInputParametrs().getParameter() ) {
-                javaDocBuilder.addParameter(
-                        type.getRenameTo(),
-                        StringUtils.isNotBlank(type.getComment()) ?
-                                type.getComment():
-                                "входной параметр запроса"
-                );
-            }
-        }
-        if ( Utils.collectionNotEmpty( daoMethod.getOutputParametrs().getParameter() ) ) {
-            javaDocBuilder.addReturn( "данные, которые вернул запрос" );
-        }
-        javaDocBuilder.close();
+        generateJavaDocForDaoMethod( daoMethod );
 
         generateAnnotation( daoMethod );
         generateMethodSignature( daoMethod, MethodType.MAPPER );
@@ -192,16 +174,17 @@ public class DepoMappingGenerator extends MappingGenerator{
         return result;
     }
 
-    private static class NamingMapFormatter{
+    private static class NamingMapFormatter {
         int maxLengthProperty;
         int maxLenghtColumn;
-        void determineMaxLength( @NotNull DaoMethod daoMethod ){
+
+        void determineMaxLength( @NotNull DaoMethod daoMethod ) {
             for ( ParameterType type : daoMethod.getOutputParametrs().getParameter() ) {
                 maxLenghtColumn = type.getName().length() > maxLenghtColumn ?
                         type.getName().length() :
                         maxLenghtColumn;
                 maxLengthProperty = type.getRenameTo().length() > maxLengthProperty ?
-                        type.getRenameTo().length():
+                        type.getRenameTo().length() :
                         maxLengthProperty;
             }
         }
@@ -210,7 +193,7 @@ public class DepoMappingGenerator extends MappingGenerator{
             return String.format(
                     "@Result(property = %s, column = %s)",
                     format( parameterType.getRenameTo(), maxLengthProperty ),
-                    format( parameterType.getName    (), maxLenghtColumn   )
+                    format( parameterType.getName(), maxLenghtColumn )
             );
         }
 

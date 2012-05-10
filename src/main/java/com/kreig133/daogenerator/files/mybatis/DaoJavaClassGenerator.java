@@ -4,12 +4,14 @@ import com.kreig133.daogenerator.common.Utils;
 import com.kreig133.daogenerator.enums.MethodType;
 import com.kreig133.daogenerator.enums.Scope;
 import com.kreig133.daogenerator.files.JavaClassGenerator;
+import com.kreig133.daogenerator.files.JavaDocGenerator;
 import com.kreig133.daogenerator.files.PackageAndFileUtils;
 import com.kreig133.daogenerator.jaxb.DaoMethod;
 import com.kreig133.daogenerator.jaxb.JavaType;
 import com.kreig133.daogenerator.jaxb.ParameterType;
 import com.kreig133.daogenerator.jaxb.ParentType;
 import com.kreig133.daogenerator.settings.Settings;
+import org.apache.commons.lang.StringUtils;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
@@ -103,5 +105,27 @@ abstract public class DaoJavaClassGenerator extends JavaClassGenerator {
         }
 
         generateMethodSignature( Scope.PUBLIC, outputClass.toString(), methodName, inputParams, null, true );
+    }
+
+    protected void generateJavaDocForDaoMethod( DaoMethod daoMethod ) {
+        JavaDocGenerator.JavaDocBuilder javaDocBuilder =
+                jDoc.getBuilder().initialize().addComment( daoMethod.getCommon().getComment() );
+
+        if( DaoJavaClassGenerator.checkToNeedOwnInClass( daoMethod ) ){
+            javaDocBuilder.addParameter( "request" /**TODO хардкод*/, "объект, содержащий входные данные для запроса" );
+        } else {
+            for ( ParameterType type : daoMethod.getInputParametrs().getParameter() ) {
+                javaDocBuilder.addParameter(
+                        type.getRenameTo(),
+                        StringUtils.isNotBlank( type.getComment() ) ?
+                                type.getComment():
+                                "входной параметр запроса"
+                );
+            }
+        }
+        if ( Utils.collectionNotEmpty( daoMethod.getOutputParametrs().getParameter() ) ) {
+            javaDocBuilder.addReturn( "данные, которые вернул запрос" );
+        }
+        javaDocBuilder.close();
     }
 }
