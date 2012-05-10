@@ -78,7 +78,7 @@ public class TestHelper {
         try {
             Field path = JDBCConnector.class.getDeclaredField( "PATH" );
             path.setAccessible( true );
-            path.set( JDBCConnector.class, "target/db/depo/application.properties" );
+            path.set( JDBCConnector.class, "target/application.properties" );
         } catch ( NoSuchFieldException e ) {
             e.printStackTrace();
         } catch ( IllegalAccessException e ) {

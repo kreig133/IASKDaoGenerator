@@ -185,4 +185,25 @@
             </plugin>
         </plugins>
     </build>
+
+    <profiles>
+        <profile>
+            <id>iask</id>
+            <properties>
+                <jdbc.url>jdbc:sqlserver://jason.aplana.com:1435;databaseName=IASK</jdbc.url>
+                <jdbc.username>sa</jdbc.username>
+                <jdbc.password>iask</jdbc.password>
+                <jdbc.driverClass>com.microsoft.sqlserver.jdbc.SQLServerDriver</jdbc.driverClass>
+            </properties>
+        </profile>
+        <profile>
+            <id>depo</id>
+            <properties>
+                <jdbc.url>jdbc:sqlserver://192.168.101.173\\DEPO;DatabaseName=depomostest</jdbc.url>
+                <jdbc.username>sa</jdbc.username>
+                <jdbc.password>depo</jdbc.password>
+                <jdbc.driverClass>com.microsoft.sqlserver.jdbc.SQLServerDriver</jdbc.driverClass>
+            </properties>
+        </profile>
+    </profiles>
 </project>

@@ -22,7 +22,7 @@ public class JDBCConnector{
 
     @Nullable
     private Connection connection = null;
-    private static String PATH = "db/depo/application.properties";
+    private static String PATH = "db/application.properties";
 
     @Nullable
     public Connection connectToDB() {
