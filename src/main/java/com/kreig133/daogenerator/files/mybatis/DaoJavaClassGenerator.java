@@ -6,10 +6,7 @@ import com.kreig133.daogenerator.enums.Scope;
 import com.kreig133.daogenerator.files.JavaClassGenerator;
 import com.kreig133.daogenerator.files.JavaDocGenerator;
 import com.kreig133.daogenerator.files.PackageAndFileUtils;
-import com.kreig133.daogenerator.jaxb.DaoMethod;
-import com.kreig133.daogenerator.jaxb.JavaType;
-import com.kreig133.daogenerator.jaxb.ParameterType;
-import com.kreig133.daogenerator.jaxb.ParentType;
+import com.kreig133.daogenerator.jaxb.*;
 import com.kreig133.daogenerator.settings.Settings;
 import org.apache.commons.lang.StringUtils;
 import org.jetbrains.annotations.NotNull;
@@ -71,10 +68,11 @@ abstract public class DaoJavaClassGenerator extends JavaClassGenerator {
                     addImport( DATE_IMPORT );
                 }
             } else {
+                String outClassName = InOutClassGenerator.getOutClassName( daoMethod );
                 outputClass.append(
-                        PackageAndFileUtils.getShortName( daoMethod.getOutputParametrs().getJavaClassName() )
+                        PackageAndFileUtils.getShortName( outClassName )
                 );
-                addImport( daoMethod.getOutputParametrs().getJavaClassName() );
+                addImport( outClassName );
             }
             if ( daoMethod.getCommon().getConfiguration().isMultipleResult() ) {
                 outputClass.append( ">" );
@@ -84,11 +82,12 @@ abstract public class DaoJavaClassGenerator extends JavaClassGenerator {
         List<String> inputParams = new ArrayList<String>( inputParameterList.size() );
         if ( Utils.collectionNotEmpty( inputParameterList ) ) {
             if ( checkToNeedOwnInClass( daoMethod ) ) {
+                String inClassName = InOutClassGenerator.getInClassName( daoMethod );
                 inputParams.add(
-                        PackageAndFileUtils.getShortName( daoMethod.getInputParametrs().getJavaClassName() ) +
+                        PackageAndFileUtils.getShortName( inClassName ) +
                                 " request"
                 );
-                addImport( daoMethod.getInputParametrs().getJavaClassName() );
+                addImport( inClassName );
             } else {
                 for ( ParameterType p : inputParameterList ) {
                     if( p.getType() == JavaType.DATE ) {
@@ -105,6 +104,7 @@ abstract public class DaoJavaClassGenerator extends JavaClassGenerator {
 
         generateMethodSignature( Scope.PUBLIC, outputClass.toString(), methodName, inputParams, null, true );
     }
+
 
     protected void generateJavaDocForDaoMethod( DaoMethod daoMethod ) {
         JavaDocGenerator.JavaDocBuilder javaDocBuilder =

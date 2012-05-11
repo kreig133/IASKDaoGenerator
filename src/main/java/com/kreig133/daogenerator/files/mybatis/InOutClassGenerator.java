@@ -181,4 +181,15 @@ public class InOutClassGenerator extends JavaClassGenerator {
         );
     }
 
+    public static String getOutClassName( DaoMethod daoMethod ) {
+        return Settings.settings().getEntityPackage() + "."+
+                NamingUtils.convertNameForClassNaming( daoMethod.getCommon().getMethodName() ) + "Out";
+    }
+
+    public static String getInClassName( DaoMethod daoMethod ) {
+        return Settings.settings().getEntityPackage() + "."+
+                NamingUtils.convertNameForClassNaming( daoMethod.getCommon().getMethodName() ) + "In";
+    }
+
+
 }

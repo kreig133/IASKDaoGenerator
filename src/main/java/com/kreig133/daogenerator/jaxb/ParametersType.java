@@ -93,7 +93,7 @@ public class ParametersType {
      *
      */
     public String getJavaClassName() {
-        return javaClassName;
+        throw new IllegalAccessError();
     }
 
     /**
