@@ -18,7 +18,6 @@ public class InterfaceGenerator extends DaoJavaClassGenerator {
 
     private final static InterfaceGenerator INSTANCE = new InterfaceGenerator();
 
-    //TODO че за?
     protected InterfaceGenerator() {
     }
 
@@ -46,7 +45,7 @@ public class InterfaceGenerator extends DaoJavaClassGenerator {
 
     @Override
     public void generateBody( DaoMethod daoMethod ) {
-        jDoc.insertJavaDoc( daoMethod.getCommon().getComment().split( "\n" ) );
+        generateJavaDocForDaoMethod( daoMethod );
         insertTabs();
         generateMethodSignature( daoMethod, MethodType.DAO );
         builder.append( ";" );
