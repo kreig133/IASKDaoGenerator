@@ -44,7 +44,6 @@ public class ImplementationGenerator extends InterfaceGenerator{
         addImport( "com.luxoft.sbrf.iask.persistence.common.dao.AbstractDao" );
         addImport( "org.springframework.stereotype.Repository" );
 
-        //TODO блок комментариев
         builder.append( "@Repository" );
         insertLine();
 
@@ -85,20 +84,12 @@ public class ImplementationGenerator extends InterfaceGenerator{
             @NotNull DaoMethod  daoMethod,
             @NotNull StringBuilder     builder
     ) {
-        builder.append( "select" );
-        if ( daoMethod.getCommon().getConfiguration().isMultipleResult() ) {
-            builder.append( "List" );
-        } else {
-            builder.append( "One" );
-        }
+        builder.append( "select" )
+               .append( daoMethod.getCommon().getConfiguration().isMultipleResult() ? "List" : "One" );
 
         builder.append( "(\"" ).append( Settings.settings().getDaoPackage() ).append( "." )
-                .append( InterfaceGenerator.instance().getFileName() ).append( "." )
-                .append( daoMethod.getCommon().getMethodName() ).append( "\" ").append( "," );
-        if( Utils.collectionNotEmpty( daoMethod.getInputParametrs().getParameter() ) ){
-            builder.append( "request" );
-        } else {
-            builder.append( "null" );
-        }
+               .append( InterfaceGenerator.instance().getFileName() ).append( "." )
+               .append( daoMethod.getCommon().getMethodName() ).append( "\" ").append( "," )
+               .append( Utils.collectionNotEmpty( daoMethod.getInputParametrs().getParameter() ) ? "request" : "null" );
     }
 }
