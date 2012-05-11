@@ -28,15 +28,7 @@ public class MavenProjectGenerator {
     }
 
     private static void copyBaseModels() throws IOException {
-        for ( ParentType parentType : ParentType.values() ) {
-            copyFile(
-                    PackageAndFileUtils.getShortName( ModelClassGenerator.parentImport.get( parentType ) ) + ".txt",
-                    Settings.settings().getPathForGeneratedSource() +  "/"
-                            + PackageAndFileUtils.replacePointBySlash(
-                                ModelClassGenerator.parentImport.get( parentType )
-                            ) + ".java"
-            );
-        }
+        //TODO не понятно будет ли базовая модель в ИАСКе
     }
 
     private static void copyFile( String resourceName, String destFilePath ) throws IOException {
