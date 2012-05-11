@@ -290,7 +290,7 @@
                       </component>
                       <component id="77036" class="javax.swing.JTextField" binding="methodNameField">
                         <constraints>
-                          <grid row="0" column="7" row-span="1" col-span="5" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
+                          <grid row="0" column="7" row-span="1" col-span="10" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
                             <preferred-size width="150" height="-1"/>
                           </grid>
                         </constraints>
@@ -325,14 +325,6 @@
                           <text value="&lt;html&gt;Режим&lt;br&gt;2 запроса"/>
                         </properties>
                       </component>
-                      <component id="9b948" class="javax.swing.JComboBox" binding="outputParamsType">
-                        <constraints>
-                          <grid row="0" column="16" row-span="1" col-span="1" vsize-policy="0" hsize-policy="2" anchor="8" fill="1" indent="0" use-parent-layout="false"/>
-                        </constraints>
-                        <properties>
-                          <model/>
-                        </properties>
-                      </component>
                       <component id="f6a98" class="javax.swing.JSeparator">
                         <constraints>
                           <grid row="0" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="0" fill="3" indent="0" use-parent-layout="false">
@@ -341,40 +333,6 @@
                         </constraints>
                         <properties>
                           <orientation value="1"/>
-                        </properties>
-                      </component>
-                      <component id="270b0" class="javax.swing.JLabel">
-                        <constraints>
-                          <grid row="0" column="15" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
-                        </constraints>
-                        <properties>
-                          <text value="&lt;html&gt;Тип вых.&lt;br&gt;парам-в"/>
-                        </properties>
-                      </component>
-                      <component id="a51b7" class="javax.swing.JSeparator">
-                        <constraints>
-                          <grid row="0" column="12" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="0" fill="3" indent="0" use-parent-layout="false">
-                            <maximum-size width="10" height="-1"/>
-                          </grid>
-                        </constraints>
-                        <properties>
-                          <orientation value="1"/>
-                        </properties>
-                      </component>
-                      <component id="6b148" class="javax.swing.JComboBox" binding="inputParamsType">
-                        <constraints>
-                          <grid row="0" column="14" row-span="1" col-span="1" vsize-policy="0" hsize-policy="2" anchor="8" fill="1" indent="0" use-parent-layout="false"/>
-                        </constraints>
-                        <properties>
-                          <model/>
-                        </properties>
-                      </component>
-                      <component id="ec4d6" class="javax.swing.JLabel">
-                        <constraints>
-                          <grid row="0" column="13" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
-                        </constraints>
-                        <properties>
-                          <text value="&lt;html&gt;Тип вх.&lt;br&gt;парам-в"/>
                         </properties>
                       </component>
                     </children>

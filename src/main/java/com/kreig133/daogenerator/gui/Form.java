@@ -74,8 +74,6 @@ public class Form  implements SourcePathChangeListener{
     private JRadioButton doubleQueryRadioButton;
     private JEditorPane secondQuery;
     private JScrollPane secondQueryPanel;
-    private JComboBox outputParamsType;
-    private JComboBox inputParamsType;
     private JFrame windowWithText;
 
     private boolean start = true;
@@ -92,10 +90,6 @@ public class Form  implements SourcePathChangeListener{
     }
 
     private void initializingAnalyticTab() {
-        outputParamsType.setModel(
-                new DefaultComboBoxModel( new ParentType[] { ParentType.DEFAULT, ParentType.CATALOGUE } ) );
-        inputParamsType.setModel(
-                new DefaultComboBoxModel( new ParentType[] { ParentType.DEFAULT, ParentType.SAVED_QUERY } ) );
 
         queryTextArea.setContentType( "text/sql" );
         secondQuery.setContentType( "text/sql" );
@@ -207,8 +201,7 @@ public class Form  implements SourcePathChangeListener{
                                 @Override
                                 public void run() {
                                     try {
-                                        WikiGenerator.generateWikiForXmlFile( xmlFilePath,
-                                                outputParamsType.getSelectedItem() == ParentType.CATALOGUE );
+                                        WikiGenerator.generateWikiForXmlFile( xmlFilePath );
 
                                         TextView.setText(
                                                 Utils.streamToString( new FileInputStream( xmlFilePath + ".txt" ) ) );
@@ -406,13 +399,11 @@ public class Form  implements SourcePathChangeListener{
         result.getCommon().setMethodName( methodNameField.getText() );
 
         result.setInputParametrs( new ParametersType() );
-        result.getInputParametrs().setParent( ( ParentType ) inputParamsType.getSelectedItem() );
         result.getInputParametrs().getParameter().addAll(
                 ( ( ParametrsModel ) ( inputParametrs.getModel() ) ).getParameterTypes()
         );
 
         result.setOutputParametrs( new ParametersType() );
-        result.getOutputParametrs().setParent( ( ParentType ) outputParamsType.getSelectedItem() );
         result.getOutputParametrs().getParameter().addAll(
                 ( (ParametrsModel) ( outputParametrs.getModel() ) ).getParameterTypes()
         );
