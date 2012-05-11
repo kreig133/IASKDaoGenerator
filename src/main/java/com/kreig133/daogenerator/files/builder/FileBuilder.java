@@ -8,6 +8,7 @@ import com.kreig133.daogenerator.files.JavaClassGenerator;
 import com.kreig133.daogenerator.files.mybatis.DaoJavaClassGenerator;
 import com.kreig133.daogenerator.jaxb.DaoMethod;
 import com.kreig133.daogenerator.jaxb.ParameterType;
+import com.kreig133.daogenerator.jaxb.validators.DaoMethodValidator;
 import com.kreig133.daogenerator.settings.OperationSettings;
 import com.kreig133.daogenerator.settings.Settings;
 import org.apache.commons.lang.StringUtils;
@@ -70,7 +71,7 @@ public abstract class FileBuilder {
             ) );
         }
         boolean success = false;
-        if( checkDaoMethods( daoMethods ) ){
+        if( DaoMethodValidator.checkDaoMethods( daoMethods ) ){
             try {
                 generateAndWriteFiles();
                 MavenProjectGenerator.generate();
@@ -86,63 +87,7 @@ public abstract class FileBuilder {
         return success;
     }
 
-    static boolean checkDaoMethods( List<DaoMethod> daoMethods ) {
-        boolean allIsOk = true;
-        for ( DaoMethod daoMethod : FileBuilder.daoMethods ) {
-            allIsOk = checkJavaClassNames( daoMethod ) && allIsOk;
-            allIsOk = checkRenameTos     ( daoMethod ) && allIsOk;
-        }
-        return  allIsOk;
-    }
 
-    static boolean checkRenameTos( DaoMethod daoMethod ) {
-        List<ParameterType> parameter = new ArrayList<ParameterType>( daoMethod.getInputParametrs().getParameter() );
-        parameter.addAll( daoMethod.getOutputParametrs().getParameter() );
-
-        boolean containsEmptyRenameTo = false;
-
-        for ( ParameterType parameterType : parameter ) {
-            if( StringUtils.isBlank( parameterType.getRenameTo() ) ) {
-                containsEmptyRenameTo = true;
-                System.out.println( String.format( "ERROR! В методе %s в RenameTo есть пустые значения!",
-                        daoMethod.getCommon().getMethodName() )
-                );
-            }
-        }
-
-        boolean containsSameRenameToValues =
-                daoMethod.getInputParametrs ().containsSameRenameTo() ||
-                daoMethod.getOutputParametrs().containsSameRenameTo();
-        return ! ( containsSameRenameToValues ||  containsEmptyRenameTo );
-    }
-
-    static boolean checkJavaClassNames( DaoMethod daoMethod ) {
-        boolean isOk = true;
-        String errorMessage = "ERROR! Для метода %s не указано javaClassName для %s модели!";
-        if( DaoJavaClassGenerator.checkToNeedOwnInClass( daoMethod ) ){
-            if( StringUtils.isBlank(daoMethod.getInputParametrs().getJavaClassName() ) ){
-                System.out.println(String.format(
-                        errorMessage,
-                        daoMethod.getCommon().getMethodName(),
-                        "входной"
-                        )
-                );
-                isOk = false;
-            }
-        }
-        if( DaoJavaClassGenerator.checkToNeedOwnOutClass( daoMethod ) ){
-            if( StringUtils.isBlank(daoMethod.getOutputParametrs().getJavaClassName() ) ){
-                System.out.println(String.format(
-                        errorMessage,
-                        daoMethod.getCommon().getMethodName(),
-                        "выходной"
-                    )
-                );
-                isOk = false;
-            }
-        }
-        return isOk;
-    }
 
     public static String[] getXmlFileNamesInDirectory( String path ) {
         return ( new File( path ) )
