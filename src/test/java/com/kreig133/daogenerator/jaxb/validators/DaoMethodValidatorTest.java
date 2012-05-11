@@ -12,18 +12,6 @@ import org.junit.Test;
  */
 public class DaoMethodValidatorTest {
     @Test
-    public void testCheckJavaClassNames() {
-        DaoMethod daoMethodForTest = TestHelper.getDaoMethodForTest();
-        daoMethodForTest.getOutputParametrs().setJavaClassName( "" );
-
-        Assert.assertFalse( DaoMethodValidator.checkJavaClassNames( daoMethodForTest ) );
-
-        daoMethodForTest.getOutputParametrs().setJavaClassName( "123" );
-
-        Assert.assertTrue( DaoMethodValidator.checkJavaClassNames( daoMethodForTest ) );
-    }
-
-    @Test
     public void testCheckRenameTos(){
         DaoMethod daoMethodForTest = TestHelper.getDaoMethodForTest();
         daoMethodForTest.getInputParametrs().getParameter().get( 0 ).setRenameTo( "" );
