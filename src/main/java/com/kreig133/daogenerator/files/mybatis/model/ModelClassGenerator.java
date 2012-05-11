@@ -20,14 +20,6 @@ import java.util.Map;
  */
 abstract public class ModelClassGenerator extends JavaClassGenerator {
 
-    public static final Map<ParentType, String> parentImport = new HashMap<ParentType, String>(3);
-    static {
-        parentImport.put( ParentType.DEFAULT    , "com.aplana.sbrf.deposit.common.client.data.DepoModelData" );
-        parentImport.put( ParentType.CATALOGUE  , "com.aplana.sbrf.deposit.common.client.data.RefBookModelData" );
-        parentImport.put( ParentType.SAVED_QUERY, "com.aplana.sbrf.deposit.common.client.data.QueryModelData" );
-        parentImport.put( ParentType.WITH_PAGING, "com.aplana.sbrf.deposit.common.client.data.DepoPagingModelData" );
-    }
-
     final ParametersType parametersType;
 
     ModelClassGenerator( ParametersType parametersType ) {
@@ -59,11 +51,12 @@ abstract public class ModelClassGenerator extends JavaClassGenerator {
     }
 
     protected void insertClassDeclarationAndParent( ParentType type ){
-        addImport( parentImport.get( type ) );
+        String parent = "com.extjs.gxt.ui.client.data.BaseModelData";
+        addImport( parent );
         insertClassDeclaration(
                 ClassType.CLASS,
                 PackageAndFileUtils.getShortName( parametersType.getJavaClassName() ),
-                PackageAndFileUtils.getShortName( parentImport.get( type ) ),
+                PackageAndFileUtils.getShortName( parent ),
                 null
         );
     }
