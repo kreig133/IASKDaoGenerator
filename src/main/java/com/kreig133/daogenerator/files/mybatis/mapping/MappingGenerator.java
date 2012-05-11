@@ -14,7 +14,7 @@ import java.io.File;
 public abstract class MappingGenerator extends DaoJavaClassGenerator {
 
     public static MappingGenerator instance (){
-        return new DepoMappingGenerator();
+        return new IaskMappingGenerator();
     }
 
     @NotNull
