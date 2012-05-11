@@ -35,8 +35,6 @@ public class SpInputParameterExtractor extends InputParameterExtractor {
     //</editor-fold>
 
     //<editor-fold desc="SQL-Query">
-    private static final String GET_SP_PARENT = "SELECT sExecute FROM t_SessionDataSetType WHERE sTablePattern = ?";
-
     private static final String GET_INPUT_PARAMETRS_QUERY =
             "SELECT * FROM  INFORMATION_SCHEMA.PARAMETERS WHERE SPECIFIC_NAME = ? ORDER BY ORDINAL_POSITION";
 
@@ -53,8 +51,6 @@ public class SpInputParameterExtractor extends InputParameterExtractor {
 
     @Nullable
     private static String spText = null;
-    @Nullable
-    private static String parentSpText = null;
 
     @NotNull
     DaoMethod fillTestValuesByInsertedQuery( @NotNull DaoMethod daoMethod ) {
@@ -130,17 +126,9 @@ public class SpInputParameterExtractor extends InputParameterExtractor {
 
     //<editor-fold desc="Заполнение данными из текста хранимки">
     private void fillParameterTypesByInfoFromSpText( @NotNull List<ParameterType> result, String spName ) {
-        String parentSpName = getParentSpName( spName );
-
-        parentSpText =  parentSpName.equals( spName ) || parentSpName.equals( NOT_FOUNDED ) ?
-                null:
-                getSPText( parentSpName );
         spText = getSPText( spName );
 
         fillParameterByInfoFromSpText( result, getDefinitionFromSpText( spText ) );
-        if( parentSpText != null ){
-            fillParameterByInfoFromSpText( result, getDefinitionFromSpText( parentSpText ) );
-        }
     }
 
     private void fillParameterByInfoFromSpText( @NotNull List<ParameterType> result, String storeProcedureDefinition ) {
@@ -186,11 +174,6 @@ public class SpInputParameterExtractor extends InputParameterExtractor {
         return spText;
     }
 
-    @Nullable
-    public static String getParenSpText(){
-        return parentSpText;
-    }
-
     protected String getSPText( String spName ){
         final Connection connection = JDBCConnector.instance().connectToDB();
 
@@ -222,19 +205,6 @@ public class SpInputParameterExtractor extends InputParameterExtractor {
                 "(?isu)create\\s+procedure(.*?(--[^\\n]*\\bas\\b.*?)*)\\bas\\b"
         ).matcher( spText );
         return matcher.find() ? matcher.group( 1 ) : "";
-    }
-
-    private String getParentSpName( String spName ) {
-        Connection connection = JDBCConnector.instance().connectToDB();
-        try {
-            PreparedStatement preparedStatement = connection.prepareStatement( GET_SP_PARENT );
-            preparedStatement.setString( 1, spName );
-            ResultSet resultSet = preparedStatement.executeQuery();
-            return  resultSet.next() ? getParentSpName( resultSet ) : spName;
-        } catch ( SQLException e ) {
-            e.printStackTrace();
-            return spName;
-        }
     }
 
     @NotNull

@@ -69,7 +69,6 @@ public class Form  implements SourcePathChangeListener{
     private JButton button1;
     private JLabel entityPackageLable;
     private JButton prepareQueryButton;
-    private JButton parentSpTextButton;
     private JRadioButton singleQueryRadioButton;
     private JRadioButton doubleQueryRadioButton;
     private JEditorPane secondQuery;
@@ -135,7 +134,6 @@ public class Form  implements SourcePathChangeListener{
                 final boolean isSelect = currentDaoMethod.getSelectType() == SelectType.SELECT;
 
                 SPTextButton.setEnabled( isSpCall );
-                parentSpTextButton.setEnabled( isSpCall );
                 getOutParamsButton.setEnabled( isSpCall || isSelect );
                 generateXMLButton.setEnabled( ! ( isSelect || isSpCall ) );
                 DaoMethod daoMethod = InputParameterExtractor.getInstance( currentDaoMethod )
@@ -149,20 +147,6 @@ public class Form  implements SourcePathChangeListener{
             @Override
             public void actionPerformed( ActionEvent e ) {
                 TextView.setText( SpInputParameterExtractor.getSPText() );
-                getWindowWithText().setVisible( true );
-            }
-        } );
-        parentSpTextButton.addActionListener( new ActionListener() {
-            @Override
-            public void actionPerformed( ActionEvent e ) {
-                String spText = SpInputParameterExtractor.getParenSpText();
-                if ( spText == null ) {
-                    JOptionPane.showMessageDialog( mainPanel, "Хранимка не является оберткой!",
-                            "Говорит DaoGenerator:", JOptionPane.INFORMATION_MESSAGE );
-                    return;
-                }
-                TextView.setText( spText );
-
                 getWindowWithText().setVisible( true );
             }
         } );

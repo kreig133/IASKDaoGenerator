@@ -174,13 +174,6 @@
                           <toolTipText value="Посмотреть текст хранимой процедуры"/>
                         </properties>
                       </component>
-                      <component id="8c4e5" class="javax.swing.JButton" binding="parentSpTextButton" default-binding="true">
-                        <constraints/>
-                        <properties>
-                          <enabled value="false"/>
-                          <text value="Parent Sp Text"/>
-                        </properties>
-                      </component>
                       <component id="51597" class="javax.swing.JButton" binding="generateXMLButton" default-binding="true">
                         <constraints/>
                         <properties>
