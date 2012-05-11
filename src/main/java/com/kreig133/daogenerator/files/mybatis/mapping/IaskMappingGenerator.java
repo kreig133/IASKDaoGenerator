@@ -5,6 +5,7 @@ import com.kreig133.daogenerator.jaxb.NamingUtils;
 import com.kreig133.daogenerator.files.mybatis.intrface.InterfaceGenerator;
 import com.kreig133.daogenerator.jaxb.DaoMethod;
 import com.kreig133.daogenerator.jaxb.ParameterType;
+import com.kreig133.daogenerator.jaxb.SelectType;
 import com.kreig133.daogenerator.settings.Settings;
 import com.kreig133.daogenerator.sql.creators.QueryCreatorFactory;
 import org.jetbrains.annotations.NotNull;
@@ -57,7 +58,10 @@ public class IaskMappingGenerator extends MappingGenerator{
 
         StringBuilder builder = new StringBuilder();
         insertTabs().append( "<" ) .append( daoMethod.getSelectType().annotation().toLowerCase() )
-                .append( " id=\"" ).append( name ).append( "\" statementType=\"CALLABLE\"" );
+                .append( " id=\"" ).append( name ).append( "\" " );
+        if( daoMethod.getSelectType() == SelectType.CALL ) {
+            builder.append( "statementType=\"CALLABLE\"" );
+        }
 
         writeParameterType(  inputParameterList, name, "parameterType", "In" , package_, builder );
         writeParameterType( outputParameterList, name, "resultType"   , "Out", package_, builder );
