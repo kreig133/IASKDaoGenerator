@@ -136,7 +136,7 @@ public class Form  implements SourcePathChangeListener{
                 SPTextButton.setEnabled( isSpCall );
                 getOutParamsButton.setEnabled( isSpCall || isSelect );
                 generateXMLButton.setEnabled( ! ( isSelect || isSpCall ) );
-                DaoMethod daoMethod = InputParameterExtractor.getInstance( currentDaoMethod )
+                DaoMethod daoMethod = InputParameterExtractor.instance( currentDaoMethod )
                         .extractInputParams( currentDaoMethod );
 
                 updateInputParameters( daoMethod.getInputParametrs().getParameter() );
