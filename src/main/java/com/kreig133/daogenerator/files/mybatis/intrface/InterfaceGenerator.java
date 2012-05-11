@@ -46,9 +46,9 @@ public class InterfaceGenerator extends DaoJavaClassGenerator {
     @Override
     public void generateBody( DaoMethod daoMethod ) {
         generateJavaDocForDaoMethod( daoMethod );
-        insertTabs();
         generateMethodSignature( daoMethod, MethodType.DAO );
         builder.append( ";" );
+        decreaseNestingLevel();
         insertLine();
     }
 

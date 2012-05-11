@@ -63,7 +63,6 @@ public class ImplementationGenerator extends InterfaceGenerator{
     public void generateBody( @NotNull DaoMethod daoMethod ) {
         insertTabs().append( "@Override" );
         insertLine();
-        insertTabs().append( Scope.PUBLIC.value() ).append( " " );
 
         generateMethodSignature( daoMethod, MethodType.DAO );
         builder.append( " {" );

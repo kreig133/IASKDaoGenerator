@@ -22,11 +22,6 @@ abstract public class DaoJavaClassGenerator extends JavaClassGenerator {
 
     protected void startingLinesOfDaoFiles() {
         setPackage( Settings.settings().getDaoPackage() );
-        addDaoFilesImports();
-    }
-
-    protected void addDaoFilesImports() {
-        addImport( Settings.settings().getEntityPackage() + ".*" );
     }
 
     /**
@@ -61,6 +56,7 @@ abstract public class DaoJavaClassGenerator extends JavaClassGenerator {
         if ( Utils.collectionNotEmpty( outputParameterList ) ) {
             if ( daoMethod.getCommon().getConfiguration().isMultipleResult() ) {
                 outputClass.append( "List<" );
+                addImport( "java.util.List" );
             }
             if ( ! checkToNeedOwnOutClass( daoMethod ) ) {
                 outputClass.append( outputParameterList.get( 0 ).getType().value() );
@@ -95,7 +91,6 @@ abstract public class DaoJavaClassGenerator extends JavaClassGenerator {
                     }
 
                     StringBuilder inputParam = new StringBuilder();
-                    inputParam.append( "@Param(\"" ).append( p.getRenameTo() ).append( "\") " );
                     inputParam.append( p.getType().value() ).append( " " ).append( p.getRenameTo() );
                     inputParams.add( inputParam.toString() );
                 }
