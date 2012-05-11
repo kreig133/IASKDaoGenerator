@@ -3,8 +3,6 @@ package com.kreig133.daogenerator.files.builder;
 import com.kreig133.daogenerator.files.JavaClassGenerator;
 import com.kreig133.daogenerator.files.mybatis.DaoJavaClassGenerator;
 import com.kreig133.daogenerator.files.mybatis.InOutClassGenerator;
-import com.kreig133.daogenerator.files.mybatis.model.InModelClassGenerator;
-import com.kreig133.daogenerator.files.mybatis.model.OutModelClassGenerator;
 import com.kreig133.daogenerator.jaxb.DaoMethod;
 import com.kreig133.daogenerator.jaxb.InOutType;
 import org.jetbrains.annotations.NotNull;
