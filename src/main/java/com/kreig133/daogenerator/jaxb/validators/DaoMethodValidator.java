@@ -16,7 +16,6 @@ public class DaoMethodValidator {
     public static boolean checkDaoMethods( List<DaoMethod> daoMethods ) {
         boolean allIsOk = true;
         for ( DaoMethod daoMethod : daoMethods ) {
-            allIsOk = checkJavaClassNames( daoMethod ) && allIsOk;
             allIsOk = checkRenameTos     ( daoMethod ) && allIsOk;
         }
         return  allIsOk;
@@ -41,33 +40,5 @@ public class DaoMethodValidator {
                 daoMethod.getInputParametrs ().containsSameRenameTo() ||
                         daoMethod.getOutputParametrs().containsSameRenameTo();
         return ! ( containsSameRenameToValues ||  containsEmptyRenameTo );
-    }
-
-    static boolean checkJavaClassNames( DaoMethod daoMethod ) {
-        boolean isOk = true;
-        String errorMessage = "ERROR! Для метода %s не указано javaClassName для %s модели!";
-        if( DaoJavaClassGenerator.checkToNeedOwnInClass( daoMethod ) ){
-            if( StringUtils.isBlank(daoMethod.getInputParametrs().getJavaClassName() ) ){
-                System.out.println(String.format(
-                        errorMessage,
-                        daoMethod.getCommon().getMethodName(),
-                        "входной"
-                )
-                );
-                isOk = false;
-            }
-        }
-        if( DaoJavaClassGenerator.checkToNeedOwnOutClass( daoMethod ) ){
-            if( StringUtils.isBlank(daoMethod.getOutputParametrs().getJavaClassName() ) ){
-                System.out.println(String.format(
-                        errorMessage,
-                        daoMethod.getCommon().getMethodName(),
-                        "выходной"
-                )
-                );
-                isOk = false;
-            }
-        }
-        return isOk;
     }
 }
