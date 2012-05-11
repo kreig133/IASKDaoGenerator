@@ -42,14 +42,13 @@ abstract public class DaoJavaClassGenerator extends JavaClassGenerator {
     ) {
         final List<ParameterType> parameters = daoMethod.getInputParametrs().getParameter();
 
-        return  ( parameters.size() > 3 ) || daoMethod.getInputParametrs().getParent() != ParentType.DEFAULT;
+        return parameters.size() > 1;
     }
 
     public static boolean checkToNeedOwnOutClass(
             @NotNull DaoMethod daoMethod
     ) {
-        return daoMethod.getOutputParametrs().getParameter().size() > 1 ||
-                daoMethod.getOutputParametrs().getParent() != ParentType.DEFAULT;
+        return daoMethod.getOutputParametrs().getParameter().size() > 1;
     }
 
     protected void generateMethodSignature(
