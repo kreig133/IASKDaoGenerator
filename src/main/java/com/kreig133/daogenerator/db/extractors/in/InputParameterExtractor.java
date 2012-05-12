@@ -19,6 +19,8 @@ abstract public class InputParameterExtractor extends Extractor{
 
     public abstract DaoMethod extractInputParams( DaoMethod daoMethod );
 
+    public abstract DaoMethod fillMethodName( DaoMethod daoMethod );
+
     public static InputParameterExtractor instance( @NotNull DaoMethod daoMethod ){
         switch ( daoMethod.getSelectType() ){
             case CALL:

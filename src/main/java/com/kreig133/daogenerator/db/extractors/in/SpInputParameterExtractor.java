@@ -53,6 +53,17 @@ public class SpInputParameterExtractor extends InputParameterExtractor {
     private static String spText = null;
 
     @NotNull
+    @Override
+    public DaoMethod fillMethodName( @NotNull DaoMethod daoMethod ) {
+        daoMethod.getCommon().setMethodName(
+                Utils.convertPBNameToName(
+                        Extractor.getStoreProcedureName( daoMethod.getCommon().getQuery() )
+                )
+        );
+        return daoMethod;
+    }
+
+    @NotNull
     DaoMethod fillTestValuesByInsertedQuery( @NotNull DaoMethod daoMethod ) {
         List<ParameterType> inputParametrs = daoMethod.getInputParametrs().getParameter();
         String query = daoMethod.getCommon().getQuery();

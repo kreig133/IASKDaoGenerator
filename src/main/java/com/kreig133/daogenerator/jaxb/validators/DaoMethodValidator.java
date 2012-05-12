@@ -31,7 +31,7 @@ public class DaoMethodValidator {
             if( StringUtils.isBlank( parameterType.getRenameTo() ) ) {
                 containsEmptyRenameTo = true;
                 System.out.println( String.format( "ERROR! В методе %s в RenameTo есть пустые значения!",
-                        daoMethod.getCommon().getMethodName() )
+                        getMethodName( daoMethod ) )
                 );
             }
         }
@@ -40,5 +40,10 @@ public class DaoMethodValidator {
                 daoMethod.getInputParametrs ().containsSameRenameTo() ||
                         daoMethod.getOutputParametrs().containsSameRenameTo();
         return ! ( containsSameRenameToValues ||  containsEmptyRenameTo );
+    }
+
+    private static String getMethodName( DaoMethod daoMethod ) {
+        return StringUtils.isBlank( daoMethod.getCommon().getMethodName() ) ?
+                "<Без названия>" : daoMethod.getCommon().getMethodName();
     }
 }

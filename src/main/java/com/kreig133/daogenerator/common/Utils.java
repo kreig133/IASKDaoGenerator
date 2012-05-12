@@ -52,6 +52,9 @@ public class Utils {
         if( StringUtils.isBlank( nameForCall ) ) {
             return "";
         }
+        if ( StringUtils.isAllUpperCase( StringUtils.join( nameForCall.trim().split( "_+" ) ) ) ) {
+            nameForCall =  nameForCall.toLowerCase();
+        }
         {
             final char[] chars = nameForCall.toCharArray();
             chars[ 0 ] = Character.toLowerCase( chars[ 0 ] );
