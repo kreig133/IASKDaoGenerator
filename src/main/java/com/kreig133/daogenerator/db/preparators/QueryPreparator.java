@@ -39,7 +39,7 @@ public class QueryPreparator {
     protected static final String TEST_VALUES = "(([-\\d\\.]+)|(null)|('.+?'))";
     @NotNull
     @Language("RegExp")
-    protected String regex = "(?u)([\"\\[]?\\w+[\"\\]]?)?%s\\s*=\\s*" + TEST_VALUES;
+    protected String regex = "(?u)[^\\.`]([\"\\[]?\\b\\w+[\"\\]]?\\.){0,2}%s\\s*=\\s*" + TEST_VALUES;
     @NotNull
     @Language( "RegExp" )
     protected String castRegExp = "(?isu)(%s\\s*=.*?)\\bcast\\s*\\(\\s*"+ TEST_VALUES +"\\s*as\\s*("+ SQL_TYPE + ")\\s*\\)";
