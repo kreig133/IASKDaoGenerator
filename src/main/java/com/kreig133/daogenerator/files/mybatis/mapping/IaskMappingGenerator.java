@@ -1,11 +1,10 @@
 package com.kreig133.daogenerator.files.mybatis.mapping;
 
 import com.kreig133.daogenerator.common.Utils;
-import com.kreig133.daogenerator.jaxb.NamingUtils;
+import com.kreig133.daogenerator.files.mybatis.DaoJavaClassGenerator;
+import com.kreig133.daogenerator.files.mybatis.InOutClassGenerator;
+import com.kreig133.daogenerator.jaxb.*;
 import com.kreig133.daogenerator.files.mybatis.intrface.InterfaceGenerator;
-import com.kreig133.daogenerator.jaxb.DaoMethod;
-import com.kreig133.daogenerator.jaxb.ParameterType;
-import com.kreig133.daogenerator.jaxb.SelectType;
 import com.kreig133.daogenerator.settings.Settings;
 import com.kreig133.daogenerator.sql.creators.QueryCreatorFactory;
 import org.jetbrains.annotations.NotNull;
@@ -20,7 +19,28 @@ public class IaskMappingGenerator extends MappingGenerator{
 
     @Override
     public void generateBody( DaoMethod daoMethod ) {
-        builder.append( generateXmlMapping( daoMethod ) );
+        generateResultMap( daoMethod );
+        generateXmlMapping( daoMethod );
+    }
+
+    private void generateResultMap( DaoMethod daoMethod ) {
+        if( ! DaoJavaClassGenerator.checkToNeedOwnOutClass( daoMethod ) ) return;
+        insertTabs();
+        builder.append( String.format( "<resultMap id=\"%sResult\"", daoMethod.getCommon().getMethodName() ) );
+        insertLine();
+        increaseNestingLevel();
+        insertTabs().append( String.format( "type=\"%s\">", InOutClassGenerator.getOutClassName( daoMethod ) ) );
+        insertLine();
+        for ( ParameterType parameterType : daoMethod.getOutputParametrs().getParameter() ) {
+            insertTabs().append( String.format( "<result property=\"%s\" column=\"%s\" />",
+                    parameterType.getRenameTo(), parameterType.getName()
+            ) );
+            insertLine();
+        }
+        decreaseNestingLevel();
+        insertTabs().append( "</resultMap>" );
+        insertLine();
+        insertLine();
     }
 
     @Override
@@ -28,10 +48,22 @@ public class IaskMappingGenerator extends MappingGenerator{
         return Settings.settings().getOperationName();
     }
 
-//    @Override
-//    public void generateFoot() throws IOException {
-//        builder.append( "</mapper>" );
-//    }
+    @NotNull
+    @Override
+    public String getResult() {
+        try {
+            generateFoot();
+            return builder.toString();
+        } finally {
+            updateBuilder();
+        }
+    }
+
+    @Override
+    public void generateFoot() {
+        decreaseNestingLevel();
+        builder.append( "</mapper>" );
+    }
 
     @NotNull
     @Override
@@ -46,9 +78,10 @@ public class IaskMappingGenerator extends MappingGenerator{
                 ".org/dtd/mybatis-3-mapper.dtd\">\n" );
         builder.append( "<mapper namespace=\"" ).append( Settings.settings().getDaoPackage() )
                 .append( "." ).append( InterfaceGenerator.instance().getFileName() ).append( "\">\n" );
+        increaseNestingLevel();
     }
 
-    private String generateXmlMapping(
+    private void generateXmlMapping(
             @NotNull final DaoMethod daoMethod
     ){
         final List<ParameterType> inputParameterList  = daoMethod.getInputParametrs ().getParameter();
@@ -56,48 +89,68 @@ public class IaskMappingGenerator extends MappingGenerator{
         final String name                         = daoMethod.getCommon().getMethodName();
         final String package_                     = Settings.settings().getEntityPackage();
 
-        StringBuilder builder = new StringBuilder();
         insertTabs().append( "<" ) .append( daoMethod.getSelectType().annotation().toLowerCase() )
                 .append( " id=\"" ).append( name ).append( "\" " );
         if( daoMethod.getSelectType() == SelectType.CALL ) {
             builder.append( "statementType=\"CALLABLE\"" );
         }
 
-        writeParameterType(  inputParameterList, name, "parameterType", "In" , package_, builder );
-        writeParameterType( outputParameterList, name, "resultType"   , "Out", package_, builder );
-
+        writeInputParameterType( inputParameterList, name, package_, builder );
+        writeOutputParameterType( daoMethod, name, package_, builder );
         builder.append( ">\n\n" );
         increaseNestingLevel();
-        insertTabs().append(
-                QueryCreatorFactory.newInstance( daoMethod ).generateExecuteQuery( daoMethod, false )
-        );
+        for( String s: QueryCreatorFactory.newInstance( daoMethod )
+                .generateExecuteQuery( daoMethod, false ).split( "[\\n\\r]+" )
+        ) {
+            insertTabs().append( s );
+            insertLine();
+        }
         insertLine();
         decreaseNestingLevel();
 
         insertTabs().append( "</" ).append( daoMethod.getSelectType().annotation().toLowerCase() ).append( ">" );
         insertLine();
         insertLine();
-
-        return builder.toString();
     }
 
-    private void writeParameterType(
-            @NotNull List<ParameterType> outputParameterList,
+    private void writeOutputParameterType(
+            @NotNull DaoMethod daoMethod,
             String name,
-            String type,
-            String suffix,
             String package_,
             @NotNull StringBuilder builder
     ) {
-        if ( Utils.collectionNotEmpty( outputParameterList ) ) {
+        if ( Utils.collectionNotEmpty( daoMethod.getOutputParametrs().getParameter() ) ) {
             insertLine();
             increaseNestingLevel();
-            insertTabs().append( type ).append( "=\"" );
-            if ( outputParameterList.size() > 1 ) {
+            boolean needOwnClass = DaoJavaClassGenerator.checkToNeedOwnOutClass( daoMethod );
+            insertTabs().append( String.format( "%s=\"%s\"",
+                    ( needOwnClass ? "resultMap" : "resultType" ),
+                    ( needOwnClass ? daoMethod.getCommon().getMethodName() + "Result" :
+                        ( daoMethod.getOutputParametrs().getParameter().get( 0 ).getType() == JavaType.DATE ?
+                            "java.util.Date" : "java.util."+daoMethod.getOutputParametrs()
+                                .getParameter().get( 0 ).getType().value()
+                        )
+                    )
+            ));
+            decreaseNestingLevel();
+        }
+    }
+
+    private void writeInputParameterType(
+            @NotNull List<ParameterType> parameterTypeList,
+            String name,
+            String package_,
+            @NotNull StringBuilder builder
+    ) {
+        if ( Utils.collectionNotEmpty( parameterTypeList ) ) {
+            insertLine();
+            increaseNestingLevel();
+            insertTabs().append( "parameterType=\"" );
+            if ( parameterTypeList.size() > 1 ) {
                 builder.append( package_ ).append( "." );
-                builder.append( NamingUtils.convertNameForClassNaming( name ) ).append( suffix );
+                builder.append( NamingUtils.convertNameForClassNaming( name ) ).append( "In" );
             } else {
-                builder.append( "java.lang." ).append( outputParameterList.get( 0 ).getType().value() );
+                builder.append( "java.lang." ).append( parameterTypeList.get( 0 ).getType().value() );
             }
             builder.append( "\"" );
             decreaseNestingLevel();

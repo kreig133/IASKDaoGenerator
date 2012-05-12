@@ -91,7 +91,7 @@ abstract public class DaoJavaClassGenerator extends JavaClassGenerator {
                     }
 
                     StringBuilder inputParam = new StringBuilder();
-                    inputParam.append( p.getType().value() ).append( " " ).append( p.getRenameTo() );
+                    inputParam.append( p.getType().value() ).append( " request" );
                     inputParams.add( inputParam.toString() );
                 }
             }
@@ -110,7 +110,7 @@ abstract public class DaoJavaClassGenerator extends JavaClassGenerator {
         } else {
             for ( ParameterType type : daoMethod.getInputParametrs().getParameter() ) {
                 javaDocBuilder.addParameter(
-                        type.getRenameTo(),
+                        "request",
                         StringUtils.isNotBlank( type.getComment() ) ?
                                 type.getComment():
                                 "входной параметр запроса"

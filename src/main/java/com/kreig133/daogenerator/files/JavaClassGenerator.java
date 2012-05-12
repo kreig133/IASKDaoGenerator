@@ -49,12 +49,12 @@ abstract public class JavaClassGenerator extends Generator {
 //        javaDocForFile = null;
     }
 
-    private void generateFoot() {
+    protected void generateFoot() {
         insertLine().append( "}" );
     }
 
     @NotNull
-    final public String getResult(){
+    public String getResult(){
         generateFoot();
         String s = builder.toString().replaceAll( "\\n{2,}", "\n\n" );
 
@@ -257,7 +257,7 @@ abstract public class JavaClassGenerator extends Generator {
         insertLine();
     }
 
-    private void updateBuilder() {
+    final protected void updateBuilder() {
         setNestingLevel( 0 );
         jDoc.setNestingLevel( 0 );
         builder = new StringBuilder();
