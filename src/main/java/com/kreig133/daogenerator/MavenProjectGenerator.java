@@ -1,6 +1,7 @@
 package com.kreig133.daogenerator;
 
 import com.kreig133.daogenerator.common.Utils;
+import com.kreig133.daogenerator.files.PackageAndFileUtils;
 import com.kreig133.daogenerator.files.mybatis.mapping.MappingGenerator;
 import com.kreig133.daogenerator.files.mybatis.test.TesterClassGenerator;
 import com.kreig133.daogenerator.jaxb.NamingUtils;
@@ -20,12 +21,25 @@ public class MavenProjectGenerator {
         copyPomFileToMavenProject();
         copyAppContextConfigToMavenProject();
         copyAbstractTest();
-        copyBaseModels();
+        copyBaseClass();
         generateSpringConfig();
     }
 
-    private static void copyBaseModels() throws IOException {
-        //TODO не понятно будет ли базовая модель в ИАСКе
+    private static void copyBaseClass() throws IOException {
+        copyFile(
+                "AbstractDao.txt",
+                Settings.settings().getPathForGeneratedSource() +  "/"
+                        + PackageAndFileUtils.replacePointBySlash(
+                        "com.luxoft.sbrf.iask.persistence.common.dao.AbstractDao"
+                ) + ".java"
+        );
+        copyFile(
+                "AbstractDaoCommand.txt",
+                Settings.settings().getPathForGeneratedSource() +  "/"
+                        + PackageAndFileUtils.replacePointBySlash(
+                        "com.luxoft.sbrf.iask.persistence.common.dao.AbstractDaoCommand"
+                ) + ".java"
+        );
     }
 
     private static void copyFile( String resourceName, String destFilePath ) throws IOException {
