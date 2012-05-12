@@ -35,4 +35,17 @@ public class ValueModeQueryPreparatorTest extends ValueModeQueryPreparator {
         Assert.assertEquals( columnsFromQuery.size(), 1 );
     }
 
+    @Test
+    public void test(){
+        String s = super.prepareQuery( QUERY );
+        Assert.assertEquals( s, "SELECT\n" +
+                "\ttDocPack.nDocID\n" +
+                "FROM \n" +
+                "\ttDocPack ( NOLOCK )\n" +
+                "WHERE \n" +
+                "\ttDocPack.nDocTypeID = 59 and\n" +
+                "\tisnull ( tDocPack.ndeleted , 0 ) = 0 and\n" +
+                "\ttDocPack.nPackID = ${nPackID;int;250287} " );
+    }
+
 }
