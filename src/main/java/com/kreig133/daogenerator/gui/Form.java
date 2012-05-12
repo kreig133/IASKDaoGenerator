@@ -13,6 +13,7 @@ import com.kreig133.daogenerator.db.preparators.DoubleQueryPreparator;
 import com.kreig133.daogenerator.db.preparators.QueryPreparator;
 import com.kreig133.daogenerator.files.builder.FileBuilder;
 import com.kreig133.daogenerator.jaxb.*;
+import com.kreig133.daogenerator.jaxb.validators.DaoMethodValidator;
 import com.kreig133.daogenerator.settings.Settings;
 import org.apache.commons.lang.StringUtils;
 import org.jetbrains.annotations.NotNull;
@@ -28,6 +29,7 @@ import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.io.*;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.regex.Pattern;
 
@@ -191,6 +193,15 @@ public class Form  implements SourcePathChangeListener{
                 final DaoMethod currentDaoMethod = getCurrentDaoMethod();
 
                 if ( ! validateBeforeGenerateXML( currentDaoMethod ) ) return;
+
+                if ( ! DaoMethodValidator.checkDaoMethods( Arrays.asList( currentDaoMethod ) ) ) {
+                    if( JOptionPane.YES_OPTION != JOptionPane.showConfirmDialog(
+                            mainPanel, "<html>Имеются ошибки! (Детали во вкладке Log)<br>Продолжить?",
+                            WARNING_DIALOG_TITLE, JOptionPane.YES_NO_OPTION, JOptionPane.ERROR_MESSAGE )
+                    ){
+                        return;
+                    }
+                }
 
                 JFileChooser newFileChooser = getNewFileChooser();
                 if ( newFileChooser.showSaveDialog( mainPanel ) == JFileChooser.APPROVE_OPTION ) {

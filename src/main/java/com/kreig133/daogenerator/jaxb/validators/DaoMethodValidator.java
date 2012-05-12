@@ -32,7 +32,7 @@ public class DaoMethodValidator {
             if( StringUtils.isBlank( parameterType.getRenameTo() ) ) {
                 containsEmptyRenameTo = true;
                 System.out.println( String.format( "ERROR! В методе %s в RenameTo есть пустые значения!",
-                        daoMethod.getCommon().getMethodName() )
+                        getMethodName( daoMethod ) )
                 );
             }
         }
@@ -43,6 +43,11 @@ public class DaoMethodValidator {
         return ! ( containsSameRenameToValues ||  containsEmptyRenameTo );
     }
 
+    private static String getMethodName( DaoMethod daoMethod ) {
+        return StringUtils.isBlank( daoMethod.getCommon().getMethodName() ) ?
+                "<Без названия>" : daoMethod.getCommon().getMethodName();
+    }
+
     static boolean checkJavaClassNames( DaoMethod daoMethod ) {
         boolean isOk = true;
         String errorMessage = "ERROR! Для метода %s не указано javaClassName для %s модели!";
@@ -50,7 +55,7 @@ public class DaoMethodValidator {
             if( StringUtils.isBlank(daoMethod.getInputParametrs().getJavaClassName() ) ){
                 System.out.println(String.format(
                         errorMessage,
-                        daoMethod.getCommon().getMethodName(),
+                        getMethodName( daoMethod ),
                         "входной"
                 )
                 );
@@ -61,7 +66,7 @@ public class DaoMethodValidator {
             if( StringUtils.isBlank(daoMethod.getOutputParametrs().getJavaClassName() ) ){
                 System.out.println(String.format(
                         errorMessage,
-                        daoMethod.getCommon().getMethodName(),
+                        getMethodName( daoMethod ),
                         "выходной"
                 )
                 );
