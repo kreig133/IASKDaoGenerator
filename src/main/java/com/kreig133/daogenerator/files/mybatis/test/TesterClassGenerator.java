@@ -20,6 +20,7 @@ import java.io.File;
 public class TesterClassGenerator extends JavaClassGenerator{
 
     private final static TesterClassGenerator INSTANCE = new TesterClassGenerator();
+    public static final String PARENT = "com.aplana.sbrf.deposit.AbstractDaoExecuteTest";
 
     private TesterClassGenerator() {
     }
@@ -47,13 +48,13 @@ public class TesterClassGenerator extends JavaClassGenerator{
     public void generateHead() {
         setPackage( Settings.settings().getMapperPackage() );
         insertLine();
-        addImport( "com.aplana.sbrf.deposit.AbstractDepoDaoExecuteTest" );
+        addImport( PARENT );
         addImport( "org.junit.Test" );
         addImport( "org.springframework.beans.factory.annotation.Autowired" );
         addImport( Settings.settings().getDaoPackage() + "." + InterfaceGenerator.instance().getFileName() );
         addImport( "java.util.HashMap" );
         addImport( "java.util.Map" );
-        insertClassDeclaration( ClassType.CLASS, getFileName(), "AbstractDepoDaoExecuteTest", null );
+        insertClassDeclaration( ClassType.CLASS, getFileName(), PackageAndFileUtils.getShortName( PARENT ), null );
         insertTabs().append( "@Autowired" );
         insertLine();
         insertTabs().append( InterfaceGenerator.instance().getFileName() ).append( " " )

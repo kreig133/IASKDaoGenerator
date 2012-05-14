@@ -75,9 +75,9 @@ public class MavenProjectGenerator {
 
     protected static void copyAbstractTest() throws IOException {
         copyFile(
-                "AbstractDepoDaoExecuteTest.txt",
-                Settings.settings().getPathForGeneratedTests()
-                        + "/com/aplana/sbrf/deposit/AbstractDepoDaoExecuteTest.java"
+                "AbstractDaoExecuteTest.txt",
+                Settings.settings().getPathForGeneratedTests() + "/"
+                        + PackageAndFileUtils.replacePointBySlash( TesterClassGenerator.PARENT ) + ".java"
         );
     }
 

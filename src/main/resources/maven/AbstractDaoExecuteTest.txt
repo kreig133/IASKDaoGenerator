@@ -21,8 +21,8 @@ import java.util.Map;
 @Transactional
 @RunWith(SpringJUnit4ClassRunner.class)
 @TransactionConfiguration(transactionManager="txManager", defaultRollback=true)
-@ContextConfiguration(locations = {"classpath:gwt-rpc-servlet.xml"})
-public abstract class AbstractDepoDaoExecuteTest {
+@ContextConfiguration(locations = {"classpath:testApplicationContext.xml"})
+public abstract class AbstractDaoExecuteTest {
 
     private SimpleDateFormat format = new SimpleDateFormat( "M-d-yyyy H:m:s.SSS" );
 
