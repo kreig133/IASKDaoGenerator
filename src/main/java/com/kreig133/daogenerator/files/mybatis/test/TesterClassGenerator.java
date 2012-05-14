@@ -5,7 +5,6 @@ import com.kreig133.daogenerator.enums.Scope;
 import com.kreig133.daogenerator.files.JavaClassGenerator;
 import com.kreig133.daogenerator.files.PackageAndFileUtils;
 import com.kreig133.daogenerator.files.mybatis.intrface.InterfaceGenerator;
-import com.kreig133.daogenerator.files.mybatis.mapping.MappingGenerator;
 import com.kreig133.daogenerator.jaxb.DaoMethod;
 import com.kreig133.daogenerator.jaxb.ParameterType;
 import com.kreig133.daogenerator.settings.Settings;
@@ -28,8 +27,6 @@ public class TesterClassGenerator extends JavaClassGenerator{
     public static TesterClassGenerator instance(){
         return INSTANCE;
     }
-
-    public static final String TEST_CONFIG = "gwt-rpc-servlet.xml";
 
     @NotNull
     @Override
@@ -99,6 +96,6 @@ public class TesterClassGenerator extends JavaClassGenerator{
     @NotNull
     @Override
     public String getFileName() {
-        return MappingGenerator.instance().getFileName() + "Test";
+        return Settings.settings().getOperationName() + "DaoTest";
     }
 }
