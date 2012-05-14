@@ -440,9 +440,13 @@ public class Form  implements SourcePathChangeListener{
 
     private boolean validateBeforeStartGenerateJavaClasses() {
         if(
-                ( ! isPackageName( mappingPackageTextField  .getText() ) )
+                ( ! isPackageName( mappingPackageTextField  .getText() ) ) &&
+                ( ! isPackageName( entityPackageTextField   .getText() ) ) &&
+                ( ! isPackageName( daoPackageTextField      .getText() ))
         ){
-            JOptionPane.showMessageDialog( mainPanel, "Одно или несколько имен пакетов не прошло валидацию." );
+            JOptionPane.showMessageDialog( mainPanel, "<html>Одно или несколько имен пакетов не прошло валидацию." +
+                    "<br>(Обязательно должно начинаться с ru.sbrf.iask.[см. \"Стандарт разработки\"])"
+            );
             return false;
         }
         //TODO надо бы проверить пути
@@ -450,7 +454,8 @@ public class Form  implements SourcePathChangeListener{
     }
 
     private boolean isPackageName( String packageName ){
-        return Pattern.compile( "[\\w\\d]+(\\.[\\w\\d]+)+" ).matcher( packageName ).matches();
+        return Pattern.compile( "[\\w\\d]+(\\.[\\w\\d]+)+" ).matcher( packageName ).matches()
+                && packageName.startsWith( "ru.sbrf.iask." );
     }
 
     private void setOutputPath() {
