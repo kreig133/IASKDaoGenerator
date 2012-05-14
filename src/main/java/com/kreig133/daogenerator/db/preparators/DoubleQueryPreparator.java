@@ -16,11 +16,9 @@ import java.util.regex.Pattern;
  */
 public class DoubleQueryPreparator extends QueryPreparator {
 
-
     public String prepareQuery( String first, String second ){
         String queryWithNames;
         String queryWithTestValues;
-        final StringBuilder result = new StringBuilder();
 
         if( determineWorkingMode( first ) == WorkingMode.NAME ){
             queryWithNames = first;
@@ -32,13 +30,17 @@ public class DoubleQueryPreparator extends QueryPreparator {
             throw new AssertionError();
         }
 
+        String rawQuery = queryWithNames;
+
+        queryWithNames      = prepareQueryBeforeParse( queryWithNames );
+        queryWithTestValues = prepareQueryBeforeParse( queryWithTestValues );
+
         List<String> paramNames = new ArrayList<String>();
         List<String> queryPiece = new ArrayList<String>();
 
         parseQueryWithName( queryPiece, paramNames, queryWithNames );
 
         for ( int i = 0; i < paramNames.size(); i++ ) {
-            result.append( queryPiece.get( i ) );
             String after = StringUtils.substringAfter( queryWithTestValues, queryPiece.get( i ) );
             ParameterType pType = new ParameterType();
             {
@@ -58,13 +60,10 @@ public class DoubleQueryPreparator extends QueryPreparator {
                 determineSqlTypeByTestValue( pType );
             }
 
-            result.append( String.format( "${%s;%s;%s}", pType.getName(), pType.getSqlType(), pType.getTestValue() ) );
+            rawQuery = rawQuery.replaceAll( ":" + pType.getName(),
+                    String.format( "\\${%s;%s;%s}", pType.getName(), pType.getSqlType(), pType.getTestValue() ) );
         }
-        if( queryPiece.size() > paramNames.size() ) {
-            result.append( queryPiece.get( paramNames.size() ) );
-        }
-
-        return result.toString();
+        return rawQuery;
     }
 
     protected void determineSqlTypeByTestValue( @NotNull ParameterType pType ) {
@@ -140,6 +139,12 @@ public class DoubleQueryPreparator extends QueryPreparator {
         }
     }
 
+    protected String prepareQueryBeforeParse( String query ){
+        return query.replaceAll( "(\\w)\\s+(\\w)", "$1 $2" )
+                    .replaceAll( "(\\B)\\s++", "$1" )
+                    .replaceAll( "\\s++(\\B)", "$1" );
+    }
+
     private char getCloseChar( @NotNull Character quote ) {
         switch ( quote ){
             case '\'':
@@ -153,6 +158,7 @@ public class DoubleQueryPreparator extends QueryPreparator {
         }
     }
 
+    //<editor-fold desc="Singleton">
     private final static DoubleQueryPreparator INSTANCE = new DoubleQueryPreparator();
 
     private DoubleQueryPreparator() {
@@ -161,4 +167,5 @@ public class DoubleQueryPreparator extends QueryPreparator {
     public static DoubleQueryPreparator instance(){
         return INSTANCE;
     }
+    //</editor-fold>
 }
