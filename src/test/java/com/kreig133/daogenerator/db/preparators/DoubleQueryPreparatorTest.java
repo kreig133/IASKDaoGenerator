@@ -74,6 +74,7 @@ public class DoubleQueryPreparatorTest{
         String s = DoubleQueryPreparator.instance().prepareQuery( inputWithName, inputWithTestVlue );
         Assert.assertEquals( s, "select count(n_ad_id) from dbo.t_ad_rasp where not n_ad_id is null and n_adr_raspor = ${irasp_id;int;376682} and iisdeleted = 0" );
     }
+
     @Test
     public void testParse(){
         String s = DoubleQueryPreparator.instance().prepareQuery( query, fiiledQuery );
@@ -99,6 +100,22 @@ public class DoubleQueryPreparatorTest{
         testDetermineSqlTypeByTestValue( "99239818328939.000", "numeric" );
         testDetermineSqlTypeByTestValue( "''", "varchar" );
         testDetermineSqlTypeByTestValue( "''", "varchar" );
+    }
+
+    @Test
+    public void testPrepareQueryWithNonEqualQueries(){
+        String s = DoubleQueryPreparator.instance().prepareQuery(
+                "SELECT * FROM      table \t\t\nWHERE id   \t\n   \r   =:id AND date=\t\n\r\t\n\r                  :date",
+                "       SELECT \t\r\n* FROM table WHERE id=1 AND date='1.1.1 1'" );
+        Assert.assertTrue( s.contains( "${id;int;1}" ) );
+        Assert.assertTrue( s.contains( "${date;varchar;'1.1.1 1'}" ) );
+    }
+
+    @Test
+    public void prepareQueryBeforeParseTest(){
+        Assert.assertEquals( DoubleQueryPreparator.instance().prepareQueryBeforeParse( ") \n, " ), ")," );
+        Assert.assertEquals( DoubleQueryPreparator.instance().prepareQueryBeforeParse( "p    \t\n\r = \n123 " ),
+                "p=123" );
     }
 
     private void testDetermineSqlTypeByTestValue( String testValue, String sqlType ) {
