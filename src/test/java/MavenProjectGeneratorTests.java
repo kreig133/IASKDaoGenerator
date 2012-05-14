@@ -20,14 +20,6 @@ public class MavenProjectGeneratorTests extends MavenProjectGenerator{
         Assert.assertTrue( s.startsWith( "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" ) );
         Assert.assertTrue( s.endsWith( "</com:daoMethod>" ) );
     }
-    
-    @Test
-    public void fillContextTemplateByDataTest() {
-        Settings.settings().setMapperPackage( "com.kreig133" );
-        Settings.settings().setSourcePath( "C:/Operation" );
-        String s = MavenProjectGenerator.fillContextTemplateByData(
-                "    <bean id=\"${beanName}\" class=\"${beanClass}\">" );
-        Assert.assertEquals( "    <bean id=\"operationDao\" class=\"com.kreig133.OperationDao\">", s );
-    }
+
 
 }

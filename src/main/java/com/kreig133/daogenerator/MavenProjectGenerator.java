@@ -1,10 +1,7 @@
 package com.kreig133.daogenerator;
 
-import com.kreig133.daogenerator.common.Utils;
 import com.kreig133.daogenerator.files.PackageAndFileUtils;
-import com.kreig133.daogenerator.files.mybatis.mapping.MappingGenerator;
 import com.kreig133.daogenerator.files.mybatis.test.TesterClassGenerator;
-import com.kreig133.daogenerator.jaxb.NamingUtils;
 import com.kreig133.daogenerator.settings.Settings;
 import org.jetbrains.annotations.NotNull;
 
@@ -19,13 +16,11 @@ public class MavenProjectGenerator {
     public static void generate() throws IOException {
         copyPropertiesFileToMavenProject();
         copyPomFileToMavenProject();
-        copyAppContextConfigToMavenProject();
         copyAbstractTest();
-        copyBaseClass();
-        generateSpringConfig();
+        copyBaseClassesAndConfigs();
     }
 
-    private static void copyBaseClass() throws IOException {
+    private static void copyBaseClassesAndConfigs() throws IOException {
         copyFile(
                 "AbstractDao.txt",
                 Settings.settings().getPathForGeneratedSource() +  "/"
@@ -40,6 +35,14 @@ public class MavenProjectGenerator {
                         "com.luxoft.sbrf.iask.persistence.common.dao.AbstractDaoCommand"
                 ) + ".java"
         );
+        copyFile(
+                "AbstractDao.map.xml",
+                Settings.settings().getPathForTestResources() + "/AbstractDao.map.xml"
+        );
+        copyFile(
+                "testApplicationContext.xml",
+                Settings.settings().getPathForTestResources() + "/testApplicationContext.xml"
+        );
     }
 
     private static void copyFile( String resourceName, String destFilePath ) throws IOException {
@@ -49,42 +52,11 @@ public class MavenProjectGenerator {
         );
     }
 
-    protected static void generateSpringConfig() throws IOException {
-        InputStream stream = new ByteArrayInputStream( fillContextTemplateByData( Utils.streamToString(
-                MavenProjectGenerator.class.getClassLoader().getResourceAsStream( "mapperBeanContextTemplate.xml" )
-        ) ).getBytes() );
-
-        copyFile(
-                stream,
-                new File(
-                        Settings.settings().getPathForTestResources() + "/" +
-                        getConfigName()
-                )
-        );
-    }
-
-    protected static String fillContextTemplateByData( @NotNull String string ) {
-        return string
-                .replaceFirst( "\\$\\{beanClass\\}",
-                        Settings.settings().getMapperPackage() + "." +
-                                MappingGenerator.instance().getFileName() )
-                .replaceFirst( "\\$\\{beanName\\}",
-                        NamingUtils.convertNameForNonClassNaming(
-                                MappingGenerator.instance().getFileName() ) );
-    }
-
     protected static void copyAbstractTest() throws IOException {
         copyFile(
                 "AbstractDaoExecuteTest.txt",
                 Settings.settings().getPathForGeneratedTests() + "/"
                         + PackageAndFileUtils.replacePointBySlash( TesterClassGenerator.PARENT ) + ".java"
-        );
-    }
-
-    protected static void copyAppContextConfigToMavenProject() throws IOException {
-        copyFile(
-                "testApplicationContext.xml",
-                Settings.settings().getPathForTestResources() + "/testApplicationContext.xml"
         );
     }
 
@@ -127,11 +99,6 @@ public class MavenProjectGenerator {
         }
     }
     
-    @NotNull
-    public static String getConfigName(){
-        return TesterClassGenerator.TEST_CONFIG;
-    }
-
     public static int installProject() {
         final String[] cmdarray = { "cmd", "/C",
                 System.getProperty( "user.dir" )+"\\"+
