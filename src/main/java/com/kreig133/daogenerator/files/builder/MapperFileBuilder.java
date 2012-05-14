@@ -3,7 +3,7 @@ package com.kreig133.daogenerator.files.builder;
 import com.kreig133.daogenerator.files.JavaClassGenerator;
 import com.kreig133.daogenerator.files.mybatis.implementation.ImplementationGenerator;
 import com.kreig133.daogenerator.files.mybatis.intrface.InterfaceGenerator;
-import com.kreig133.daogenerator.files.mybatis.mapping.MappingGenerator;
+import com.kreig133.daogenerator.files.mybatis.mapping.IaskMappingGenerator;
 import com.kreig133.daogenerator.files.mybatis.test.TesterClassGenerator;
 import com.kreig133.daogenerator.jaxb.DaoMethod;
 import org.jetbrains.annotations.NotNull;
@@ -32,7 +32,7 @@ public class MapperFileBuilder extends FileBuilder {
 
     @Override
     protected void prepareBuilder( List<DaoMethod> daoMethod ) {
-        generators.add( MappingGenerator        .instance() );
+        generators.add( IaskMappingGenerator    .instance() );
         generators.add( InterfaceGenerator      .instance() );
         generators.add( ImplementationGenerator .instance() );
         generators.add( TesterClassGenerator    .instance() );

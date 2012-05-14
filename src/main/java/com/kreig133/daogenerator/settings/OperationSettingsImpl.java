@@ -50,6 +50,12 @@ final public class OperationSettingsImpl implements OperationSettings{
         return OUTPUT_PATH_FOR_JAVA_CLASSES + "\\src\\test\\resources";
     }
 
+    @NotNull
+    @Override
+    public String getPathForJavaResources() {
+        return OUTPUT_PATH_FOR_JAVA_CLASSES + "\\src\\main\\resources";
+    }
+
     @Override
     public String getOperationName() {
         return new File( SOURCE_PATH ).getName();

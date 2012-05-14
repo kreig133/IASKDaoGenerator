@@ -1,6 +1,7 @@
 package com.kreig133.daogenerator.files.mybatis.mapping;
 
 import com.kreig133.daogenerator.common.Utils;
+import com.kreig133.daogenerator.files.PackageAndFileUtils;
 import com.kreig133.daogenerator.files.mybatis.DaoJavaClassGenerator;
 import com.kreig133.daogenerator.files.mybatis.InOutClassGenerator;
 import com.kreig133.daogenerator.jaxb.*;
@@ -9,13 +10,33 @@ import com.kreig133.daogenerator.settings.Settings;
 import com.kreig133.daogenerator.sql.creators.QueryCreatorFactory;
 import org.jetbrains.annotations.NotNull;
 
+import java.io.File;
 import java.util.List;
 
 /**
  * @author kreig133
  * @version 1.0
  */
-public class IaskMappingGenerator extends MappingGenerator{
+public class IaskMappingGenerator extends DaoJavaClassGenerator{
+
+    public static IaskMappingGenerator instance (){
+        return new IaskMappingGenerator();
+    }
+
+    @NotNull
+    @Override
+    public File getFile() {
+
+        File file = new File(
+                Settings.settings().getPathForJavaResources() + "/" +
+                        PackageAndFileUtils.replacePointBySlash( Settings.settings().getMapperPackage() ) + "/"
+                        + getFileName()
+        );
+
+        PackageAndFileUtils.createDirsAndFile( file.getParentFile() );
+
+        return file;
+    }
 
     @Override
     public void generateBody( DaoMethod daoMethod ) {
@@ -45,7 +66,7 @@ public class IaskMappingGenerator extends MappingGenerator{
 
     @Override
     public String getFileName() {
-        return Settings.settings().getOperationName();
+        return Settings.settings().getOperationName() + ".map.xml";
     }
 
     @NotNull
@@ -63,12 +84,6 @@ public class IaskMappingGenerator extends MappingGenerator{
     public void generateFoot() {
         decreaseNestingLevel();
         builder.append( "</mapper>" );
-    }
-
-    @NotNull
-    @Override
-    protected String getFileNameEnding() {
-        return ".map.xml";
     }
 
     @Override
