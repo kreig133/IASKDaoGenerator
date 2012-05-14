@@ -127,7 +127,7 @@ public class IaskMappingGenerator extends MappingGenerator{
                     ( needOwnClass ? "resultMap" : "resultType" ),
                     ( needOwnClass ? daoMethod.getCommon().getMethodName() + "Result" :
                         ( daoMethod.getOutputParametrs().getParameter().get( 0 ).getType() == JavaType.DATE ?
-                            "java.util.Date" : "java.util."+daoMethod.getOutputParametrs()
+                            "java.util.Date" : "java.lang."+daoMethod.getOutputParametrs()
                                 .getParameter().get( 0 ).getType().value()
                         )
                     )
