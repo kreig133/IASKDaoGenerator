@@ -38,25 +38,26 @@ public class QueryPreparator {
     @Language( "RegExp" )
     protected static final String TEST_VALUES = "(([-\\d\\.]+)|(null)|('.+?'))";
     @NotNull
-    @Language("RegExp")
+    @Language( "RegExp" )
     protected String regex = "(?u)[^\\.`]([\"\\[]?\\b\\w+[\"\\]]?\\.){0,2}%s\\s*=\\s*" + TEST_VALUES;
     @NotNull
     @Language( "RegExp" )
-    protected String castRegExp = "(?isu)(%s\\s*=.*?)\\bcast\\s*\\(\\s*"+ TEST_VALUES +"\\s*as\\s*("+ SQL_TYPE + ")\\s*\\)";
+    protected String castRegExp =
+            "(?isu)(%s\\s*=.*?)\\bcast\\s*\\(\\s*" + TEST_VALUES + "\\s*as\\s*(" + SQL_TYPE + ")\\s*\\)";
     @NotNull
-    @Language("RegExp")
+    @Language( "RegExp" )
     protected String columnName = "\\b([@#\\w&&[\\D]][\\w\\$@#]*)\\b";
     @NotNull
-    @Language("RegExp")
+    @Language( "RegExp" )
     protected String quotedColumnName = "\"(.+?)\"";
     @NotNull
-    @Language("RegExp")
+    @Language( "RegExp" )
     protected String columnNameInBrackets = "\\[(.+?)\\]";
     @NotNull
     @Language( "RegExp" )
-    protected String testValuesInInsert = "(?i)"+ TEST_VALUES + "\\s*[,\\)]";
+    protected String testValuesInInsert = "(?i)" + TEST_VALUES + "\\s*[,\\)]";
     @NotNull
-    @Language("RegExp")
+    @Language( "RegExp" )
     protected String insertRE =
             "(?isu)insert\\b\\s*\\binto\\b\\s*.+?\\s*(\\(\\s*(.+?)\\s*\\))?\\s*\\bvalues\\b\\s*\\((.+?\\))";
     @NotNull
