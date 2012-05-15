@@ -118,6 +118,8 @@ public class DoubleQueryPreparatorTest{
                 "p=123" );
         Assert.assertEquals( DoubleQueryPreparator.instance().prepareQueryBeforeParse( "SELECT\nINTO" ),
                 "SELECT INTO" );
+        Assert.assertEquals( DoubleQueryPreparator.instance().prepareQueryBeforeParse( "FROM dbo.tabPersons p\nWHERE" ),
+                "FROM dbo.tabPersons p WHERE" );
     }
 
     private void testDetermineSqlTypeByTestValue( String testValue, String sqlType ) {
