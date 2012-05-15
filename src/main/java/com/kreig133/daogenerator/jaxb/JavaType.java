@@ -71,7 +71,7 @@ public enum JavaType {
     private static final Map< JavaType, List<String> > map = new HashMap<JavaType, List<String>>( 6 );
 
     static {
-        linkJavaTypeWithAliases( LONG   , "int", "byte", "long", "smallint", "tinyint", "bigint" );
+        linkJavaTypeWithAliases( LONG   , "int", "byte", "long", "smallint", "tinyint", "bigint", "integer" );
         linkJavaTypeWithAliases( BYTE   , "bit", "varbinary" /*TODO костыль*/ );
         linkJavaTypeWithAliases( DATE   , "datetime" );
         linkJavaTypeWithAliases( STRING , "string", "varchar", "char", "nvarchar", "text", "nchar" );
