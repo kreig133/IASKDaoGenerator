@@ -161,19 +161,16 @@ public abstract class AbstractDaoExecuteTest {
                     for ( int i = 0; i < names.size(); i++ ) {
                         values.add( getValueByType( parameterTypes[ i ], map.get( names.get( i ) ) ) );
                     }
-
                     invoke = method.invoke( dao, values.toArray() );
             }
 
-            if( invoke == null && method.getReturnType().getName().equals("void") ){
-                invoke = "Method don't have to return any value";
-            }
-
-            assert invoke != null;
-
-            if ( invoke instanceof List ) {
+            if( invoke == null  ){
+                if( method.getReturnType().getName().equals("void") ) {
+                    invoke = "Method don't have to return any value";
+                }
+            } else if ( invoke instanceof List ) {
                 @SuppressWarnings ("unchecked")
-            	List<Object> list = (List<Object>) invoke;
+                List<Object> list = (List<Object>) invoke;
                 for ( Object object : list) {
                     System.out.println( object );
                 }
