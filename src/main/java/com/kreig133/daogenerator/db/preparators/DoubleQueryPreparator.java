@@ -140,9 +140,9 @@ public class DoubleQueryPreparator extends QueryPreparator {
     }
 
     protected String prepareQueryBeforeParse( String query ){
-        return query.replaceAll( "(\\w)\\s+(\\w)", "$1 $2" )
-                    .replaceAll( "(\\B)\\s++", "$1" )
-                    .replaceAll( "\\s++(\\B)", "$1" );
+        return query.replaceAll( "(\\b)\\s+(\\b)", "$1 $2" )
+                    .replaceAll( "(\\B)\\s+", "$1" )
+                    .replaceAll( "\\s+(\\B)", "$1" );
     }
 
     private char getCloseChar( @NotNull Character quote ) {
