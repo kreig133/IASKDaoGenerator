@@ -100,7 +100,7 @@ public class DoubleQueryPreparator extends QueryPreparator {
 
         for ( char aChar : chars ) {
             if ( paramNameMode ) {
-                if ( StringUtils.isWhitespace( new String( new char[] { aChar } ) ) ) {
+                if ( new String( new char[]{ aChar } ).matches( "[\\W&&[^@$#]]" ) ) {
                     paramNameMode = false;
                     paramNames.add( paramNameBuilder.toString() );
                     paramNameBuilder = new StringBuilder();

@@ -116,6 +116,8 @@ public class DoubleQueryPreparatorTest{
         Assert.assertEquals( DoubleQueryPreparator.instance().prepareQueryBeforeParse( ") \n, " ), ")," );
         Assert.assertEquals( DoubleQueryPreparator.instance().prepareQueryBeforeParse( "p    \t\n\r = \n123 " ),
                 "p=123" );
+        Assert.assertEquals( DoubleQueryPreparator.instance().prepareQueryBeforeParse( "SELECT\nINTO" ),
+                "SELECT INTO" );
     }
 
     private void testDetermineSqlTypeByTestValue( String testValue, String sqlType ) {
