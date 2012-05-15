@@ -13,10 +13,10 @@ import java.util.List;
  * @version 1.0
  */
 public class DaoMethodValidator {
-    public static boolean checkDaoMethods( List<DaoMethod> daoMethods ) {
+    public static boolean checkDaoMethods( List<DaoMethod> daoMethods, boolean isAnalyticMode ) {
         boolean allIsOk = true;
         for ( DaoMethod daoMethod : daoMethods ) {
-            allIsOk = checkJavaClassNames( daoMethod ) && allIsOk;
+            allIsOk = checkJavaClassNames( daoMethod, isAnalyticMode ) && allIsOk;
             allIsOk = checkRenameTos     ( daoMethod ) && allIsOk;
         }
         return  allIsOk;
@@ -48,7 +48,7 @@ public class DaoMethodValidator {
                 "<Без названия>" : daoMethod.getCommon().getMethodName();
     }
 
-    static boolean checkJavaClassNames( DaoMethod daoMethod ) {
+    static boolean checkJavaClassNames( DaoMethod daoMethod, boolean analyticMode ) {
         boolean isOk = true;
         String errorMessage = "ERROR! Для метода %s не указано javaClassName для %s модели!";
         if( DaoJavaClassGenerator.checkToNeedOwnInClass( daoMethod ) ){
@@ -73,6 +73,6 @@ public class DaoMethodValidator {
                 isOk = false;
             }
         }
-        return isOk;
+        return isOk || analyticMode;
     }
 }

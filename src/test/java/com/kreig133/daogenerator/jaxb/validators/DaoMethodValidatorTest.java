@@ -16,11 +16,11 @@ public class DaoMethodValidatorTest {
         DaoMethod daoMethodForTest = TestHelper.getDaoMethodForTest();
         daoMethodForTest.getOutputParametrs().setJavaClassName( "" );
 
-        Assert.assertFalse( DaoMethodValidator.checkJavaClassNames( daoMethodForTest ) );
+        Assert.assertFalse( DaoMethodValidator.checkJavaClassNames( daoMethodForTest, false ) );
 
         daoMethodForTest.getOutputParametrs().setJavaClassName( "123" );
 
-        Assert.assertTrue( DaoMethodValidator.checkJavaClassNames( daoMethodForTest ) );
+        Assert.assertTrue( DaoMethodValidator.checkJavaClassNames( daoMethodForTest, false ) );
     }
 
     @Test
