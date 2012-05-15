@@ -165,13 +165,11 @@ public abstract class AbstractDepoDaoExecuteTest {
                     invoke = method.invoke( dao, values.toArray() );
             }
 
-            if( invoke == null && method.getReturnType().getName().equals("void") ){
-                invoke = "Method don't have to return any value";
-            }
-
-            assert invoke != null;
-
-            if ( invoke instanceof List ) {
+            if( invoke == null  ){
+                if( method.getReturnType().getName().equals("void") ) {
+                    invoke = "Method don't have to return any value";
+                }
+            } else if ( invoke instanceof List ) {
                 @SuppressWarnings ("unchecked")
             	List<Object> list = (List<Object>) invoke;
                 for ( Object object : list) {
