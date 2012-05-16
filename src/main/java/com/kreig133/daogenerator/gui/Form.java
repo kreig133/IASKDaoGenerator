@@ -348,11 +348,6 @@ public class Form  implements SourcePathChangeListener{
                         JOptionPane.showMessageDialog( mainPanel, errorMessage, WARNING_DIALOG_TITLE,
                                 JOptionPane.ERROR_MESSAGE );
                     }
-                    try {
-                        directory.createNewFile();
-                    } catch ( IOException ex ) {
-                        ex.printStackTrace();
-                    }
                 }
             }
         } );
