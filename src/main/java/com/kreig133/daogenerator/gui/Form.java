@@ -365,10 +365,10 @@ public class Form  implements SourcePathChangeListener{
             public void actionPerformed( ActionEvent e ) {
                 if (
                         JOptionPane.showConfirmDialog(
-                            mainPanel, ( "Очистить папку \"" + destDirTextField.getText() + "\"?"),
-                            ATTENTION, JOptionPane.OK_CANCEL_OPTION,  JOptionPane.QUESTION_MESSAGE  )
-                        == JOptionPane.OK_OPTION
-                ) {
+                                mainPanel, ( "Очистить папку \"" + destDirTextField.getText() + "\"?" ),
+                                ATTENTION, JOptionPane.OK_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE )
+                                == JOptionPane.OK_OPTION
+                        ) {
                     File directory = new File( destDirTextField.getText() );
 
                     boolean errorExist = false;
@@ -383,13 +383,19 @@ public class Form  implements SourcePathChangeListener{
                         errorMessage = errorMessage + "Полтергейст! То, что указано в поле, не является папкой!";
                     }
                     if ( ! errorExist ) {
-                        if( ! PackageAndFileUtils.removeDirectory( directory ) ){
+                        if ( ! PackageAndFileUtils.removeDirectory( directory ) ) {
                             errorExist = true;
                             errorMessage = "При очистке папки возникли ошибки.";
                         }
                     }
-                    if( errorExist ){
-                        JOptionPane.showMessageDialog( mainPanel, errorMessage, WARNING_DIALOG_TITLE, JOptionPane.ERROR_MESSAGE );
+                    if ( errorExist ) {
+                        JOptionPane.showMessageDialog( mainPanel, errorMessage, WARNING_DIALOG_TITLE,
+                                JOptionPane.ERROR_MESSAGE );
+                    }
+                    try {
+                        directory.createNewFile();
+                    } catch ( IOException ex ) {
+                        ex.printStackTrace();
                     }
                 }
             }
