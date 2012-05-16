@@ -11,6 +11,7 @@ import com.kreig133.daogenerator.db.extractors.in.SpInputParameterExtractor;
 import com.kreig133.daogenerator.db.extractors.out.OutputParameterExtractor;
 import com.kreig133.daogenerator.db.preparators.DoubleQueryPreparator;
 import com.kreig133.daogenerator.db.preparators.QueryPreparator;
+import com.kreig133.daogenerator.files.PackageAndFileUtils;
 import com.kreig133.daogenerator.files.builder.FileBuilder;
 import com.kreig133.daogenerator.jaxb.*;
 import com.kreig133.daogenerator.jaxb.validators.DaoMethodValidator;
@@ -42,6 +43,7 @@ import static com.kreig133.daogenerator.gui.GuiUtils.getNewFileChooser;
 public class Form  implements SourcePathChangeListener{
     private static Form INSTANCE;
     private static final String WARNING_DIALOG_TITLE = "Голактего в опастносте!!11один";
+    private static final String ATTENTION = "Говорит DaoGenerator:";
 
     private JPanel mainPanel;
     private JTable inputParametrs;
@@ -78,6 +80,7 @@ public class Form  implements SourcePathChangeListener{
     private JScrollPane secondQueryPanel;
     private JComboBox outputParamsType;
     private JComboBox inputParamsType;
+    private JButton clearButton;
     private JFrame windowWithText;
 
     private boolean start = true;
@@ -166,7 +169,7 @@ public class Form  implements SourcePathChangeListener{
                 String spText = SpInputParameterExtractor.getParenSpText();
                 if ( spText == null ) {
                     JOptionPane.showMessageDialog( mainPanel, "Хранимка не является оберткой!",
-                            "Говорит DaoGenerator:", JOptionPane.INFORMATION_MESSAGE );
+                            ATTENTION, JOptionPane.INFORMATION_MESSAGE );
                     return;
                 }
                 TextView.setText( spText );
@@ -355,6 +358,40 @@ public class Form  implements SourcePathChangeListener{
             @Override
             public void focusLost( FocusEvent e ) {
                 updateSourcePath();
+            }
+        } );
+        clearButton.addActionListener( new ActionListener() {
+            @Override
+            public void actionPerformed( ActionEvent e ) {
+                if (
+                        JOptionPane.showConfirmDialog(
+                            mainPanel, ( "Очистить папку \"" + destDirTextField.getText() + "\"?"),
+                            ATTENTION, JOptionPane.OK_CANCEL_OPTION,  JOptionPane.QUESTION_MESSAGE  )
+                        == JOptionPane.OK_OPTION
+                ) {
+                    File directory = new File( destDirTextField.getText() );
+
+                    boolean errorExist = false;
+                    String errorMessage = "";
+
+                    if ( ! directory.exists() ) {
+                        errorExist = true;
+                        errorMessage = "Папка " + directory.getAbsolutePath() + " не существует!\n";
+                    }
+                    if ( ! directory.isDirectory() ) {
+                        errorExist = true;
+                        errorMessage = errorMessage + "Полтергейст! То, что указано в поле, не является папкой!";
+                    }
+                    if ( ! errorExist ) {
+                        if( ! PackageAndFileUtils.removeDirectory( directory ) ){
+                            errorExist = true;
+                            errorMessage = "При очистке папки возникли ошибки.";
+                        }
+                    }
+                    if( errorExist ){
+                        JOptionPane.showMessageDialog( mainPanel, errorMessage, WARNING_DIALOG_TITLE, JOptionPane.ERROR_MESSAGE );
+                    }
+                }
             }
         } );
     }
