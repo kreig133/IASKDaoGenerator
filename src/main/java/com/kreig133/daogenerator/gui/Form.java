@@ -478,8 +478,8 @@ public class Form  implements SourcePathChangeListener{
 
     private boolean validateBeforeStartGenerateJavaClasses() {
         if(
-                ( ! isPackageName( mappingPackageTextField  .getText() ) ) &&
-                ( ! isPackageName( entityPackageTextField   .getText() ) ) &&
+                ( ! isPackageName( mappingPackageTextField  .getText() ) ) ||
+                ( ! isPackageName( entityPackageTextField   .getText() ) ) ||
                 ( ! isPackageName( daoPackageTextField      .getText() ))
         ){
             JOptionPane.showMessageDialog( mainPanel, "<html>Одно или несколько имен пакетов не прошло валидацию." +
