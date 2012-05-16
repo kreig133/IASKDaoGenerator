@@ -19,7 +19,7 @@ import java.io.File;
 public class TesterClassGenerator extends JavaClassGenerator{
 
     private final static TesterClassGenerator INSTANCE = new TesterClassGenerator();
-    public static final String PARENT = "com.aplana.sbrf.deposit.AbstractDaoExecuteTest";
+    public static final String PARENT = "ru.sbrf.iask.dao.testing.AbstractDaoExecuteTest";
 
     private TesterClassGenerator() {
     }

@@ -14,7 +14,7 @@
 
 
     <context:annotation-config/>
-    <context:component-scan base-package="com.aplana.sbrf.deposit.dao"/>
+    <context:component-scan base-package="ru.sbrf.iask"/>
 
     <!-- Spring property values -->
     <bean id="propertyConfigurer"

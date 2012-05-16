@@ -1,4 +1,4 @@
-package com.aplana.sbrf.deposit;
+package ru.sbrf.iask.dao.testing;
 
 import org.apache.ibatis.annotations.Param;
 import org.junit.runner.RunWith;
