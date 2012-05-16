@@ -75,7 +75,7 @@ public class PackageAndFileUtils {
             }
         }
 
-        return true;
+        return directory.delete();
     }
 
 }
