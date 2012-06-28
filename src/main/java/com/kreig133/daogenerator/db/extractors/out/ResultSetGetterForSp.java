@@ -31,15 +31,8 @@ public class ResultSetGetterForSp implements ResultSetGetter{
         assert connection != null;
 
         final CallableStatement callableStatement = connection.prepareCall( query );
-
-        connection.createStatement().execute( "SET NOCOUNT ON;" );
-
-        ResultSet resultSet = callableStatement.execute() ? callableStatement.getResultSet() : null;
-
-        connection.createStatement().execute( "SET NOCOUNT OFF;" );
-
         fillJdbcTypeForInputParameters( callableStatement.getParameterMetaData(), daoMethod );
 
-        return resultSet;
+        return callableStatement.execute() ? callableStatement.getResultSet() : null;
     }
 }
