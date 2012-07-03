@@ -30,12 +30,11 @@ public class OutputParameterExtractor extends Extractor{
 
     @NotNull
     public DaoMethod getOutputParameters( @NotNull final DaoMethod daoMethod ){
-
+        ResultSet resultSet = null;
         try {
-            final ResultSet resultSet = ResultSetGetter.Factory.get( daoMethod.getSelectType() )
-                    .getResultSetAndFillJdbcTypeIfNeed( daoMethod );
-            if ( resultSet != null ) {
-
+            try {
+                resultSet = ResultSetGetter.Factory.get( daoMethod.getSelectType() )
+                        .getResultSetAndFillJdbcTypeIfNeed( daoMethod );
                 final ResultSetMetaData metaData = resultSet.getMetaData();
                 final List<ParameterType> parameterTypes = new LinkedList<ParameterType>();
 
@@ -51,11 +50,14 @@ public class OutputParameterExtractor extends Extractor{
 
                 daoMethod.setOutputParametrs( new ParametersType() );
                 daoMethod.getOutputParametrs().getParameter().addAll( parameterTypes );
+            } finally {
+                if ( resultSet != null ) {
+                    resultSet.close();
+                }
             }
         } catch ( SQLException e ) {
             e.printStackTrace();
         }
-
         return daoMethod;
     }
 }

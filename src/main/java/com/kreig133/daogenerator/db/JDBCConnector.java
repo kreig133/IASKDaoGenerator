@@ -45,6 +45,7 @@ public class JDBCConnector{
                     properties.getProperty( USERNAME ),
                     properties.getProperty( PASSWORD )
             );
+            connection.createStatement().execute( "SET NOCOUNT ON;" );
         } catch ( SQLException e ) {
             throw new RuntimeException( "Не удалось подключиться к базе", e );
         }
