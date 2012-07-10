@@ -172,6 +172,10 @@ public class ParametersType {
         return false;
     }
     
+    /**
+     * Поддерживает ли запрос пейджинг?
+     * @return
+     */
     public boolean isWithPaging() {
         return isWithPaging( getParameter() );
     }

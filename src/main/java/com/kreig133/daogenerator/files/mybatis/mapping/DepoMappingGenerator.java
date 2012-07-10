@@ -5,8 +5,6 @@ import com.google.common.collect.Iterators;
 import com.kreig133.daogenerator.common.Utils;
 import com.kreig133.daogenerator.enums.ClassType;
 import com.kreig133.daogenerator.enums.MethodType;
-import com.kreig133.daogenerator.files.JavaDocGenerator;
-import com.kreig133.daogenerator.files.mybatis.DaoJavaClassGenerator;
 import com.kreig133.daogenerator.jaxb.DaoMethod;
 import com.kreig133.daogenerator.jaxb.ParameterType;
 import com.kreig133.daogenerator.jaxb.SelectType;
@@ -65,6 +63,9 @@ public class DepoMappingGenerator extends MappingGenerator{
         );
     }
 
+    /** Формирует аннотации для дао-метода. Включается в себя маппинг столбцов, тип запроса, настройки кэширования
+     * @param daoMethod
+     */
     private void generateAnnotation(
             @NotNull DaoMethod daoMethod
     ){
@@ -90,6 +91,7 @@ public class DepoMappingGenerator extends MappingGenerator{
         insertLine();
         if( daoMethod.getSelectType() == SelectType.CALL ) {
             insertTabs().append( "@Options(statementType=StatementType.CALLABLE");
+            // TODO (Marat Fayzullin) условие также должно срабатывать, если есть INOUT параметры
             if( daoMethod.getInputParametrs().isWithPaging() ) {
                 builder.append( ", useCache=false" );
             }
@@ -100,6 +102,9 @@ public class DepoMappingGenerator extends MappingGenerator{
         generateNameMapping( daoMethod );
     }
 
+    /** Формирование маппинга столбцов
+     * @param daoMethod
+     */
     private void generateNameMapping( @NotNull DaoMethod daoMethod ) {
         if(
                   Utils.collectionNotEmpty( daoMethod.getOutputParametrs().getParameter() ) &&
@@ -131,8 +136,8 @@ public class DepoMappingGenerator extends MappingGenerator{
 
     /**
      * Обрамляет каждую новую строку в кавычки и конкатенацию строк
-     * @param string
-     * @return
+     * @param string исходная строка
+     * @return результат
      */
     public StringBuilder wrapWithQuotesAndWrite( @NotNull String string ) {
         String[] strings = string.split( "[\n\r][\n\r]?" );

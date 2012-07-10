@@ -187,6 +187,27 @@
                     <failOnError>true</failOnError>
                 </configuration>
             </plugin>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>exec-maven-plugin</artifactId>
+                <version>1.2.1</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>exec</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+	                <executable>java</executable>
+	                <workingDirectory>${basedir}/target</workingDirectory>
+	                <arguments>
+	                    <argument>-Dfile.encoding=UTF-8</argument>
+	                    <argument>-jar</argument>
+	                    <argument>${project.artifactId}-${project.version}.jar</argument>
+	                </arguments>
+                </configuration>
+            </plugin>
         </plugins>
     </build>
 

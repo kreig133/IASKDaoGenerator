@@ -35,7 +35,7 @@ abstract public class DaoJavaClassGenerator extends JavaClassGenerator {
     /**
      * Проверяет нужно ли создавать in-класс
      * @param daoMethod
-     * @return
+     * @return true - нужно, false - нет
      */
     public static boolean checkToNeedOwnInClass(
             @NotNull DaoMethod daoMethod
@@ -52,6 +52,11 @@ abstract public class DaoJavaClassGenerator extends JavaClassGenerator {
                 daoMethod.getOutputParametrs().getParent() != ParentType.DEFAULT;
     }
 
+    /**
+     * Формирует тело дао-метода без впередиидущих аннотаций
+     * @param daoMethod данные о методе
+     * @param methodType тип метода
+     */
     protected void generateMethodSignature(
             @NotNull final DaoMethod daoMethod,
             final MethodType methodType
@@ -104,7 +109,7 @@ abstract public class DaoJavaClassGenerator extends JavaClassGenerator {
             }
         }
 
-        generateMethodSignature( Scope.PUBLIC, outputClass.toString(), methodName, inputParams, null, true );
+        generateMethodSignature( Scope.DEFAULT, outputClass.toString(), methodName, inputParams, null, true );
     }
 
     protected void generateJavaDocForDaoMethod( DaoMethod daoMethod ) {

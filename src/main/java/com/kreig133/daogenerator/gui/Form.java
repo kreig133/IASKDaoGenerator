@@ -1,5 +1,7 @@
 package com.kreig133.daogenerator.gui;
 
+import static com.kreig133.daogenerator.gui.GuiUtils.getNewFileChooser;
+
 import com.kreig133.daogenerator.JaxbHandler;
 import com.kreig133.daogenerator.MavenProjectGenerator;
 import com.kreig133.daogenerator.WikiGenerator;
@@ -13,28 +15,57 @@ import com.kreig133.daogenerator.db.preparators.DoubleQueryPreparator;
 import com.kreig133.daogenerator.db.preparators.QueryPreparator;
 import com.kreig133.daogenerator.files.PackageAndFileUtils;
 import com.kreig133.daogenerator.files.builder.FileBuilder;
-import com.kreig133.daogenerator.jaxb.*;
+import com.kreig133.daogenerator.jaxb.CommonType;
+import com.kreig133.daogenerator.jaxb.ConfigurationType;
+import com.kreig133.daogenerator.jaxb.DaoMethod;
+import com.kreig133.daogenerator.jaxb.ParameterType;
+import com.kreig133.daogenerator.jaxb.ParametersType;
+import com.kreig133.daogenerator.jaxb.ParentType;
+import com.kreig133.daogenerator.jaxb.SelectType;
 import com.kreig133.daogenerator.jaxb.validators.DaoMethodValidator;
 import com.kreig133.daogenerator.settings.Settings;
-import org.apache.commons.lang.StringUtils;
-import org.jetbrains.annotations.NotNull;
 
-import javax.swing.*;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
-import javax.swing.text.BadLocationException;
-import javax.swing.text.Document;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
-import java.io.*;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.regex.Pattern;
 
-import static com.kreig133.daogenerator.gui.GuiUtils.getNewFileChooser;
+import javax.swing.DefaultComboBoxModel;
+import javax.swing.JButton;
+import javax.swing.JCheckBox;
+import javax.swing.JComboBox;
+import javax.swing.JEditorPane;
+import javax.swing.JFileChooser;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JRadioButton;
+import javax.swing.JScrollPane;
+import javax.swing.JSplitPane;
+import javax.swing.JTabbedPane;
+import javax.swing.JTable;
+import javax.swing.JTextArea;
+import javax.swing.JTextField;
+import javax.swing.JTextPane;
+import javax.swing.SwingUtilities;
+import javax.swing.WindowConstants;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
+import javax.swing.text.BadLocationException;
+import javax.swing.text.Document;
+
+import org.apache.commons.lang.StringUtils;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * @author eshangareev
@@ -42,8 +73,8 @@ import static com.kreig133.daogenerator.gui.GuiUtils.getNewFileChooser;
  */
 public class Form  implements SourcePathChangeListener{
     private static Form INSTANCE;
-    private static final String WARNING_DIALOG_TITLE = "Голактего в опастносте!!11один";
-    private static final String ATTENTION = "Говорит DaoGenerator:";
+    private static final String WARNING_DIALOG_TITLE = "Предупреждение";
+    private static final String ATTENTION = "Сообщение";
 
     private JPanel mainPanel;
     private JTable inputParametrs;
@@ -169,7 +200,7 @@ public class Form  implements SourcePathChangeListener{
                 String spText = SpInputParameterExtractor.getParenSpText();
                 if ( spText == null ) {
                     JOptionPane.showMessageDialog( mainPanel, "Хранимка не является оберткой!",
-                            "Говорит DaoGenerator:", JOptionPane.INFORMATION_MESSAGE );
+                    		ATTENTION , JOptionPane.INFORMATION_MESSAGE );
                     return;
                 }
                 TextView.setText( spText );
@@ -199,7 +230,7 @@ public class Form  implements SourcePathChangeListener{
 
                 if ( ! DaoMethodValidator.checkDaoMethods( Arrays.asList( currentDaoMethod ) ) ) {
                     if( JOptionPane.YES_OPTION != JOptionPane.showConfirmDialog(
-                            mainPanel, "<html>Имеются ошибки! (Детали во вкладке Log)<br>Продолжить?",
+                            mainPanel, "<html>Имеются ошибки! (сведения на вкладке Log)<br>Продолжить?",
                             WARNING_DIALOG_TITLE, JOptionPane.YES_NO_OPTION, JOptionPane.ERROR_MESSAGE )
                     ){
                         return;
@@ -268,7 +299,7 @@ public class Form  implements SourcePathChangeListener{
     private boolean validateBeforeGenerateXML( DaoMethod currentDaoMethod ) {
         if ( StringUtils.isBlank( methodNameField.getText() ) ) {
             JOptionPane.showMessageDialog( mainPanel,
-                    "Введи адекватное название метода, а то Марат придет... и покарает!",
+                    "Необходимо ввести название метода!",
                     WARNING_DIALOG_TITLE,
                     JOptionPane.WARNING_MESSAGE
             );
@@ -318,7 +349,8 @@ public class Form  implements SourcePathChangeListener{
                                     if( ! FileBuilder.generateJavaCode() ) return;
                                     int status = MavenProjectGenerator.installProject();
                                     if( status == 0 ) {
-                                        if (
+                                    	// TODO (Marat Fayzullin) Так как пока не реализовано, то нефиг мучать пользователя дополнительными вопросами
+                                        /*if (
                                                 JOptionPane.showConfirmDialog(
                                                         mainPanel,
                                                         "Тестирование успешно завершено.\nСкопировать файлы в проект?"
@@ -328,12 +360,12 @@ public class Form  implements SourcePathChangeListener{
                                                     mainPanel,
                                                     "Функциональность еще не реализована"
                                             );
-                                        }
+                                        }*/
                                     } else {
                                         JOptionPane.showMessageDialog(
                                                 mainPanel,
                                                 "Тестирование провалилось.\nИзмените входные данные или сообщите " +
-                                                        "разработчику этой фигни, что он, возможно, где-то накосячил"
+                                                        "разработчикам о возникшей проблеме"
                                                 );
                                     }
                                 } finally {
@@ -363,40 +395,48 @@ public class Form  implements SourcePathChangeListener{
         clearButton.addActionListener( new ActionListener() {
             @Override
             public void actionPerformed( ActionEvent e ) {
-                if (
-                        JOptionPane.showConfirmDialog(
-                                mainPanel, ( "Очистить папку \"" + destDirTextField.getText() + "\"?" ),
-                                ATTENTION, JOptionPane.OK_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE )
-                                == JOptionPane.OK_OPTION
-                        ) {
-                    File directory = new File( destDirTextField.getText() );
-
-                    boolean errorExist = false;
-                    String errorMessage = "";
-
-                    if ( ! directory.exists() ) {
-                        errorExist = true;
-                        errorMessage = "Папка " + directory.getAbsolutePath() + " не существует!\n";
-                    }
-                    if ( ! directory.isDirectory() ) {
-                        errorExist = true;
-                        errorMessage = errorMessage + "Полтергейст! То, что указано в поле, не является папкой!";
-                    }
-                    if ( ! errorExist ) {
-                        if ( ! PackageAndFileUtils.removeDirectory( directory ) ) {
-                            errorExist = true;
-                            errorMessage = "При очистке папки возникли ошибки.";
-                        }
-                    }
-                    if ( errorExist ) {
-                        JOptionPane.showMessageDialog( mainPanel, errorMessage, WARNING_DIALOG_TITLE,
-                                JOptionPane.ERROR_MESSAGE );
-                    }
-                }
+            	checkAndClearTargetFolder();
             }
         } );
     }
 
+    /**
+     * Проверяет и удаляет папку с ранее сформированными проектными файлами
+     */
+    private boolean checkAndClearTargetFolder() {
+    	String folderName = destDirTextField.getText();
+    	File directory = new File(folderName);
+
+    	if (directory.exists()) {
+    		if (!directory.isDirectory() ) {
+    			showError("Указанное в поле значение не является папкой!");
+    			return false;
+            }
+    	
+    		if (JOptionPane.showConfirmDialog(
+                    mainPanel, ( String.format("Указанная папка \"%s\" существует.\nУдалить её?", folderName)),
+                    ATTENTION, JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE ) == JOptionPane.YES_OPTION
+                ) {
+    				if (!PackageAndFileUtils.removeDirectory( directory ) ) {
+    					showError("При удалении папки возникли ошибки. Проверьте, что она не используется другими программами.");
+    					return false;
+    				}
+    		}
+        }
+    	return true;
+    }
+    
+    /**
+     * Отображает диалоговое окно с ошибкой
+     * @param text текст ошибки
+     */
+    private void showError(String text) {
+    	JOptionPane.showMessageDialog( mainPanel, text, WARNING_DIALOG_TITLE, JOptionPane.ERROR_MESSAGE );
+    }
+    
+    /**
+     * Перенаправляем стандартный вывод сообщений и ошибок на панель
+     */
     private void redirectOutAndErrOutputToGui() {
         OutputStream out = new OutputStream() {
             @Override
@@ -529,6 +569,8 @@ public class Form  implements SourcePathChangeListener{
             JOptionPane.showMessageDialog( mainPanel, "Одно или несколько имен пакетов не прошло валидацию." );
             return false;
         }
+        if (!checkAndClearTargetFolder())
+        	return false;
         //TODO надо бы проверить пути
         return true;
     }
