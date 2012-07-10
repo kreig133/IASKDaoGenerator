@@ -19,8 +19,8 @@
         <mybatis.ehcache.version>1.0.0</mybatis.ehcache.version>
         <c3p0.version>0.9.1.2</c3p0.version>
         <slf4j-log4j12.version>1.6.1</slf4j-log4j12.version>
+        <jdbc.jtds.version>1.2.4</jdbc.jtds.version>
     </properties>
-
 
     <dependencies>
         <dependency>
@@ -56,9 +56,9 @@
             <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>com.microsoft.sqlserver</groupId>
-            <artifactId>sqljdbc</artifactId>
-            <version>${sqljdbc.version}</version>
+            <groupId>net.sourceforge.jtds</groupId>
+            <artifactId>jtds</artifactId>
+            <version>${jdbc.jtds.version}</version>
         </dependency>
         <dependency>
             <groupId>org.mybatis</groupId>
@@ -114,7 +114,7 @@
     <repositories>
         <repository>
             <id>sbrf-deposit-internal</id>
-            <url>http://sbrfcredit2.aplana.com:8081/nexus/content/repositories/sbrf-deposit-internal</url>
+            <url>http://172.16.127.13:8081/nexus/content/repositories/sbrf-deposit-internal/</url>
         </repository>
     </repositories>
 

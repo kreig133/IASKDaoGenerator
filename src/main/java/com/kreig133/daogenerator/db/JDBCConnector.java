@@ -1,11 +1,11 @@
 package com.kreig133.daogenerator.db;
 
-import com.kreig133.daogenerator.settings.Settings;
 import org.jetbrains.annotations.Nullable;
 
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.sql.Connection;
+import java.sql.Driver;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.Properties;
@@ -36,7 +36,12 @@ public class JDBCConnector{
         }
 
         loadProperties();
-
+        
+        try {
+        	DriverManager.registerDriver ((Driver) Class.forName(properties.getProperty( DRIVER )).newInstance());
+        } catch(Exception e) {
+        	throw new RuntimeException( "Не удалось подключить драйвер СУБД", e );
+        }
         System.setProperty( "jdbc.driver", properties.getProperty( DRIVER ) );
 
         try {

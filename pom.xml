@@ -7,10 +7,11 @@
     <groupId>com.kreig133</groupId>
     <artifactId>DaoGenerator</artifactId>
     <packaging>jar</packaging>
-    <version>2.10.3</version>
+    <version>2.10.4</version>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <jdbc.jtds.version>1.2.4</jdbc.jtds.version>
     </properties>
 
     <dependencies>
@@ -27,10 +28,9 @@
         </dependency>
 
         <dependency>
-            <groupId>com.microsoft.sqlserver</groupId>
-            <artifactId>sqljdbc</artifactId>
-            <version>3.0</version>
-            <scope>runtime</scope>
+            <groupId>net.sourceforge.jtds</groupId>
+            <artifactId>jtds</artifactId>
+            <version>${jdbc.jtds.version}</version>
         </dependency>
 
         <dependency>
@@ -224,10 +224,10 @@
         <profile>
             <id>depo</id>
             <properties>
-                <jdbc.url>jdbc:sqlserver://172.16.127.12:1433;DatabaseName=apldepdb</jdbc.url>
+                <jdbc.url>jdbc:jtds:sqlserver://172.16.127.12/apldepdb;appName=Dao Generator</jdbc.url>
                 <jdbc.username>sa</jdbc.username>
                 <jdbc.password>XSW@zaq1</jdbc.password>
-                <jdbc.driverClass>com.microsoft.sqlserver.jdbc.SQLServerDriver</jdbc.driverClass>
+                <jdbc.driverClass>net.sourceforge.jtds.jdbc.Driver</jdbc.driverClass>
             </properties>
         </profile>
     </profiles>
