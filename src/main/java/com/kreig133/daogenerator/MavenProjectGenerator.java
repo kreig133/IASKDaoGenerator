@@ -129,14 +129,17 @@ public class MavenProjectGenerator {
         return TesterClassGenerator.TEST_CONFIG;
     }
 
+    /**
+     * Запускает сборку тестового проекта
+     * @return результат выполнения команды cmd
+     */
     public static int installProject() {
-        final String[] cmdarray = { "cmd", "/C",
-                System.getProperty( "user.dir" )+"\\"+
-                "apache-maven-3.0.4\\bin\\mvn -e -f "+ Settings.settings().getOutputPathForJavaClasses() +
-                "\\pom.xml clean install"};
-
-        for ( String s1 : cmdarray ) {
-            System.out.println( s1 );
+        final String[] cmdarray = { "cmd", "/c",
+        		String.format("\"\"%s/apache-maven-3.0.4/bin/mvn\" -e -f \"%s/pom.xml\" clean install\"", 
+        				System.getProperty("user.dir"),
+        				Settings.settings().getOutputPathForJavaClasses())};
+        for ( String s : cmdarray ) {
+            System.out.println( s );
         }
 
         try {

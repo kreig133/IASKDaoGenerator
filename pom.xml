@@ -187,6 +187,27 @@
                     <failOnError>true</failOnError>
                 </configuration>
             </plugin>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>exec-maven-plugin</artifactId>
+                <version>1.2.1</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>exec</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+	                <executable>java</executable>
+	                <workingDirectory>${basedir}/target</workingDirectory>
+	                <arguments>
+	                    <argument>-Dfile.encoding=UTF-8</argument>
+	                    <argument>-jar</argument>
+	                    <argument>${project.artifactId}-${project.version}.jar</argument>
+	                </arguments>
+                </configuration>
+            </plugin>
         </plugins>
     </build>
 
@@ -203,9 +224,9 @@
         <profile>
             <id>depo</id>
             <properties>
-                <jdbc.url>jdbc:sqlserver://192.168.101.173:1433;DatabaseName=depomostest</jdbc.url>
+                <jdbc.url>jdbc:sqlserver://172.16.127.12:1433;DatabaseName=apldepdb</jdbc.url>
                 <jdbc.username>sa</jdbc.username>
-                <jdbc.password>depo</jdbc.password>
+                <jdbc.password>XSW@zaq1</jdbc.password>
                 <jdbc.driverClass>com.microsoft.sqlserver.jdbc.SQLServerDriver</jdbc.driverClass>
             </properties>
         </profile>

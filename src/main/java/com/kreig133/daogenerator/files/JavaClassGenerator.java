@@ -85,10 +85,13 @@ abstract public class JavaClassGenerator extends Generator {
             @Nullable List<String> throwsing,
             boolean signatureOnly
     ){
-        insertTabs().append( scope.value() ).append( " " )
-                .append( StringUtils.isNotEmpty( outputClass ) ? outputClass : "void" ).append( " " ).append(
-                methodName )
-                .append( "(" );
+    	if (scope != Scope.DEFAULT)
+    		insertTabs().append( scope.value() )
+    					.append( " " );
+    		insertTabs().append( StringUtils.isNotEmpty( outputClass ) ? outputClass : "void" )
+    					.append( " " )
+    					.append( methodName )
+    					.append( "(" );
 
         boolean needNewLineForParam = inputParams != null && inputParams.size() > 2;
 
