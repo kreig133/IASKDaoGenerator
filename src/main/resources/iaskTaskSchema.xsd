@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema attributeFormDefault="unqualified" elementFormDefault="qualified"
+           xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           xmlns:this="com.aplana.iask.task"
+           targetNamespace="com.aplana.iask.task"
+        >
+
+    <xs:element name="common">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="group"       minOccurs="1" maxOccurs="1"/>
+                <xs:element ref="name"        minOccurs="1" maxOccurs="1"/>
+                <xs:element ref="description" minOccurs="0" maxOccurs="1"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="group"       type="xs:string"/>
+    <xs:element name="name"        type="xs:string"/>
+    <xs:element name="description" type="xs:string"/>
+
+    <xs:element name="configuration">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="type"      minOccurs="1" maxOccurs="1"/>
+                <xs:element ref="queryText" minOccurs="0" maxOccurs="1"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+
+    <xs:simpleType name="type">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="QUERY"/>
+            <xs:enumeration value="QUERY_WITH_XSLT-PROCESSING"/>
+            <xs:enumeration value="OTHER"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:element name="type" type="type"/>
+    <xs:element name="queryText" type="xs:string"/>
+
+    <xs:element name="IaskTask">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="common"/>
+                <xs:element ref="configuration"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+</xs:schema>
