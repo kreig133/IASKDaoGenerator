@@ -228,7 +228,7 @@ public class Form  implements SourcePathChangeListener{
 
                 if ( ! validateBeforeGenerateXML( currentDaoMethod ) ) return;
 
-                if ( ! DaoMethodValidator.checkDaoMethods( Arrays.asList( currentDaoMethod ) ) ) {
+                if ( ! DaoMethodValidator.checkDaoMethods( Arrays.asList( currentDaoMethod ), true ) ) {
                     if( JOptionPane.YES_OPTION != JOptionPane.showConfirmDialog(
                             mainPanel, "<html>Имеются ошибки! (сведения на вкладке Log)<br>Продолжить?",
                             WARNING_DIALOG_TITLE, JOptionPane.YES_NO_OPTION, JOptionPane.ERROR_MESSAGE )
