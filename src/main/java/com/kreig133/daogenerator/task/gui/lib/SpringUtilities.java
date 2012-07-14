@@ -1,4 +1,4 @@
-package com.kreig133.daogenerator.task.gui;
+package com.kreig133.daogenerator.task.gui.lib;
 
 import javax.swing.*;
 import javax.swing.SpringLayout;

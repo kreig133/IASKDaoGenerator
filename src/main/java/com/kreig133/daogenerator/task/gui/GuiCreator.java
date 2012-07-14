@@ -1,6 +1,9 @@
 package com.kreig133.daogenerator.task.gui;
 
 import com.kreig133.daogenerator.jaxb.ParameterType;
+import com.kreig133.daogenerator.task.gui.field.JTaskField;
+import com.kreig133.daogenerator.task.gui.field.JTaskFieldFactory;
+import com.kreig133.daogenerator.task.gui.lib.SpringUtilities;
 import com.kreig133.daogenerator.task.model.IaskTask;
 
 import javax.swing.*;
@@ -30,26 +33,39 @@ public class GuiCreator {
         return taskGroupedByRootMenuName;
     }
 
-    private JPanel createGuiForTask( IaskTask task ) {
-        JPanel panel = new JPanel( new SpringLayout() );
+    JPanel createGuiForAnyTask( IaskTask task ) {
         switch ( task.getConfiguration().getType() ) {
             case OTHER:
                 break;
             default:
-                List<ParameterType> parameterTypeList = extractInputParams( task.getConfiguration().getQueryText() );
-
-                for ( ParameterType parameterTypes : parameterTypeList ) {
-                    JLabel label = new JLabel( parameterTypes.getName(), JLabel.TRAILING );
-                    JTextField field = new JTextField();
-                    panel.add( label );
-                    label.setLabelFor( field );
-                    panel.add( field );
-                }
-                SpringUtilities.makeCompactGrid( panel,
-                        parameterTypeList.size(), 2,
-                        6, 6,
-                        6, 6 );
+                return createGuiForQueryTask( task );
         }
+        throw new RuntimeException( "Косяк" );
+    }
+
+    JPanel createGuiForQueryTask( IaskTask task ) {
+        List<ParameterType> parameterTypeList = extractInputParams( task.getConfiguration().getQueryText() );
+
+        JTaskPanel panel = new JTaskPanel();
+        panel.setLayout( new SpringLayout() );
+
+        for ( ParameterType parameterType : parameterTypeList ) {
+            JLabel label = new JLabel( parameterType.getName(), JLabel.TRAILING );
+            JTaskField field = JTaskFieldFactory.newJTaskField( parameterType );
+
+            panel.add( label );
+            label.setLabelFor( field );
+            panel.add( field, parameterType );
+
+            field.setValue( parameterType.getTestValue() );
+            field.setToolTipText(
+                    parameterType.getComment() == null ? "Входной параметр для запроса" : parameterType.getComment()
+            );
+        }
+        SpringUtilities.makeCompactGrid( panel,
+                parameterTypeList.size(), 2,
+                6, 6,
+                6, 6 );
         return panel;
     }
 }
