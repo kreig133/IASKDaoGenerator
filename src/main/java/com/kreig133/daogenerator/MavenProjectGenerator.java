@@ -23,17 +23,11 @@ public class MavenProjectGenerator {
     private static void copyBaseClassesAndConfigs() throws IOException {
         copyFile(
                 "AbstractDao.txt",
-                Settings.settings().getPathForGeneratedSource() +  "/"
-                        + PackageAndFileUtils.replacePointBySlash(
-                        "com.luxoft.sbrf.iask.persistence.common.dao.AbstractDao"
-                ) + ".java"
+                getPathForSourceJavaClass( "ru.sbrf.iask.foundation.persistence.dao.AbstractDao" )
         );
         copyFile(
-                "AbstractDaoCommand.txt",
-                Settings.settings().getPathForGeneratedSource() +  "/"
-                        + PackageAndFileUtils.replacePointBySlash(
-                        "com.luxoft.sbrf.iask.persistence.common.dao.AbstractDaoCommand"
-                ) + ".java"
+                "ICredentials.txt",
+                getPathForSourceJavaClass( "ru.sbrf.iask.foundation.persistence.entity.ICredentials" )
         );
         copyFile(
                 "AbstractDao.map.xml",
@@ -43,6 +37,13 @@ public class MavenProjectGenerator {
                 "testApplicationContext.xml",
                 Settings.settings().getPathForTestResources() + "/testApplicationContext.xml"
         );
+    }
+
+    private static String getPathForSourceJavaClass( String fullClassName ) {
+        return Settings.settings().getPathForGeneratedSource() +  "/"
+                + PackageAndFileUtils.replacePointBySlash(
+                fullClassName
+        ) + ".java";
     }
 
     private static void copyFile( String resourceName, String destFilePath ) throws IOException {

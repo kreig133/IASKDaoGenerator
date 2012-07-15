@@ -1,9 +1,10 @@
-package com.luxoft.sbrf.iask.persistence.common.dao;
+package ru.sbrf.iask.foundation.persistence.dao;
 
 import java.sql.SQLException;
 
+import org.apache.ibatis.session.SqlSession;
 import org.mybatis.spring.support.SqlSessionDaoSupport;
-
+import ru.sbrf.iask.foundation.persistence.entity.ICredentials;
 
 /**
  * Abstract {@link SqlSessionDaoSupport} implementation
@@ -18,7 +19,7 @@ public abstract class AbstractDao extends SqlSessionDaoSupport {
     /**
      * FIX_USER query id
      */
-    private static final String FIX_USER = "com.luxoft.sbrf.iask.persistence.common.dao.AbstractDao.fixUser";
+    private static final String FIX_USER = "ru.sbrf.iask.foundation.persistence.dao.AbstractDao.fixUser";
 
     /**
      * SET NOCOUNT ON in DB
@@ -26,10 +27,25 @@ public abstract class AbstractDao extends SqlSessionDaoSupport {
      * @throws SQLException in case of exception.
      */
     protected void noCountOn() {
-        //getSqlSession().update("noCountOn");
+        getLocalSqlSession().update("noCountOn");
     }
 
+    /**
+     * Fix user.
+     * 
+     * @param object request
+     */
+    protected void fixUser(Object object) {
+    	 if (object instanceof ICredentials) {
+    		 String login = ((ICredentials) object).getLogin();
+    		 if (login != null)
+    			 getLocalSqlSession().selectOne(FIX_USER, login);
+         }
+    }
 
+    public SqlSession getLocalSqlSession() {
+        return getSqlSession();
+    }
 
     /**
      * SET NOCOUNT OFF in DB
@@ -37,21 +53,21 @@ public abstract class AbstractDao extends SqlSessionDaoSupport {
      * @throws SQLException in case of exception.
      */
     protected void noCountOff() {
-        getSqlSession().update("noCountOff");
+        getLocalSqlSession().update("noCountOff");
     }
 
     /**
      * Устанавливает db-свойство CONCAT_NULL_YIELDS_NULL в ON.
      */
     protected void setConcatNullYieldsNullOn() {
-        getSqlSession().selectOne("setConcatNullYieldsNullOn");
+        getLocalSqlSession().selectOne("setConcatNullYieldsNullOn");
     }
 
     /**
      * Устанавливает db-свойство CONCAT_NULL_YIELDS_NULL в OFF.
      */
     protected void setConcatNullYieldsNullOff() {
-        getSqlSession().selectOne("setConcatNullYieldsNullOff");
+        getLocalSqlSession().selectOne("setConcatNullYieldsNullOff");
     }
 
     /**
@@ -69,10 +85,10 @@ public abstract class AbstractDao extends SqlSessionDaoSupport {
             @Override
             public R execute() {
                 if (null == request) {
-                    return (R) getSqlSession().selectList(queryId);
+                    return (R) getLocalSqlSession().selectList(queryId);
                 }
                 else {
-                    return (R) getSqlSession().selectList(queryId, request);
+                    return (R) getLocalSqlSession().selectList(queryId, request);
                 }
             }
         });
@@ -92,7 +108,7 @@ public abstract class AbstractDao extends SqlSessionDaoSupport {
             @SuppressWarnings("unchecked")
             @Override
             public R execute() {
-                return (R) getSqlSession().selectOne(queryId, request);
+                return (R) getLocalSqlSession().selectOne(queryId, request);
             }
         });
     }
@@ -108,12 +124,14 @@ public abstract class AbstractDao extends SqlSessionDaoSupport {
      * @param <P> тип параметра запроса команды.
      * @param command комманда инкапсулирующая операцию.
      * @return result list from DB.
-     * @see AbstractDaoCommand
+     * @see ru.sbrf.iask.foundation.persistence.dao.AbstractDaoCommand
      */
     protected <R, P> R executeWithCountOn(AbstractDaoCommand<R, P> command) {
+        fixUser(command.getRequest());
         noCountOn();
         R result = command.execute();
         noCountOff();
         return result;
     }
+
 }
