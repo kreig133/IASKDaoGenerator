@@ -187,6 +187,15 @@
         </plugins>
     </build>
 
+    <repositories>
+        <repository>
+            <snapshots/>
+            <id>irisa</id>
+            <name>public-snapshot</name>
+            <url>http://maven.irisa.fr/artifactory/list/repo</url>
+        </repository>
+    </repositories>
+
     <profiles>
         <profile>
             <id>iask</id>
