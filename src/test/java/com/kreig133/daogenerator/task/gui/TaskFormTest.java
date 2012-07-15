@@ -14,6 +14,6 @@ public class TaskFormTest {
         JPanel ui = new TaskForm().getUI();
         TaskTestHelper.showComponent( ui );
 
-        Thread.sleep( 100000 );
+//        Thread.sleep( 100000 );
     }
 }

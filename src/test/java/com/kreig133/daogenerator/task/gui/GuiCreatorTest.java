@@ -22,7 +22,7 @@ public class GuiCreatorTest{
 
         showComponent( panel );
 
-        Thread.sleep( 100000 );
+//        Thread.sleep( 100000 );
     }
 
 
@@ -32,7 +32,7 @@ public class GuiCreatorTest{
         JTree gui = new GuiCreator().createGui( TaskTestHelper.getIaskTaskList( 10 ) );
         showComponent( gui );
 
-        Thread.sleep( 100000 );
+//        Thread.sleep( 100000 );
     }
 
 
