@@ -274,7 +274,8 @@ public class Form  implements SourcePathChangeListener{
                                     if( ! FileBuilder.generateJavaCode() ) return;
                                     int status = MavenProjectGenerator.installProject();
                                     if( status == 0 ) {
-                                        if (
+                                    	// TODO (Marat Fayzullin) Так как пока не реализовано, то нефиг мучать пользователя дополнительными вопросами
+                                        /*if (
                                                 JOptionPane.showConfirmDialog(
                                                         mainPanel,
                                                         "Тестирование успешно завершено.\nСкопировать файлы в проект?"
@@ -284,7 +285,7 @@ public class Form  implements SourcePathChangeListener{
                                                     mainPanel,
                                                     "Функциональность еще не реализована"
                                             );
-                                        }
+                                        }*/
                                     } else {
                                         JOptionPane.showMessageDialog(
                                                 mainPanel,
@@ -319,40 +320,48 @@ public class Form  implements SourcePathChangeListener{
         clearButton.addActionListener( new ActionListener() {
             @Override
             public void actionPerformed( ActionEvent e ) {
-                if (
-                        JOptionPane.showConfirmDialog(
-                                mainPanel, ( "Очистить папку \"" + destDirTextField.getText() + "\"?" ),
-                                ATTENTION, JOptionPane.OK_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE )
-                                == JOptionPane.OK_OPTION
-                        ) {
-                    File directory = new File( destDirTextField.getText() );
-
-                    boolean errorExist = false;
-                    String errorMessage = "";
-
-                    if ( ! directory.exists() ) {
-                        errorExist = true;
-                        errorMessage = "Папка " + directory.getAbsolutePath() + " не существует!\n";
-                    }
-                    if ( ! directory.isDirectory() ) {
-                        errorExist = true;
-                        errorMessage = errorMessage + "Полтергейст! То, что указано в поле, не является папкой!";
-                    }
-                    if ( ! errorExist ) {
-                        if ( ! PackageAndFileUtils.removeDirectory( directory ) ) {
-                            errorExist = true;
-                            errorMessage = "При очистке папки возникли ошибки.";
-                        }
-                    }
-                    if ( errorExist ) {
-                        JOptionPane.showMessageDialog( mainPanel, errorMessage, WARNING_DIALOG_TITLE,
-                                JOptionPane.ERROR_MESSAGE );
-                    }
-                }
+            	checkAndClearTargetFolder();
             }
         } );
     }
 
+    /**
+     * Проверяет и удаляет папку с ранее сформированными проектными файлами
+     */
+    private boolean checkAndClearTargetFolder() {
+    	String folderName = destDirTextField.getText();
+    	File directory = new File(folderName);
+
+    	if (directory.exists()) {
+    		if (!directory.isDirectory() ) {
+    			showError("Указанное в поле значение не является папкой!");
+    			return false;
+            }
+    	
+    		if (JOptionPane.showConfirmDialog(
+                    mainPanel, ( String.format("Указанная папка \"%s\" существует.\nУдалить её?", folderName)),
+                    ATTENTION, JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE ) == JOptionPane.YES_OPTION
+                ) {
+    				if (!PackageAndFileUtils.removeDirectory( directory ) ) {
+    					showError("При удалении папки возникли ошибки. Проверьте, что она не используется другими программами.");
+    					return false;
+    				}
+    		}
+        }
+    	return true;
+    }
+    
+    /**
+     * Отображает диалоговое окно с ошибкой
+     * @param text текст ошибки
+     */
+    private void showError(String text) {
+    	JOptionPane.showMessageDialog( mainPanel, text, WARNING_DIALOG_TITLE, JOptionPane.ERROR_MESSAGE );
+    }
+    
+    /**
+     * Перенаправляем стандартный вывод сообщений и ошибок на панель
+     */
     private void redirectOutAndErrOutputToGui() {
         OutputStream out = new OutputStream() {
             @Override
@@ -487,6 +496,8 @@ public class Form  implements SourcePathChangeListener{
             );
             return false;
         }
+        if (!checkAndClearTargetFolder())
+        	return false;
         //TODO надо бы проверить пути
         return true;
     }
