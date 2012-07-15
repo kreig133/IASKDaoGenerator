@@ -102,7 +102,7 @@ abstract public class DaoJavaClassGenerator extends JavaClassGenerator {
             }
         }
 
-        generateMethodSignature( Scope.DEFAULT, outputClass.toString(), methodName, inputParams, null, true );
+        generateMethodSignature( Scope.PUBLIC, outputClass.toString(), methodName, inputParams, null, true );
     }
 
 
