@@ -59,7 +59,7 @@ public abstract class FileBuilder {
     public abstract void generateBody( List<DaoMethod> daoMethods );
 
     public static boolean generateJavaCode() {
-        System.out.println("Generating new maven project started...");
+        System.out.println("Generating new maven project started...\n");
 
         final OperationSettings opSettings = Settings.settings();
 
