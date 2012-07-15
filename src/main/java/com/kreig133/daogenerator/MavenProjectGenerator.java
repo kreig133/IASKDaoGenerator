@@ -39,6 +39,10 @@ public class MavenProjectGenerator {
                 getPathForSourceJavaClass( "ru.sbrf.iask.foundation.persistence.entity.ICredentials" )
         );
         copyFile(
+                "AbstractDaoCommand.txt",
+                getPathForSourceJavaClass( "ru.sbrf.iask.foundation.persistence.dao.AbstractDaoCommand" )
+        );
+        copyFile(
                 "AbstractDao.map.xml",
                 Settings.settings().getPathForTestResources() + "/AbstractDao.map.xml"
         );
