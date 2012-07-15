@@ -106,7 +106,11 @@ public class PropertiesFileController {
 
     public static void saveSpecificProperties( String sourcePath, @NotNull Properties properties ) {
         try {
-            properties.store( new FileOutputStream( getSpecificPropertiesFile( sourcePath, true ) ), COMMENTS );
+            File specificPropertiesFile = getSpecificPropertiesFile( sourcePath, true );
+
+            if( specificPropertiesFile != null ){
+                properties.store( new FileOutputStream( specificPropertiesFile ), COMMENTS );
+            }
         } catch ( IOException e ) {
             e.printStackTrace();
         }
