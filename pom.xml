@@ -105,14 +105,6 @@
             <resource>
                 <directory>src/main/resources/maven</directory>
             </resource>
-            <!--Конфиги к БД для тестового приложения-->
-            <resource>
-                <directory>src/main/resources/properties</directory>
-                <filtering>true</filtering>
-                <excludes>
-                    <exclude>DaoGenerator.properties</exclude>
-                </excludes>
-            </resource>
         </resources>
 
         <plugins>
