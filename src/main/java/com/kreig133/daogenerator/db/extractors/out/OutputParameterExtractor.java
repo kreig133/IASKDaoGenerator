@@ -35,21 +35,24 @@ public class OutputParameterExtractor extends Extractor{
             try {
                 resultSet = ResultSetGetter.Factory.get( daoMethod.getSelectType() )
                         .getResultSetAndFillJdbcTypeIfNeed( daoMethod );
-                final ResultSetMetaData metaData = resultSet.getMetaData();
-                final List<ParameterType> parameterTypes = new LinkedList<ParameterType>();
-
-                for ( int i = 1; i <= metaData.getColumnCount(); i++ ) {
-                    final ParameterType parameterType = new ParameterType();
-                    parameterType.setName( metaData.getColumnName( i ) );
-                    parameterType.setRenameTo( Utils.convertPBNameToName( parameterType.getName() ) );
-                    parameterType.setSqlType( SqlTypeHelper.getSqlTypeFromResultSet( metaData, i ) );
-                    parameterType.setType( JavaType.getBySqlType( metaData.getColumnTypeName( i ) ) );
-
-                    parameterTypes.add( parameterType );
-                }
 
                 daoMethod.setOutputParametrs( new ParametersType() );
-                daoMethod.getOutputParametrs().getParameter().addAll( parameterTypes );
+                if( resultSet != null ){
+                    final ResultSetMetaData metaData = resultSet.getMetaData();
+                    final List<ParameterType> parameterTypes = new LinkedList<ParameterType>();
+
+                    for ( int i = 1; i <= metaData.getColumnCount(); i++ ) {
+                        final ParameterType parameterType = new ParameterType();
+                        parameterType.setName( metaData.getColumnName( i ) );
+                        parameterType.setRenameTo( Utils.convertPBNameToName( parameterType.getName() ) );
+                        parameterType.setSqlType( SqlTypeHelper.getSqlTypeFromResultSet( metaData, i ) );
+                        parameterType.setType( JavaType.getBySqlType( metaData.getColumnTypeName( i ) ) );
+
+                        parameterTypes.add( parameterType );
+                    }
+
+                    daoMethod.getOutputParametrs().getParameter().addAll( parameterTypes );
+                }
             } finally {
                 if ( resultSet != null ) {
                     resultSet.close();
