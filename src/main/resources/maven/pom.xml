@@ -59,6 +59,8 @@
             <groupId>com.microsoft.sqlserver</groupId>
             <artifactId>sqljdbc</artifactId>
             <version>${sqljdbc.version}</version>
+            <scope>system</scope>
+            <systemPath>${project.basedir}/lib/sqljdbc-3.0.jar</systemPath>
         </dependency>
         <dependency>
             <groupId>org.mybatis</groupId>
@@ -84,19 +86,9 @@
             </exclusions>
         </dependency>
         <dependency>
-            <groupId>com.extjs</groupId>
-            <artifactId>gxt</artifactId>
-            <version>${gxt.version}</version>
-        </dependency>
-        <dependency>
             <groupId>cglib</groupId>
             <artifactId>cglib</artifactId>
             <version>2.2</version>
-        </dependency>
-        <dependency>
-            <groupId>org.mybatis</groupId>
-            <artifactId>mybatis-ehcache</artifactId>
-            <version>${mybatis.ehcache.version}</version>
         </dependency>
         <dependency>
             <groupId>org.slf4j</groupId>
@@ -104,19 +96,7 @@
             <version>${slf4j-log4j12.version}</version>
             <scope>compile</scope>
         </dependency>
-        <dependency>
-            <groupId>com.google.gwt</groupId>
-            <artifactId>gwt-user</artifactId>
-            <version>2.1.1</version>
-        </dependency>
     </dependencies>
-
-    <repositories>
-        <repository>
-            <id>sbrf-deposit-internal</id>
-            <url>http://sbrfcredit2.aplana.com:8081/nexus/content/repositories/sbrf-deposit-internal</url>
-        </repository>
-    </repositories>
 
     <build>
         <plugins>

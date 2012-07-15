@@ -18,6 +18,15 @@ public class MavenProjectGenerator {
         copyPomFileToMavenProject();
         copyAbstractTest();
         copyBaseClassesAndConfigs();
+        copySqlServerDriver();
+    }
+
+    private static void copySqlServerDriver() throws IOException {
+        String path = "/lib/sqljdbc-3.0.jar";
+        copyFile(
+                new FileInputStream( System.getProperty("user.dir") + path ),
+                new File( Settings.settings().getOutputPathForJavaClasses() + path )
+        );
     }
 
     private static void copyBaseClassesAndConfigs() throws IOException {
