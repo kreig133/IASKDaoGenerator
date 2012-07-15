@@ -3,6 +3,7 @@ package com.kreig133.daogenerator.jaxb.validators;
 import com.kreig133.daogenerator.files.mybatis.DaoJavaClassGenerator;
 import com.kreig133.daogenerator.jaxb.DaoMethod;
 import com.kreig133.daogenerator.jaxb.ParameterType;
+import com.kreig133.daogenerator.jaxb.ParametersType;
 import org.apache.commons.lang.StringUtils;
 
 import java.util.ArrayList;
@@ -14,12 +15,14 @@ import java.util.List;
  */
 public class DaoMethodValidator {
     public static boolean checkDaoMethods( List<DaoMethod> daoMethods, boolean isAnalyticMode ) {
+        System.out.println( "---------ЭТАП ВАЛИДАЦИИ ВХОДНЫХ XML-ФАЙЛОВ------------" );
         boolean allIsOk = true;
         for ( DaoMethod daoMethod : daoMethods ) {
+            System.out.println( " Проверка метода " + daoMethod.getCommon().getMethodName() );
             allIsOk = checkJavaClassNames( daoMethod, isAnalyticMode ) && allIsOk;
-            allIsOk = checkRenameTos     ( daoMethod ) && allIsOk;
+            allIsOk = checkRenameTos     ( daoMethod                 ) && allIsOk;
         }
-        return  allIsOk;
+        return allIsOk;
     }
 
     static boolean checkRenameTos( DaoMethod daoMethod ) {
@@ -31,9 +34,7 @@ public class DaoMethodValidator {
         for ( ParameterType parameterType : parameter ) {
             if( StringUtils.isBlank( parameterType.getRenameTo() ) ) {
                 containsEmptyRenameTo = true;
-                System.out.println( String.format( "ERROR! В методе %s в RenameTo есть пустые значения!",
-                        getMethodName( daoMethod ) )
-                );
+                System.out.println( ParametersType.RENAME_TO_ERROR + " с пустыми значениями!" );
             }
         }
 
@@ -50,15 +51,10 @@ public class DaoMethodValidator {
 
     static boolean checkJavaClassNames( DaoMethod daoMethod, boolean analyticMode ) {
         boolean isOk = true;
-        String errorMessage = "ERROR! Для метода %s не указано javaClassName для %s модели!";
+        String errorMessage = "\tERROR! Для метода не указано javaClassName для %s модели!";
         if( DaoJavaClassGenerator.checkToNeedOwnInClass( daoMethod ) ){
-            if( StringUtils.isBlank(daoMethod.getInputParametrs().getJavaClassName() ) ){
-                System.out.println(String.format(
-                        errorMessage,
-                        getMethodName( daoMethod ),
-                        "входной"
-                )
-                );
+            if( StringUtils.isBlank(daoMethod.getInputParametrs().getJavaClassName() ) ) {
+                System.out.println( String.format( errorMessage, "входной" ) );
                 isOk = false;
             }
         }
