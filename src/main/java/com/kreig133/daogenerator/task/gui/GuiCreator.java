@@ -7,6 +7,9 @@ import com.kreig133.daogenerator.task.gui.lib.SpringUtilities;
 import com.kreig133.daogenerator.task.model.IaskTask;
 
 import javax.swing.*;
+import javax.swing.event.TreeSelectionEvent;
+import javax.swing.event.TreeSelectionListener;
+import javax.swing.tree.DefaultMutableTreeNode;
 import java.util.*;
 
 import static com.kreig133.daogenerator.sql.creators.QueryCreator.extractInputParams;
@@ -16,10 +19,32 @@ import static com.kreig133.daogenerator.sql.creators.QueryCreator.extractInputPa
  * @version 1.0
  */
 public class GuiCreator {
-    public JPanel createGui( List<IaskTask> taskList ) {
-        getTaskGroupedByRootMenuName( taskList );
 
-        return null;
+    public JTree createGui( List<IaskTask> taskList ) {
+        Map<String, List<IaskTask>> taskGroupedByRootMenuName = getTaskGroupedByRootMenuName( taskList );
+
+        Map<String, Map.Entry<IaskTask, JTaskPanel>> map = new HashMap<String, Map.Entry<IaskTask, JTaskPanel>>();
+
+        DefaultMutableTreeNode root = new DefaultMutableTreeNode( "Задачи" );
+        JTaskTree result = new JTaskTree( root );
+
+        for ( String name : taskGroupedByRootMenuName.keySet() ) {
+            DefaultMutableTreeNode parent = new DefaultMutableTreeNode( name );
+            root.add( parent );
+            for ( IaskTask task : taskGroupedByRootMenuName.get( name ) ) {
+                String taskName = task.getCommon().getName();
+
+                map.put( taskName,
+                        new AbstractMap.SimpleEntry<IaskTask, JTaskPanel>( task, createGuiForAnyTask( task ) )
+                );
+
+                parent.add( new DefaultMutableTreeNode( taskName, false ) );
+            }
+        }
+
+        result.setMap( map );
+
+        return result;
     }
 
     private Map<String, List<IaskTask>> getTaskGroupedByRootMenuName( List<IaskTask> taskList ) {
@@ -33,7 +58,7 @@ public class GuiCreator {
         return taskGroupedByRootMenuName;
     }
 
-    JPanel createGuiForAnyTask( IaskTask task ) {
+    JTaskPanel createGuiForAnyTask( IaskTask task ) {
         switch ( task.getConfiguration().getType() ) {
             case OTHER:
                 break;
@@ -43,7 +68,7 @@ public class GuiCreator {
         throw new RuntimeException( "Косяк" );
     }
 
-    JPanel createGuiForQueryTask( IaskTask task ) {
+    JTaskPanel createGuiForQueryTask( IaskTask task ) {
         List<ParameterType> parameterTypeList = extractInputParams( task.getConfiguration().getQueryText() );
 
         JTaskPanel panel = new JTaskPanel();
