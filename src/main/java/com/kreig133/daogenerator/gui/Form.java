@@ -77,7 +77,6 @@ public class Form  implements SourcePathChangeListener{
     private JRadioButton doubleQueryRadioButton;
     private JEditorPane secondQuery;
     private JScrollPane secondQueryPanel;
-    private JButton clearButton;
     private JFrame windowWithText;
 
     private boolean start = true;
@@ -315,12 +314,6 @@ public class Form  implements SourcePathChangeListener{
             @Override
             public void focusLost( FocusEvent e ) {
                 updateSourcePath();
-            }
-        } );
-        clearButton.addActionListener( new ActionListener() {
-            @Override
-            public void actionPerformed( ActionEvent e ) {
-            	checkAndClearTargetFolder();
             }
         } );
     }
