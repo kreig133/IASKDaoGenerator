@@ -45,4 +45,12 @@ public class DaoMethodValidatorTest {
 
         Assert.assertTrue( DaoMethodValidator.checkRenameTos( daoMethod ) );
     }
+
+    @Test
+    public void testingHungarionNotation(){
+        DaoMethod daoMethodForTest = TestHelper.getDaoMethodForTest();
+        boolean b = DaoMethodValidator.checkAccordingTypeAndNameWithHungarianNotation( daoMethodForTest );
+
+        Assert.assertFalse( b );
+    }
 }
