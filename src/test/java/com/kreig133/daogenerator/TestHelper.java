@@ -51,7 +51,7 @@ public class TestHelper {
 
         parameterType = new ParameterType();
 
-        parameterType.setName( "параметр" );
+        parameterType.setName( "s_параметр" );
         parameterType.setRenameTo( "параметрКакПараметр" );
         parameterType.setSqlType( "nchar(10)" );
         parameterType.setType( JavaType.LONG );
@@ -60,7 +60,7 @@ public class TestHelper {
 
         parameterType = new ParameterType();
 
-        parameterType.setName( "321" );
+        parameterType.setName( "d_321" );
         parameterType.setRenameTo( "одавыолдавылодавыф" );
         parameterType.setInOut( InOutType.IN );
         parameterType.setDefaultValue( "" );
