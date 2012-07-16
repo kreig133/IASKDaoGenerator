@@ -57,6 +57,13 @@ public class ImplementationGenerator extends InterfaceGenerator{
                     }
                 }
         );
+        insertTabs();
+        builder.append( String.format( "public static final String NAMESPACE = \"%s.%s.\";",
+                Settings.settings().getDaoPackage(),
+                InterfaceGenerator.instance().getFileName()
+        ) );
+        insertLine();
+        insertLine();
     }
 
     @Override
@@ -86,9 +93,11 @@ public class ImplementationGenerator extends InterfaceGenerator{
         builder.append( "select" )
                .append( daoMethod.getCommon().getConfiguration().isMultipleResult() ? "List" : "One" );
 
-        builder.append( "(\"" ).append( Settings.settings().getDaoPackage() ).append( "." )
-               .append( InterfaceGenerator.instance().getFileName() ).append( "." )
-               .append( daoMethod.getCommon().getMethodName() ).append( "\" ").append( "," )
-               .append( Utils.collectionNotEmpty( daoMethod.getInputParametrs().getParameter() ) ? "request" : "null" );
+        builder.append(
+                String.format( "( NAMESPACE + \"%s\", %s",
+                        daoMethod.getCommon().getMethodName(),
+                        Utils.collectionNotEmpty( daoMethod.getInputParametrs().getParameter() ) ? "request" : "null"
+                ) );
+
     }
 }
