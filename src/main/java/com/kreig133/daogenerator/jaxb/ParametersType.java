@@ -50,6 +50,8 @@ import static com.google.common.base.Preconditions.checkNotNull;
 })
 public class ParametersType {
 
+    public static final String RENAME_TO_ERROR = "\tERROR! В методе есть поля RenameTo ";
+
     @XmlElement(defaultValue = "DEFAULT")
     protected ParentType parent;
     @XmlElement( defaultValue = "Default" )
@@ -210,8 +212,7 @@ public class ParametersType {
         Set<String> names = new HashSet<String>();
         for ( ParameterType parameterType : parameterTypes ) {
             if ( names.contains( accessor.getFieldValue( parameterType ) ) ) {
-                System.err.println("ERROR! В методе %s в RenameTo есть поля с одинаковыми названиями: " +
-                        accessor.getFieldValue( parameterType ) );
+                System.err.println( RENAME_TO_ERROR + " с одинаковыми названиями: " + accessor.getFieldValue( parameterType ) );
                 result = true;
             } else {
                 names.add( accessor.getFieldValue( parameterType ) );

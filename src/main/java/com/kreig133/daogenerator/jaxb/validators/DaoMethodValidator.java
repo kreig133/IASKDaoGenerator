@@ -1,10 +1,14 @@
 package com.kreig133.daogenerator.jaxb.validators;
 
+import com.google.common.base.Predicate;
+import com.google.common.collect.Iterables;
 import com.kreig133.daogenerator.files.mybatis.DaoJavaClassGenerator;
 import com.kreig133.daogenerator.jaxb.DaoMethod;
 import com.kreig133.daogenerator.jaxb.ParameterType;
+import com.kreig133.daogenerator.jaxb.ParametersType;
 import org.apache.commons.lang.StringUtils;
 
+import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,12 +18,15 @@ import java.util.List;
  */
 public class DaoMethodValidator {
     public static boolean checkDaoMethods( List<DaoMethod> daoMethods, boolean isAnalyticMode ) {
+        System.out.println( "---------ЭТАП ВАЛИДАЦИИ ВХОДНЫХ XML-ФАЙЛОВ------------" );
         boolean allIsOk = true;
         for ( DaoMethod daoMethod : daoMethods ) {
+            System.out.println( " Проверка метода " + getMethodName( daoMethod ) );
             allIsOk = checkJavaClassNames( daoMethod, isAnalyticMode ) && allIsOk;
-            allIsOk = checkRenameTos     ( daoMethod ) && allIsOk;
+            allIsOk = checkRenameTos     ( daoMethod                 ) && allIsOk;
+            allIsOk = checkAccordingTypeAndNameWithHungarianNotation( daoMethod ) && allIsOk;
         }
-        return  allIsOk;
+        return allIsOk;
     }
 
     static boolean checkRenameTos( DaoMethod daoMethod ) {
@@ -31,9 +38,7 @@ public class DaoMethodValidator {
         for ( ParameterType parameterType : parameter ) {
             if( StringUtils.isBlank( parameterType.getRenameTo() ) ) {
                 containsEmptyRenameTo = true;
-                System.out.println( String.format( "ERROR! В методе %s в RenameTo есть пустые значения!",
-                        getMethodName( daoMethod ) )
-                );
+                System.out.println( ParametersType.RENAME_TO_ERROR + " с пустыми значениями!" );
             }
         }
 
@@ -50,15 +55,10 @@ public class DaoMethodValidator {
 
     static boolean checkJavaClassNames( DaoMethod daoMethod, boolean analyticMode ) {
         boolean isOk = true;
-        String errorMessage = "ERROR! Для метода %s не указано javaClassName для %s модели!";
+        String errorMessage = "\tERROR! Для метода не указано javaClassName для %s модели!";
         if( DaoJavaClassGenerator.checkToNeedOwnInClass( daoMethod ) ){
-            if( StringUtils.isBlank(daoMethod.getInputParametrs().getJavaClassName() ) ){
-                System.out.println(String.format(
-                        errorMessage,
-                        getMethodName( daoMethod ),
-                        "входной"
-                )
-                );
+            if( StringUtils.isBlank(daoMethod.getInputParametrs().getJavaClassName() ) ) {
+                System.out.println( String.format( errorMessage, "входной" ) );
                 isOk = false;
             }
         }
@@ -66,7 +66,6 @@ public class DaoMethodValidator {
             if( StringUtils.isBlank(daoMethod.getOutputParametrs().getJavaClassName() ) ){
                 System.out.println(String.format(
                         errorMessage,
-                        getMethodName( daoMethod ),
                         "выходной"
                 )
                 );
@@ -75,4 +74,24 @@ public class DaoMethodValidator {
         }
         return isOk || analyticMode;
     }
+
+    static boolean checkAccordingTypeAndNameWithHungarianNotation( DaoMethod daoMethod ) {
+        Iterable<ParameterType> filtered =
+                Iterables.filter( daoMethod.getOutputParametrs().getParameter(), new Predicate<ParameterType>() {
+                    @Override
+                    public boolean apply( @Nullable ParameterType type ) {
+                        boolean result = !  type.getType().isNameAccordHungarianNotation( type.getName() );
+                        if ( result ) {
+                            System.out.println( String.format (
+                                    "Название параметра %s не соответствует венгерской нотации. Есть " +
+                                    "вероятность, что генератор неправильно определил тип переменной",
+                                    type.getName()
+                            ) );
+                        }
+                        return result;
+                    }
+                } );
+        return  Iterables.isEmpty( filtered );
+    }
+
 }

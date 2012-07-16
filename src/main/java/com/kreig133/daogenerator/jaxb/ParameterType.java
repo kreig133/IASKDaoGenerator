@@ -279,7 +279,7 @@ public class ParameterType {
      *
      */
     public void setComment(String value) {
-        this.comment = value;
+        this.comment = value.replace( "*/", "/" );
     }
 
 

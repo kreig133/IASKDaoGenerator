@@ -94,8 +94,8 @@ public class MavenProjectGenerator {
 
     protected static void copyPropertiesFileToMavenProject() throws IOException {
         copyFile(
-                "application.properties",
-                Settings.settings().getPathForTestResources() + "/application.properties"
+                new FileInputStream( new File( System.getProperty( "user.dir") +  "/application.properties" ) ),
+                new File( Settings.settings().getPathForTestResources() + "/application.properties" )
         );
     }
 
