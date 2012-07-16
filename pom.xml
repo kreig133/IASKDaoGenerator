@@ -205,15 +205,6 @@
 
     <profiles>
         <profile>
-            <id>iask</id>
-            <properties>
-                <jdbc.url>jdbc:sqlserver://jason.aplana.com:1435;databaseName=IASK</jdbc.url>
-                <jdbc.username>sa</jdbc.username>
-                <jdbc.password>iask</jdbc.password>
-                <jdbc.driverClass>com.microsoft.sqlserver.jdbc.SQLServerDriver</jdbc.driverClass>
-            </properties>
-        </profile>
-        <profile>
             <id>depo</id>
             <properties>
                 <jdbc.url>jdbc:jtds:sqlserver://172.16.127.12/apldepdb;appName=Dao Generator</jdbc.url>
@@ -221,6 +212,9 @@
                 <jdbc.password>XSW@zaq1</jdbc.password>
                 <jdbc.driverClass>net.sourceforge.jtds.jdbc.Driver</jdbc.driverClass>
             </properties>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
         </profile>
     </profiles>
 </project>
