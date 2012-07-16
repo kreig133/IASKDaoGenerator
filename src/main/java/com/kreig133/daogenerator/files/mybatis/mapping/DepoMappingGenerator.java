@@ -1,11 +1,14 @@
 package com.kreig133.daogenerator.files.mybatis.mapping;
 
 import com.google.common.base.Function;
+import com.google.common.base.Predicate;
+import com.google.common.collect.Iterables;
 import com.google.common.collect.Iterators;
 import com.kreig133.daogenerator.common.Utils;
 import com.kreig133.daogenerator.enums.ClassType;
 import com.kreig133.daogenerator.enums.MethodType;
 import com.kreig133.daogenerator.jaxb.DaoMethod;
+import com.kreig133.daogenerator.jaxb.InOutType;
 import com.kreig133.daogenerator.jaxb.ParameterType;
 import com.kreig133.daogenerator.jaxb.SelectType;
 import com.kreig133.daogenerator.settings.Settings;
@@ -91,8 +94,17 @@ public class DepoMappingGenerator extends MappingGenerator{
         insertLine();
         if( daoMethod.getSelectType() == SelectType.CALL ) {
             insertTabs().append( "@Options(statementType=StatementType.CALLABLE");
-            // TODO (Marat Fayzullin) условие также должно срабатывать, если есть INOUT параметры
-            if( daoMethod.getInputParametrs().isWithPaging() ) {
+
+            boolean hasInParameters = ! Iterables.isEmpty(
+                    Iterables.filter( daoMethod.getInputParametrs().getParameter(), new Predicate<ParameterType>() {
+                        @Override
+                        public boolean apply( @Nullable ParameterType o ) {
+                            return o.getInOut() != InOutType.OUT;
+                        }
+                    } )
+            );
+
+            if( daoMethod.getInputParametrs().isWithPaging() || hasInParameters ) {
                 builder.append( ", useCache=false" );
             }
             builder.append( ")" );
