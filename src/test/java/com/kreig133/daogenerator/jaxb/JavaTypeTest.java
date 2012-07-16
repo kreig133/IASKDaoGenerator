@@ -20,7 +20,7 @@ public class JavaTypeTest {
         Assert.assertFalse( JavaType.STRING.isNameAccordHungarianNotation( "nJLKJLKJ" ) );
         Assert.assertTrue( JavaType.STRING.isNameAccordHungarianNotation( "KJLKJLKJ" ) );
 
-        Assert.assertFalse( JavaType.DATE.isNameAccordHungarianNotation( "SKLJLJJL" ) );
+        Assert.assertTrue( JavaType.DATE.isNameAccordHungarianNotation( "SKLJLJJL" ) );
         Assert.assertFalse( JavaType.DATE.isNameAccordHungarianNotation( "sKLJLJJL" ) );
         Assert.assertFalse( JavaType.DATE.isNameAccordHungarianNotation( "nKLJLJJL" ) );
         Assert.assertTrue( JavaType.DATE.isNameAccordHungarianNotation( "dKLJLJJL" ) );
