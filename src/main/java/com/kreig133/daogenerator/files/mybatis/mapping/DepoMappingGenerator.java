@@ -95,16 +95,16 @@ public class DepoMappingGenerator extends MappingGenerator{
         if( daoMethod.getSelectType() == SelectType.CALL ) {
             insertTabs().append( "@Options(statementType=StatementType.CALLABLE");
 
-            boolean hasInParameters = ! Iterables.isEmpty(
+            boolean hasOutParameters = ! Iterables.isEmpty(
                     Iterables.filter( daoMethod.getInputParametrs().getParameter(), new Predicate<ParameterType>() {
                         @Override
                         public boolean apply( @Nullable ParameterType o ) {
-                            return o.getInOut() != InOutType.OUT;
+                            return o.getInOut() != InOutType.IN;
                         }
                     } )
             );
 
-            if( daoMethod.getInputParametrs().isWithPaging() || hasInParameters ) {
+            if( daoMethod.getInputParametrs().isWithPaging() || hasOutParameters ) {
                 builder.append( ", useCache=false" );
             }
             builder.append( ")" );
