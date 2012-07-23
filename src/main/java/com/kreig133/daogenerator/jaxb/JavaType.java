@@ -9,6 +9,7 @@
 package com.kreig133.daogenerator.jaxb;
 
 import com.google.common.base.Strings;
+import org.apache.commons.lang.StringUtils;
 import org.jetbrains.annotations.NotNull;
 
 import javax.xml.bind.annotation.XmlEnum;
@@ -111,7 +112,9 @@ public enum JavaType {
     }
 
     public static boolean isHungarianNotation( String string ) {
-        return Character.isLowerCase( string.toCharArray()[0] ) && string.matches( "\\b(d|s|n)[\\w_]+" );
+        return ! StringUtils.isEmpty(string)
+                && Character.isLowerCase( string.toCharArray()[0] )
+                && string.matches( "\\b(d|s|n)[\\w_]+" );
     }
 
 
