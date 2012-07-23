@@ -113,13 +113,17 @@ public class DoubleQueryPreparatorTest{
 
     @Test
     public void prepareQueryBeforeParseTest(){
-        Assert.assertEquals( DoubleQueryPreparator.instance().prepareQueryBeforeParse( ") \n, " ), ")," );
+        Assert.assertEquals( DoubleQueryPreparator.instance().prepareQueryBeforeParse( ") \n, " ), " ) , " );
         Assert.assertEquals( DoubleQueryPreparator.instance().prepareQueryBeforeParse( "p    \t\n\r = \n123 " ),
-                "p=123" );
+                "p = 123 " );
         Assert.assertEquals( DoubleQueryPreparator.instance().prepareQueryBeforeParse( "SELECT\nINTO" ),
                 "SELECT INTO" );
         Assert.assertEquals( DoubleQueryPreparator.instance().prepareQueryBeforeParse( "FROM dbo.tabPersons p\nWHERE" ),
                 "FROM dbo.tabPersons p WHERE" );
+        Assert.assertEquals( DoubleQueryPreparator.instance().prepareQueryBeforeParse( ")id=" ), " ) id = " );
+        Assert.assertEquals( DoubleQueryPreparator.instance().prepareQueryBeforeParse( ">="),  ">=" );
+        Assert.assertEquals( DoubleQueryPreparator.instance().prepareQueryBeforeParse( "<="),  "<=" );
+        Assert.assertEquals( DoubleQueryPreparator.instance().prepareQueryBeforeParse( "!="),  "!=" );
     }
 
     private void testDetermineSqlTypeByTestValue( String testValue, String sqlType ) {
@@ -128,5 +132,65 @@ public class DoubleQueryPreparatorTest{
         DoubleQueryPreparator.instance().determineSqlTypeByTestValue( parameterType );
 
         Assert.assertEquals( parameterType.getSqlType(), sqlType );
+    }
+
+    @Language( "SQL" )
+    String inQueryWithParams = "SELECT \n" +
+            "         id,   \n" +
+            "         dt,   \n" +
+            "         nday,   \n" +
+            "         fl,\n" +
+            "         dbo.datepartday(dt),\n" +
+            "         case when dbo.datepartmonth(dt) = CAST(:n AS INT) then 1 else 0 end,   \n" +
+            "         (case when CAST(:fl AS INT)=1 and not t.dtdate is null then 1 \n" +
+            "                     when CAST(:fl AS INT)=2 and not v.ddatefrom is null then 1 \n" +
+            "                     else 0 end) AS flquot  \n" +
+            "FROM dbo.t_calendar_workday\n" +
+            "     Left join (select dtdate,sum(nratebond) AS nres \n" +
+            "                  from dbo.tabquotation \n" +
+            "                where dtdate between :dt1 and :dt2 and \n" +
+            "                      iisdeleted = 0 \n" +
+            "                group by dtdate\n" +
+            "                having sum(nratebond) > 0 ) t on t.dtdate = dt \n" +
+            "     Left join (select ddatefrom,sum(nrate) AS nres \n" +
+            "                  from dbo.tabbondsmarketrate\n" +
+            "                where ddatefrom between :dt1 and :dt2 and \n" +
+            "                      ivalueid = 2 \n" +
+            "                group by ddatefrom\n" +
+            "                having sum(nrate) > 0) v on dt = ddatefrom\n" +
+            "where dt between :dt1 and :dt2  \n" +
+            "order by dt";
+
+
+    @Language( "SQL" )
+    String inQueryTestParams = "SELECT \n" +
+            "         id,   \n" +
+            "         dt,   \n" +
+            "         nday,   \n" +
+            "         fl,\n" +
+            "         dbo.datepartday(dt),\n" +
+            "         case when dbo.datepartmonth(dt) = CAST(7 AS INT) then 1 else 0 end,   \n" +
+            "         (case when CAST(1 AS INT)=1 and not t.dtdate is null then 1 \n" +
+            "                     when CAST(1 AS INT)=2 and not v.ddatefrom is null then 1 \n" +
+            "                     else 0 end) AS flquot  \n" +
+            "FROM dbo.t_calendar_workday\n" +
+            "     Left join (select dtdate,sum(nratebond) AS nres \n" +
+            "                  from dbo.tabquotation \n" +
+            "                where dtdate between '6-25-2012 0:0:0.000' and '7-31-2012 0:0:0.000' and \n" +
+            "                      iisdeleted = 0 \n" +
+            "                group by dtdate\n" +
+            "                having sum(nratebond) > 0 ) t on t.dtdate = dt \n" +
+            "     Left join (select ddatefrom,sum(nrate) AS nres \n" +
+            "                  from dbo.tabbondsmarketrate\n" +
+            "                where ddatefrom between '6-25-2012 0:0:0.000' and '7-31-2012 0:0:0.000' and \n" +
+            "                      ivalueid = 2 \n" +
+            "                group by ddatefrom\n" +
+            "                having sum(nrate) > 0) v on dt = ddatefrom\n" +
+            "where dt between '6-25-2012 0:0:0.000' and '7-31-2012 0:0:0.000'  \n" +
+            "order by dt";
+
+    @Test
+    public void prepareQueryTest2(){
+        String s = DoubleQueryPreparator.instance().prepareQuery( inQueryTestParams, inQueryWithParams );
     }
 }
