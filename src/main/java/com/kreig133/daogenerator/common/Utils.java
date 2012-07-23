@@ -8,6 +8,7 @@ import org.jetbrains.annotations.Nullable;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.text.SimpleDateFormat;
 import java.util.List;
 
 /**
@@ -15,6 +16,14 @@ import java.util.List;
  * @version 1.0
  */
 public class Utils {
+
+    public static SimpleDateFormat getDaoGeneratorDateFormat() {
+        return new SimpleDateFormat( getDaoGeneratorDateFormatString() );
+    }
+
+    private static String getDaoGeneratorDateFormatString() {
+        return "M-d-yyyy H:m:s.SSS";
+    }
 
     public static boolean stringContainsMoreThanOneWord( @NotNull String text ) {
         return ( text.split( "\\s+" ).length > 1 );
