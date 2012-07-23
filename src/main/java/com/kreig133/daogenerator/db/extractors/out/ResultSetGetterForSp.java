@@ -11,7 +11,7 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-import static com.kreig133.daogenerator.db.JBDCTypeIdConverter.fillJdbcTypeForInputParameters;
+import static com.kreig133.daogenerator.db.JDBCTypeIdConverter.fillJdbcTypeForInputParameters;
 
 /**
  * @author kreig133
