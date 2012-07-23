@@ -55,7 +55,7 @@ public class ResultSetGetterForQuery implements  ResultSetGetter{
         }
 
         if ( testValue.startsWith( "'" ) ) {
-            testValue = testValue.substring( 2, testValue.length() - 2 );
+            testValue = testValue.substring( 1, testValue.length() - 2 );
         }
 
         switch ( parameter.getType() ) {
