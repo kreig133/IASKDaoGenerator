@@ -10,7 +10,7 @@ import org.jetbrains.annotations.NotNull;
  */
 public class TestValueByStringGenerator {
 
-    private static final String NULL = "null";
+    public static final String NULL = "null";
 
     @NotNull
     public static TestValueByStringGenerator newInstance( @NotNull ParameterType p ){
@@ -20,10 +20,10 @@ public class TestValueByStringGenerator {
         
         return new TestValueByStringGenerator();
     }
-    
-    public String getTestValue ( @NotNull ParameterType parameterType ){
-        if ( parameterType.getTestValue() == null || NULL.equals( parameterType.getTestValue() ) ) {
-            return "NULL";
+
+    public String getTestValue( @NotNull ParameterType parameterType ){
+        if ( parameterType.getTestValue() == null || NULL.equalsIgnoreCase( parameterType.getTestValue() ) ) {
+            return NULL;
         }
 
         return getNotNullTestValue( parameterType );
@@ -31,6 +31,7 @@ public class TestValueByStringGenerator {
 
     protected String getNotNullTestValue( @NotNull ParameterType parameterType ) {
         String testValue = parameterType.getTestValue();
+
         if( parameterType.getType() != JavaType.STRING && "".equals( testValue ) ){
             return NULL;
         }
