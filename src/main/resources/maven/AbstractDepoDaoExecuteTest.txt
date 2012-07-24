@@ -1,12 +1,5 @@
 package com.aplana.sbrf.deposit;
 
-import org.apache.ibatis.annotations.Param;
-import org.junit.runner.RunWith;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.test.context.transaction.TransactionConfiguration;
-import org.springframework.transaction.annotation.Transactional;
-
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 import java.text.SimpleDateFormat;
@@ -14,20 +7,32 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.ibatis.annotations.Param;
+import org.junit.runner.RunWith;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.transaction.TransactionConfiguration;
+import org.springframework.transaction.annotation.Transactional;
+
 /**
  * @author eshangareev
  * @version 1.0
  */
 @Transactional
 @RunWith(SpringJUnit4ClassRunner.class)
-@TransactionConfiguration(transactionManager="txManager", defaultRollback=true)
-@ContextConfiguration(locations = {"classpath:gwt-rpc-servlet.xml"})
+@TransactionConfiguration(transactionManager = "txManager", defaultRollback = true)
+@ContextConfiguration(locations = { "classpath:gwt-rpc-servlet.xml" })
 public abstract class AbstractDepoDaoExecuteTest {
 
-    private SimpleDateFormat format = new SimpleDateFormat( "M-d-yyyy H:m:s.SSS" );
-
+    private SimpleDateFormat format = new SimpleDateFormat("M-d-yyyy H:m:s.SSS");
+    
+    private static final Logger logger = LoggerFactory.getLogger(AbstractDepoDaoExecuteTest.class);
+    
     /**
      * Возращает входной объект для метода с одним параметром
+     * 
      * @param aClass - класс входного объекта
      * @param values - map со значениями, которыми будет заполнен объект
      * @return входной объект для вызова функции
@@ -35,28 +40,35 @@ public abstract class AbstractDepoDaoExecuteTest {
     private Object getInputParamsForMethodWithSingleParam(
             Class<?> aClass,
             Map<String, String> values
-    ) throws Exception {
+            ) throws Exception {
         // Если тип примитивный, то будет только одно значение
-        if ( values.size() == 1 ) {
-            return getValueByType( aClass, values.values().iterator().next() );
+        if (values.size() == 1) {
+            return getValueByType(aClass, values.values().iterator().next());
         }
 
-        return fillObjectWithData( aClass.newInstance(), values );
+        return fillObjectWithData(aClass.newInstance(), values);
     }
 
     /**
      * Заполнение объекта
+     * 
      * @param object объект
      * @param values значения, которыми будет заполнен POJO-объект
      * @return заполненный объект
      */
     private Object fillObjectWithData(
             Object object, Map<String, String> values
-    ) throws Exception {
+            ) throws Exception {
 
-        for ( String s : values.keySet() ) {
-            Method setter = findMethodByName( "set" + convertNameForGettersAndSetters( s ), object.getClass() );
-            setter.invoke( object, getValueByType( setter.getParameterTypes()[ 0 ], values.get( s ) ) );
+        for (String s : values.keySet()) {
+            Method setter = findMethodByName("set" + convertNameForGettersAndSetters(s), object.getClass());
+            // Добавлено для костыля ( если в In-entity меньше 4 полей )
+            if (setter != null) {
+                setter.invoke(object, getValueByType(setter.getParameterTypes()[0], values.get(s)));
+            } else {
+                logger.warn("!!!! Setter not found! If this is not planned, this mean that there is error !!!!");
+                logger.warn("\t\tparameterName = " + s);
+            }
         }
 
         return object;
@@ -64,35 +76,34 @@ public abstract class AbstractDepoDaoExecuteTest {
 
     /**
      * Преобразует значение, представленное в строке, к заданному типу
+     * 
      * @param aClass тип, в который нужно преобразовать
      * @param value значение
      * @return значение, приведенное к нужному типу
      */
     private Object getValueByType(
             Class<?> aClass, String value
-    ) throws Exception {
-        if ( value == null || value.equals( "null" ) ) {
+            ) throws Exception {
+        if (value == null || value.equals("null")) {
             return null;
-        } else if ( aClass == java.util.Date.class ) {
-            if ( value.equals( "" ) ) {
+        } else if (aClass == java.util.Date.class) {
+            if (value.equals("")) {
                 return null;
             }
-            return format.parse( value );
-        } else if ( aClass == java.lang.String.class ) {
+            return format.parse(value);
+        } else if (aClass == java.lang.String.class) {
             return value;
-        } else if (
-                aClass == java.lang.Long.class   ||
-                aClass == java.lang.Byte.class   ||
+        } else if (aClass == java.lang.Long.class ||
+                aClass == java.lang.Byte.class ||
                 aClass == java.lang.Double.class ||
-                aClass == Integer.class
-        ) {
-            if ( value.equals( "" ) ) {
+                aClass == Integer.class) {
+            if (value.equals("")) {
                 return null;
             } else {
-                Method valueOf = aClass.getMethod( "valueOf", String.class );
-                return valueOf.invoke( aClass, value );
+                Method valueOf = aClass.getMethod("valueOf", String.class);
+                return valueOf.invoke(aClass, value);
             }
-        } else if(aClass.getName().equals("int")) {
+        } else if (aClass.getName().equals("int")) {
             return Integer.valueOf(value);
         }
 
@@ -101,17 +112,18 @@ public abstract class AbstractDepoDaoExecuteTest {
 
     /**
      * Находит в заданном классе метод с заданными названием
+     * 
      * @param methodName название метода
      * @param aClass класс, в котором будет осуществляться поиск
      * @return метод, если он найден, иначе - null
      */
-    private Method findMethodByName( String methodName, Class<?> aClass ) {
+    private Method findMethodByName(String methodName, Class<?> aClass) {
         final Method[] methods = aClass.getMethods();
 
         Method method = null;
 
-        for ( Method m : methods ) {
-            if ( m.getName().equalsIgnoreCase(methodName) ) {
+        for (Method m : methods) {
+            if (m.getName().equalsIgnoreCase(methodName)) {
                 method = m;
                 break;
             }
@@ -122,78 +134,83 @@ public abstract class AbstractDepoDaoExecuteTest {
     /**
      * Выполняет метод с указанным названием у заданного объекта dao,
      * метод вызывается со значениями из ассоциативного массива
+     * 
      * @param dao объект dao, у которого будет вызван метод
      * @param map ассоциативный массив со значениями для вызова
      * @param methodName название метода, который будет вызван
      * @return объект, который был возращен вызовом метода
      */
-    public Object invoke( Object dao, Map<String, String> map, String methodName ) {
+    public Object invoke(Object dao, Map<String, String> map, String methodName) {
         try {
-            Method method = findMethodByName( methodName, dao.getClass() );
+            Method method = findMethodByName(methodName, dao.getClass());
             assert method != null : "Не найден метод с указанным именем: " + methodName;
 
             final Class<?>[] parameterTypes = method.getParameterTypes();
 
             Object invoke;
 
-            switch ( parameterTypes.length ) {
+            switch (parameterTypes.length) {
                 case 0:
-                    invoke = method.invoke( dao );
+                    invoke = method.invoke(dao);
                     break;
                 case 1:
                     invoke = method.invoke(
-                            dao, getInputParamsForMethodWithSingleParam( parameterTypes[ 0 ], map )
-                    );
+                            dao, getInputParamsForMethodWithSingleParam(parameterTypes[0], map)
+                            );
                     break;
                 default:
-                    List<String> names = new ArrayList<String>( parameterTypes.length );
-                    for (
-                            Annotation[] parameterAnnotation :
-                            findMethodByName( methodName, dao.getClass().getInterfaces()[ 0 ] )
-                                    .getParameterAnnotations()
-                            ) {
-                        names.add( ( String ) Param.class.getMethod( "value" ).invoke( parameterAnnotation[ 0 ] ) );
+                    List<String> names = new ArrayList<String>(parameterTypes.length);
+                    for (Annotation[] parameterAnnotation : findMethodByName(methodName, dao.getClass().getInterfaces()[0])
+                            .getParameterAnnotations()) {
+                        names.add((String) Param.class.getMethod("value").invoke(parameterAnnotation[0]));
                     }
 
                     assert parameterTypes.length == names.size();
 
-                    List<Object> values = new ArrayList<Object>( parameterTypes.length );
-                    for ( int i = 0; i < names.size(); i++ ) {
-                        values.add( getValueByType( parameterTypes[ i ], map.get( names.get( i ) ) ) );
+                    List<Object> values = new ArrayList<Object>(parameterTypes.length);
+                    for (int i = 0; i < names.size(); i++) {
+                        values.add(getValueByType(parameterTypes[i], map.get(names.get(i))));
                     }
 
-                    invoke = method.invoke( dao, values.toArray() );
+                    invoke = method.invoke(dao, values.toArray());
             }
 
-            if( invoke == null  ){
-                if( method.getReturnType().getName().equals("void") ) {
+            logger.info("result:");
+            if (invoke == null) {
+                if (method.getReturnType().getName().equals("void")) {
                     invoke = "Method don't have to return any value";
+                    logger.info("void");
+                } else {
+                    logger.info("null");
                 }
-            } else if ( invoke instanceof List ) {
-                @SuppressWarnings ("unchecked")
-            	List<Object> list = (List<Object>) invoke;
-                for ( Object object : list) {
-                    System.out.println( object );
+            } else if (invoke instanceof List) {
+                @SuppressWarnings("unchecked")
+                List<Object> list = (List<Object>) invoke;
+                for (Object object : list) {
+                    logger.info(object == null ? "null" : object.toString());
                 }
             } else {
-                System.out.println( invoke );
+                logger.info(invoke.toString());
             }
             return invoke;
-        } catch ( Exception ex ) {
-            throw new RuntimeException( ex );
+        } catch(Exception ex) {
+            logger.error(ex.getMessage(), ex);
+            throw new RuntimeException(ex);
         }
     }
 
-    String convertNameForGettersAndSetters( String name ) {
+    String convertNameForGettersAndSetters(String name) {
 
-        if ( name == null || "".equals( name ) ) throw new IllegalArgumentException();
+        if (name == null || "".equals(name)) {
+            throw new IllegalArgumentException();
+        }
 
         final char[] chars = name.toCharArray();
 
-        if ( Character.isLowerCase( chars[ 0 ] ) ) {
-            if ( chars.length == 1 || Character.isLowerCase( chars[ 1 ] ) ) {
-                chars[ 0 ] = Character.toUpperCase( chars[ 0 ] );
-                name = new String( chars );
+        if (Character.isLowerCase(chars[0])) {
+            if (chars.length == 1 || Character.isLowerCase(chars[1])) {
+                chars[0] = Character.toUpperCase(chars[0]);
+                name = new String(chars);
             }
         }
 
