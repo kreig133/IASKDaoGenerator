@@ -81,16 +81,17 @@ public class DepoMappingGenerator extends MappingGenerator{
         assert selectType != null ;
 
         insertTabs().append( "@" ).append( selectType.annotation() ).append( "(" );
-        insertLine();
 
+        increaseNestingLevel();
         increaseNestingLevel();
         wrapWithQuotesAndWrite(
                 QueryCreatorFactory.newInstance( daoMethod )
                         .generateExecuteQuery( daoMethod, false ).replaceAll( "\"", "\\\\\"" )
         );
+        builder.append( ")" );
+        decreaseNestingLevel();
         decreaseNestingLevel();
 
-        insertTabs().append( ")" );
         insertLine();
         if( daoMethod.getSelectType() == SelectType.CALL ) {
             insertTabs().append( "@Options(statementType=StatementType.CALLABLE");
@@ -161,9 +162,10 @@ public class DepoMappingGenerator extends MappingGenerator{
                 builder.append( " +" );
                 insertLine();
             }
-            insertTabs().append( "\" " ).append( strings[ i ] ).append( "\"" );
+            if(i != 0)
+            	insertTabs();
+            builder.append( "\"" ).append( strings[ i ] ).append( "\"" );
         }
-        insertLine();
         return builder;
     }
 
