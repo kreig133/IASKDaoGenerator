@@ -85,7 +85,7 @@ public class DaoMethodValidator {
      * @return true - проверка не является критичной
      */
     static boolean checkAccordingTypeAndNameWithHungarianNotation( DaoMethod daoMethod ) {
-        Iterable<ParameterType> filtered =
+        //Iterable<ParameterType> filtered =
                 Iterables.filter( daoMethod.getOutputParametrs().getParameter(), new Predicate<ParameterType>() {
                     @Override
                     public boolean apply( @Nullable ParameterType type ) {
