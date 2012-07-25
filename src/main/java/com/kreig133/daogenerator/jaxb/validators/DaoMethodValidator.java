@@ -13,6 +13,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
+ * Валидатор дао методов
+ * 
  * @author eshangareev
  * @version 1.0
  */
@@ -75,6 +77,13 @@ public class DaoMethodValidator {
         return isOk || analyticMode;
     }
 
+    /**
+     * Проверка потенциальных ошибок несоответствий типов и названий параметров. Носит информативный характер. На 
+     * процесс генерации не оказывает никакого влияния
+     * 
+     * @param daoMethod метаданные о проверяемом методе
+     * @return true - проверка не является критичной
+     */
     static boolean checkAccordingTypeAndNameWithHungarianNotation( DaoMethod daoMethod ) {
         Iterable<ParameterType> filtered =
                 Iterables.filter( daoMethod.getOutputParametrs().getParameter(), new Predicate<ParameterType>() {
@@ -91,7 +100,8 @@ public class DaoMethodValidator {
                         return result;
                     }
                 } );
-        return  Iterables.isEmpty( filtered );
+        //return Iterables.isEmpty( filtered ); // (Marat Fayzullin, 2012.07.25) необязательная проверка
+        return true;
     }
 
 }
