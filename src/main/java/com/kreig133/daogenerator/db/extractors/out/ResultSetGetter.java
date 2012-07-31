@@ -3,6 +3,7 @@ package com.kreig133.daogenerator.db.extractors.out;
 import com.kreig133.daogenerator.jaxb.DaoMethod;
 import com.kreig133.daogenerator.jaxb.SelectType;
 
+import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.HashMap;
@@ -13,7 +14,7 @@ import java.util.Map;
  * @version 1.0
  */
 public interface ResultSetGetter {
-    ResultSet getResultSetAndFillJdbcTypeIfNeed( DaoMethod daoMethod ) throws SQLException;
+    ResultSet getResultSetAndFillJdbcTypeIfNeed( DaoMethod daoMethod, Connection connection ) throws SQLException;
 
     class Factory{
         private static final Map<SelectType, ResultSetGetter> resultSetGetterMap = new HashMap<SelectType, ResultSetGetter>();

@@ -42,8 +42,13 @@ public class DoubleQueryPreparator extends QueryPreparator {
 
         parseQueryWithName( queryPiece, paramNames, queryWithNames );
 
+        String tempQueryWithTestValues = queryWithTestValues;
+
         for ( int i = 0; i < paramNames.size(); i++ ) {
-            String after = StringUtils.substringAfter( queryWithTestValues, queryPiece.get( i ) );
+            String after = StringUtils.substringAfter( tempQueryWithTestValues, queryPiece.get( i ) );
+
+            tempQueryWithTestValues = after;
+
             ParameterType pType = new ParameterType();
             {
                 Matcher matcher = Pattern.compile( "(?iu)" + TEST_VALUES ).matcher( after );
@@ -88,8 +93,6 @@ public class DoubleQueryPreparator extends QueryPreparator {
             }
         }
     }
-
-
 
     protected void parseQueryWithName(
             @NotNull List<String> queryPiece, @NotNull List<String> paramNames, @NotNull String queryWithNames
@@ -144,9 +147,11 @@ public class DoubleQueryPreparator extends QueryPreparator {
     }
 
     protected String prepareQueryBeforeParse( String query ){
-        return query.replaceAll( "(\\b)\\s+(\\b)", "$1 $2" )
-                    .replaceAll( "(\\B)\\s+", "$1" )
-                    .replaceAll( "\\s+(\\B)", "$1" );
+        return query.replaceAll( "(\\)|\\()", " $1 " )
+                    .replaceAll( "(?<!>|<|!)=", " = " )
+                    .replaceAll( "(\\b)\\s+(\\b)", "$1 $2" )
+                    .replaceAll( "(\\B)\\s+", "$1 " )
+                    .replaceAll( "\\s+(\\B)", " $1" );
     }
 
     private char getCloseChar( @NotNull Character quote ) {

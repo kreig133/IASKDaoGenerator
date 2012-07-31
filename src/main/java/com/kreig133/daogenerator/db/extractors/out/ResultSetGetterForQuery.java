@@ -8,6 +8,7 @@ import com.kreig133.daogenerator.sql.test.TestValueByStringGenerator;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -21,13 +22,16 @@ public class ResultSetGetterForQuery implements  ResultSetGetter{
 
     @Nullable
     @Override
-    public ResultSet getResultSetAndFillJdbcTypeIfNeed( @NotNull DaoMethod daoMethod ) throws SQLException {
+    public ResultSet getResultSetAndFillJdbcTypeIfNeed(
+            @NotNull DaoMethod daoMethod, @NotNull Connection connection
+    ) throws SQLException {
+
         final String query =
                 QueryCreator.getQueryStringWithoutMetaData( daoMethod.getCommon().getQuery() );
 
         assert query != null;
 
-        final PreparedStatement statement = JDBCConnector.instance().connectToDB().prepareStatement( query );
+        final PreparedStatement statement = connection.prepareStatement( query );
 
         List<String> names = QueryCreator.getListOfParametrNames( daoMethod.getCommon().getQuery() );
 
