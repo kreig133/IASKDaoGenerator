@@ -21,14 +21,12 @@ public class ResultSetGetterForSp implements ResultSetGetter{
 
     @Nullable
     @Override
-    public ResultSet getResultSetAndFillJdbcTypeIfNeed( @NotNull DaoMethod daoMethod ) throws SQLException {
+    public ResultSet getResultSetAndFillJdbcTypeIfNeed(
+            @NotNull DaoMethod daoMethod, @NotNull Connection connection
+    ) throws SQLException {
         final String query = QueryCreatorFactory.newInstance( daoMethod ).generateExecuteQuery( daoMethod, true );
 
         assert query != null;
-
-        final Connection connection = JDBCConnector.instance().connectToDB();
-
-        assert connection != null;
 
         final CallableStatement callableStatement = connection.prepareCall( query );
         fillJdbcTypeForInputParameters( callableStatement.getParameterMetaData(), daoMethod );
