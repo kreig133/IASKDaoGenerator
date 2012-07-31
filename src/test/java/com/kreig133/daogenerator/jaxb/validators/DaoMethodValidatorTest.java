@@ -63,6 +63,6 @@ public class DaoMethodValidatorTest {
         DaoMethod daoMethodForTest = TestHelper.getDaoMethodForTest();
         boolean b = DaoMethodValidator.checkAccordingTypeAndNameWithHungarianNotation( daoMethodForTest );
 
-        Assert.assertFalse( b );
+        Assert.assertTrue( b );
     }
 }
