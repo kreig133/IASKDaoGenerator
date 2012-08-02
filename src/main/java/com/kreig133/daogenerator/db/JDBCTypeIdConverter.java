@@ -70,15 +70,4 @@ public class JDBCTypeIdConverter {
 
         throw new IllegalArgumentException( "Нет такого JbdcType" );
     }
-
-    public static void fillJdbcTypeForInputParameters(
-            @NotNull ParameterMetaData parameterMetaData, @NotNull DaoMethod daoMethod
-    ) throws SQLException {
-
-        for ( ParameterType p : daoMethod.getInputParametrs().getParameter() ) {
-            p.setJdbcType( JDBCTypeIdConverter.getJdbcTypeNameById( parameterMetaData.getParameterType(
-                    daoMethod.getInputParametrs().getParameter().indexOf( p ) + 1
-            ) ) );
-        }
-    }
 }

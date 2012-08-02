@@ -34,9 +34,19 @@ import javax.xml.bind.annotation.XmlType;
 @XmlEnum
 public enum InOutType {
 
-    IN,
-    OUT,
-    INOUT;
+    IN(1),
+    OUT(2),
+    INOUT(4);
+
+    Integer code;
+
+    private InOutType( Integer code ) {
+        this.code = code;
+    }
+
+    public Integer getCode() {
+        return code;
+    }
 
     public String value() {
         return name();
@@ -54,5 +64,14 @@ public enum InOutType {
             }
         }
         throw  new IllegalArgumentException();
+    }
+
+    public static InOutType getByCode( int code ) {
+        for ( InOutType inOutType : InOutType.values() ) {
+            if ( inOutType.getCode() == code ) {
+                return inOutType;
+            }
+        }
+        throw new IllegalArgumentException();
     }
 }

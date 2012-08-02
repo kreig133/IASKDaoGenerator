@@ -11,8 +11,6 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-import static com.kreig133.daogenerator.db.JDBCTypeIdConverter.fillJdbcTypeForInputParameters;
-
 /**
  * @author kreig133
  * @version 1.0
@@ -21,17 +19,16 @@ public class ResultSetGetterForSp implements ResultSetGetter{
 
     @Nullable
     @Override
-    public ResultSet getResultSetAndFillJdbcTypeIfNeed( @NotNull DaoMethod daoMethod ) throws SQLException {
+    public ResultSet getResultSetAndFillJdbcTypeIfNeed(
+            @NotNull DaoMethod daoMethod, @NotNull Connection connection
+    ) throws SQLException {
         final String query = QueryCreatorFactory.newInstance( daoMethod ).generateExecuteQuery( daoMethod, true );
 
         assert query != null;
 
-        final Connection connection = JDBCConnector.instance().connectToDB();
-
-        assert connection != null;
-
-        final CallableStatement callableStatement = connection.prepareCall( query );
-        fillJdbcTypeForInputParameters( callableStatement.getParameterMetaData(), daoMethod );
+        final CallableStatement callableStatement = connection.prepareCall(
+                query, ResultSet.TYPE_FORWARD_ONLY, ResultSet.CONCUR_READ_ONLY
+        );
 
         return callableStatement.execute() ? callableStatement.getResultSet() : null;
     }

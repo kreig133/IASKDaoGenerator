@@ -12,20 +12,16 @@ import java.sql.SQLException;
  * @author eshangareev
  * @version 1.0
  */
-public class SqlTypeHelper {
+public abstract class SqlTypeHelper {
 
-    public static final String DATA_TYPE_COLUMN         = "DATA_TYPE";
-    public static final String CHARACTER_MAXIMUM_LENGTH = "CHARACTER_MAXIMUM_LENGTH";
-    public static final String NUMERIC_PRECISION = "NUMERIC_PRECISION";
-    public static final String NUMERIC_SCALE = "NUMERIC_SCALE";
-
-
-    public static String getSqlTypeFromResultSet( @NotNull ResultSet resultSet ) throws SQLException {
+    public static String getSqlTypeFromResultSet(
+            @NotNull ResultSet resultSet, @NotNull ColumnNameHolder columnNameHolder
+    ) throws SQLException {
         return getFullSqlTypeDefinition(
-                resultSet.getString( DATA_TYPE_COLUMN ),
-                resultSet.getString( CHARACTER_MAXIMUM_LENGTH ),
-                resultSet.getString( NUMERIC_PRECISION ),
-                resultSet.getString( NUMERIC_SCALE ) );
+                resultSet.getString( columnNameHolder.getDataTypeColumnName() ),
+                resultSet.getString( columnNameHolder.getCharacterMaximumLengthColumnName() ),
+                resultSet.getString( columnNameHolder.getNumericPrecisionColumnName() ),
+                resultSet.getString( columnNameHolder.getNumericScaleColumnName() ) );
     }
 
 
@@ -78,5 +74,12 @@ public class SqlTypeHelper {
             String sqlType, Object precision
     ){
         return String.format( "%s(%s)", sqlType, precision );
+    }
+
+    public interface ColumnNameHolder{
+        String getNumericScaleColumnName();
+        String getNumericPrecisionColumnName();
+        String getCharacterMaximumLengthColumnName();
+        String getDataTypeColumnName();
     }
 }

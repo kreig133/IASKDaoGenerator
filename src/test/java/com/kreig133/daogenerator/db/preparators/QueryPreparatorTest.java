@@ -69,7 +69,7 @@ public class QueryPreparatorTest extends QueryPreparator {
         Assert.assertEquals(
                 super.prepareQuery( "INSERT INTO OpsJourn VALUES ( 1, 1 )" ),
                 "INSERT INTO OpsJourn values(\n" +
-                        "\t${iInstrOpsID;int;1},\n" +
+                        "\t${iInstrOpsID;int identity;1},\n" +
                         "\t${iOrderID;int;1}\n" +
                         ")"
         );

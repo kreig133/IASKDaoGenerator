@@ -1,11 +1,13 @@
 package com.kreig133.daogenerator.db.extractors.out;
 
 import com.kreig133.daogenerator.common.Utils;
+import com.kreig133.daogenerator.db.JDBCConnector;
 import com.kreig133.daogenerator.db.extractors.Extractor;
 import com.kreig133.daogenerator.db.extractors.SqlTypeHelper;
 import com.kreig133.daogenerator.jaxb.*;
 import org.jetbrains.annotations.NotNull;
 
+import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
@@ -31,10 +33,13 @@ public class OutputParameterExtractor extends Extractor{
     @NotNull
     public DaoMethod getOutputParameters( @NotNull final DaoMethod daoMethod ){
         ResultSet resultSet = null;
+        Connection  connection = JDBCConnector.instance().connectToDB();
         try {
             try {
+                connection.setSavepoint();
+
                 resultSet = ResultSetGetter.Factory.get( daoMethod.getSelectType() )
-                        .getResultSetAndFillJdbcTypeIfNeed( daoMethod );
+                        .getResultSetAndFillJdbcTypeIfNeed( daoMethod, connection );
 
                 daoMethod.setOutputParametrs( new ParametersType() );
                 if( resultSet != null ){
@@ -57,9 +62,10 @@ public class OutputParameterExtractor extends Extractor{
                 if ( resultSet != null ) {
                     resultSet.close();
                 }
+                connection.rollback();
             }
         } catch ( SQLException e ) {
-            e.printStackTrace();
+            throw new RuntimeException( e );
         }
         return daoMethod;
     }

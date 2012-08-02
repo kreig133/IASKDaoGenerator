@@ -44,9 +44,9 @@ public class SpInputParameterExtractorTest{
     public void extractDataFromResultSetRowTest() throws SQLException {
         ResultSet rs = Mockito.mock( ResultSet.class );
 
-        Mockito.when( rs.getString( SqlTypeHelper.DATA_TYPE_COLUMN ) ).thenReturn( "int" );
+        Mockito.when( rs.getString( SpInputParameterExtractor.TYPE_NAME ) ).thenReturn( "int" );
         Mockito.when( rs.getString( SpInputParameterExtractor.PARAMETER_NAME_COLUMN ) ).thenReturn( "id" );
-        Mockito.when( rs.getString( SpInputParameterExtractor.PARAMETER_MODE ) ).thenReturn( "IN" );
+        Mockito.when( rs.getInt( SpInputParameterExtractor.PARAMETER_MODE ) ).thenReturn( 1 );
 
         final ParameterType parameterType =
                ( ( SpInputParameterExtractor ) SpInputParameterExtractor.instance() ).extractDataFromResultSetRow( rs );
