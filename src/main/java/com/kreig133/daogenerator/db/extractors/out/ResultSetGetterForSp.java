@@ -1,6 +1,5 @@
 package com.kreig133.daogenerator.db.extractors.out;
 
-import com.kreig133.daogenerator.db.JDBCConnector;
 import com.kreig133.daogenerator.jaxb.DaoMethod;
 import com.kreig133.daogenerator.sql.creators.QueryCreatorFactory;
 import org.jetbrains.annotations.NotNull;
@@ -10,8 +9,6 @@ import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-
-import static com.kreig133.daogenerator.db.JBDCTypeIdConverter.fillJdbcTypeForInputParameters;
 
 /**
  * @author kreig133
@@ -31,7 +28,6 @@ public class ResultSetGetterForSp implements ResultSetGetter{
         final CallableStatement callableStatement = connection.prepareCall(
                 query, ResultSet.TYPE_FORWARD_ONLY, ResultSet.CONCUR_READ_ONLY
         );
-        fillJdbcTypeForInputParameters( callableStatement.getParameterMetaData(), daoMethod );
 
         return callableStatement.execute() ? callableStatement.getResultSet() : null;
     }

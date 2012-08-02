@@ -1,6 +1,7 @@
 package com.kreig133.daogenerator.db.extractors.in;
 
 import com.kreig133.daogenerator.common.Utils;
+import com.kreig133.daogenerator.db.JBDCTypeIdConverter;
 import com.kreig133.daogenerator.db.JDBCConnector;
 import com.kreig133.daogenerator.db.extractors.Extractor;
 import com.kreig133.daogenerator.jaxb.*;
@@ -46,9 +47,11 @@ public class SpInputParameterExtractor extends InputParameterExtractor {
     //<editor-fold desc="SQL-Column">
     protected static final String S_EXECUTE = "sExecute";
 
-    public static final String PARAMETER_NAME_COLUMN    = "PARAMETER_NAME";
+    public static final String PARAMETER_NAME_COLUMN    = "COLUMN_NAME";
 
-    public static final String PARAMETER_MODE           = "PARAMETER_MODE";
+    public static final String PARAMETER_MODE           = "COLUMN_TYPE";
+
+    public static final String JDBC_TYPE                = "DATA_TYPE";
     //</editor-fold>
 
     @Nullable
@@ -94,15 +97,14 @@ public class SpInputParameterExtractor extends InputParameterExtractor {
     //<editor-fold desc="Получение данных из INFORMATION_SCHEMA">
     protected void getInputValuesFromInformationSchema( @NotNull List<ParameterType> result, @NotNull String spName ) {
         try {
-            final PreparedStatement preparedStatement =
-                    JDBCConnector.instance().connectToDB().prepareStatement( GET_INPUT_PARAMETRS_QUERY );
 
-            preparedStatement.setString( 1, spName );
+            Connection connection = JDBCConnector.instance().connectToDB();
+            ResultSet procedureColumns = connection.getMetaData().getProcedureColumns( null, null, spName, null );
 
-            final ResultSet resultSet = preparedStatement.executeQuery();
-
-            while ( resultSet.next() ){
-                result.add( extractDataFromResultSetRow( resultSet ) );
+            while ( procedureColumns.next() ) {
+                if ( procedureColumns.getInt( PARAMETER_MODE ) != 5 ) {
+                    result.add( extractDataFromResultSetRow( procedureColumns ) );
+                }
             }
         } catch ( SQLException e ) {
             throw new RuntimeException( "Не удалось получить параметры для хранимой процедуры " + spName, e );
@@ -116,8 +118,9 @@ public class SpInputParameterExtractor extends InputParameterExtractor {
         parameterType.setName   ( getParameterNameFromResultSet( resultSet ) );
         parameterType.setSqlType( getSqlTypeFromResultSet( resultSet ) );
         parameterType.setType   ( JavaType.getBySqlType( parameterType.getSqlType() ) );
-        parameterType.setInOut  ( InOutType.getByName( resultSet.getString( PARAMETER_MODE ) ) );
+        parameterType.setInOut  ( InOutType.getByCode( resultSet.getInt( PARAMETER_MODE ) ) );
         parameterType.setRenameTo( Utils. convertPBNameToName( parameterType.getName() ) );
+        parameterType.setRenameTo( JBDCTypeIdConverter.getJdbcTypeNameById( resultSet.getInt( JDBC_TYPE ) ) );
         return parameterType;
     }
 

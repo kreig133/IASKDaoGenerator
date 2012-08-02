@@ -59,15 +59,4 @@ public class JBDCTypeIdConverter {
     public static String getJdbcTypeNameById( int id ) {
         return map.get( id );
     }
-
-    public static void fillJdbcTypeForInputParameters(
-            @NotNull ParameterMetaData parameterMetaData, @NotNull DaoMethod daoMethod
-    ) throws SQLException {
-
-        for ( ParameterType p : daoMethod.getInputParametrs().getParameter() ) {
-            p.setJdbcType( JBDCTypeIdConverter.getJdbcTypeNameById( parameterMetaData.getParameterType(
-                    daoMethod.getInputParametrs().getParameter().indexOf( p ) + 1
-            ) ) );
-        }
-    }
 }
