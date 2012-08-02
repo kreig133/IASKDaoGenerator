@@ -28,7 +28,9 @@ public class ResultSetGetterForSp implements ResultSetGetter{
 
         assert query != null;
 
-        final CallableStatement callableStatement = connection.prepareCall( query );
+        final CallableStatement callableStatement = connection.prepareCall(
+                query, ResultSet.TYPE_FORWARD_ONLY, ResultSet.CONCUR_READ_ONLY
+        );
         fillJdbcTypeForInputParameters( callableStatement.getParameterMetaData(), daoMethod );
 
         return callableStatement.execute() ? callableStatement.getResultSet() : null;

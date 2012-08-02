@@ -1,6 +1,7 @@
 package com.kreig133.daogenerator.sql.creators;
 
 import com.kreig133.daogenerator.jaxb.*;
+import org.intellij.lang.annotations.Language;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
@@ -32,8 +33,18 @@ public abstract class QueryCreator {
                 String.format( "#{%s}", parameterType.getRenameTo() ) ;
     }
 
-    public static String getQueryStringWithoutMetaData( @NotNull String query ){
-        return query.replaceAll( daoGeneratorEscapedParamInfo.pattern(), "?" ) ;
+    public static String getQueryStringForTesting( @NotNull String query ) {
+        return
+                optimizeQuery(
+                    query.replaceAll( daoGeneratorEscapedParamInfo.pattern(), "?" )
+                );
+    }
+
+    @Language( "RegExp" )
+    static String replace = "(?i)^\\s*(select\\s+(distinct\\s+)?+(?!top))";
+
+    public static String optimizeQuery( String query ) {
+        return query.replaceFirst( replace, "$1TOP 1 " );
     }
 
     protected static final Pattern daoGeneratorEscapedParamInfo = Pattern.compile( "\\$\\{(.+?)\\}");
