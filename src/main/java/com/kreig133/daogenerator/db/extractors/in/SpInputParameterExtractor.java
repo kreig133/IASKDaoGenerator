@@ -59,7 +59,7 @@ public class SpInputParameterExtractor extends InputParameterExtractor {
 
     public static final String PRECISION = "PRECISION";
 
-    public static final String CHAR_OCTET_LENGTH = "CHAR_OCTET_LENGTH";
+    public static final String CHAR_OCTET_LENGTH = "PRECISION";
 
     public static final String TYPE_NAME = "TYPE_NAME";
     //</editor-fold>
@@ -125,12 +125,12 @@ public class SpInputParameterExtractor extends InputParameterExtractor {
     protected ParameterType extractDataFromResultSetRow( @NotNull ResultSet resultSet ) throws SQLException {
         final ParameterType parameterType = new ParameterType();
 
-        parameterType.setName   ( getParameterNameFromResultSet( resultSet ) );
-        parameterType.setSqlType( getSqlTypeFromResultSet( resultSet, getColumnNameHolderForSp() ) );
-        parameterType.setType   ( JavaType.getBySqlType( parameterType.getSqlType() ) );
-        parameterType.setInOut  ( InOutType.getByCode( resultSet.getInt( PARAMETER_MODE ) ) );
-        parameterType.setRenameTo( Utils. convertPBNameToName( parameterType.getName() ) );
-        parameterType.setRenameTo( JBDCTypeIdConverter.getJdbcTypeNameById( resultSet.getInt( JDBC_TYPE ) ) );
+        parameterType.setName       ( getParameterNameFromResultSet( resultSet ) );
+        parameterType.setSqlType    ( getSqlTypeFromResultSet( resultSet, getColumnNameHolderForSp() ) );
+        parameterType.setType       ( JavaType.getBySqlType( parameterType.getSqlType() ) );
+        parameterType.setInOut      ( InOutType.getByCode( resultSet.getInt( PARAMETER_MODE ) ) );
+        parameterType.setRenameTo   ( Utils. convertPBNameToName( parameterType.getName() ) );
+        parameterType.setJdbcType   ( JBDCTypeIdConverter.getJdbcTypeNameById( resultSet.getInt( JDBC_TYPE ) ) );
         return parameterType;
     }
 
