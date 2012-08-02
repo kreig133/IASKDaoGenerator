@@ -137,18 +137,12 @@ public class QueryPreparator {
     protected List<ParameterType> getColumnsFromDbByTableName( String tableName ) {
         try {
             Connection connection = JDBCConnector.instance().connectToDB();
+            ResultSet resultSet = connection.getMetaData().getColumns( null, null, tableName, null );
 
-            assert connection != null;
-
-            PreparedStatement statement = connection.prepareStatement(
-                    "SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = ? ORDER BY ORDINAL_POSITION" );
-            statement.setString( 1, tableName );
-
-            ResultSet resultSet = statement.executeQuery();
             List<ParameterType> parameterTypeList = new ArrayList<ParameterType>();
             while ( resultSet.next() ) {
                 ParameterType type = new ParameterType();
-                type.setSqlType( SqlTypeHelper.getSqlTypeFromResultSet( resultSet ) );
+                type.setSqlType( SqlTypeHelper.getSqlTypeFromResultSet( resultSet, getColumnNameHolderForQuery() ) );
                 type.setName( resultSet.getString( "COLUMN_NAME" ) );
                 parameterTypeList.add( type );
             }
@@ -158,6 +152,31 @@ public class QueryPreparator {
             return new ArrayList<ParameterType>();
         }
     }
+
+    private SqlTypeHelper.ColumnNameHolder getColumnNameHolderForQuery() {
+        return new SqlTypeHelper.ColumnNameHolder() {
+            @Override
+            public String getNumericScaleColumnName() {
+                return "DECIMAL_DIGITS";
+            }
+
+            @Override
+            public String getNumericPrecisionColumnName() {
+                return "COLUMN_SIZE";
+            }
+
+            @Override
+            public String getCharacterMaximumLengthColumnName() {
+                return "COLUMN_SIZE";
+            }
+
+            @Override
+            public String getDataTypeColumnName() {
+                return "TYPE_NAME";
+            }
+        };
+    }
+
 
     private final static QueryPreparator INSTANCE = new QueryPreparator();
 
