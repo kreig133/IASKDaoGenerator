@@ -61,7 +61,7 @@ public class QueryPreparatorTest extends QueryPreparator {
     public void prepareQueryTestUpdate() {
         Assert.assertEquals(
                 super.prepareQuery( "UPDATE teSponsor SET sName = :sName, sPart=:sPart, sText=:sText WHERE nRecID = :nRecID" ),
-                "UPDATE teSponsor SET sName = ${sName;varchar(255)}, sPart=${sPart;varchar(255)}, sText=${sText;varchar(255)} WHERE nRecID = ${nRecID;int}"
+                "UPDATE teSponsor SET sName = ${sName;varchar(255)}, sPart=${sPart;varchar(255)}, sText=${sText;varchar(255)} WHERE nRecID = ${nRecID;int identity}"
         );
     }
 
