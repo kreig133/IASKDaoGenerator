@@ -49,4 +49,12 @@ public class QueryCreatorTest {
         daoMethod.getOutputParametrs().getParameter().clear();
         daoMethod.getOutputParametrs().getParameter().addAll( typeList );
     }
+
+    @Test
+    public void optimizeImportTest() {
+        Assert.assertEquals( "sElect      \tDistinct   TOP 1 ",
+                QueryCreator.optimizeQuery( "    \n sElect      \tDistinct   " ) );
+        Assert.assertEquals( "select top ", QueryCreator.optimizeQuery( "select top " ) );
+        Assert.assertEquals( "select distinct top ", QueryCreator.optimizeQuery( "select distinct top " ) );
+    }
 }

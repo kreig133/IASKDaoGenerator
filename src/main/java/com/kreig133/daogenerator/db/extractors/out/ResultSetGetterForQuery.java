@@ -1,6 +1,5 @@
 package com.kreig133.daogenerator.db.extractors.out;
 
-import com.kreig133.daogenerator.db.JDBCConnector;
 import com.kreig133.daogenerator.jaxb.DaoMethod;
 import com.kreig133.daogenerator.jaxb.ParameterType;
 import com.kreig133.daogenerator.sql.creators.QueryCreator;
@@ -27,7 +26,7 @@ public class ResultSetGetterForQuery implements  ResultSetGetter{
     ) throws SQLException {
 
         final String query =
-                QueryCreator.getQueryStringWithoutMetaData( daoMethod.getCommon().getQuery() );
+                QueryCreator.getQueryStringForTesting( daoMethod.getCommon().getQuery() );
 
         assert query != null;
 
