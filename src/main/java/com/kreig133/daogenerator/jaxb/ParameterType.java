@@ -292,6 +292,21 @@ public class ParameterType {
      *
      */
     public String getJdbcType() {
+        if ( jdbcType == null ) {
+            switch ( getType() ) { //TODO enum запилить надо
+                case DOUBLE:
+                    return "NUMERIC";
+                case LONG:
+                case BYTE:
+                    return "INTEGER";
+                case STRING:
+                    return "VARCHAR";
+                case DATE:
+                    return "TIMESTAMP";
+                default:
+                    throw new IllegalArgumentException();
+            }
+        }
         return jdbcType;
     }
 

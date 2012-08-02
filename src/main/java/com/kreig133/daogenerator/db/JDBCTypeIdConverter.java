@@ -68,6 +68,6 @@ public class JDBCTypeIdConverter {
             }
         }
 
-        throw new IllegalArgumentException( "Нет такого JbdcType" );
+        throw new IllegalArgumentException( "Нет такого JbdcType :" + jdbcTypeName );
     }
 }
