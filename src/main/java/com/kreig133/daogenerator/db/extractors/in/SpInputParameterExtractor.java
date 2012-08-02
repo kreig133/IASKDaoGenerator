@@ -4,6 +4,7 @@ import com.kreig133.daogenerator.common.Utils;
 import com.kreig133.daogenerator.db.JBDCTypeIdConverter;
 import com.kreig133.daogenerator.db.JDBCConnector;
 import com.kreig133.daogenerator.db.extractors.Extractor;
+import com.kreig133.daogenerator.db.extractors.SqlTypeHelper;
 import com.kreig133.daogenerator.jaxb.*;
 import org.apache.commons.lang.StringUtils;
 import org.jetbrains.annotations.NotNull;
@@ -26,6 +27,7 @@ public class SpInputParameterExtractor extends InputParameterExtractor {
 
     //<editor-fold desc="instance">
     private final static SpInputParameterExtractor INSTANCE = new SpInputParameterExtractor();
+
 
     private SpInputParameterExtractor() {
     }
@@ -52,6 +54,14 @@ public class SpInputParameterExtractor extends InputParameterExtractor {
     public static final String PARAMETER_MODE           = "COLUMN_TYPE";
 
     public static final String JDBC_TYPE                = "DATA_TYPE";
+
+    public static final String SCALE = "SCALE";
+
+    public static final String PRECISION = "PRECISION";
+
+    public static final String CHAR_OCTET_LENGTH = "CHAR_OCTET_LENGTH";
+
+    public static final String TYPE_NAME = "TYPE_NAME";
     //</editor-fold>
 
     @Nullable
@@ -116,7 +126,7 @@ public class SpInputParameterExtractor extends InputParameterExtractor {
         final ParameterType parameterType = new ParameterType();
 
         parameterType.setName   ( getParameterNameFromResultSet( resultSet ) );
-        parameterType.setSqlType( getSqlTypeFromResultSet( resultSet ) );
+        parameterType.setSqlType( getSqlTypeFromResultSet( resultSet, getColumnNameHolderForSp() ) );
         parameterType.setType   ( JavaType.getBySqlType( parameterType.getSqlType() ) );
         parameterType.setInOut  ( InOutType.getByCode( resultSet.getInt( PARAMETER_MODE ) ) );
         parameterType.setRenameTo( Utils. convertPBNameToName( parameterType.getName() ) );
@@ -262,5 +272,29 @@ public class SpInputParameterExtractor extends InputParameterExtractor {
         checkArgument( determineQueryType( query ) != SelectType.CALL,
                 "Нельзя проверить название хранимой процедуры для SQL-запроса" );
         return ! ( getStoreProcedureName( query ) == null || "".equals( getStoreProcedureName( query ) ) );
+    }
+
+    public static SqlTypeHelper.ColumnNameHolder getColumnNameHolderForSp() {
+        return new SqlTypeHelper.ColumnNameHolder() {
+            @Override
+            public String getNumericScaleColumnName() {
+                return SCALE;
+            }
+
+            @Override
+            public String getNumericPrecisionColumnName() {
+                return PRECISION;
+            }
+
+            @Override
+            public String getCharacterMaximumLengthColumnName() {
+                return CHAR_OCTET_LENGTH;
+            }
+
+            @Override
+            public String getDataTypeColumnName() {
+                return TYPE_NAME;
+            }
+        };
     }
 }
