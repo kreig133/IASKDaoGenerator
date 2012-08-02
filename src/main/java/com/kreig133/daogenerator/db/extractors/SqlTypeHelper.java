@@ -14,10 +14,10 @@ import java.sql.SQLException;
  */
 public class SqlTypeHelper {
 
-    public static final String DATA_TYPE_COLUMN         = "DATA_TYPE";
-    public static final String CHARACTER_MAXIMUM_LENGTH = "CHARACTER_MAXIMUM_LENGTH";
-    public static final String NUMERIC_PRECISION = "NUMERIC_PRECISION";
-    public static final String NUMERIC_SCALE = "NUMERIC_SCALE";
+    public static final String DATA_TYPE_COLUMN         = "TYPE_NAME";
+    public static final String CHARACTER_MAXIMUM_LENGTH = "CHAR_OCTET_LENGTH";
+    public static final String NUMERIC_PRECISION        = "PRECISION";
+    public static final String NUMERIC_SCALE            = "SCALE";
 
 
     public static String getSqlTypeFromResultSet( @NotNull ResultSet resultSet ) throws SQLException {
