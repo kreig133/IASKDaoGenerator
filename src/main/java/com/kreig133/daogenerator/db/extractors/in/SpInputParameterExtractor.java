@@ -58,7 +58,7 @@ public class SpInputParameterExtractor extends InputParameterExtractor {
 
     public static final String PRECISION = "PRECISION";
 
-    public static final String CHAR_OCTET_LENGTH = "CHAR_OCTET_LENGTH";
+    public static final String CHAR_OCTET_LENGTH = "PRECISION";
 
     public static final String TYPE_NAME = "TYPE_NAME";
     //</editor-fold>
