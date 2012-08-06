@@ -129,7 +129,7 @@ public class SpInputParameterExtractor extends InputParameterExtractor {
         parameterType.setType   ( JavaType.getBySqlType( parameterType.getSqlType() ) );
         parameterType.setInOut  ( InOutType.getByCode( resultSet.getInt( PARAMETER_MODE ) ) );
         parameterType.setRenameTo( Utils. convertPBNameToName( parameterType.getName() ) );
-        parameterType.setRenameTo( JDBCTypeIdConverter.getJdbcTypeNameById( resultSet.getInt( JDBC_TYPE ) ) );
+        parameterType.setJdbcType( JDBCTypeIdConverter.getJdbcTypeNameById( resultSet.getInt( JDBC_TYPE ) ) );
         return parameterType;
     }
 
