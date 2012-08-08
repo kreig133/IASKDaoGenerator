@@ -1,9 +1,8 @@
 package com.kreig133.daogenerator.db.extractors.in;
 
 import com.kreig133.daogenerator.common.Utils;
-import com.kreig133.daogenerator.db.JBDCTypeIdConverter;
+import com.kreig133.daogenerator.db.JDBCTypeIdConverter;
 import com.kreig133.daogenerator.db.JDBCConnector;
-import com.kreig133.daogenerator.db.extractors.Extractor;
 import com.kreig133.daogenerator.db.extractors.SqlTypeHelper;
 import com.kreig133.daogenerator.jaxb.*;
 import org.apache.commons.lang.StringUtils;
@@ -137,7 +136,7 @@ public class SpInputParameterExtractor extends InputParameterExtractor {
         parameterType.setType       ( JavaType.getBySqlType( parameterType.getSqlType() ) );
         parameterType.setInOut      ( InOutType.getByCode( resultSet.getInt( PARAMETER_MODE ) ) );
         parameterType.setRenameTo   ( Utils. convertPBNameToName( parameterType.getName() ) );
-        parameterType.setJdbcType   ( JBDCTypeIdConverter.getJdbcTypeNameById( resultSet.getInt( JDBC_TYPE ) ) );
+        parameterType.setJdbcType   ( JDBCTypeIdConverter.getJdbcTypeNameById( resultSet.getInt( JDBC_TYPE ) ) );
         return parameterType;
     }
 
