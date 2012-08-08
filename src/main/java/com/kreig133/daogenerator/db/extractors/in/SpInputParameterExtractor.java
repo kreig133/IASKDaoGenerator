@@ -3,6 +3,7 @@ package com.kreig133.daogenerator.db.extractors.in;
 import com.kreig133.daogenerator.common.Utils;
 import com.kreig133.daogenerator.db.JDBCTypeIdConverter;
 import com.kreig133.daogenerator.db.JDBCConnector;
+import com.kreig133.daogenerator.db.extractors.Extractor;
 import com.kreig133.daogenerator.db.extractors.SqlTypeHelper;
 import com.kreig133.daogenerator.jaxb.*;
 import org.apache.commons.lang.StringUtils;
