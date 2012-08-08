@@ -13,7 +13,7 @@ import java.util.List;
  * @author eshangareev
  * @version 1.0
  */
-public class DoubleQueryPreparatorTest{
+public class DoubleQueryPreparatorTest {
 
     @NotNull
     @Language( "SQL" )
@@ -64,7 +64,7 @@ public class DoubleQueryPreparatorTest{
             "ORDER BY sshortname";
 
     @Test
-    public void prepareQueryTest(){
+    public void prepareQueryTest() {
         @Language( "SQL" )
         String inputWithName =
                 "select count(n_ad_id) from dbo.t_ad_rasp where not n_ad_id is null and n_adr_raspor = :irasp_id and iisdeleted = 0";
@@ -72,13 +72,34 @@ public class DoubleQueryPreparatorTest{
         String inputWithTestVlue =
                 "select count(n_ad_id) from dbo.t_ad_rasp where not n_ad_id is null and n_adr_raspor = 376682 and iisdeleted = 0";
         String s = DoubleQueryPreparator.instance().prepareQuery( inputWithName, inputWithTestVlue );
-        Assert.assertEquals( s, "select count(n_ad_id) from dbo.t_ad_rasp where not n_ad_id is null and n_adr_raspor = ${irasp_id;int;376682} and iisdeleted = 0" );
+        Assert.assertEquals( s,
+                "select count(n_ad_id) from dbo.t_ad_rasp where not n_ad_id is null and n_adr_raspor = ${irasp_id;int;376682} and iisdeleted = 0" );
     }
 
     @Test
-    public void testParse(){
+    public void testParse() {
         String s = DoubleQueryPreparator.instance().prepareQuery( query, fiiledQuery );
-        System.out.println(s);
+        Assert.assertEquals( s, "SELECT distinct\n" +
+                " tm.imembercid, \n" +
+                "ltrim(tm.sShortName) as sshortname \n" +
+                "FROM dbo.tabBondKind bk with (nolock) \n" +
+                "JOIN dbo.tabBondTypes bt with (nolock) ON bk.iBondKindID = bt.iBondKindID \n" +
+                "JOIN dbo.tabMembers tm with (nolock) ON bt.iMemberCID = tm.iMemberCID \n" +
+                "JOIN ( select ibonvalueid \n" +
+                "from dbo.tabsectorbondtypes with (nolock) \n" +
+                "where ivalueid = coalesce(cast(${id;integer;123} as integer),0) \n" +
+                "union select ivalueid as ibonvalueid \n" +
+                "from dbo.tabbondtypes with (nolock) \n" +
+                "where coalesce(cast(${id;integer;123} as integer),0) = 0) ts ON bt.ivalueid = ts.ibonvalueid, \n" +
+                "( select streecode, ibondkindid \n" +
+                "from dbo.tabBondKind with (nolock) \n" +
+                "where ibondkindid=coalesce(cast(${ibondid;integer;456} as integer),ibondkindid)) tk \n" +
+                "WHERE dbo.SUBSTRING(bk.streecode,1, dbo.DATALENGTH(tk.streecode)) = tk.streecode \n" +
+                "UNION ALL\n" +
+                "SELECT cast(null as int) as imembercid, \n" +
+                "'' as sshortname \n" +
+                "FROM dbo.v_dummy \n" +
+                "ORDER BY sshortname" );
     }
 
     @Test
@@ -103,7 +124,7 @@ public class DoubleQueryPreparatorTest{
     }
 
     @Test
-    public void testPrepareQueryWithNonEqualQueries(){
+    public void testPrepareQueryWithNonEqualQueries() {
         String s = DoubleQueryPreparator.instance().prepareQuery(
                 "SELECT * FROM      table \t\t\nWHERE id   \t\n   \r   =:id AND date=\t\n\r\t\n\r                  :date",
                 "       SELECT \t\r\n* FROM table WHERE id=1 AND date='1.1.1 1'" );
@@ -112,7 +133,7 @@ public class DoubleQueryPreparatorTest{
     }
 
     @Test
-    public void prepareQueryBeforeParseTest(){
+    public void prepareQueryBeforeParseTest() {
         Assert.assertEquals( DoubleQueryPreparator.instance().prepareQueryBeforeParse( ") \n, " ), " ) , " );
         Assert.assertEquals( DoubleQueryPreparator.instance().prepareQueryBeforeParse( "p    \t\n\r = \n123 " ),
                 "p = 123 " );
@@ -121,9 +142,9 @@ public class DoubleQueryPreparatorTest{
         Assert.assertEquals( DoubleQueryPreparator.instance().prepareQueryBeforeParse( "FROM dbo.tabPersons p\nWHERE" ),
                 "FROM dbo.tabPersons p WHERE" );
         Assert.assertEquals( DoubleQueryPreparator.instance().prepareQueryBeforeParse( ")id=" ), " ) id = " );
-        Assert.assertEquals( DoubleQueryPreparator.instance().prepareQueryBeforeParse( ">="),  ">=" );
-        Assert.assertEquals( DoubleQueryPreparator.instance().prepareQueryBeforeParse( "<="),  "<=" );
-        Assert.assertEquals( DoubleQueryPreparator.instance().prepareQueryBeforeParse( "!="),  "!=" );
+        Assert.assertEquals( DoubleQueryPreparator.instance().prepareQueryBeforeParse( ">=" ), ">=" );
+        Assert.assertEquals( DoubleQueryPreparator.instance().prepareQueryBeforeParse( "<=" ), "<=" );
+        Assert.assertEquals( DoubleQueryPreparator.instance().prepareQueryBeforeParse( "!=" ), "!=" );
     }
 
     private void testDetermineSqlTypeByTestValue( String testValue, String sqlType ) {
@@ -161,7 +182,6 @@ public class DoubleQueryPreparatorTest{
             "where dt between :dt1 and :dt2  \n" +
             "order by dt";
 
-
     @Language( "SQL" )
     String inQueryTestParams = "SELECT \n" +
             "         id,   \n" +
@@ -190,7 +210,58 @@ public class DoubleQueryPreparatorTest{
             "order by dt";
 
     @Test
-    public void prepareQueryTest2(){
-        String s = DoubleQueryPreparator.instance().prepareQuery( inQueryTestParams, inQueryWithParams );
+    public void prepareQueryTest2() {
+        Assert.assertEquals( DoubleQueryPreparator.instance().prepareQuery( inQueryTestParams, inQueryWithParams ),
+        "SELECT \n" +
+                "         id,   \n" +
+                "         dt,   \n" +
+                "         nday,   \n" +
+                "         fl,\n" +
+                "         dbo.datepartday(dt),\n" +
+                "         case when dbo.datepartmonth(dt) = CAST(${n;INT;7} AS INT) then 1 else 0 end,   \n" +
+                "         (case when CAST(${fl;INT;1} AS INT)=1 and not t.dtdate is null then 1 \n" +
+                "                     when CAST(${fl;INT;1} AS INT)=2 and not v.ddatefrom is null then 1 \n" +
+                "                     else 0 end) AS flquot  \n" +
+                "FROM dbo.t_calendar_workday\n" +
+                "     Left join (select dtdate,sum(nratebond) AS nres \n" +
+                "                  from dbo.tabquotation \n" +
+                "                where dtdate between ${dt1;datetime;'6-25-2012 0:0:0.000'} and ${dt2;datetime;'7-31-2012 0:0:0.000'} and \n" +
+                "                      iisdeleted = 0 \n" +
+                "                group by dtdate\n" +
+                "                having sum(nratebond) > 0 ) t on t.dtdate = dt \n" +
+                "     Left join (select ddatefrom,sum(nrate) AS nres \n" +
+                "                  from dbo.tabbondsmarketrate\n" +
+                "                where ddatefrom between ${dt1;datetime;'6-25-2012 0:0:0.000'} and ${dt2;datetime;'7-31-2012 0:0:0.000'} and \n" +
+                "                      ivalueid = 2 \n" +
+                "                group by ddatefrom\n" +
+                "                having sum(nrate) > 0) v on dt = ddatefrom\n" +
+                "where dt between ${dt1;datetime;'6-25-2012 0:0:0.000'} and ${dt2;datetime;'7-31-2012 0:0:0.000'}  \n" +
+                "order by dt");
+
     }
+
+    @Language( "SQL" )
+    String inputQueryWithTestValues =
+            "select count ( n_depo_id ) from dbo.t_depo where n_depo_id <> CAST ( 128 AS INT ) and dbo" +
+            ".concat3 ( s_depo_bank , n_depo_divnr , COALESCE ( s_depo_branch , '' ) ) =dbo.concat3 " +
+            "( CAST ( '11' AS VARCHAR ( 255 ) ) , CAST ( '22' AS VARCHAR ( 255 ) ) , " +
+            "COALESCE ( CAST ( '00023' AS VARCHAR ( 255 ) ) , '' ) )";
+
+    @Language( "SQL" )
+    String inputQueryWithParams =
+            "select count(n_depo_id)\nfrom dbo.t_depo \nwhere n_depo_id <> CAST(:id AS INT) and \n" +
+            "      dbo.concat3(s_depo_bank,n_depo_divnr,COALESCE(s_depo_branch,'')) = dbo.concat3" +
+                    "(CAST(:scode1 AS VARCHAR(255)),CAST(:scode2 AS VARCHAR(255))," +
+                    "COALESCE(CAST(:scode3 AS VARCHAR(255)),''))";
+
+    @Test
+    public void prepareNotShouldRemoveTestValues(){
+        Assert.assertEquals(
+                "select count(n_depo_id)\n" +
+                "from dbo.t_depo \n" +
+                "where n_depo_id <> CAST(${id;INT;128} AS INT) and \n" +
+                "      dbo.concat3(s_depo_bank,n_depo_divnr,COALESCE(s_depo_branch,'')) = dbo.concat3(CAST(${scode1;VARCHAR ( 255 );'11'} AS VARCHAR(255)),CAST(${scode2;VARCHAR ( 255 );'22'} AS VARCHAR(255)),COALESCE(CAST(${scode3;VARCHAR ( 255 );'00023'} AS VARCHAR(255)),''))"
+        , DoubleQueryPreparator.instance().prepareQuery( inputQueryWithParams, inputQueryWithTestValues ));
+    }
+
 }
