@@ -151,6 +151,8 @@ public class DoubleQueryPreparator extends QueryPreparator {
                     .replaceAll( "(?<!>|<|!)=", " = " )
                     .replaceAll( "(\\b)\\s+(\\b)", "$1 $2" )
                     .replaceAll( "(\\B)\\s+", "$1 " )
+                    .replaceAll( "(\\S)\\s*,", "$1 ," )
+                    .replaceAll( ",\\s*(\\S)", ", $1" )
                     .replaceAll( "\\s+(\\B)", " $1" );
     }
 
