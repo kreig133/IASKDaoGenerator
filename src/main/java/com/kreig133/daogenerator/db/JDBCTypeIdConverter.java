@@ -13,7 +13,7 @@ import java.util.Map;
  * @author eshangareev
  * @version 1.0
  */
-public class JBDCTypeIdConverter {
+public class JDBCTypeIdConverter {
     static Map<Integer, String> map;
 
     static {
