@@ -12,7 +12,7 @@ import org.jetbrains.annotations.NotNull;
 
 import javax.xml.bind.annotation.XmlEnum;
 import javax.xml.bind.annotation.XmlType;
-
+import java.sql.ParameterMetaData;
 
 /**
  * <p>Java class for inOutType.
@@ -28,15 +28,14 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;/restriction>
  * &lt;/simpleType>
  * </pre>
- *
  */
-@XmlType(name = "inOutType")
+@XmlType( name = "inOutType" )
 @XmlEnum
 public enum InOutType {
 
-    IN(1),
-    OUT(2),
-    INOUT(4);
+    IN( ParameterMetaData.parameterModeIn ),
+    OUT( ParameterMetaData.parameterModeOut ),
+    INOUT( ParameterMetaData.parameterModeInOut ),;
 
     Integer code;
 
@@ -52,18 +51,18 @@ public enum InOutType {
         return name();
     }
 
-    public static InOutType fromValue(String v) {
-        return valueOf(v);
+    public static InOutType fromValue( String v ) {
+        return valueOf( v );
     }
 
     @NotNull
     public static InOutType getByName( @NotNull String name ) {
-        for( InOutType inputOrOutputType : InOutType.values() ){
-            if( inputOrOutputType.toString().equalsIgnoreCase( name.trim() )){
+        for ( InOutType inputOrOutputType : InOutType.values() ) {
+            if ( inputOrOutputType.toString().equalsIgnoreCase( name.trim() ) ) {
                 return inputOrOutputType;
             }
         }
-        throw  new IllegalArgumentException();
+        throw new IllegalArgumentException();
     }
 
     public static InOutType getByCode( int code ) {
