@@ -3,6 +3,7 @@ package com.kreig133.daogenerator.db.preparators;
 import com.kreig133.daogenerator.jaxb.ParameterType;
 import org.intellij.lang.annotations.Language;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.TestOnly;
 
 import java.util.List;
 import java.util.regex.Matcher;
@@ -47,7 +48,7 @@ public class NameModeQueryPreparator extends  QueryPreparator{
         return query;
     }
 
-    private String replaceOthersNameMode( @NotNull String query ) {
-        return query.replaceAll( ":(\\w+)", "\\${$1;"+ERROR+"}" );
+    String replaceOthersNameMode( @NotNull String query ) {
+        return query.replaceAll( "(?<=\\W):(\\w+)", "\\${$1;"+ERROR+"}" );
     }
 }
