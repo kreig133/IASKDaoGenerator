@@ -68,7 +68,7 @@ public class ValueModeQueryPreparator extends QueryPreparator {
             while ( matcher.find() ) {
                 newQuery = newQuery.replaceAll(
                         format,
-                        String.format("$1\\${$2;$7;$3}" ) );
+                        String.format("$1\\${$2;$8;$4}" ) );
             }
         }
         return newQuery;
