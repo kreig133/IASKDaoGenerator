@@ -42,7 +42,11 @@ public class QueryPreparator {
     protected String regex = "(?u)[^\\.`]([\"\\[]?\\b\\w+[\"\\]]?\\.){0,2}%s\\s*=\\s*" + TEST_VALUES;
     @NotNull
     @Language( "RegExp" )
-    protected String castRegExp = "(?isu)(%s\\s*=.*?)\\bcast\\s*\\(\\s*"+ TEST_VALUES +"\\s*as\\s*("+ SQL_TYPE + ")\\s*\\)";
+    protected String OTHER_FUNCTION = "(\\s*\\w+\\s*\\(\\s*)*";
+    @NotNull
+    @Language( "RegExp" )
+    protected String castRegExp =
+            "(?isu)(%s\\s*="+ OTHER_FUNCTION + "\\s*)\\bcast\\s*\\(\\s*"+ TEST_VALUES +"\\s*as\\s*("+ SQL_TYPE + ")\\s*\\)";
     @NotNull
     @Language("RegExp")
     protected String columnName = "\\b([@#\\w&&[\\D]][\\w\\$@#]*)\\b";

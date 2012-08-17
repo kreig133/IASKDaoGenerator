@@ -153,6 +153,26 @@ public class QueryPreparatorTest extends QueryPreparator {
         Assert.assertEquals( determineWorkingMode( query + ":" ), WorkingMode.NAME );
     }
 
+    @Language( "SQL" )
+    String queryWithWrappedCast = "SELECT dbo.tabJurPersons.sFullName \n" +
+            "FROM dbo.tabMembers, \n" +
+            "dbo.tabJurPersons \n" +
+            "WHERE ( dbo.tabJurPersons.iMemberCID = dbo.tabMembers.iMemberCID ) and \n" +
+            "( dbo.tabMembers.iMemberCID = coalesce(cast(0 as integer),-1) ) and \n" +
+            "( coalesce(cast(10 as integer),0) > 0 )";
 
+    @Test
+    public void testPrepareQueryWithWrappedCast() {
+        String result = QueryPreparator.instance().prepareQuery( queryWithWrappedCast );
+        Assert.assertEquals( result,
+            "SELECT dbo.tabJurPersons.sFullName \n" +
+                    "FROM dbo.tabMembers, \n" +
+                    "dbo.tabJurPersons \n" +
+                    "WHERE ( dbo.tabJurPersons.iMemberCID = dbo.tabMembers.iMemberCID ) and \n" +
+                    "( dbo.tabMembers.iMemberCID = coalesce(${iMemberCID;integer;0},-1) ) and \n" +
+                    "( coalesce(cast(10 as integer),0) > 0 )"
+
+                );
+    }
 
 }
