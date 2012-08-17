@@ -175,4 +175,28 @@ public class QueryPreparatorTest extends QueryPreparator {
                 );
     }
 
+    @Language( "SQL" )
+    String queryWithCast = "select count ( *) as retn\n" +
+            "from dbo.t_division\n" +
+            "where iisdeleted =0 and\n" +
+            "ntypesource =2 and\n" +
+            "iownerid =0 and\n" +
+            "irelationtypeid =CAST ( 1 AS INT ) and\n" +
+            "isourceid =CAST ( 8368 AS INT )";
+    @Test
+    public void testPrepareQueryWithCast(){
+        String result  = prepareQuery( queryWithCast );
+        Assert.assertEquals( result,
+                "select count ( *) as retn\n" +
+                        "from dbo.t_division\n" +
+                        "where iisdeleted = ${iisdeleted;int;0} and\n" +
+                        "ntypesource = ${ntypesource;int;2} and\n" +
+                        "iownerid = ${iownerid;int;0} and\n" +
+                        "irelationtypeid =${irelationtypeid;INT;1} and\n" +
+                        "isourceid =${isourceid;INT;8368}"
+                );
+    }
+
+
+
 }
