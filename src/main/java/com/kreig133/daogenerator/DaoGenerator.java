@@ -1,6 +1,7 @@
 package com.kreig133.daogenerator;
 
 import com.kreig133.daogenerator.gui.Form;
+import com.kreig133.daogenerator.presenter.FormPresenter;
 import com.kreig133.daogenerator.settings.PropertiesFileController;
 import com.kreig133.daogenerator.settings.Settings;
 import jsyntaxpane.DefaultSyntaxKit;
@@ -54,8 +55,9 @@ public class DaoGenerator {
                 }
                 final JFrame frame = new JFrame( "DaoGenerator " + VERSION );
 
-
-                frame.setContentPane( Form.getInstance() );
+                FormPresenter presenter = new FormPresenter();
+                presenter.setView(Form.getInstance(presenter));
+                frame.setContentPane( Form.getMainPanel(presenter) );
                 frame.setSize( settings().getFrameWidth(), settings().getFrameHeight() );
 
                 frame.addComponentListener( new ComponentAdapter() {
