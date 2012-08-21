@@ -494,7 +494,7 @@ public class Form  implements SourcePathChangeListener, FormInterface{
 
     @Override
     public void showWindowWithText(String text){
-        TextView.setText( SpInputParameterExtractor.getSPText() );
+        TextView.setText(text);
         getWindowWithText().setVisible(true);
     }
 
