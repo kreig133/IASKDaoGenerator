@@ -147,7 +147,7 @@ public class DoubleQueryPreparator extends QueryPreparator {
     }
 
     protected String prepareQueryBeforeParse( String query ){
-        return query.replaceAll( "(\\)|\\()", " $1 " )
+        return query.replaceAll( "(\\)|\\(|\\+)", " $1 " )
                     .replaceAll( "(?<!>|<|!)=", " = " )
                     .replaceAll( "(\\b)\\s+(\\b)", "$1 $2" )
                     .replaceAll( "(\\B)\\s+", "$1 " )
