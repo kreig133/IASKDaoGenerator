@@ -264,4 +264,28 @@ public class DoubleQueryPreparatorTest {
         , DoubleQueryPreparator.instance().prepareQuery( inputQueryWithParams, inputQueryWithTestValues ));
     }
 
+    @Test
+    public void problemsWithPlusTest(){
+        @Language("SQL")
+        String first = "SELECT tTempTables.sTblName,   \n" +
+                "       tTempTables.sCreateScript  \n" +
+                "FROM   tTempTables  \n" +
+                "WHERE  tTempTables.sTblName = '#table1'    \n" +
+                "And IsNull(object_ID('tempdb..'+'#table1'),0 ) = 0";
+        @Language("SQL")
+        String second = "SELECT tTempTables.sTblName,   \n" +
+                "       tTempTables.sCreateScript  \n" +
+                "FROM   tTempTables  \n" +
+                "WHERE  tTempTables.sTblName = :as_temp_table_name    \n" +
+                "And IsNull(object_ID('tempdb..' + :as_temp_table_name),0 ) = 0";
+
+        String result = DoubleQueryPreparator.instance().prepareQuery( first, second );
+
+        Assert.assertEquals( result, "SELECT tTempTables.sTblName,   \n" +
+                "       tTempTables.sCreateScript  \n" +
+                "FROM   tTempTables  \n" +
+                "WHERE  tTempTables.sTblName = ${as_temp_table_name;varchar;'#table1'}    \n" +
+                "And IsNull(object_ID('tempdb..' + ${as_temp_table_name;varchar;'#table1'}),0 ) = 0" );
+    }
+
 }
