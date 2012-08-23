@@ -35,7 +35,7 @@ public class WrapperGenerator extends CommonCallCreator{
                             @Override
                             public String apply( @Nullable ParameterType p ) {
                                 assert p != null;
-                                return String.format( "%s %s NULL", p.getName(), p.getSqlType() );
+                                return String.format( "%s %s NULL", p.getRenameTo(), p.getSqlType() );
                             }
                         }
                 ), ",\n\t"

@@ -94,7 +94,9 @@ public class DepoMappingGenerator extends MappingGenerator{
 
         insertLine();
         if( daoMethod.getSelectType() == SelectType.CALL ) {
-            insertTabs().append( "@Options(statementType=StatementType.CALLABLE");
+            insertTabs().append( "@Options(statementType=StatementType.");
+
+            builder.append( daoMethod.getOutputParametrs().containsSameNames() ? "PREPARED": "CALLABLE" );
 
             boolean hasOutParameters = ! Iterables.isEmpty(
                     Iterables.filter( daoMethod.getInputParametrs().getParameter(), new Predicate<ParameterType>() {
