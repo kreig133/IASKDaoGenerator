@@ -51,7 +51,7 @@ public class InOutClassGenerator extends JavaClassGenerator {
                         "/" +
                         PackageAndFileUtils.replacePointBySlash( Settings.settings().getEntityPackage() ) +
                         "/" +
-                        NamingUtils.convertNameForClassNaming( this.name ) + JAVA_EXTENSION);
+                        this.name + JAVA_EXTENSION);
 
         PackageAndFileUtils.createDirsAndFile( file.getParentFile() );
 
@@ -66,13 +66,13 @@ public class InOutClassGenerator extends JavaClassGenerator {
 
         insertClassDeclaration(
                 ClassType.CLASS,
-                NamingUtils.convertNameForClassNaming( this.name ),
+                this.name,
                 null,
                 new ArrayList<String>(){{add( "Serializable" );}}
         );
 
         insertSerialVersionUID();
-        writeEmptyConstructor( NamingUtils.convertNameForClassNaming( this.name ) );
+        writeEmptyConstructor( this.name );
     }
 
     @Override
@@ -93,7 +93,7 @@ public class InOutClassGenerator extends JavaClassGenerator {
 
     @Override
     public String getFileName() {
-        return NamingUtils.convertNameForClassNaming( this.name );
+        return this.name;
     }
 
     private final List<ParameterType> parameters;
@@ -101,14 +101,14 @@ public class InOutClassGenerator extends JavaClassGenerator {
 
     public InOutClassGenerator( List<ParameterType> parameters, String name ) {
         this.parameters = parameters;
-        this.name = name;
+        this.name = NamingUtils.convertNameForClassNaming( name );
     }
 
     private void writeFullConstructor() {
         if( parameters.size() > 5 ) return;
 
         insertTabs().append( Scope.PUBLIC.value() )
-                .append( " " ).append( NamingUtils.convertNameForClassNaming( this.name ) ).append( "(" );
+                .append( " " ).append( this.name ).append( "(" );
         insertLine();
         increaseNestingLevel();
 
@@ -166,18 +166,18 @@ public class InOutClassGenerator extends JavaClassGenerator {
     }
 
     private void generateGetter( @NotNull ParameterType parameterType ){
-        super.generateGetter( 
-                parameterType.getCommentForJavaDoc(),
-                parameterType.getType(), 
-                parameterType.getRenameTo() 
+        super.generateGetter(
+                name,
+                parameterType.getRenameTo(),
+                parameterType.getType()
         );
     }
 
     public void generateSetter( @NotNull ParameterType parameterType ) {
         super.generateSetter(
-                parameterType.getCommentForJavaDoc(),
-                parameterType.getType(),
-                parameterType.getRenameTo()
+                name,
+                parameterType.getRenameTo(),
+                parameterType.getType()
         );
     }
 

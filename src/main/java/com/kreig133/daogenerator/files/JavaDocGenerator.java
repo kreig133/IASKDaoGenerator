@@ -28,10 +28,8 @@ public class JavaDocGenerator extends Generator{
         initialize();
 
         for ( String comment : commentsLine ) {
-            if ( StringUtils.isNotEmpty( comment ) ) {
-                insertNewJavaDocLine();
-                builder.append( comment.trim() );
-            }
+            insertNewJavaDocLine();
+            builder.append( comment );
         }
 
         if( withReturn ) {
@@ -69,11 +67,6 @@ public class JavaDocGenerator extends Generator{
     @NotNull
     public String wrapCommentForSetter( String javaDoc ) {
         return "Установить " + javaDoc;
-    }
-
-    @NotNull
-    public String wrapCommentForGetter( String javaDoc ) {
-        return "Получить " + javaDoc;
     }
 
     @NotNull

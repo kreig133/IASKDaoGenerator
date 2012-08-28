@@ -187,29 +187,37 @@ abstract public class JavaClassGenerator extends Generator {
     }
 
     protected void generateGetter(
-            String javaDoc,
-            @NotNull JavaType javaType,
-            String name
-            
+            @NotNull String className,
+            @NotNull String name,
+            @NotNull JavaType javaType
+
     ){
-        generateGetterSignature( javaDoc, javaType, name );
+        generateGetterSignature( className, name, javaType );
 
         insertTabs().append( "return " ).append( name ).append( ";");
         insertLine();
         closeMethodOrInnerClassDefinition();
     }
 
-    protected void generateGetterSignature( String javaDoc, @NotNull JavaType javaType, String name ) {
+    /**
+     * Генерирует сигнатуру геттера с JavaDoc'ом
+     * @param javaType - тип параметра
+     * @param paramName - название параметра
+     * @param className - название класса
+     */
+    protected void generateGetterSignature(
+            @NotNull String className, @NotNull String paramName, @NotNull JavaType javaType
+    ) {
         if ( javaType == JavaType.DATE ) {
             addImport( DATE_IMPORT );
         }
 
-        jDoc.insertJavaDoc( true, jDoc.wrapCommentForGetter( javaDoc ) );
+        jDoc.insertJavaDoc( false, String.format( "@return значение поля {@link %s#%s}", className, paramName ) );
 
         generateMethodSignature(
                 Scope.PUBLIC,
                 javaType.value(),
-                "get" + NamingUtils.convertNameForGettersAndSetters( name ),
+                "get" + NamingUtils.convertNameForGettersAndSetters( paramName ),
                 null,
                 null,
                 false
@@ -218,22 +226,32 @@ abstract public class JavaClassGenerator extends Generator {
     }
 
     public void generateSetter(
-            String javaDoc,
-            @NotNull JavaType javaType,
-            String name
-    ){
-        generateSetterSignature( javaDoc, javaType, name );
+            String className,
+            String name,
+            @NotNull JavaType javaType
+            ){
+        generateSetterSignature( className, name, javaType );
         insertTabs().append( "this." ).append( name ).append( " = " ).append( name ).append( ";" );
         insertLine();
         closeMethodOrInnerClassDefinition();
     }
 
-    protected void generateSetterSignature( String javaDoc, @NotNull JavaType javaType, String name ) {
-        generateSetterSignature( javaDoc, javaType, name, false );
+    protected void generateSetterSignature( @NotNull String className, @NotNull String name, @NotNull JavaType javaType ) {
+        generateSetterSignature( className, name, javaType,  false );
     }
 
-    protected void generateSetterSignature( String javaDoc, @NotNull JavaType javaType, String name, boolean forModel ) {
-        jDoc.insertJavaDoc( forModel, jDoc.wrapCommentForSetter( javaDoc ) );
+    protected void generateSetterSignature(
+            @NotNull String className,
+            @NotNull String name,
+            @NotNull JavaType javaType,
+            @NotNull boolean forModel
+    ) {
+        jDoc.insertJavaDoc( forModel,
+                String.format( "Установить значение поля {@link %s#%s}", className, name ),
+                "",
+                String.format( "@param %s", name ),
+                "        значение, которое будет установлено"
+        );
         generateMethodSignature(
                 Scope.PUBLIC,
                 forModel ? javaType.value() : null,
