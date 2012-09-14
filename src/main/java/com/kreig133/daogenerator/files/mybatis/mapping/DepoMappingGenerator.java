@@ -166,7 +166,7 @@ public class DepoMappingGenerator extends MappingGenerator{
             }
             if(i != 0)
             	insertTabs();
-            builder.append( "\"" ).append( strings[ i ] ).append( "\"" );
+            builder.append( "\"" ).append( strings[ i ] ).append( " \"" );
         }
         return builder;
     }
