@@ -56,7 +56,7 @@ public class DepoMappingGenerator extends MappingGenerator{
         addImport( "org.apache.ibatis.annotations.*" );
         addImport( "org.apache.ibatis.mapping.StatementType" );
         addImport( "org.apache.ibatis.annotations.CacheNamespace" );
-        builder.append( "@CacheNamespace(implementation = org.mybatis.caches.ehcache.EhcacheCache.class)" );
+        builder.append( "@CacheNamespace(implementation = com.aplana.sbrf.deposit.common.server.cache.SbEhcacheCache.class)" );
         insertLine();
         insertClassDeclaration(
                 ClassType.INTERFACE,

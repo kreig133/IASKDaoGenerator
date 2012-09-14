@@ -1,0 +1,274 @@
+package com.aplana.sbrf.deposit.common.server.cache;
+
+import java.io.Serializable;
+import java.util.concurrent.locks.ReadWriteLock;
+import java.util.concurrent.locks.ReentrantReadWriteLock;
+
+import net.sf.ehcache.CacheManager;
+import net.sf.ehcache.Ehcache;
+import net.sf.ehcache.Element;
+import net.sf.ehcache.config.CacheConfiguration;
+
+import org.apache.ibatis.cache.Cache;
+import org.apache.ibatis.cache.CacheException;
+import org.apache.ibatis.cache.CacheKey;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+/**
+ * Clone of the EhcacheCache.class, which resolve problem with key collision. Original implementation use key.hashCode()
+ * as a key for store, but hashCode can be equals for different keys. For example, Long.valueOf(3).hashCode() =
+ * Long.valueOf(-4).hashCode(). All original occurence of key.hashCode() was replaced by {@link #getSerializableKey}
+ * (key)
+ * 
+ * @author <a href="mailto:mfayzullin@aplana.com">mfayzullin</a>
+ * @since 14.09.2012 12:13:43
+ */
+public class SbEhcacheCache implements Cache {
+
+	private static final Logger logger = LoggerFactory.getLogger(SbEhcacheCache.class);
+
+	protected int requests = 0;
+	protected int hits = 0;
+
+	/**
+	 * The cache manager reference.
+	 */
+	private static final CacheManager CACHE_MANAGER = CacheManager.create();
+
+	/**
+	 * The {@code ReadWriteLock}.
+	 */
+	private final ReadWriteLock readWriteLock = new ReentrantReadWriteLock();
+
+	/**
+	 * The cache id.
+	 */
+	private final String id;
+
+	/**
+	 * 
+	 * 
+	 * @param id
+	 */
+	public SbEhcacheCache(final String id) {
+		if (id == null) {
+			throw new IllegalArgumentException("Cache instances require an ID");
+		}
+		this.id = id;
+		if (!CACHE_MANAGER.cacheExists(this.id)) {
+			CACHE_MANAGER.addCache(this.id);
+		}
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public void clear() {
+		getCache().removeAll();
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public String getId() {
+		return id;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public Object getObject(Object key) {
+		try {
+			Element cachedElement = getCache().get(getSerializableKey(key));
+			if (logger.isDebugEnabled()) {
+				requests++;
+				if (cachedElement != null) {
+					hits++;
+				}
+				logger.trace("Cache Hit Ratio [" + getId() + "]: " + getHitRatio());
+			}
+			if (cachedElement == null) {
+				return null;
+			}
+			return cachedElement.getObjectValue();
+		} catch(Throwable t) {
+			throw new CacheException(t);
+		}
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public ReadWriteLock getReadWriteLock() {
+		return readWriteLock;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public int getSize() {
+		try {
+			return getCache().getSize();
+		} catch(Throwable t) {
+			throw new CacheException(t);
+		}
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public void putObject(Object key, Object value) {
+		try {
+			getCache().put(new Element(getSerializableKey(key), value));
+		} catch(Throwable t) {
+			throw new CacheException(t);
+		}
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public Object removeObject(Object key) {
+		try {
+			Object obj = getObject(key);
+			getCache().remove(getSerializableKey(key));
+			return obj;
+		} catch(Throwable t) {
+			throw new CacheException(t);
+		}
+	}
+
+	/**
+	 * Returns the ehcache manager for this cache.
+	 * 
+	 * @return the ehcache manager for this cache.
+	 */
+	private Ehcache getCache() {
+		return CACHE_MANAGER.getCache(id);
+	}
+
+	/**
+	 * Returns the configuration for this cache.
+	 * 
+	 * @return the configuration for this cache.
+	 */
+	private CacheConfiguration getCacheConfiguration() {
+		return getCache().getCacheConfiguration();
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj) {
+			return true;
+		}
+		if (obj == null) {
+			return false;
+		}
+		if (!(obj instanceof Cache)) {
+			return false;
+		}
+
+		Cache otherCache = (Cache) obj;
+		return id.equals(otherCache.getId());
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public int hashCode() {
+		return id.hashCode();
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public String toString() {
+		return "EHCache {"
+				+ id
+				+ "}";
+	}
+
+	// DYNAMIC PROPERTIES
+
+	/**
+	 * Sets the time to idle for an element before it expires. Is only used if the element is not eternal.
+	 * 
+	 * @param timeToIdleSeconds the default amount of time to live for an element from its last accessed or modified
+	 *            date
+	 */
+	public void setTimeToIdleSeconds(long timeToIdleSeconds) {
+		getCacheConfiguration().setTimeToIdleSeconds(timeToIdleSeconds);
+	}
+
+	/**
+	 * Sets the time to idle for an element before it expires. Is only used if the element is not eternal.
+	 * 
+	 * @param timeToLiveSeconds the default amount of time to live for an element from its creation date
+	 */
+	public void setTimeToLiveSeconds(long timeToLiveSeconds) {
+		getCacheConfiguration().setTimeToLiveSeconds(timeToLiveSeconds);
+	}
+
+	/**
+	 * Sets the maximum objects to be held in memory (0 = no limit).
+	 * 
+	 * @param maxEntriesLocalHeap The maximum number of elements in memory, before they are evicted (0 == no limit)
+	 */
+	public void setMaxEntriesLocalHeap(long maxEntriesLocalHeap) {
+		getCacheConfiguration().setMaxEntriesLocalHeap(maxEntriesLocalHeap);
+	}
+
+	/**
+	 * Sets the maximum number elements on Disk. 0 means unlimited.
+	 * 
+	 * @param maxEntriesLocalDisk the maximum number of Elements to allow on the disk. 0 means unlimited.
+	 */
+	public void setMaxEntriesLocalDisk(long maxEntriesLocalDisk) {
+		getCacheConfiguration().setMaxEntriesLocalDisk(maxEntriesLocalDisk);
+	}
+
+	/**
+	 * Sets the eviction policy. An invalid argument will set it to null.
+	 * 
+	 * @param memoryStoreEvictionPolicy a String representation of the policy. One of "LRU", "LFU" or "FIFO".
+	 */
+	public void setMemoryStoreEvictionPolicy(String memoryStoreEvictionPolicy) {
+		getCacheConfiguration().setMemoryStoreEvictionPolicy(memoryStoreEvictionPolicy);
+	}
+
+	/**
+	 * Checks that key is serializable. We need serializable keys to use it with Ehcache. If key param is already
+	 * serializable then this value return back. If key is instance of CacheKey class then it will be wrapped
+	 * by serializable version (SbCacheKey). In other cases exception occures.
+	 * 
+	 * @param key object to check
+	 * @return serializable key
+	 */
+	private Serializable getSerializableKey(Object key) {
+		if (key instanceof CacheKey) {
+			return new SbCacheKey((CacheKey) key);
+		}
+		if (key instanceof Serializable) {
+			return (Serializable) key;
+		}
+		throw new IllegalArgumentException("\"Key\" param is not implements \"Serializable\" interface");
+	}
+
+	private double getHitRatio() {
+		return (double) hits / (double) requests;
+	}
+
+}
