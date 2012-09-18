@@ -24,7 +24,7 @@ import javax.annotation.Nullable;
  */
 public class DepoMappingGenerator extends MappingGenerator{
 
-    private static final String MAPPER_PREFIX = "Dao";
+    private static final String MAPPER_POSTFIX = "Dao";
 
     @Override
     public void generateBody( @NotNull DaoMethod daoMethod ) {
@@ -42,7 +42,7 @@ public class DepoMappingGenerator extends MappingGenerator{
     @NotNull
     @Override
     public String getFileName() {
-        return Settings.settings().getOperationName() + MAPPER_PREFIX;
+        return Settings.settings().getOperationName() + MAPPER_POSTFIX;
     }
 
     @Override
@@ -60,7 +60,7 @@ public class DepoMappingGenerator extends MappingGenerator{
         insertLine();
         insertClassDeclaration(
                 ClassType.INTERFACE,
-                Settings.settings().getOperationName() + MAPPER_PREFIX,
+                Settings.settings().getOperationName() + MAPPER_POSTFIX,
                 null,
                 null
         );

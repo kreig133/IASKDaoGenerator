@@ -70,7 +70,8 @@ public class DaoMethodValidator {
                 System.out.println( String.format( errorMessage, "входной" ) );
                 isOk = false;
             }
-            isOk &= checkClassNameSyntax(javaClassName);
+            else
+                isOk &= checkClassNameSyntax(javaClassName);
         }
         if( DaoJavaClassGenerator.checkToNeedOwnOutClass( daoMethod ) ){
             String javaClassName = daoMethod.getOutputParametrs().getJavaClassName();
@@ -82,7 +83,8 @@ public class DaoMethodValidator {
                 );
                 isOk = false;
             }
-            isOk &= checkClassNameSyntax(javaClassName);
+            else
+                isOk &= checkClassNameSyntax(javaClassName);
         }
         return isOk || analyticMode;
     }
