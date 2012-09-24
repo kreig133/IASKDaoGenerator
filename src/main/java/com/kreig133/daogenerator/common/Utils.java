@@ -70,7 +70,7 @@ public class Utils {
         }
         StringBuilder builder = new StringBuilder();
 
-        final String[] split = nameForCall.split( "_" );
+        final String[] split = nameForCall.split( "_+" );
         builder.append( split[ 0 ] );
         for( int i = 1; i < split.length ; i++ ){
             final char[] chars = split[ i ].toCharArray();
