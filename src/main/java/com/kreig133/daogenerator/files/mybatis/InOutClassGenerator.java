@@ -121,7 +121,7 @@ public class InOutClassGenerator extends JavaClassGenerator {
                         return p.getType().value() + " " + p.getRenameTo();
                     }
         } ), ",\n\t\t" ) );
-
+        insertLine();
         insertTabs().append( ") {" );
         insertLine();
         for( ParameterType p: parameters ){
