@@ -317,9 +317,27 @@ public class ParameterType {
 
     @NotNull
     public String getDefaultValueForJavaCode() {
-        return defaultValue.trim() +
-                ( type == JavaType.LONG ?
-                        ( "null".equals( defaultValue.toLowerCase().trim() ) ? "" : "L" ) : "" );
+        defaultValue = defaultValue.trim();
+        //TODO запилить тест
+        if( ! defaultValue.equals( "null" ) ){
+            switch ( type ) {
+                case DOUBLE:
+                case LONG:
+                    if( defaultValue.matches( "-?\\d+" ) ){
+                        defaultValue = defaultValue + ( type == JavaType.DOUBLE ? ".0" : "L" );
+                    }
+                    break;
+                case STRING:
+                    if( ! defaultValue.matches( "(?s)^\".+\"$" ) ){
+                        defaultValue = "\"" + defaultValue + "\"";
+                    }
+                    break;
+                default:
+                    //do nothing
+            }
+        }
+
+        return defaultValue;
     }
     
     @Nullable
