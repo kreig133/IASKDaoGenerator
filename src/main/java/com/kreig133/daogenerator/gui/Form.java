@@ -153,7 +153,6 @@ public class Form  implements SourcePathChangeListener, FormInterface{
     private void getInParamsButtonListener(){
         try {
             updateInputParameters( presenter.getInParameters());
-            updateOutputParameters( new ArrayList<ParameterType>() );
             setButtonsStateAfterGetInParams();
         }
         catch (PresenterException ex){
@@ -174,7 +173,6 @@ public class Form  implements SourcePathChangeListener, FormInterface{
     private void getOutParamsButtonListener(){
         try {
             updateOutputParameters( presenter.getOutParameters() );
-            updateInputParameters( presenter.getInParameters() );
             generateXMLButton.setEnabled( true );
         }
         catch (PresenterException ex){
