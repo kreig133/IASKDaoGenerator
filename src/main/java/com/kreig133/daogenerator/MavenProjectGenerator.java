@@ -1,6 +1,7 @@
 package com.kreig133.daogenerator;
 
 import com.kreig133.daogenerator.common.Utils;
+import com.kreig133.daogenerator.files.ClassFiles;
 import com.kreig133.daogenerator.files.PackageAndFileUtils;
 import com.kreig133.daogenerator.files.mybatis.model.ModelClassGenerator;
 import com.kreig133.daogenerator.jaxb.NamingUtils;
@@ -17,13 +18,14 @@ import java.io.*;
  * @version 1.0
  */
 public class MavenProjectGenerator {
-
+	
     public static void generate() throws IOException {
         copyPropertiesFileToMavenProject();
         copyPomFileToMavenProject();
         copyAppContextConfigToMavenProject();
         copyAbstractTest();
         copyBaseModels();
+        copyReferenceClasses();
         generateSpringConfig();
     }
 
@@ -35,6 +37,16 @@ public class MavenProjectGenerator {
                             + PackageAndFileUtils.replacePointBySlash(
                                 ModelClassGenerator.parentImport.get( parentType )
                             ) + ".java"
+            );
+        }
+    }
+    
+    private static void copyReferenceClasses() throws IOException {
+        for ( ClassFiles classFile : ClassFiles.values() ) {
+            copyFile(
+                    classFile.getFileName(),
+                    Settings.settings().getPathForGeneratedSource() +  "/"
+                            + PackageAndFileUtils.replacePointBySlash(classFile.getClassName()) + ".java"
             );
         }
     }
@@ -98,7 +110,7 @@ public class MavenProjectGenerator {
                 new File( Settings.settings().getPathForTestResources() + "/application.properties" )
         );
     }
-
+    
     public static void copyFile( InputStream inputStream, @NotNull File outputFile  ) throws IOException {
         outputFile.getParentFile().mkdirs();
 

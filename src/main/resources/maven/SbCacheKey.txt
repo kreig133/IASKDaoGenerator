@@ -1,0 +1,111 @@
+package com.aplana.sbrf.deposit.common.server.cache;
+
+import java.io.Serializable;
+import java.lang.reflect.Field;
+import java.util.ArrayList;
+import java.util.List;
+
+import org.apache.ibatis.cache.CacheKey;
+
+/**
+ * Serializable wrapper of CacheKey class
+ * 
+ * @author <a href="mailto:mfayzullin@aplana.com">mfayzullin</a>
+ * @since 14.09.2012 12:23:18
+ */
+public class SbCacheKey implements Serializable {
+
+	private static final long serialVersionUID = 3495590315302174252L;
+
+	private int hashcode;
+	private long checksum;
+	private int count;
+	private List<Serializable> updateList;
+
+	public SbCacheKey(CacheKey key) {
+		try {
+			Field privateHashCodeField = CacheKey.class.getDeclaredField("hashcode");
+			Field privateCheckSumField = CacheKey.class.getDeclaredField("checksum");
+			Field privateCountField = CacheKey.class.getDeclaredField("count");
+			Field privateUpdateListField = CacheKey.class.getDeclaredField("updateList");
+
+			privateHashCodeField.setAccessible(true);
+			privateCheckSumField.setAccessible(true);
+			privateCountField.setAccessible(true);
+			privateUpdateListField.setAccessible(true);
+
+			hashcode = privateHashCodeField.getInt(key);
+			checksum = privateCheckSumField.getLong(key);
+			count = privateCountField.getInt(key);
+			@SuppressWarnings("unchecked")
+			List<Object> list = (List<Object>) privateUpdateListField.get(key);
+			updateList = new ArrayList<Serializable>();
+			for (Object item : list) {
+				updateList.add((Serializable) item);
+			}
+
+		} catch(Exception e) {
+			throw new IllegalArgumentException(e.getMessage(), e);
+		}
+	}
+
+	@Override
+	public boolean equals(Object object) {
+		if (this == object) {
+			return true;
+		}
+		if (!(object instanceof SbCacheKey)) {
+			return false;
+		}
+
+		final SbCacheKey cacheKey = (SbCacheKey) object;
+
+		if (hashcode != cacheKey.hashcode) {
+			return false;
+		}
+		if (checksum != cacheKey.checksum) {
+			return false;
+		}
+		if (count != cacheKey.count) {
+			return false;
+		}
+
+		for (int i = 0; i < updateList.size(); i++) {
+			Object thisObject = updateList.get(i);
+			Object thatObject = cacheKey.updateList.get(i);
+			if (thisObject == null) {
+				if (thatObject != null) {
+					return false;
+				}
+			} else {
+				if (!thisObject.equals(thatObject)) {
+					return false;
+				}
+			}
+		}
+		return true;
+	}
+
+	@Override
+	public int hashCode() {
+		return hashcode;
+	}
+
+	@Override
+	public String toString() {
+		StringBuilder returnValue = new StringBuilder().append(hashcode).append(':').append(checksum);
+		for (int i = 0; i < updateList.size(); i++) {
+			returnValue.append(':').append(updateList.get(i));
+		}
+
+		return returnValue.toString();
+	}
+
+	@Override
+	public SbCacheKey clone() throws CloneNotSupportedException {
+		SbCacheKey clonedCacheKey = (SbCacheKey) super.clone();
+		clonedCacheKey.updateList = new ArrayList<Serializable>(updateList);
+		return clonedCacheKey;
+	}
+
+}

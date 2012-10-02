@@ -11,6 +11,7 @@ import org.apache.commons.lang.StringUtils;
 import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Pattern;
 
 /**
  * Валидатор дао методов
@@ -19,6 +20,10 @@ import java.util.List;
  * @version 1.0
  */
 public class DaoMethodValidator {
+    
+    private static final String CLASSNAME_PATTERN = "^([_a-z]+[_a-z0-9]*\\.)+([_a-zA-Z]+[_a-zA-Z0-9]*)$";
+    private static final String METHODNAME_PATTERN = "^([a-z]+[a-zA-Z0-9]*)+$";
+    
     public static boolean checkDaoMethods( List<DaoMethod> daoMethods, boolean isAnalyticMode ) {
         System.out.println( "---------ЭТАП ВАЛИДАЦИИ ВХОДНЫХ XML-ФАЙЛОВ------------" );
         boolean allIsOk = true;
@@ -26,6 +31,7 @@ public class DaoMethodValidator {
             System.out.println( " Проверка метода " + getMethodName( daoMethod ) );
             allIsOk = checkJavaClassNames( daoMethod, isAnalyticMode ) && allIsOk;
             allIsOk = checkRenameTos     ( daoMethod                 ) && allIsOk;
+            allIsOk = checkMethodName    ( daoMethod                 ) && allIsOk;
             allIsOk = checkAccordingTypeAndNameWithHungarianNotation( daoMethod ) && allIsOk;
         }
         return allIsOk;
@@ -59,13 +65,17 @@ public class DaoMethodValidator {
         boolean isOk = true;
         String errorMessage = "\tERROR! Для метода не указано javaClassName для %s модели!";
         if( DaoJavaClassGenerator.checkToNeedOwnInClass( daoMethod ) ){
-            if( StringUtils.isBlank(daoMethod.getInputParametrs().getJavaClassName() ) ) {
+            String javaClassName = daoMethod.getInputParametrs().getJavaClassName();
+            if( StringUtils.isBlank(javaClassName ) ) {
                 System.out.println( String.format( errorMessage, "входной" ) );
                 isOk = false;
             }
+            else
+                isOk &= checkClassNameSyntax(javaClassName);
         }
         if( DaoJavaClassGenerator.checkToNeedOwnOutClass( daoMethod ) ){
-            if( StringUtils.isBlank(daoMethod.getOutputParametrs().getJavaClassName() ) ){
+            String javaClassName = daoMethod.getOutputParametrs().getJavaClassName();
+            if( StringUtils.isBlank(javaClassName ) ){
                 System.out.println(String.format(
                         errorMessage,
                         "выходной"
@@ -73,6 +83,8 @@ public class DaoMethodValidator {
                 );
                 isOk = false;
             }
+            else
+                isOk &= checkClassNameSyntax(javaClassName);
         }
         return isOk || analyticMode;
     }
@@ -102,6 +114,37 @@ public class DaoMethodValidator {
                 } );
         //return Iterables.isEmpty( filtered ); // (Marat Fayzullin, 2012.07.25) необязательная проверка
         return true;
+    }
+    
+    /**
+     * Проверяет валидность имени класса
+     * 
+     * @param className имя класса
+     * @return результат проверки
+     */
+    static boolean checkClassNameSyntax(String className) {
+        boolean isValid = Pattern.matches(CLASSNAME_PATTERN, className);
+        if (!isValid) {
+            System.out.println(String.format("Неверное название имени класса или пакета \"%s\" (лишние пробелы, " +
+                    "недопустимые символы и т.д.). Допустим формат \"%s\"", className, CLASSNAME_PATTERN));
+        }
+        return isValid;
+    }
+    
+    /** 
+     * Проверяет валидность имени метода
+     * 
+     * @param daoMethod сведения о методе
+     * @return результат проверки
+     */
+    static boolean checkMethodName( DaoMethod daoMethod ) {
+        String methodName = daoMethod.getCommon().getMethodName();
+        boolean isValid = Pattern.matches(METHODNAME_PATTERN, methodName);
+        if (!isValid) {
+            System.out.println(String.format("Неверное название метода \"%s\" (лишние пробелы, недопустимые символы " +
+                    "подчеркивания и т.д.). Допустим формат \"%s\"", methodName, METHODNAME_PATTERN));
+        }
+        return isValid;
     }
 
 }

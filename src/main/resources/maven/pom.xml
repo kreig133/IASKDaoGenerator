@@ -11,12 +11,12 @@
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <junit.version>4.10</junit.version>
-        <spring.version>3.0.6.RELEASE</spring.version>
+        <spring.version>3.1.1.RELEASE</spring.version>
         <mybatis-spring.version>1.0.2</mybatis-spring.version>
         <sqljdbc.version>3.0</sqljdbc.version>
         <gxt.version>2.2.0</gxt.version>
         <aspectj.version>1.6.12</aspectj.version>
-        <mybatis.ehcache.version>1.0.0</mybatis.ehcache.version>
+        <mybatis.ehcache.version>1.0.1</mybatis.ehcache.version>
         <c3p0.version>0.9.1.2</c3p0.version>
         <slf4j-log4j12.version>1.6.1</slf4j-log4j12.version>
         <jdbc.jtds.version>1.2.4</jdbc.jtds.version>
@@ -64,24 +64,6 @@
             <groupId>org.mybatis</groupId>
             <artifactId>mybatis-spring</artifactId>
             <version>${mybatis-spring.version}</version>
-            <exclusions>
-                <exclusion>
-                    <artifactId>spring-core</artifactId>
-                    <groupId>org.springframework</groupId>
-                </exclusion>
-                <exclusion>
-                    <artifactId>spring-tx</artifactId>
-                    <groupId>org.springframework</groupId>
-                </exclusion>
-                <exclusion>
-                    <artifactId>spring-jdbc</artifactId>
-                    <groupId>org.springframework</groupId>
-                </exclusion>
-                <exclusion>
-                    <artifactId>spring-context</artifactId>
-                    <groupId>org.springframework</groupId>
-                </exclusion>
-            </exclusions>
         </dependency>
         <dependency>
             <groupId>com.extjs</groupId>
@@ -94,7 +76,7 @@
             <version>2.2</version>
         </dependency>
         <dependency>
-            <groupId>org.mybatis</groupId>
+            <groupId>org.mybatis.caches</groupId>
             <artifactId>mybatis-ehcache</artifactId>
             <version>${mybatis.ehcache.version}</version>
         </dependency>

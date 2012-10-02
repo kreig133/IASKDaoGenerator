@@ -24,7 +24,7 @@ import javax.annotation.Nullable;
  */
 public class DepoMappingGenerator extends MappingGenerator{
 
-    private static final String MAPPER_PREFIX = "Dao";
+    private static final String MAPPER_POSTFIX = "Dao";
 
     @Override
     public void generateBody( @NotNull DaoMethod daoMethod ) {
@@ -42,7 +42,7 @@ public class DepoMappingGenerator extends MappingGenerator{
     @NotNull
     @Override
     public String getFileName() {
-        return Settings.settings().getOperationName() + MAPPER_PREFIX;
+        return Settings.settings().getOperationName() + MAPPER_POSTFIX;
     }
 
     @Override
@@ -56,11 +56,11 @@ public class DepoMappingGenerator extends MappingGenerator{
         addImport( "org.apache.ibatis.annotations.*" );
         addImport( "org.apache.ibatis.mapping.StatementType" );
         addImport( "org.apache.ibatis.annotations.CacheNamespace" );
-        builder.append( "@CacheNamespace(implementation = org.mybatis.caches.ehcache.EhcacheCache.class)" );
+        builder.append( "@CacheNamespace(implementation = com.aplana.sbrf.deposit.common.server.cache.SbEhcacheCache.class)" );
         insertLine();
         insertClassDeclaration(
                 ClassType.INTERFACE,
-                Settings.settings().getOperationName() + MAPPER_PREFIX,
+                Settings.settings().getOperationName() + MAPPER_POSTFIX,
                 null,
                 null
         );
@@ -166,7 +166,7 @@ public class DepoMappingGenerator extends MappingGenerator{
             }
             if(i != 0)
             	insertTabs();
-            builder.append( "\"" ).append( strings[ i ] ).append( "\"" );
+            builder.append( "\"" ).append( strings[ i ] ).append( " \"" );
         }
         return builder;
     }
