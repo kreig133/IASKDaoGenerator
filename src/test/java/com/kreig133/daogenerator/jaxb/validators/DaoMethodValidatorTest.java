@@ -18,7 +18,7 @@ public class DaoMethodValidatorTest {
 
         Assert.assertFalse( DaoMethodValidator.checkJavaClassNames( daoMethodForTest, false ) );
 
-        daoMethodForTest.getOutputParametrs().setJavaClassName( "123" );
+        daoMethodForTest.getOutputParametrs().setJavaClassName( "ru.sbrf.A123" );
 
         Assert.assertTrue( DaoMethodValidator.checkJavaClassNames( daoMethodForTest, false ) );
     }
@@ -63,6 +63,14 @@ public class DaoMethodValidatorTest {
         DaoMethod daoMethodForTest = TestHelper.getDaoMethodForTest();
         boolean b = DaoMethodValidator.checkAccordingTypeAndNameWithHungarianNotation( daoMethodForTest );
 
+        Assert.assertTrue( b );
+    }
+
+    @Test
+    public void testingClassNaming() {
+        String testValue =
+                "com.aplana.sbrf.deposit.web.custom.client.operation.administrativeoperation.data.AccDepoAdmBySrcOut";
+        boolean b = DaoMethodValidator.checkClassNameSyntax( testValue );
         Assert.assertTrue( b );
     }
 }
