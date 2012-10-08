@@ -23,18 +23,17 @@ public class ProcedureCallCreator extends CommonCallCreator{
     ) {
         StringBuilder builder      = new StringBuilder();
 
-        builder.append( "{CALL " ).append( daoMethod.getCommon().getSpName() ).append( "(" );
+        builder.append( String.format( "{CALL %s(", daoMethod.getCommon().getSpName() ) );
 
         if( !daoMethod.getInputParametrs().getParameter().isEmpty() ){
             builder.append( "\n\t" );
+            builder.append( StringUtils.join(
+                    Iterators.transform( daoMethod.getInputParametrs().getParameter().iterator(), function ), ",\n\t"
+            ));
+
+            builder.append( "\n" );
         }
 
-        builder.append( StringUtils.join(
-                Iterators.transform( daoMethod.getInputParametrs().getParameter().iterator(), function ),
-                ",\n\t"
-        ));
-
-        builder.append( "\n" );
         builder.append( ")}" );
 
         return builder.toString();
