@@ -126,25 +126,17 @@ public class FormPresenter {
                 new Runnable(){
                     @Override
                     public void run() {
-                        if(!FileBuilder.generateJavaCode()) return;
-                        int status = MavenProjectGenerator.installProject();
-                        if( status == 0 ) {
-                            // TODO (Marat Fayzullin) Так как пока не реализовано, то нефиг мучать пользователя дополнительными вопросами
-                            /*if (
-                                    JOptionPane.showConfirmDialog(
-                                            mainPanel,
-                                            "Тестирование успешно завершено.\nСкопировать файлы в проект?"
-                                    ) == JOptionPane.OK_OPTION
-                            ) {
-                                JOptionPane.showMessageDialog(
-                                        mainPanel,
-                                        "Функциональность еще не реализована"
-                                );
-                            }*/
-                        } else {
-                            throw PresenterException.warn
-                                    ("Тестирование провалилось.\nИзмените входные данные или сообщите " +
-                                            "разработчику этой фигни, что он, возможно, где-то накосячил");
+                        try {
+                            view.lockGui();
+                            if(!FileBuilder.generateJavaCode()) return;
+                            int status = MavenProjectGenerator.installProject();
+                            if( status != 0 ) {
+                                throw PresenterException.warn
+                                        ("Тестирование провалилось.\nИзмените входные данные или сообщите " +
+                                                "разработчику этой фигни, что он, возможно, где-то накосячил");
+                            }
+                        } finally {
+                            view.unlockGui();
                         }
                     }
                 }

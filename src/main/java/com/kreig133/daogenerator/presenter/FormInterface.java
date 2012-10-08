@@ -6,53 +6,56 @@ public interface FormInterface {
 
     //для вкладки AnalyticMode
 
-    public boolean getIsMultipleResult();
-    public void setIsMultipleResult(boolean value);
+    boolean getIsMultipleResult();
+    void setIsMultipleResult(boolean value);
 
-    public boolean getSingleQueryChecked();
-    public void setSingleQuery(boolean value);
+    boolean getSingleQueryChecked();
+    void setSingleQuery(boolean value);
 
-    public boolean getDoubleQueryChecked();
-    public void setDoubleQuery(boolean value);
+    boolean getDoubleQueryChecked();
+    void setDoubleQuery(boolean value);
 
-    public String getQueryTextArea();
-    public void setQueryTextArea(String text);
+    String getQueryTextArea();
+    void setQueryTextArea(String text);
 
-    public String getSecondQuery();
-    public void setSecondQuery(String text);
+    String getSecondQuery();
+    void setSecondQuery(String text);
 
-    public String getMethodName();
-    public void setMethodName(String name);
+    String getMethodName();
+    void setMethodName(String name);
 
-    public String getCommentText();
-    public void setCommentText(String text);
+    String getCommentText();
+    void setCommentText(String text);
 
-    public ParametrsModel getInputParametersTypes();
+    ParametrsModel getInputParametersTypes();
 
-    public ParametrsModel getOutputParametersTypes();
+    ParametrsModel getOutputParametersTypes();
 
-    public String getDirForSave();
+    String getDirForSave();
 
-    public String getFileForSave();
+    String getFileForSave();
 
-    public void showWindowWithText(String text);
+    void showWindowWithText(String text);
 
     //для вкладки DeveloperMode
 
-    public String getMappingPackageText();
-    public void setMappingPackageText(String text);
+    String getMappingPackageText();
+    void setMappingPackageText(String text);
 
-    public String getEntityPackageText();
-    public void setEntityPackageTextField(String text);
+    String getEntityPackageText();
+    void setEntityPackageTextField(String text);
 
-    public String getDaoPackageText();
-    public void setDaoPackageTextField(String text);
+    String getDaoPackageText();
+    void setDaoPackageTextField(String text);
 
-    public String getDestDirText();
-    public void setDestDirText(String text);
+    String getDestDirText();
+    void setDestDirText(String text);
+
+    void lockGui();
+    void unlockGui();
 
     //общие
-    public boolean showWarningDialog(String message);
-    public boolean showAttentionDialog(String message);
+    boolean showWarningDialog(String message);
+    boolean showAttentionDialog(String message);
 
 }

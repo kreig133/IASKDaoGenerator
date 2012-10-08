@@ -245,8 +245,7 @@ public class Form  implements SourcePathChangeListener, FormInterface{
                 tabbedPane1.setSelectedIndex(3);
                 presenter.startProjectGenerating();
             }
-        }
-        catch (PresenterException ex){
+        } catch (PresenterException ex){
             JOptionPane.showMessageDialog( mainPanel, ex.getMessage(),
                     WARNING_DIALOG_TITLE, JOptionPane.WARNING_MESSAGE );
         }
@@ -552,5 +551,15 @@ public class Form  implements SourcePathChangeListener, FormInterface{
                 ATTENTION, JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE ) == JOptionPane.YES_OPTION
                 ) return true;
         else return false;
+    }
+
+    @Override
+    public void lockGui() {
+        tabbedPane1.setEnabled( false );
+    }
+
+    @Override
+    public void unlockGui() {
+        tabbedPane1.setEnabled( true );
     }
 }
