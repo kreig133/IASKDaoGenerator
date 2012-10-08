@@ -153,7 +153,7 @@ public class InOutClassGenerator extends JavaClassGenerator {
 
     public void insertFieldDeclaration( @NotNull ParameterType p ) {
 
-        jDoc.insertJavaDoc( p.getCommentForJavaDoc() );
+        jDoc.insertJavaDoc( builder, p.getCommentForJavaDoc() );
         insertTabs().append( Scope.PRIVATE.value() ).append( " " ).append( p.getType().value() )
                 .append( " " ).append( p.getRenameTo() );
 

@@ -60,7 +60,7 @@ abstract public class JavaClassGenerator extends Generator {
 
         updateBuilder();
 
-        jDoc.insertJavaDoc( javaDocForFile + DaoGenerator.VERSION );
+        jDoc.insertJavaDoc( builder, javaDocForFile + DaoGenerator.VERSION );
         insertPackageLine( _package );
 
         for ( String anImport : imports ) {
@@ -68,7 +68,7 @@ abstract public class JavaClassGenerator extends Generator {
         }
         insertLine();
 
-        jDoc.insertJavaDoc( false, true, "" );
+        jDoc.insertJavaDoc( builder, false, true, "" );
 
         return builder.toString() + s;
     }
@@ -212,7 +212,8 @@ abstract public class JavaClassGenerator extends Generator {
             addImport( DATE_IMPORT );
         }
 
-        jDoc.insertJavaDoc( false, String.format( "@return значение поля {@link %s#%s}", className, paramName ) );
+        jDoc.insertJavaDoc( builder, false, String.format(
+                "@return значение поля {@link %s#%s}", className, paramName ) );
 
         generateMethodSignature(
                 Scope.PUBLIC,
@@ -246,7 +247,7 @@ abstract public class JavaClassGenerator extends Generator {
             @NotNull JavaType javaType,
             @NotNull boolean forModel
     ) {
-        jDoc.insertJavaDoc( forModel,
+        jDoc.insertJavaDoc( builder, forModel,
                 String.format( "Установить значение поля {@link %s#%s}", className, name ),
                 "",
                 String.format( "@param %s", name ),
@@ -279,7 +280,6 @@ abstract public class JavaClassGenerator extends Generator {
         setNestingLevel( 0 );
         jDoc.setNestingLevel( 0 );
         builder = new StringBuilder();
-        jDoc.setBuilder( builder );
     }
 
     @Override

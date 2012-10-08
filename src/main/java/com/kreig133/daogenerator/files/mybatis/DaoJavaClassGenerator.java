@@ -108,7 +108,7 @@ abstract public class DaoJavaClassGenerator extends JavaClassGenerator {
 
     protected void generateJavaDocForDaoMethod( DaoMethod daoMethod ) {
         JavaDocGenerator.JavaDocBuilder javaDocBuilder =
-                jDoc.getBuilder().initialize().addComment( daoMethod.getCommon().getComment() );
+                jDoc.getBuilder( builder ).initialize().addComment( daoMethod.getCommon().getComment() );
 
         if( DaoJavaClassGenerator.checkToNeedOwnInClass( daoMethod ) ){
             javaDocBuilder.addParameter( "request" /**TODO хардкод*/, "объект, содержащий входные данные для запроса" );
