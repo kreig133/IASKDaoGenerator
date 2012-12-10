@@ -28,7 +28,7 @@ public class HashBuilderTest {
         }
 
         assertEquals(EtalonTestClass.getGeneratedHashMethod(),
-                HashBuilder.hashBuilder(params, EtalonTestClass.getEtalonClassName())
+                HashBuilder.hashBuilder(params)
         );
     }
 }
