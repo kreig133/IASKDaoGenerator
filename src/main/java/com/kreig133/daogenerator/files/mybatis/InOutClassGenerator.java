@@ -5,8 +5,8 @@ import com.google.common.collect.Iterators;
 import com.kreig133.daogenerator.enums.ClassType;
 import com.kreig133.daogenerator.enums.Scope;
 import com.kreig133.daogenerator.files.JavaClassGenerator;
-import com.kreig133.daogenerator.files.equalshashbuilder.EqualsBuilder;
-import com.kreig133.daogenerator.files.equalshashbuilder.HashBuilder;
+import com.kreig133.daogenerator.files.equalshashbuilder.EqualsMethodBuilder;
+import com.kreig133.daogenerator.files.equalshashbuilder.HashCodeMethodBuilder;
 import com.kreig133.daogenerator.jaxb.NamingUtils;
 import com.kreig133.daogenerator.files.PackageAndFileUtils;
 import com.kreig133.daogenerator.jaxb.*;
@@ -100,10 +100,10 @@ public class InOutClassGenerator extends JavaClassGenerator {
     }
 
     private void generateHashCodeEqualsMethod(ParametersType params, String className){
-        insertTabs().append( EqualsBuilder.equalsBuilder(params, className) );
+        insertTabs().append( EqualsMethodBuilder.equalsMethodBuilding(params, className) );
         insertLine();
         insertLine();
-        insertTabs().append( HashBuilder.hashBuilder(params) );
+        insertTabs().append( HashCodeMethodBuilder.hashCodeMethodBuilding(params) );
         insertLine();
         insertLine();
     }

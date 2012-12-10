@@ -11,9 +11,9 @@ import static java.util.Collections.sort;
  * @author zildarius
  * @version 1.0
  */
-public class EqualsBuilder {
+public class EqualsMethodBuilder {
 
-    private static final String CLASS_BEGIN = "@Override\n" +
+    private static final String METHOD_BEGIN = "@Override\n" +
             "    public boolean equals(Object o) {\n" +
             "        if (this == o) return true;\n"+
             "        if (!(o instanceof %s)) return false;\n"+
@@ -21,7 +21,7 @@ public class EqualsBuilder {
             "        %s that = (%s) o;"+
             "\n"+"\n";
 
-    private static final String CLASS_END = "\n" +
+    private static final String METHOD_END = "\n" +
             "        return true;\n" +
             "    }";
 
@@ -29,11 +29,10 @@ public class EqualsBuilder {
             "false;"+
             "\n";
 
-    public static String equalsBuilder(ParametersType params, String className){
+    public static String equalsMethodBuilding(ParametersType params, String className){
 
-        StringBuilder result = new StringBuilder (String.format( CLASS_BEGIN, className, className, className ));
+        StringBuilder result = new StringBuilder (String.format( METHOD_BEGIN, className, className, className ));
 
-        // we need to sort list, because IDEA sorted list too
         ArrayList<String> paramList = new ArrayList<String>();
         for (ParameterType param : params.getParameter()){
             paramList.add(param.getRenameTo());
@@ -44,7 +43,7 @@ public class EqualsBuilder {
             result.append( String.format(PARAMETER, currentParam,currentParam,currentParam,currentParam));
         }
 
-        result.append(CLASS_END);
+        result.append(METHOD_END);
 
         return result.toString();
     }

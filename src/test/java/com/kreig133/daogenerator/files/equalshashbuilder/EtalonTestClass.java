@@ -34,8 +34,8 @@ public class EtalonTestClass {
     }
 
     // See below
-    public static String getGeneratedHashMethod(){
-        return "    @Override\n" +
+    public static final String GENERATED_HASHCODE_METHOD =
+                "    @Override\n" +
                 "    public int hashCode() {\n" +
                 "        int result = paramByte != null ? paramByte.hashCode() : 0;\n" +
                 "        result = 31 * result + (paramShort != null ? paramShort.hashCode() : 0);\n" +
@@ -46,11 +46,10 @@ public class EtalonTestClass {
                 "        result = 31 * result + (paramString != null ? paramString.hashCode() : 0);\n" +
                 "        return result;\n" +
                 "    }";
-    }
 
     // See below
-    public static String getGeneratedEqualsMethod(){
-        return "    @Override\n" +
+    public static final String GENERATED_EQUALS_METHOD =
+                "    @Override\n" +
                 "    public boolean equals(Object o) {\n" +
                 "        if (this == o) return true;\n" +
                 "        if (!(o instanceof EtalonTestClass)) return false;\n" +
@@ -67,7 +66,6 @@ public class EtalonTestClass {
                 "\n" +
                 "        return true;\n" +
                 "    }";
-    }
 
     @Override
     public boolean equals(Object o) {

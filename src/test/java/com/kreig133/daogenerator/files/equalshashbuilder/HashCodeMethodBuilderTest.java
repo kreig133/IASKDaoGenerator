@@ -12,10 +12,10 @@ import static junit.framework.Assert.assertEquals;
  * @author zildarius
  * @version 1.0
  */
-public class EqualsBuilderTest {
+public class HashCodeMethodBuilderTest {
 
     @Test
-    public void testEqualsBuilder() throws Exception {
+    public void testHashBuilder() throws Exception {
         ArrayList<String> etalonParams = new ArrayList<String>();
         etalonParams = EtalonTestClass.getParamList();
 
@@ -27,8 +27,8 @@ public class EqualsBuilderTest {
             params.getParameter().add(param);
         }
 
-        assertEquals(EtalonTestClass.getGeneratedEqualsMethod(),
-                     EqualsBuilder.equalsBuilder(params, EtalonTestClass.getEtalonClassName())
-                    );
+        assertEquals(EtalonTestClass.GENERATED_HASHCODE_METHOD,
+                HashCodeMethodBuilder.hashCodeMethodBuilding(params)
+        );
     }
 }

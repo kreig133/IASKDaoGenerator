@@ -7,18 +7,18 @@ import com.kreig133.daogenerator.jaxb.ParametersType;
  * @author zildarius
  * @version 1.0
  */
-public class HashBuilder {
-    private static final String CLASS_BEGIN = "@Override\n" +
+public class HashCodeMethodBuilder {
+    private static final String METHOD_BEGIN = "@Override\n" +
                                               "    public int hashCode() {\n";
 
-    private static final String CLASS_END = "        return result;\n" +
+    private static final String METHOD_END = "        return result;\n" +
                                             "    }";
 
     private static final String PRE_PARAMETER = "        int result = %s != null ? %s.hashCode() : 0;\n";
     private static final String PARAMETER = "        result = 31 * result + (%s != null ? %s.hashCode() : 0);\n";
 
-    public static String hashBuilder(ParametersType params){
-        StringBuilder result = new StringBuilder(CLASS_BEGIN);
+    public static String hashCodeMethodBuilding(ParametersType params){
+        StringBuilder result = new StringBuilder(METHOD_BEGIN);
 
         boolean isFirst = true;
         for (ParameterType param : params.getParameter()){
@@ -30,7 +30,7 @@ public class HashBuilder {
             }
         }
 
-        result.append(CLASS_END);
+        result.append(METHOD_END);
         return result.toString();
     }
 }
