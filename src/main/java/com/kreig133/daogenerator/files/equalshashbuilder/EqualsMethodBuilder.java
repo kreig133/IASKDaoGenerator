@@ -29,7 +29,7 @@ public class EqualsMethodBuilder {
             "false;"+
             "\n";
 
-    public static String equalsMethodBuilding(ParametersType params, String className){
+    public static String buildEqualsMethod(ParametersType params, String className){
 
         StringBuilder result = new StringBuilder (String.format( METHOD_BEGIN, className, className, className ));
 

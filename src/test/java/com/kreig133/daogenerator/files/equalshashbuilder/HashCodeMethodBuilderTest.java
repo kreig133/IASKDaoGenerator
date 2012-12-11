@@ -28,7 +28,7 @@ public class HashCodeMethodBuilderTest {
         }
 
         assertEquals(EtalonTestClass.GENERATED_HASHCODE_METHOD,
-                HashCodeMethodBuilder.hashCodeMethodBuilding(params)
+                HashCodeMethodBuilder.buildHashCodeMethod(params)
         );
     }
 }

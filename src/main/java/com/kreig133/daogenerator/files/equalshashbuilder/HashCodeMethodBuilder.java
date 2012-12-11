@@ -17,7 +17,7 @@ public class HashCodeMethodBuilder {
     private static final String PRE_PARAMETER = "        int result = %s != null ? %s.hashCode() : 0;\n";
     private static final String PARAMETER = "        result = 31 * result + (%s != null ? %s.hashCode() : 0);\n";
 
-    public static String hashCodeMethodBuilding(ParametersType params){
+    public static String buildHashCodeMethod(ParametersType params){
         StringBuilder result = new StringBuilder(METHOD_BEGIN);
 
         boolean isFirst = true;

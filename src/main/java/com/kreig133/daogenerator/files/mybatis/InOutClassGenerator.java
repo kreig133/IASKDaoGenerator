@@ -90,20 +90,20 @@ public class InOutClassGenerator extends JavaClassGenerator {
             generateSetter( p );
         }
 
-        ParametersType params = new ParametersType();
-        for ( ParameterType p : parameters ) {
-            params.getParameter().add(p);
-        }
-        generateHashCodeEqualsMethod(params, this.name);
+        writeHashCodeEqualsMethod();
 
         writeToString();
     }
 
-    private void generateHashCodeEqualsMethod(ParametersType params, String className){
-        insertTabs().append( EqualsMethodBuilder.equalsMethodBuilding(params, className) );
+    private void writeHashCodeEqualsMethod(){
+        String className = this.name;
+        ParametersType params = new ParametersType();
+        params.getParameter().addAll(parameters);
+
+        insertTabs().append( EqualsMethodBuilder.buildEqualsMethod(params, className) );
         insertLine();
         insertLine();
-        insertTabs().append( HashCodeMethodBuilder.hashCodeMethodBuilding(params) );
+        insertTabs().append( HashCodeMethodBuilder.buildHashCodeMethod(params) );
         insertLine();
         insertLine();
     }

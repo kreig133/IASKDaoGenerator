@@ -28,7 +28,7 @@ public class EqualsMethodBuilderTest {
         }
 
         assertEquals(EtalonTestClass.GENERATED_EQUALS_METHOD,
-                     EqualsMethodBuilder.equalsMethodBuilding(params, EtalonTestClass.getEtalonClassName())
+                     EqualsMethodBuilder.buildEqualsMethod(params, EtalonTestClass.getEtalonClassName())
                     );
     }
 }
