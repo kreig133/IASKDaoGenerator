@@ -10,46 +10,36 @@ public interface OperationSettings {
     String getOperationName();
 
     String getOutputPathForJavaClasses();
-    
-    String getPathForGeneratedSource();
+    void   setOutputPathForJavaClasses( String outputPath );
 
-    void setOutputPathForJavaClasses( String outputPath );
-    
-    int getFrameWidth();
-
+    int  getFrameWidth();
     void setFrameWidth( int frameWidth );
 
-    int getFrameHeight();
-
+    int  getFrameHeight();
     void setFrameHeight( int frameHeight );
 
     String getEntityPackage();
-
-    void setEntityPackage( String entityPackage );
+    void   setEntityPackage( String entityPackage );
 
     String getMapperPackage();
-
-    void setMapperPackage( String mapperPackage );
+    void   setMapperPackage( String mapperPackage );
 
     String getDaoPackage();
-
-    void setDaoPackage( String daoPackage );
+    void   setDaoPackage( String daoPackage );
 
     String getSourcePath();
-
-    void setSourcePath( String path );
+    void   setSourcePath( String path );
 
     String getPathForGeneratedTests();
-
+    String getPathForGeneratedSource();
     String getPathForTestResources();
+    String getPathForJavaResources();
 
     void addSourcePathChangeListener( SourcePathChangeListener listener );
     
     String getProjectFolder();
-
-    void setProjectFolder( String projectFolder );
+    void   setProjectFolder( String projectFolder );
 
     String getLastDirectory();
-
-    public void setLastDirectory( String lastDirectory );
+    void   setLastDirectory( String lastDirectory );
 }

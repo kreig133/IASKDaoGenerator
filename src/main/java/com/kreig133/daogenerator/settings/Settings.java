@@ -50,13 +50,13 @@ public class Settings {
 
         properties.setProperty( DEST_DIR            , operationSettings.getOutputPathForJavaClasses () );
         properties.setProperty( MAPPING_PACKAGE     , operationSettings.getMapperPackage            () );
+        properties.setProperty( ENTITY_PACKAGE      , operationSettings.getEntityPackage            () );
+        properties.setProperty( INTERFACE_PACKAGE   , operationSettings.getDaoPackage               () );
 
         if ( new File( settings().getSourcePath()  ).exists() ) {
             PropertiesFileController.saveSpecificProperties( operationSettings.getSourcePath(), properties );
         }
 
-        properties.setProperty( ENTITY_PACKAGE      , operationSettings.getEntityPackage            () );
-        properties.setProperty( INTERFACE_PACKAGE   , operationSettings.getDaoPackage               () );
         properties.setProperty( WIDTH               , String.valueOf( settings().getFrameWidth () ) );
         properties.setProperty( HEIGHT              , String.valueOf( settings().getFrameHeight() ) );
         properties.setProperty( SOURCE_DIR          , operationSettings.getSourcePath() );

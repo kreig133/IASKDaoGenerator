@@ -43,13 +43,16 @@ public class QueryPreparatorTest extends QueryPreparator {
 
     @NotNull
     @Language( "SQL" )
-    static String updateQuery = "UPDATE t_Depo \n" +
-            "SET \"nflreport\" = 1 \n" +
-            "WHERE [nflreport] = 0 AND n_DEPO_id = null";
+    static String updateQuery =
+            "UPDATE \n" +
+            "\ttDockPack\n" +
+            "SET \n" +
+            "\tnDocTypeID = 12345\n" +
+            "WHERE nPackID = 1 AND nDeleted = 0";
 
     @Test
     public void getColumnsFromDbByTableNameTest(){
-        List<ParameterType> t_depo = super.getColumnsFromDbByTableName( "t_Depo" );
+        List<ParameterType> t_depo = super.getColumnsFromDbByTableName( "tDocPack" );
         Assert.assertTrue( !t_depo.isEmpty() );
         Assert.assertTrue( t_depo.get( 0 ).getSqlType() != null );
     }
@@ -57,31 +60,42 @@ public class QueryPreparatorTest extends QueryPreparator {
     @Test
     public void prepareQueryTestUpdate() {
         Assert.assertEquals(
-                super.prepareQuery( updateQuery ),
-                "UPDATE t_Depo \n" +
-                        "SET \"nflreport\" = ${nflreport;int;1} \n" +
-                        "WHERE [nflreport] = ${nflreport;int;0} AND n_DEPO_id = ${n_DEPO_id;int;null}"
+                super.prepareQuery( "UPDATE teSponsor SET sName = :sName, sPart=:sPart, sText=:sText WHERE nRecID = :nRecID" ),
+                "UPDATE teSponsor SET sName = ${sName;varchar(255)}, sPart=${sPart;varchar(255)}, sText=${sText;varchar(255)} WHERE nRecID = ${nRecID;int identity}"
         );
     }
 
     @Test
     public void prepareQueryTestInsertWithoutColumnList() {
         Assert.assertEquals(
-                super.prepareQuery( "INSERT INTO OpsJourn VALUES ( 1, 1 )" ),
-                "INSERT INTO OpsJourn values(\n" +
-                        "\t${iInstrOpsID;int;1},\n" +
-                        "\t${iOrderID;int;1}\n" +
-                        ")"
+                super.prepareQuery( "INSERT INTO tLimitTypes VALUES (1, \'раздватри\')" ),
+                "INSERT INTO tLimitTypes values(\n" +
+                        "\t${nLimitTypeID;int;1},\n" +
+                        "\t${sLimitTypeName;varchar(100);раздватри}\n" +
+                ")"
         );
     }
 
     @Test
     public void prerareQueryTestSelect(){
         Assert.assertEquals(
-            super.prepareQuery("SELECT CONVERT ( int , isNull ( svalue , '0' ) ) FROM dbo.t_Depo_setup d " +
-                    "WHERE d.n_Depo_ID is NULL AND d.sContext ='Setup' AND d.sDeclare ='ModeSign'"),
-            "SELECT CONVERT ( int , isNull ( svalue , '0' ) ) FROM dbo.t_Depo_setup d " +
-                    "WHERE d.n_Depo_ID is NULL AND d.sContext = ${scontext;varchar(40);Setup} AND d.sDeclare = ${sdeclare;varchar(40);ModeSign}"
+            super.prepareQuery("SELECT\n" +
+                    "tDocPack.nDocID\n" +
+                    "FROM \n" +
+                    "tDocPack ( NOLOCK )\n" +
+                    "WHERE \n" +
+                    "tDocPack.nDocTypeID = 59 and\n" +
+                    "isnull ( tDocPack.ndeleted , 0 ) = 0 and\n" +
+                    "tDocPack.nPackID = 250287 "),
+
+                    "SELECT\n" +
+                    "tDocPack.nDocID\n" +
+                    "FROM \n" +
+                    "tDocPack ( NOLOCK )\n" +
+                    "WHERE \n" +
+                    "tDocPack.nDocTypeID = ${nDocTypeID;int;59} and\n" +
+                    "isnull ( tDocPack.ndeleted , 0 ) = 0 and\n" +
+                    "tDocPack.nPackID = ${nPackID;int;250287} "
         );
     }
 
@@ -101,47 +115,24 @@ public class QueryPreparatorTest extends QueryPreparator {
     @Test
     public void prerareQueryTestSelectWithConstant(){
         Assert.assertEquals(
-            super.prepareQuery("SELECT dbo.tabValue.sshortname, \n" +
-                    "dbo.tabStateBonds.sRegNumber \n" +
-                    "FROM dbo.tabStateBonds, \n" +
-                    "dbo.tabValue \n" +
-                    "WHERE dbo.tabvalue.ivalueid = dbo.tabStateBonds.iValueId and \n" +
-                    "dbo.tabStateBonds.iValueId = 6295"),
-            "SELECT dbo.tabValue.sshortname, \n" +
-                    "dbo.tabStateBonds.sRegNumber \n" +
-                    "FROM dbo.tabStateBonds, \n" +
-                    "dbo.tabValue \n" +
-                    "WHERE dbo.tabvalue.ivalueid = dbo.tabStateBonds.iValueId and \n" +
-                    "dbo.tabStateBonds.iValueId = ${iValueID;int;6295}"
+            super.prepareQuery("select fl.nPackID, sd.nLapScID /*, **/ from tFinLaps fl\n" +
+                    "join tScensData sd on fl.nScenRecID = sd.nScenRecID\n" +
+                    "where nPackID = 249616"),
+                    "select fl.nPackID, sd.nLapScID /*, **/ from tFinLaps fl\n" +
+                    "join tScensData sd on fl.nScenRecID = sd.nScenRecID\n" +
+                    "where nPackID = ${nPackID;int;249616}"
         );
     }
 
     @Test
     public void prepareQueryTestInsert() {
         Assert.assertEquals(
-                super.prepareQuery( insertQuery ),
-                "INSERT INTO dbo.t_DocAdmMembers \n" +
-                        "( iDocInID, iGeographyID, sFullName, \n" +
-                        "sEngName, dRegDate, \"sOkpoCode\", \n" +
-                        "sINN, [sOrgan], sRegNumber, \n" +
-                        "sDirLName, sDirFName, sDirFatherName, \n" +
-                        "sJurPersName, sInvestorCode, idivisiontype ) \n" +
-                        "values(\n" +
-                        "\t${iDocInID;int;4058335},\n" +
-                        "\t${iGeographyID;int;1},\n" +
-                        "\t${sFullName;varchar(255);ru,ss},\n" +
-                        "\t'eng',\n" +
-                        "\t'11-29-2011 0:0:0.000',\n" +
-                        "\t${sOkpoCode;varchar(16);0002},\n" +
-                        "\t${sINN;varchar(16);0003},\n" +
-                        "\t${sOrgan;varchar(255);omr},\n" +
-                        "\t${sRegNumber;varchar(30);0001},\n" +
-                        "\t${sDirLName;varchar(40);000002},\n" +
-                        "\t${sDirFName;varchar(24);000003},\n" +
-                        "\t${sDirFatherName;varchar(24);000004},\n" +
-                        "\t${sJurPersName;varchar(255);ru},\n" +
-                        "\t${sInvestorCode;varchar(40);ki},\n" +
-                        "\t${iDivisionType;int;-1}\n" +
+                super.prepareQuery( "INSERT INTO teSponsor ( nCUID, nCreDataID, sName, sPart ) VALUES ( 5597, 267059, 'ааа', 'ппп' )" ),
+                "INSERT INTO teSponsor ( nCUID, nCreDataID, sName, sPart ) values(\n" +
+                        "\t${nCUID;int;5597},\n" +
+                        "\t${nCreDataID;int;267059},\n" +
+                        "\t${sName;varchar(255);ааа},\n" +
+                        "\t${sPart;varchar(255);ппп}\n" +
                         ")"
         );
     }

@@ -6,10 +6,7 @@ import com.kreig133.daogenerator.enums.Scope;
 import com.kreig133.daogenerator.files.JavaClassGenerator;
 import com.kreig133.daogenerator.files.JavaDocGenerator;
 import com.kreig133.daogenerator.files.PackageAndFileUtils;
-import com.kreig133.daogenerator.jaxb.DaoMethod;
-import com.kreig133.daogenerator.jaxb.JavaType;
-import com.kreig133.daogenerator.jaxb.ParameterType;
-import com.kreig133.daogenerator.jaxb.ParentType;
+import com.kreig133.daogenerator.jaxb.*;
 import com.kreig133.daogenerator.settings.Settings;
 import org.apache.commons.lang.StringUtils;
 import org.jetbrains.annotations.NotNull;
@@ -25,11 +22,6 @@ abstract public class DaoJavaClassGenerator extends JavaClassGenerator {
 
     protected void startingLinesOfDaoFiles() {
         setPackage( Settings.settings().getDaoPackage() );
-        addDaoFilesImports();
-    }
-
-    protected void addDaoFilesImports() {
-        addImport( Settings.settings().getEntityPackage() + ".*" );
     }
 
     /**
@@ -42,14 +34,13 @@ abstract public class DaoJavaClassGenerator extends JavaClassGenerator {
     ) {
         final List<ParameterType> parameters = daoMethod.getInputParametrs().getParameter();
 
-        return  ( parameters.size() > 3 ) || daoMethod.getInputParametrs().getParent() != ParentType.DEFAULT;
+        return parameters.size() > 1;
     }
 
     public static boolean checkToNeedOwnOutClass(
             @NotNull DaoMethod daoMethod
     ) {
-        return daoMethod.getOutputParametrs().getParameter().size() > 1 ||
-                daoMethod.getOutputParametrs().getParent() != ParentType.DEFAULT;
+        return daoMethod.getOutputParametrs().getParameter().size() > 1;
     }
 
     /**
@@ -70,6 +61,7 @@ abstract public class DaoJavaClassGenerator extends JavaClassGenerator {
         if ( Utils.collectionNotEmpty( outputParameterList ) ) {
             if ( daoMethod.getCommon().getConfiguration().isMultipleResult() ) {
                 outputClass.append( "List<" );
+                addImport( "java.util.List" );
             }
             if ( ! checkToNeedOwnOutClass( daoMethod ) ) {
                 outputClass.append( outputParameterList.get( 0 ).getType().value() );
@@ -77,10 +69,11 @@ abstract public class DaoJavaClassGenerator extends JavaClassGenerator {
                     addImport( DATE_IMPORT );
                 }
             } else {
+                String outClassName = InOutClassGenerator.getOutClassName( daoMethod );
                 outputClass.append(
-                        PackageAndFileUtils.getShortName( daoMethod.getOutputParametrs().getJavaClassName() )
+                        PackageAndFileUtils.getShortName( outClassName )
                 );
-                addImport( daoMethod.getOutputParametrs().getJavaClassName() );
+                addImport( outClassName );
             }
             if ( daoMethod.getCommon().getConfiguration().isMultipleResult() ) {
                 outputClass.append( ">" );
@@ -90,11 +83,12 @@ abstract public class DaoJavaClassGenerator extends JavaClassGenerator {
         List<String> inputParams = new ArrayList<String>( inputParameterList.size() );
         if ( Utils.collectionNotEmpty( inputParameterList ) ) {
             if ( checkToNeedOwnInClass( daoMethod ) ) {
+                String inClassName = InOutClassGenerator.getInClassName( daoMethod );
                 inputParams.add(
-                        PackageAndFileUtils.getShortName( daoMethod.getInputParametrs().getJavaClassName() ) +
+                        PackageAndFileUtils.getShortName( inClassName ) +
                                 " request"
                 );
-                addImport( daoMethod.getInputParametrs().getJavaClassName() );
+                addImport( inClassName );
             } else {
                 for ( ParameterType p : inputParameterList ) {
                     if( p.getType() == JavaType.DATE ) {
@@ -102,26 +96,26 @@ abstract public class DaoJavaClassGenerator extends JavaClassGenerator {
                     }
 
                     StringBuilder inputParam = new StringBuilder();
-                    inputParam.append( "@Param(\"" ).append( p.getRenameTo() ).append( "\") " );
-                    inputParam.append( p.getType().value() ).append( " " ).append( p.getRenameTo() );
+                    inputParam.append( p.getType().value() ).append( " request" );
                     inputParams.add( inputParam.toString() );
                 }
             }
         }
 
-        generateMethodSignature( Scope.DEFAULT, outputClass.toString(), methodName, inputParams, null, true );
+        generateMethodSignature( Scope.PUBLIC, outputClass.toString(), methodName, inputParams, null, true );
     }
+
 
     protected void generateJavaDocForDaoMethod( DaoMethod daoMethod ) {
         JavaDocGenerator.JavaDocBuilder javaDocBuilder =
-                jDoc.getBuilder().initialize().addComment( daoMethod.getCommon().getComment() );
+                jDoc.getBuilder( builder ).initialize().addComment( daoMethod.getCommon().getComment() );
 
         if( DaoJavaClassGenerator.checkToNeedOwnInClass( daoMethod ) ){
             javaDocBuilder.addParameter( "request" /**TODO хардкод*/, "объект, содержащий входные данные для запроса" );
         } else {
             for ( ParameterType type : daoMethod.getInputParametrs().getParameter() ) {
                 javaDocBuilder.addParameter(
-                        type.getRenameTo(),
+                        "request",
                         StringUtils.isNotBlank( type.getComment() ) ?
                                 type.getComment():
                                 "входной параметр запроса"

@@ -95,7 +95,7 @@ public class ParametersType {
      *
      */
     public String getJavaClassName() {
-        return javaClassName;
+        throw new IllegalAccessError();
     }
 
     /**
@@ -173,14 +173,6 @@ public class ParametersType {
         }
         return false;
     }
-    
-    /**
-     * Поддерживает ли запрос пейджинг?
-     * @return
-     */
-    public boolean isWithPaging() {
-        return isWithPaging( getParameter() );
-    }
 
     public boolean containsSameNames() {
         return containsSameNames( getParameter() );
@@ -219,56 +211,6 @@ public class ParametersType {
             }
         }
         return result;
-    }
-
-    public static boolean isWithPaging( @NotNull List<ParameterType> parameterTypes ) {
-        Map<Enum, Boolean> map = new HashMap<Enum, Boolean>();
-        for ( WithPagingType withPagingType : WithPagingType.values() ) {
-            map.put( withPagingType, Boolean.FALSE );
-        }
-        for ( ParameterType parameterType : parameterTypes ) {
-            if( WithPagingType.inEnum( parameterType.getName() ) ) {
-                map.put( WithPagingType.getBySqlName( parameterType.getName() ), Boolean.TRUE );
-            }
-        }
-        for ( Enum anEnum : map.keySet() ) {
-            if ( ! map.get( anEnum ) ) {
-                return false;
-            }
-        }
-        return true;
-    }
-        
-    public enum WithPagingType{
-         ID_SESSION_DS("idSession"),
-         I_START("startRowNumber"),
-         I_PAGE_LIMIT("pageLimit"),
-         I_END("endRowNumber"),
-         S_SORT("sort"),
-         I_ROW_COUNT("rowCount");
-
-        final String fieldName;
-
-        private WithPagingType( String fieldName ) {
-            this.fieldName = fieldName;
-        }
-
-        public String fieldName() {
-            return fieldName;
-        }
-
-        public static boolean inEnum( String name ){
-            return getBySqlName( name ) != null;
-        }
-
-        @org.jetbrains.annotations.Nullable
-        public static WithPagingType getBySqlName( String name ) {
-            try {
-                return valueOf( NamingUtils.convertNameForEnum( name ) );
-            } catch ( Exception e ) {
-                return null;
-            }
-        }
     }
 
     private interface FieldAccessor {

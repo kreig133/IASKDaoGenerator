@@ -18,18 +18,18 @@ public class WikiGenerator {
         final String[] xmlFileNamesInDirectory = FileBuilder.getXmlFileNamesInDirectory( path );
 
         for ( String s : xmlFileNamesInDirectory ) {
-            generateWikiForXmlFile( path + "\\" +  s, false );
+            generateWikiForXmlFile( path + "\\" +  s );
         }
     }
 
     public static void generateWikiForXmlFile(
-            String xmlFileName, boolean forDirectory
+            String xmlFileName
     ) throws IOException, InterruptedException {
 
         final String[] cmdarray = { "cmd", "/C",
                 "java  -classpath DaoGenerator-" + DaoGenerator.VERSION + ".jar org.apache.xalan.xslt.Process " +
                         "-IN " + xmlFileName +
-                        " -XSL " + ( forDirectory ? XML_TO_WIKI_FOR_DIRECTORY : XML_TO_WIKI ) + ".xsl "+
+                        " -XSL " + XML_TO_WIKI + ".xsl "+
                         "-OUT " + xmlFileName + ".txt" };
 
         for ( String s1 : cmdarray ) {

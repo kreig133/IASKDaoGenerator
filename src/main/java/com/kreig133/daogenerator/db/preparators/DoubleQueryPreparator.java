@@ -10,6 +10,8 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import static com.kreig133.daogenerator.common.Utils.getDaoGeneratorDateFormat;
+
 /**
  * @author eshangareev
  * @version 1.0
@@ -78,7 +80,7 @@ public class DoubleQueryPreparator extends QueryPreparator {
             pType.setSqlType( "numeric" );
         } else {
             try {
-                new SimpleDateFormat( "M-d-yyyy H:m:s.SSS" ).parse(
+                getDaoGeneratorDateFormat().parse(
                         pType.getTestValue().substring( 1, pType.getTestValue().length() - 1 )
                 );
                 pType.setSqlType( "datetime" );

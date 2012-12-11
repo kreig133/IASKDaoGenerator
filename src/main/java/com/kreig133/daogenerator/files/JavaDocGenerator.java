@@ -12,26 +12,26 @@ import java.util.Date;
  */
 public class JavaDocGenerator extends Generator{
 
-    public StringBuilder insertJavaDoc( String ... commentsLine ) {
-        return insertJavaDoc( false, commentsLine );
+    public StringBuilder insertJavaDoc( StringBuilder builder, String ... commentsLine ) {
+        return insertJavaDoc( builder, false, commentsLine );
     }
 
-    public StringBuilder insertJavaDoc( boolean  withReturn, String ... commentsLine ) {
-        return insertJavaDoc( withReturn, false, commentsLine );
+    public StringBuilder insertJavaDoc( StringBuilder builder, boolean  withReturn, String ... commentsLine ) {
+        return insertJavaDoc( builder, withReturn, false, commentsLine );
     }
     public StringBuilder insertJavaDoc(
+            StringBuilder builder,
             boolean  withReturn,
             boolean  withSince,
             @NotNull String ... commentsLine
     ){
+        this.builder = builder;
 
         initialize();
 
         for ( String comment : commentsLine ) {
-            if ( StringUtils.isNotEmpty( comment ) ) {
-                insertNewJavaDocLine();
-                builder.append( comment.trim() );
-            }
+            insertNewJavaDocLine();
+            builder.append( comment );
         }
 
         if( withReturn ) {
@@ -72,13 +72,14 @@ public class JavaDocGenerator extends Generator{
     }
 
     @NotNull
-    public String wrapCommentForGetter( String javaDoc ) {
-        return "Получить " + javaDoc;
+    public JavaDocBuilder getBuilder( StringBuilder builder ) {
+        this.builder = builder;
+        return new JavaDocBuilder();
     }
 
-    @NotNull
-    public JavaDocBuilder getBuilder() {
-        return new JavaDocBuilder();
+    @Override
+    public void setBuilder( StringBuilder builder ) {
+        throw new IllegalStateException( "Нельзя устанавливать builder явно." );
     }
 
     public class JavaDocBuilder{

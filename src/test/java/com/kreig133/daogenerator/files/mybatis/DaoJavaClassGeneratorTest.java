@@ -24,11 +24,6 @@ public class DaoJavaClassGeneratorTest {
 
         daoMethod.getInputParametrs().getParameter().add( new ParameterType() );
 
-        Assert.assertFalse( checkToNeedOwnInClass( daoMethod ) );
-
-        daoMethod.getInputParametrs().getParameter().add( new ParameterType() );
-        daoMethod.getInputParametrs().getParameter().add( new ParameterType() );
-
         Assert.assertTrue( checkToNeedOwnInClass( daoMethod ) );
     }
 }

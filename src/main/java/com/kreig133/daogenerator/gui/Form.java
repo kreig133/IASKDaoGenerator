@@ -1,80 +1,34 @@
 package com.kreig133.daogenerator.gui;
 
-import static com.kreig133.daogenerator.gui.GuiUtils.getNewFileChooser;
-
-import com.kreig133.daogenerator.JaxbHandler;
-import com.kreig133.daogenerator.MavenProjectGenerator;
-import com.kreig133.daogenerator.WikiGenerator;
 import com.kreig133.daogenerator.common.SourcePathChangeListener;
-import com.kreig133.daogenerator.common.Utils;
-import com.kreig133.daogenerator.db.extractors.Extractor;
-import com.kreig133.daogenerator.db.extractors.in.InputParameterExtractor;
 import com.kreig133.daogenerator.db.extractors.in.SpInputParameterExtractor;
-import com.kreig133.daogenerator.db.extractors.out.OutputParameterExtractor;
-import com.kreig133.daogenerator.db.preparators.DoubleQueryPreparator;
-import com.kreig133.daogenerator.db.preparators.QueryPreparator;
-import com.kreig133.daogenerator.files.PackageAndFileUtils;
-import com.kreig133.daogenerator.files.builder.FileBuilder;
-import com.kreig133.daogenerator.jaxb.CommonType;
-import com.kreig133.daogenerator.jaxb.ConfigurationType;
-import com.kreig133.daogenerator.jaxb.DaoMethod;
-import com.kreig133.daogenerator.jaxb.ParameterType;
-import com.kreig133.daogenerator.jaxb.ParametersType;
-import com.kreig133.daogenerator.jaxb.ParentType;
-import com.kreig133.daogenerator.jaxb.SelectType;
-import com.kreig133.daogenerator.jaxb.validators.DaoMethodValidator;
+import com.kreig133.daogenerator.jaxb.*;
+import com.kreig133.daogenerator.presenter.FormInterface;
+import com.kreig133.daogenerator.presenter.FormPresenter;
+import com.kreig133.daogenerator.presenter.PresenterException;
 import com.kreig133.daogenerator.settings.Settings;
+import org.jetbrains.annotations.NotNull;
 
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.FocusEvent;
-import java.awt.event.FocusListener;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.OutputStream;
-import java.io.PrintStream;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.regex.Pattern;
-
-import javax.swing.DefaultComboBoxModel;
-import javax.swing.JButton;
-import javax.swing.JCheckBox;
-import javax.swing.JComboBox;
-import javax.swing.JEditorPane;
-import javax.swing.JFileChooser;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.JRadioButton;
-import javax.swing.JScrollPane;
-import javax.swing.JSplitPane;
-import javax.swing.JTabbedPane;
-import javax.swing.JTable;
-import javax.swing.JTextArea;
-import javax.swing.JTextField;
-import javax.swing.JTextPane;
-import javax.swing.SwingUtilities;
-import javax.swing.WindowConstants;
+import javax.swing.*;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.Document;
+import java.awt.event.*;
+import java.io.*;
+import java.util.ArrayList;
+import java.util.List;
 
-import org.apache.commons.lang.StringUtils;
-import org.jetbrains.annotations.NotNull;
+import static com.kreig133.daogenerator.gui.GuiUtils.getNewFileChooser;
 
 /**
  * @author eshangareev
  * @version 1.0
  */
-public class Form  implements SourcePathChangeListener{
+public class Form  implements SourcePathChangeListener, FormInterface{
     private static Form INSTANCE;
-    private static final String WARNING_DIALOG_TITLE = "Предупреждение";
-    private static final String ATTENTION = "Сообщение";
+    private static final String WARNING_DIALOG_TITLE = "Голактего в опастносте!!11один";
+    private static final String ATTENTION = "Говорит DaoGenerator:";
 
     private JPanel mainPanel;
     private JTable inputParametrs;
@@ -104,19 +58,19 @@ public class Form  implements SourcePathChangeListener{
     private JButton button1;
     private JLabel entityPackageLable;
     private JButton prepareQueryButton;
-    private JButton parentSpTextButton;
     private JRadioButton singleQueryRadioButton;
     private JRadioButton doubleQueryRadioButton;
     private JEditorPane secondQuery;
     private JScrollPane secondQueryPanel;
-    private JComboBox outputParamsType;
-    private JComboBox inputParamsType;
-    private JButton clearButton;
     private JFrame windowWithText;
 
     private boolean start = true;
 
-    private Form() {
+    private FormPresenter presenter;
+
+    private Form(FormPresenter presenter) {
+
+        this.presenter = presenter;
         redirectOutAndErrOutputToGui();
 
         initializingAnalyticTab();
@@ -128,195 +82,123 @@ public class Form  implements SourcePathChangeListener{
     }
 
     private void initializingAnalyticTab() {
-        outputParamsType.setModel(
-                new DefaultComboBoxModel( new ParentType[] { ParentType.DEFAULT, ParentType.CATALOGUE } ) );
-        inputParamsType.setModel(
-                new DefaultComboBoxModel( new ParentType[] { ParentType.DEFAULT, ParentType.SAVED_QUERY } ) );
 
         queryTextArea.setContentType( "text/sql" );
         secondQuery.setContentType( "text/sql" );
         inputParametrs.getTableHeader().setReorderingAllowed( false );
         outputParametrs.getTableHeader().setReorderingAllowed( false );
 
-        singleQueryRadioButton.addChangeListener( new ChangeListener() {
+        singleQueryRadioButton.addChangeListener(new ChangeListener() {
             @Override
-            public void stateChanged( ChangeEvent e ) {
-                secondQueryPanel.setVisible( ! singleQueryRadioButton.isSelected() );
-                ( ( JSplitPane ) secondQueryPanel.getParent() ).setDividerLocation( 0.5 );
+            public void stateChanged(ChangeEvent e) {
+                secondQueryPanel.setVisible(!singleQueryRadioButton.isSelected());
+                ((JSplitPane) secondQueryPanel.getParent()).setDividerLocation(0.5);
                 secondQueryPanel.getParent().repaint();
             }
-        } );
+        });
+
         prepareQueryButton.addActionListener( new ActionListener() {
             @Override
             public void actionPerformed( ActionEvent e ) {
-                if ( determineQueryType() == SelectType.CALL ) {
-                    JOptionPane.showMessageDialog( mainPanel, "Предварительная обработка для ХП не требуется!",
-                            WARNING_DIALOG_TITLE, JOptionPane.WARNING_MESSAGE );
-                    return;
-                }
-                String preparedQuery;
-                if ( doubleQueryRadioButton.isSelected() ) {
-                    preparedQuery = DoubleQueryPreparator.instance().prepareQuery( queryTextArea.getText(),
-                            secondQuery.getText() );
-                } else {
-                    preparedQuery = QueryPreparator.instance().prepareQuery( queryTextArea.getText() );
-                }
-                queryTextArea.setText( preparedQuery );
+                prepareQueryButtonListener();
             }
         } );
+
         getInParamsButton.addActionListener( new ActionListener() {
             @Override
             public void actionPerformed( ActionEvent e ) {
-                if ( StringUtils.isBlank( queryTextArea.getText() ) ) {
-                    JOptionPane.showMessageDialog( getInParamsButton,
-                            "Введите текст запроса или название хранимой процедуры" );
-                    return;
-                }
-                DaoMethod currentDaoMethod = getCurrentDaoMethod();
-                final boolean isSpCall = currentDaoMethod.getSelectType() == SelectType.CALL;
-                final boolean isSelect = currentDaoMethod.getSelectType() == SelectType.SELECT;
-
-                SPTextButton.setEnabled( isSpCall );
-                parentSpTextButton.setEnabled( isSpCall );
-                getOutParamsButton.setEnabled( isSpCall || isSelect );
-                generateXMLButton.setEnabled( ! ( isSelect || isSpCall ) );
-                DaoMethod daoMethod = InputParameterExtractor.getInstance( currentDaoMethod )
-                        .extractInputParams( currentDaoMethod );
-
-                updateInputParameters( daoMethod.getInputParametrs().getParameter() );
-                updateOutputParameters( new ArrayList<ParameterType>() );
+                getInParamsButtonListener();
             }
         } );
+
         SPTextButton.addActionListener( new ActionListener() {
             @Override
             public void actionPerformed( ActionEvent e ) {
-                TextView.setText( SpInputParameterExtractor.getSPText() );
-                getWindowWithText().setVisible( true );
+                SPTextButtonListener();
             }
         } );
-        parentSpTextButton.addActionListener( new ActionListener() {
-            @Override
-            public void actionPerformed( ActionEvent e ) {
-                String spText = SpInputParameterExtractor.getParenSpText();
-                if ( spText == null ) {
-                    JOptionPane.showMessageDialog( mainPanel, "Хранимка не является оберткой!",
-                    		ATTENTION , JOptionPane.INFORMATION_MESSAGE );
-                    return;
-                }
-                TextView.setText( spText );
 
-                getWindowWithText().setVisible( true );
-            }
-        } );
         getOutParamsButton.addActionListener( new ActionListener() {
             @Override
             public void actionPerformed( ActionEvent e ) {
-                final DaoMethod daoMethod = OutputParameterExtractor.instance(
-                        getCurrentDaoMethod().getSelectType()
-                ).getOutputParameters( getCurrentDaoMethod() );
-
-                updateOutputParameters( daoMethod.getOutputParametrs().getParameter() );
-                updateInputParameters( daoMethod.getInputParametrs().getParameter() );
-
-                generateXMLButton.setEnabled( true );
+                getOutParamsButtonListener();
             }
         } );
+
         generateXMLButton.addActionListener( new ActionListener() {
             @Override
             public void actionPerformed( ActionEvent e ) {
-                final DaoMethod currentDaoMethod = getCurrentDaoMethod();
-
-                if ( ! validateBeforeGenerateXML( currentDaoMethod ) ) return;
-
-                if ( ! DaoMethodValidator.checkDaoMethods( Arrays.asList( currentDaoMethod ), true ) ) {
-                    if( JOptionPane.YES_OPTION != JOptionPane.showConfirmDialog(
-                            mainPanel, "<html>Имеются ошибки! (сведения на вкладке Log)<br>Продолжить?",
-                            WARNING_DIALOG_TITLE, JOptionPane.YES_NO_OPTION, JOptionPane.ERROR_MESSAGE )
-                    ){
-                        return;
-                    }
-                }
-
-                JFileChooser newFileChooser = getNewFileChooser();
-                if ( newFileChooser.showSaveDialog( mainPanel ) == JFileChooser.APPROVE_OPTION ) {
-                    final File dirForSave = newFileChooser.getSelectedFile();
-
-
-                    final String xmlFilePath = dirForSave.getAbsolutePath() + "/" +
-                            currentDaoMethod.getCommon().getMethodName() + ".xml";
-
-                    JaxbHandler.marshallInFile( new File( xmlFilePath ), currentDaoMethod );
-
-                    new Thread(
-                            new Runnable() {
-                                @Override
-                                public void run() {
-                                    try {
-                                        WikiGenerator.generateWikiForXmlFile( xmlFilePath,
-                                                outputParamsType.getSelectedItem() == ParentType.CATALOGUE );
-
-                                        TextView.setText(
-                                                Utils.streamToString( new FileInputStream( xmlFilePath + ".txt" ) ) );
-
-                                        getWindowWithText().setVisible( true );
-                                    } catch ( IOException ex ) {
-                                        ex.printStackTrace();
-                                    } catch ( InterruptedException ex ) {
-                                        ex.printStackTrace();
-                                    }
-                                }
-                            }
-                    ).start();
-                }
+                generateXMLButtonListener();
             }
         } );
+
         generateWikiButton.addActionListener( new ActionListener() {
             @Override
             public void actionPerformed( ActionEvent e ) {
-                final JFileChooser newFileChooser = getNewFileChooser();
-                if ( newFileChooser.showOpenDialog( generateWikiButton ) == JFileChooser.APPROVE_OPTION ) {
-
-                    new Thread(
-                            new Runnable() {
-                                @Override
-                                public void run() {
-                                    try {
-                                        WikiGenerator.generateWiki(
-                                                newFileChooser.getSelectedFile().getAbsolutePath() );
-                                    } catch ( IOException ex ) {
-                                        ex.printStackTrace();
-                                    } catch ( InterruptedException ex ) {
-                                        ex.printStackTrace();
-                                    }
-                                }
-                            }
-                    ).start();
-                }
+                generateWikiButtonListener();
             }
         } );
     }
 
-    private boolean validateBeforeGenerateXML( DaoMethod currentDaoMethod ) {
-        if ( StringUtils.isBlank( methodNameField.getText() ) ) {
-            JOptionPane.showMessageDialog( mainPanel,
-                    "Необходимо ввести название метода!",
-                    WARNING_DIALOG_TITLE,
-                    JOptionPane.WARNING_MESSAGE
-            );
-            return false;
+    private void prepareQueryButtonListener(){
+        try {
+        presenter.prepareQuery();
         }
-        if(
-                currentDaoMethod.getInputParametrs ().getParent() == ParentType.SAVED_QUERY &&
-                currentDaoMethod.getOutputParametrs().getParent() == ParentType.CATALOGUE
-        ){
-            JOptionPane.showMessageDialog( mainPanel,
-                    "Неправильное сочетание типов входных и выходных параметров",
-                    WARNING_DIALOG_TITLE,
-                    JOptionPane.WARNING_MESSAGE
-            );
-            return false;
+        catch (PresenterException ex) {
+            JOptionPane.showMessageDialog( mainPanel, ex.getMessage(),
+                    WARNING_DIALOG_TITLE, JOptionPane.WARNING_MESSAGE );
         }
-        return true;
+    }
+
+    private void getInParamsButtonListener(){
+        try {
+            updateInputParameters( presenter.getInParameters());
+            setButtonsStateAfterGetInParams();
+        }
+        catch (PresenterException ex){
+            JOptionPane.showMessageDialog( getInParamsButton, ex.getMessage());
+        }
+    }
+
+    private void setButtonsStateAfterGetInParams(){
+        SPTextButton.setEnabled( presenter.getIsSpCall() );
+        getOutParamsButton.setEnabled( presenter.getIsSpCall() || presenter.getIsSelect() );
+        generateXMLButton.setEnabled( ! ( presenter.getIsSpCall() || presenter.getIsSelect() ) );
+    }
+
+    private void SPTextButtonListener(){
+        presenter.getSPText();
+    }
+
+    private void getOutParamsButtonListener(){
+        try {
+            updateOutputParameters( presenter.getOutParameters() );
+            generateXMLButton.setEnabled( true );
+        }
+        catch (PresenterException ex){
+            JOptionPane.showMessageDialog( mainPanel, ex.getMessage(),
+                    WARNING_DIALOG_TITLE, JOptionPane.WARNING_MESSAGE );
+        }
+    }
+
+    private void generateXMLButtonListener(){
+        try {
+            presenter.generateXML();
+        }
+        catch (PresenterException ex){
+            JOptionPane.showMessageDialog( mainPanel, ex.getMessage(),
+                    WARNING_DIALOG_TITLE, JOptionPane.WARNING_MESSAGE );
+        }
+    }
+
+    private void generateWikiButtonListener(){
+        try {
+            presenter.generateWiki();
+        }
+        catch (PresenterException ex){
+            JOptionPane.showMessageDialog( mainPanel, ex.getMessage(),
+                    WARNING_DIALOG_TITLE, JOptionPane.WARNING_MESSAGE );
+        }
     }
 
     private void initializingDeveloperTab() {
@@ -335,46 +217,7 @@ public class Form  implements SourcePathChangeListener{
         startButton.addActionListener( new ActionListener() {
             @Override
             public void actionPerformed( ActionEvent e ) {
-                if( validateBeforeStartGenerateJavaClasses() ){
-                    saveSettings();
-                    log.setText( "" );
-                    tabbedPane1.setSelectedIndex( 3 );
-                    //TODO
-                    new Thread(
-                        new Runnable(){
-                            @Override
-                            public void run() {
-                                try{
-                                    tabbedPane1.setEnabled( false );
-                                    if( ! FileBuilder.generateJavaCode() ) return;
-                                    int status = MavenProjectGenerator.installProject();
-                                    if( status == 0 ) {
-                                    	// TODO (Marat Fayzullin) Так как пока не реализовано, то нефиг мучать пользователя дополнительными вопросами
-                                        /*if (
-                                                JOptionPane.showConfirmDialog(
-                                                        mainPanel,
-                                                        "Тестирование успешно завершено.\nСкопировать файлы в проект?"
-                                                ) == JOptionPane.OK_OPTION
-                                        ) {
-                                            JOptionPane.showMessageDialog(
-                                                    mainPanel,
-                                                    "Функциональность еще не реализована"
-                                            );
-                                        }*/
-                                    } else {
-                                        JOptionPane.showMessageDialog(
-                                                mainPanel,
-                                                "Тестирование провалилось.\nИзмените входные данные или сообщите " +
-                                                        "разработчикам о возникшей проблеме"
-                                                );
-                                    }
-                                } finally {
-                                    tabbedPane1.setEnabled( true );
-                                }
-                            }
-                        }
-                    ).start();
-                }
+                startButtonListener();
             }
         } );
         sourceDirTextField.addActionListener( new ActionListener() {
@@ -392,40 +235,22 @@ public class Form  implements SourcePathChangeListener{
                 updateSourcePath();
             }
         } );
-        clearButton.addActionListener( new ActionListener() {
-            @Override
-            public void actionPerformed( ActionEvent e ) {
-            	checkAndClearTargetFolder();
-            }
-        } );
     }
 
-    /**
-     * Проверяет и удаляет папку с ранее сформированными проектными файлами
-     */
-    private boolean checkAndClearTargetFolder() {
-    	String folderName = destDirTextField.getText();
-    	File directory = new File(folderName);
-
-    	if (directory.exists()) {
-    		if (!directory.isDirectory() ) {
-    			showError("Указанное в поле значение не является папкой!");
-    			return false;
+    private void startButtonListener(){
+        try{
+            if( presenter.validateBeforeStartGenerateJavaClasses() ){
+                saveSettings();
+                log.setText("");
+                tabbedPane1.setSelectedIndex(3);
+                presenter.startProjectGenerating();
             }
-    	
-    		if (JOptionPane.showConfirmDialog(
-                    mainPanel, ( String.format("Указанная папка \"%s\" существует.\nУдалить её?", folderName)),
-                    ATTENTION, JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE ) == JOptionPane.YES_OPTION
-                ) {
-    				if (!PackageAndFileUtils.removeDirectory( directory ) ) {
-    					showError("При удалении папки возникли ошибки. Проверьте, что она не используется другими программами.");
-    					return false;
-    				}
-    		}
+        } catch (PresenterException ex){
+            JOptionPane.showMessageDialog( mainPanel, ex.getMessage(),
+                    WARNING_DIALOG_TITLE, JOptionPane.WARNING_MESSAGE );
         }
-    	return true;
     }
-    
+
     /**
      * Отображает диалоговое окно с ошибкой
      * @param text текст ошибки
@@ -456,61 +281,23 @@ public class Form  implements SourcePathChangeListener{
         };
 
         System.setOut( new PrintStream( out, true ) );
-        System.setErr( new PrintStream( out, true ) );
+        System.setErr(new PrintStream(out, true));
     }
 
     private void updateOutputParameters( List<ParameterType> inputParametrsForSP ) {
         updateTable( outputParametrs, inputParametrsForSP );
     }
 
-    private void updateTable( @NotNull JTable table, List<ParameterType> inputParametrsForSP ) {
-        final List<ParameterType> parameterTypes =
-                ( ( ParametrsModel ) ( table.getModel() ) ).getParameterTypes();
-        parameterTypes.clear();
-        parameterTypes.addAll( inputParametrsForSP );
-        table.updateUI();
-    }
-
     private void updateInputParameters( List<ParameterType> inputParametrsForSP ) {
         updateTable( inputParametrs, inputParametrsForSP );
     }
 
-    @NotNull
-    private DaoMethod getCurrentDaoMethod(){
-        final DaoMethod result = new DaoMethod();
-
-        result.setCommon( new CommonType() );
-        result.getCommon().setConfiguration( new ConfigurationType() );
-
-        result.getCommon().getConfiguration().setType( determineQueryType() );
-        result.getCommon().getConfiguration().setMultipleResult( isMultipleResultCheckBox.isSelected() );
-
-        if( result.getSelectType() == SelectType.CALL ){
-            result.getCommon().setSpName( Extractor.getStoreProcedureName( queryTextArea.getText() ) );
-        }
-
-        result.getCommon().setQuery( queryTextArea.getText() );
-        result.getCommon().setMethodName( methodNameField.getText() );
-        result.getCommon().setComment( commentTextArea.getText() );
-        result.getCommon().setMethodName( methodNameField.getText() );
-
-        result.setInputParametrs( new ParametersType() );
-        result.getInputParametrs().setParent( ( ParentType ) inputParamsType.getSelectedItem() );
-        result.getInputParametrs().getParameter().addAll(
-                ( ( ParametrsModel ) ( inputParametrs.getModel() ) ).getParameterTypes()
-        );
-
-        result.setOutputParametrs( new ParametersType() );
-        result.getOutputParametrs().setParent( ( ParentType ) outputParamsType.getSelectedItem() );
-        result.getOutputParametrs().getParameter().addAll(
-                ( (ParametrsModel) ( outputParametrs.getModel() ) ).getParameterTypes()
-        );
-        return result;
-    }
-
-    @NotNull
-    private SelectType determineQueryType() {
-        return Extractor.determineQueryType( queryTextArea.getText() );
+    private void updateTable( @NotNull JTable table, List<ParameterType> inputParametrsForSP ) {
+        final List<ParameterType> parameterTypes =
+                ( (ParametrsModel) ( table.getModel() ) ).getParameterTypes();
+        parameterTypes.clear();
+        parameterTypes.addAll( inputParametrsForSP );
+        table.updateUI();
     }
 
     JFrame getWindowWithText() {
@@ -562,23 +349,6 @@ public class Form  implements SourcePathChangeListener{
         Settings.settings().setMapperPackage              ( mappingPackageTextField       .getText    () );
     }
 
-    private boolean validateBeforeStartGenerateJavaClasses() {
-        if(
-                ( ! isPackageName( mappingPackageTextField  .getText() ) )
-        ){
-            JOptionPane.showMessageDialog( mainPanel, "Одно или несколько имен пакетов не прошло валидацию." );
-            return false;
-        }
-        if (!checkAndClearTargetFolder())
-        	return false;
-        //TODO надо бы проверить пути
-        return true;
-    }
-
-    private boolean isPackageName( String packageName ){
-        return Pattern.compile( "[\\w\\d]+(\\.[\\w\\d]+)+" ).matcher( packageName ).matches();
-    }
-
     private void setOutputPath() {
         JFileChooser newFileChooser = getNewFileChooser();
         if ( newFileChooser.showSaveDialog( mainPanel ) == JFileChooser.APPROVE_OPTION ) {
@@ -601,15 +371,195 @@ public class Form  implements SourcePathChangeListener{
         Settings.settings().setSourcePath( sourceDirTextField.getText() );
     }
 
-    public synchronized static JPanel getInstance(){
+    public synchronized static JPanel getMainPanel(FormPresenter presenter){
         if ( INSTANCE == null ) {
-            INSTANCE = new Form();
+            INSTANCE = new Form(presenter);
         }
         return INSTANCE.mainPanel;
+    }
+
+    public static Form getInstance(FormPresenter presenter){
+        if ( INSTANCE == null ) {
+            INSTANCE = new Form(presenter);
+        }
+        return INSTANCE;
     }
 
     @Override
     public void sourcePathChanged() {
         loadSettings();
+    }
+
+    @Override
+    public boolean getIsMultipleResult() {
+        return isMultipleResultCheckBox.isSelected();
+    }
+
+    @Override
+    public void setIsMultipleResult(boolean value) {
+        isMultipleResultCheckBox.setSelected(value);
+    }
+
+    @Override
+    public boolean getSingleQueryChecked() {
+        return  singleQueryRadioButton.isSelected();
+    }
+
+    @Override
+    public void setSingleQuery(boolean value) {
+        singleQueryRadioButton.setSelected(value);
+    }
+
+    @Override
+    public boolean getDoubleQueryChecked() {
+        return doubleQueryRadioButton.isSelected();
+    }
+
+    @Override
+    public void setDoubleQuery(boolean value) {
+        doubleQueryRadioButton.setSelected(value);
+    }
+
+    @Override
+    public String getQueryTextArea() {
+        return queryTextArea.getText();
+    }
+
+    @Override
+    public void setQueryTextArea(String text) {
+        queryTextArea.setText(text);
+    }
+
+    @Override
+    public String getSecondQuery() {
+        return secondQuery.getText();
+    }
+
+    @Override
+    public void setSecondQuery(String text) {
+        secondQuery.setText(text);
+    }
+
+    @Override
+    public String getMethodName() {
+        return methodNameField.getText();
+    }
+
+    @Override
+    public void setMethodName(String name) {
+        methodNameField.setText(name);
+    }
+
+    @Override
+    public String getCommentText() {
+        return commentTextArea.getText();
+    }
+
+    @Override
+    public void setCommentText(String text) {
+        commentTextArea.setText(text);
+    }
+
+    @Override
+    public ParametrsModel getInputParametersTypes() {
+        return (ParametrsModel)(inputParametrs.getModel());
+    }
+
+    @Override
+    public ParametrsModel getOutputParametersTypes() {
+        return (ParametrsModel)(outputParametrs.getModel());
+    }
+
+    @Override
+    public String getDirForSave() {
+        JFileChooser newFileChooser = getNewFileChooser();
+        if ( newFileChooser.showSaveDialog( mainPanel ) == JFileChooser.APPROVE_OPTION ) {
+            final File dirForSave = newFileChooser.getSelectedFile();
+            return dirForSave.getAbsolutePath();
+        }
+        return null;
+    }
+
+    @Override
+    public String getFileForSave() {
+        final JFileChooser newFileChooser = getNewFileChooser();
+        if ( newFileChooser.showOpenDialog( generateWikiButton ) == JFileChooser.APPROVE_OPTION ) {
+            return newFileChooser.getSelectedFile().getAbsolutePath();
+        }
+        else throw PresenterException.warn("Файл не выбран!");
+    }
+
+    @Override
+    public void showWindowWithText(String text){
+        TextView.setText(text);
+        getWindowWithText().setVisible(true);
+    }
+
+    @Override
+    public String getMappingPackageText() {
+        return mappingPackageTextField.getText();
+    }
+
+    @Override
+    public void setMappingPackageText(String text) {
+        mappingPackageTextField.setText(text);
+    }
+
+    @Override
+    public String getEntityPackageText() {
+        return entityPackageTextField.getText();
+    }
+
+    @Override
+    public void setEntityPackageTextField(String text) {
+        entityPackageTextField.setText(text);
+    }
+
+    @Override
+    public String getDaoPackageText() {
+        return daoPackageTextField.getText();
+    }
+
+    @Override
+    public void setDaoPackageTextField(String text) {
+        daoPackageTextField.setText(text);
+    }
+
+    @Override
+    public String getDestDirText() {
+        return destDirTextField.getText();
+    }
+
+    @Override
+    public void setDestDirText(String text) {
+        destDirTextField.setText(text);
+    }
+
+    @Override
+    public boolean showWarningDialog(String message) {
+        if( JOptionPane.YES_OPTION == JOptionPane.showConfirmDialog(
+                mainPanel, message,
+                WARNING_DIALOG_TITLE, JOptionPane.YES_NO_OPTION, JOptionPane.ERROR_MESSAGE )
+                ) return true;
+        else return false;
+    }
+
+
+    @Override
+    public boolean showAttentionDialog(String message) {
+        if( JOptionPane.showConfirmDialog( mainPanel, message,
+                ATTENTION, JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE ) == JOptionPane.YES_OPTION
+                ) return true;
+        else return false;
+    }
+
+    @Override
+    public void lockGui() {
+        tabbedPane1.setEnabled( false );
+    }
+
+    @Override
+    public void unlockGui() {
+        tabbedPane1.setEnabled( true );
     }
 }

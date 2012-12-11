@@ -71,7 +71,7 @@ public abstract class FileBuilder {
             ) );
         }
         boolean success = false;
-        if( DaoMethodValidator.checkDaoMethods( daoMethods, false ) ){
+        if( DaoMethodValidator.checkDaoMethods( daoMethods ) ){
             try {
                 generateAndWriteFiles();
                 MavenProjectGenerator.generate();

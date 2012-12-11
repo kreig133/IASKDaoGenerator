@@ -7,7 +7,7 @@ import javax.swing.table.AbstractTableModel;
 import java.util.ArrayList;
 import java.util.List;
 
-class ParametrsModel extends AbstractTableModel {
+public class ParametrsModel extends AbstractTableModel {
 
     @NotNull
     static String[] columnsName = {

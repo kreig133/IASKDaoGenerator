@@ -7,8 +7,8 @@ import com.kreig133.daogenerator.jaxb.DaoMethod;
 import com.kreig133.daogenerator.jaxb.ParameterType;
 import com.kreig133.daogenerator.jaxb.ParametersType;
 import org.apache.commons.lang.StringUtils;
+import org.jetbrains.annotations.Nullable;
 
-import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,16 +17,15 @@ import java.util.List;
  * @version 1.0
  */
 public class DaoMethodValidator {
-    public static boolean checkDaoMethods( List<DaoMethod> daoMethods, boolean isAnalyticMode ) {
+    public static boolean checkDaoMethods( List<DaoMethod> daoMethods ) {
         System.out.println( "---------ЭТАП ВАЛИДАЦИИ ВХОДНЫХ XML-ФАЙЛОВ------------" );
         boolean allIsOk = true;
         for ( DaoMethod daoMethod : daoMethods ) {
-            System.out.println( " Проверка метода " + getMethodName( daoMethod ) );
-            allIsOk = checkJavaClassNames( daoMethod, isAnalyticMode ) && allIsOk;
-            allIsOk = checkRenameTos     ( daoMethod                 ) && allIsOk;
+            System.out.println( " Проверка метода " + daoMethod.getCommon().getMethodName() );
+            allIsOk = checkRenameTos     ( daoMethod ) && allIsOk;
             allIsOk = checkAccordingTypeAndNameWithHungarianNotation( daoMethod ) && allIsOk;
         }
-        return allIsOk;
+        return  allIsOk;
     }
 
     static boolean checkRenameTos( DaoMethod daoMethod ) {
@@ -55,10 +54,15 @@ public class DaoMethodValidator {
 
     static boolean checkJavaClassNames( DaoMethod daoMethod, boolean analyticMode ) {
         boolean isOk = true;
-        String errorMessage = "\tERROR! Для метода не указано javaClassName для %s модели!";
+        String errorMessage = "ERROR! Для метода %s не указано javaClassName для %s модели!";
         if( DaoJavaClassGenerator.checkToNeedOwnInClass( daoMethod ) ){
-            if( StringUtils.isBlank(daoMethod.getInputParametrs().getJavaClassName() ) ) {
-                System.out.println( String.format( errorMessage, "входной" ) );
+            if( StringUtils.isBlank(daoMethod.getInputParametrs().getJavaClassName() ) ){
+                System.out.println(String.format(
+                        errorMessage,
+                        getMethodName( daoMethod ),
+                        "входной"
+                )
+                );
                 isOk = false;
             }
         }

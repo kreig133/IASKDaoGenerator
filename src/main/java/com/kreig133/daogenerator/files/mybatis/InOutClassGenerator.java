@@ -5,6 +5,8 @@ import com.google.common.collect.Iterators;
 import com.kreig133.daogenerator.enums.ClassType;
 import com.kreig133.daogenerator.enums.Scope;
 import com.kreig133.daogenerator.files.JavaClassGenerator;
+import com.kreig133.daogenerator.files.equalshashbuilder.EqualsMethodBuilder;
+import com.kreig133.daogenerator.files.equalshashbuilder.HashCodeMethodBuilder;
 import com.kreig133.daogenerator.jaxb.NamingUtils;
 import com.kreig133.daogenerator.files.PackageAndFileUtils;
 import com.kreig133.daogenerator.jaxb.*;
@@ -51,7 +53,7 @@ public class InOutClassGenerator extends JavaClassGenerator {
                         "/" +
                         PackageAndFileUtils.replacePointBySlash( Settings.settings().getEntityPackage() ) +
                         "/" +
-                        NamingUtils.convertNameForClassNaming( this.name ) + JAVA_EXTENSION);
+                        this.name + JAVA_EXTENSION);
 
         PackageAndFileUtils.createDirsAndFile( file.getParentFile() );
 
@@ -66,13 +68,13 @@ public class InOutClassGenerator extends JavaClassGenerator {
 
         insertClassDeclaration(
                 ClassType.CLASS,
-                NamingUtils.convertNameForClassNaming( this.name ),
+                this.name,
                 null,
                 new ArrayList<String>(){{add( "Serializable" );}}
         );
 
         insertSerialVersionUID();
-        writeEmptyConstructor( NamingUtils.convertNameForClassNaming( this.name ) );
+        writeEmptyConstructor( this.name );
     }
 
     @Override
@@ -88,12 +90,27 @@ public class InOutClassGenerator extends JavaClassGenerator {
             generateSetter( p );
         }
 
+        writeHashCodeEqualsMethod();
+
         writeToString();
+    }
+
+    private void writeHashCodeEqualsMethod(){
+        String className = this.name;
+        ParametersType params = new ParametersType();
+        params.getParameter().addAll(parameters);
+
+        insertTabs().append( EqualsMethodBuilder.buildEqualsMethod(params, className) );
+        insertLine();
+        insertLine();
+        insertTabs().append( HashCodeMethodBuilder.buildHashCodeMethod(params) );
+        insertLine();
+        insertLine();
     }
 
     @Override
     public String getFileName() {
-        return NamingUtils.convertNameForClassNaming( this.name );
+        return this.name;
     }
 
     private final List<ParameterType> parameters;
@@ -101,14 +118,14 @@ public class InOutClassGenerator extends JavaClassGenerator {
 
     public InOutClassGenerator( List<ParameterType> parameters, String name ) {
         this.parameters = parameters;
-        this.name = name;
+        this.name = NamingUtils.convertNameForClassNaming( name );
     }
 
     private void writeFullConstructor() {
         if( parameters.size() > 5 ) return;
 
         insertTabs().append( Scope.PUBLIC.value() )
-                .append( " " ).append( NamingUtils.convertNameForClassNaming( this.name ) ).append( "(" );
+                .append( " " ).append( this.name ).append( "(" );
         insertLine();
         increaseNestingLevel();
 
@@ -121,8 +138,10 @@ public class InOutClassGenerator extends JavaClassGenerator {
                         return p.getType().value() + " " + p.getRenameTo();
                     }
         } ), ",\n\t\t" ) );
-
+        insertLine();
+        decreaseNestingLevel();
         insertTabs().append( ") {" );
+        increaseNestingLevel();
         insertLine();
         for( ParameterType p: parameters ){
             insertTabs().append( String.format( "this.%s = %s;", p.getRenameTo(), p.getRenameTo() ) );
@@ -151,7 +170,7 @@ public class InOutClassGenerator extends JavaClassGenerator {
 
     public void insertFieldDeclaration( @NotNull ParameterType p ) {
 
-        jDoc.insertJavaDoc( p.getCommentForJavaDoc() );
+        jDoc.insertJavaDoc( builder, p.getCommentForJavaDoc() );
         insertTabs().append( Scope.PRIVATE.value() ).append( " " ).append( p.getType().value() )
                 .append( " " ).append( p.getRenameTo() );
 
@@ -166,19 +185,30 @@ public class InOutClassGenerator extends JavaClassGenerator {
     }
 
     private void generateGetter( @NotNull ParameterType parameterType ){
-        super.generateGetter( 
-                parameterType.getCommentForJavaDoc(),
-                parameterType.getType(), 
-                parameterType.getRenameTo() 
+        super.generateGetter(
+                name,
+                parameterType.getRenameTo(),
+                parameterType.getType()
         );
     }
 
     public void generateSetter( @NotNull ParameterType parameterType ) {
         super.generateSetter(
-                parameterType.getCommentForJavaDoc(),
-                parameterType.getType(),
-                parameterType.getRenameTo()
+                name,
+                parameterType.getRenameTo(),
+                parameterType.getType()
         );
     }
+
+    public static String getOutClassName( DaoMethod daoMethod ) {
+        return Settings.settings().getEntityPackage() + "."+
+                NamingUtils.convertNameForClassNaming( daoMethod.getCommon().getMethodName() ) + "Out";
+    }
+
+    public static String getInClassName( DaoMethod daoMethod ) {
+        return Settings.settings().getEntityPackage() + "."+
+                NamingUtils.convertNameForClassNaming( daoMethod.getCommon().getMethodName() ) + "In";
+    }
+
 
 }

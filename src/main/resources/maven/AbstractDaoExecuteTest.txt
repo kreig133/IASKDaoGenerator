@@ -1,4 +1,4 @@
-package com.aplana.sbrf.deposit;
+package ru.sbrf.iask.dao.testing;
 
 import org.apache.ibatis.annotations.Param;
 import org.junit.runner.RunWith;
@@ -21,8 +21,8 @@ import java.util.Map;
 @Transactional
 @RunWith(SpringJUnit4ClassRunner.class)
 @TransactionConfiguration(transactionManager="txManager", defaultRollback=true)
-@ContextConfiguration(locations = {"classpath:gwt-rpc-servlet.xml"})
-public abstract class AbstractDepoDaoExecuteTest {
+@ContextConfiguration(locations = {"classpath:testApplicationContext.xml"})
+public abstract class AbstractDaoExecuteTest {
 
     private SimpleDateFormat format = new SimpleDateFormat( "M-d-yyyy H:m:s.SSS" );
 
@@ -161,7 +161,6 @@ public abstract class AbstractDepoDaoExecuteTest {
                     for ( int i = 0; i < names.size(); i++ ) {
                         values.add( getValueByType( parameterTypes[ i ], map.get( names.get( i ) ) ) );
                     }
-
                     invoke = method.invoke( dao, values.toArray() );
             }
 
@@ -171,7 +170,7 @@ public abstract class AbstractDepoDaoExecuteTest {
                 }
             } else if ( invoke instanceof List ) {
                 @SuppressWarnings ("unchecked")
-            	List<Object> list = (List<Object>) invoke;
+                List<Object> list = (List<Object>) invoke;
                 for ( Object object : list) {
                     System.out.println( object );
                 }

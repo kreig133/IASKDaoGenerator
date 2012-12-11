@@ -1,0 +1,137 @@
+package ru.sbrf.iask.foundation.persistence.dao;
+
+import java.sql.SQLException;
+
+import org.apache.ibatis.session.SqlSession;
+import org.mybatis.spring.support.SqlSessionDaoSupport;
+import ru.sbrf.iask.foundation.persistence.entity.ICredentials;
+
+/**
+ * Abstract {@link SqlSessionDaoSupport} implementation
+ * contains common for all IASK DAO's functionality.
+ * 
+ * @author ashatunov
+ * @author iskorodumov
+ * 
+ * @version 2.0
+ */
+public abstract class AbstractDao extends SqlSessionDaoSupport {  
+    /**
+     * FIX_USER query id
+     */
+    private static final String FIX_USER = "ru.sbrf.iask.foundation.persistence.dao.AbstractDao.fixUser";
+
+    /**
+     * SET NOCOUNT ON in DB
+     * 
+     * @throws SQLException in case of exception.
+     */
+    protected void noCountOn() {
+        getLocalSqlSession().update("noCountOn");
+    }
+
+    /**
+     * Fix user.
+     * 
+     * @param object request
+     */
+    protected void fixUser(Object object) {
+    	 if (object instanceof ICredentials) {
+    		 String login = ((ICredentials) object).getLogin();
+    		 if (login != null)
+    			 getLocalSqlSession().selectOne(FIX_USER, login);
+         }
+    }
+
+    public SqlSession getLocalSqlSession() {
+        return getSqlSession();
+    }
+
+    /**
+     * SET NOCOUNT OFF in DB
+     * 
+     * @throws SQLException in case of exception.
+     */
+    protected void noCountOff() {
+        getLocalSqlSession().update("noCountOff");
+    }
+
+    /**
+     * Устанавливает db-свойство CONCAT_NULL_YIELDS_NULL в ON.
+     */
+    protected void setConcatNullYieldsNullOn() {
+        getLocalSqlSession().selectOne("setConcatNullYieldsNullOn");
+    }
+
+    /**
+     * Устанавливает db-свойство CONCAT_NULL_YIELDS_NULL в OFF.
+     */
+    protected void setConcatNullYieldsNullOff() {
+        getLocalSqlSession().selectOne("setConcatNullYieldsNullOff");
+    }
+
+    /**
+     * Базовая операция считывания списка данных из БД с использованием NOCOUNT вызова.
+     * 
+     * @param <R> тип возвращаемого результата команды.
+     * @param <P> тип параметра запроса команды.
+     * @param queryId query ID
+     * @param request request object
+     * @return result list from DB.
+     */
+    protected <R, P> R selectList(final String queryId, final P request) {
+        return executeWithCountOn(new AbstractDaoCommand<R, P>(request) {
+            @SuppressWarnings("unchecked")
+            @Override
+            public R execute() {
+                if (null == request) {
+                    return (R) getLocalSqlSession().selectList(queryId);
+                }
+                else {
+                    return (R) getLocalSqlSession().selectList(queryId, request);
+                }
+            }
+        });
+    }
+    
+    /**
+     * Базовая операция считывания данных из БД с использованием NOCOUNT вызова и фикса пользователя ИАСКа.
+     * 
+     * @param <R> тип возвращаемого результата команды.
+     * @param <P> тип параметра запроса команды.
+     * @param queryId query ID
+     * @param request request object
+     * @return result list from DB.
+     */
+    protected <R, P> R selectOne(final String queryId, final P request) {
+        return executeWithCountOn(new AbstractDaoCommand<R, P>(request) {
+            @SuppressWarnings("unchecked")
+            @Override
+            public R execute() {
+                return (R) getLocalSqlSession().selectOne(queryId, request);
+            }
+        });
+    }
+    
+    /**
+     * Базовый метод вызова БД с использованием NOCOUNT вызова и фикса пользователя ИАСКа.
+     * 
+     * NOTE: в связи со спецификой работы mybatis-spring-1.0.0 вызов должен происходить
+     * в транзакции, иначе будет создаваться новое соединение на каждое обращение
+     * к БД внутри комманды.
+     * 
+     * @param <R> тип возвращаемого результата команды.
+     * @param <P> тип параметра запроса команды.
+     * @param command комманда инкапсулирующая операцию.
+     * @return result list from DB.
+     * @see ru.sbrf.iask.foundation.persistence.dao.AbstractDaoCommand
+     */
+    protected <R, P> R executeWithCountOn(AbstractDaoCommand<R, P> command) {
+        fixUser(command.getRequest());
+        noCountOn();
+        R result = command.execute();
+        noCountOff();
+        return result;
+    }
+
+}

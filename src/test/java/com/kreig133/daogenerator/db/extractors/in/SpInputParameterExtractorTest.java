@@ -32,12 +32,12 @@ public class SpInputParameterExtractorTest{
     @Test
     public void extractInputParamsTest(){
         DaoMethod daoMethod = TestHelper.getDaoMethodForTest();
-        daoMethod.getCommon().setSpName( "sp_bilPg_GetBillMakerList" );
+        daoMethod.getCommon().setSpName( "pavGetSubsidySH" );
 
         final List<ParameterType> sp_bilPg_getBillMakerList =
                 SpInputParameterExtractor.instance().extractInputParams( daoMethod  ).getInputParametrs().getParameter();
 
-        assertEquals( 37, sp_bilPg_getBillMakerList.size() );
+        assertEquals( 3, sp_bilPg_getBillMakerList.size() );
     }
 
     @Test
@@ -57,11 +57,10 @@ public class SpInputParameterExtractorTest{
 
     @Test
     public void getSPTextTest(){
-        ( ( SpInputParameterExtractor ) SpInputParameterExtractor.instance() ).getSPText( "sp_bilPg_GetBillMakerList" );
-        final String sp_bilPg_getBillMakerList = SpInputParameterExtractor.getSPText();
-        System.out.println( "sp_bilPg_getBillMakerList = " + sp_bilPg_getBillMakerList );
+        final String sp_bilPg_getBillMakerList =
+                ( ( SpInputParameterExtractor ) SpInputParameterExtractor.instance() ).getSPText( "pavGetSubsidySH" );
+        System.out.println( "pavGetSubsidySH = " + sp_bilPg_getBillMakerList );
         assertNotNull( sp_bilPg_getBillMakerList );
-
     }
 
     @Test
