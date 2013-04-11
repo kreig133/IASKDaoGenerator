@@ -35,7 +35,7 @@ public class EtalonTestClass {
 
     // See below
     public static final String GENERATED_HASHCODE_METHOD =
-                "    @Override\n" +
+                "@Override\n" +
                 "    public int hashCode() {\n" +
                 "        int result = paramByte != null ? paramByte.hashCode() : 0;\n" +
                 "        result = 31 * result + (paramShort != null ? paramShort.hashCode() : 0);\n" +
@@ -49,7 +49,7 @@ public class EtalonTestClass {
 
     // See below
     public static final String GENERATED_EQUALS_METHOD =
-                "    @Override\n" +
+                "@Override\n" +
                 "    public boolean equals(Object o) {\n" +
                 "        if (this == o) return true;\n" +
                 "        if (!(o instanceof EtalonTestClass)) return false;\n" +

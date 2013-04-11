@@ -1,1 +1,1 @@
-java -Dfile.encoding=UTF-8  -jar DaoGenerator-${project.version}.jar
+start javaw -Dfile.encoding=UTF-8  -jar DaoGenerator-${project.version}.jar
