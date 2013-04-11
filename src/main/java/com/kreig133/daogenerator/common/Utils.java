@@ -99,11 +99,20 @@ public class Utils {
     private static String modifyOrDeleteFirstCharFromName(String nameForCall) {
         char[] chars = nameForCall.toCharArray();
 
-        if (Character.isUpperCase(chars[1])) {
+        if (Character.isUpperCase(chars[1]) && Character.isLowerCase(chars[0])) {
             chars = Arrays.copyOfRange(chars, 1, chars.length);
         }
 
-        return changeFirstCharCase(toLowerCaseWhenAllCharsIsUpperCase(new String(chars)), Case.LOWER);
+        return changeFirstCharCaseToLowerCaseIfSecondCharIsLowerCase(toLowerCaseWhenAllCharsIsUpperCase(new String(chars)));
+    }
+
+    private static String changeFirstCharCaseToLowerCaseIfSecondCharIsLowerCase(String s) {
+        char[] chars = s.toCharArray();
+        if (Character.isUpperCase(chars[0]) && Character.isLowerCase(chars[1])) {
+            chars[0] = Character.toLowerCase(chars[0]);
+            return changeFirstCharCase(new String(chars), Case.LOWER);
+        }
+        return s;
     }
 
     private static String[] splitStringByUnderscores(String nameForCall) {
