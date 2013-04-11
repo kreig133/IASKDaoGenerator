@@ -9,13 +9,19 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.text.SimpleDateFormat;
+import java.util.Arrays;
 import java.util.List;
+
+import static org.apache.commons.lang.StringUtils.isAllUpperCase;
+import static org.apache.commons.lang.StringUtils.isBlank;
 
 /**
  * @author eshangareev
  * @version 1.0
  */
 public class Utils {
+
+
     public static SimpleDateFormat getDaoGeneratorDateFormat() {
         return new SimpleDateFormat( getDaoGeneratorDateFormatString() );
     }
@@ -50,6 +56,9 @@ public class Utils {
         return builder;
     }
 
+    private enum Case{
+        UPPER, LOWER
+    }
 
     /**
      * Пытается переделать имя в Java-style
@@ -57,28 +66,52 @@ public class Utils {
      * @return
      */
     public static String convertPBNameToName( @NotNull String nameForCall ) {
-        if( StringUtils.isBlank( nameForCall ) ) {
+        if( isBlank(nameForCall) ) {
             return "";
         }
-        if ( StringUtils.isAllUpperCase( StringUtils.join( nameForCall.trim().split( "_+" ) ) ) ) {
-            nameForCall =  nameForCall.toLowerCase();
-        }
-        {
-            final char[] chars = nameForCall.toCharArray();
-            chars[ 0 ] = Character.toLowerCase( chars[ 0 ] );
-            nameForCall = new String( chars );
-        }
-        StringBuilder builder = new StringBuilder();
+        return modifyOrDeleteFirstCharFromName(
+                        toCamelStyle(
+                                splitStringByUnderscores(
+                                        toLowerCaseWhenAllCharsIsUpperCase(nameForCall)
+                                )));
+    }
 
-        final String[] split = nameForCall.split( "_+" );
-        builder.append( split[ 0 ] );
-        for( int i = 1; i < split.length ; i++ ){
-            final char[] chars = split[ i ].toCharArray();
-            chars[ 0 ] = Character.toUpperCase( chars[ 0 ] );
-            builder.append( new String( chars ) );
-        }
+    private static String toLowerCaseWhenAllCharsIsUpperCase(String nameForCall) {
+        return isAllUpperCase(removeUnderscoresFromName(nameForCall)) ?
+            nameForCall.toLowerCase() : nameForCall;
+    }
 
+    private static String toCamelStyle(String[] split) {
+        StringBuilder builder = new StringBuilder(split[0]);
+        for (int i = 1; i < split.length; i++) {
+            builder.append(changeFirstCharCase(split[i], Case.UPPER));
+        }
         return builder.toString();
+    }
+
+
+    private static String changeFirstCharCase(String s, Case caze) {
+        final char[] chars = s.toCharArray();
+        chars[0] = caze == Case.UPPER ? Character.toUpperCase(chars[0]) : Character.toLowerCase(chars[0]);
+        return new String(chars);
+    }
+
+    private static String modifyOrDeleteFirstCharFromName(String nameForCall) {
+        char[] chars = nameForCall.toCharArray();
+
+        if (Character.isUpperCase(chars[1])) {
+            chars = Arrays.copyOfRange(chars, 1, chars.length);
+        }
+
+        return changeFirstCharCase(toLowerCaseWhenAllCharsIsUpperCase(new String(chars)), Case.LOWER);
+    }
+
+    private static String[] splitStringByUnderscores(String nameForCall) {
+        return nameForCall.split( "_+" );
+    }
+
+    private static String removeUnderscoresFromName(String nameForCall) {
+        return StringUtils.join(splitStringByUnderscores(nameForCall.trim()));
     }
 
     @NotNull

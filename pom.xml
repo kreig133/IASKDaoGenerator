@@ -192,7 +192,7 @@
         <profile>
             <id>iask</id>
             <properties>
-                <jdbc.url>jdbc:sqlserver://jason.aplana.com:1435;databaseName=IASK</jdbc.url>
+                <jdbc.url>jdbc:sqlserver://192.168.101.189:1433;databaseName=IASK</jdbc.url>
                 <jdbc.username>sa</jdbc.username>
                 <jdbc.password>iask</jdbc.password>
                 <jdbc.driverClass>com.microsoft.sqlserver.jdbc.SQLServerDriver</jdbc.driverClass>
