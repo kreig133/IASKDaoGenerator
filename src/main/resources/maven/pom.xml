@@ -11,7 +11,7 @@
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <junit.version>4.10</junit.version>
-        <spring.version>3.0.6.RELEASE</spring.version>
+        <spring.version>5.2.20.RELEASE</spring.version>
         <mybatis-spring.version>1.0.2</mybatis-spring.version>
         <sqljdbc.version>3.0</sqljdbc.version>
         <gxt.version>2.2.0</gxt.version>
